@@ -63,9 +63,9 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
-              <img src="/logo.svg" alt="SalesMatic" className="h-9 w-9" />
-              <span className="text-xl font-bold text-primary">SalesMatic</span>
-              <span className="text-sm text-gray-400 hidden sm:block">سيلزماتك</span>
+              <img src="/logo.svg" alt="Dealix" className="h-9 w-9" />
+              <span className="text-xl font-bold text-primary">Dealix</span>
+              <span className="text-sm text-gray-400 hidden sm:block">ديليكس</span>
             </div>
             <div className="hidden md:flex items-center gap-8 text-sm">
               <a href="#features" className="text-gray-600 hover:text-primary transition">المميزات</a>
@@ -159,7 +159,7 @@ export default function LandingPage() {
               <div key={i} className="bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100 hover:shadow-md transition">
                 <div className="text-4xl mb-3">{p.emoji}</div>
                 <p className="text-lg font-medium text-gray-800">{p.text}</p>
-                <p className="text-sm text-secondary mt-2 font-medium">SalesMatic يحل هذي المشكلة</p>
+                <p className="text-sm text-secondary mt-2 font-medium">Dealix يحل هذي المشكلة</p>
               </div>
             ))}
           </div>
@@ -332,7 +332,7 @@ export default function LandingPage() {
       <section className="py-20 bg-hero-gradient text-white px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">جاهز تزيد مبيعاتك؟</h2>
-          <p className="text-lg text-gray-300 mb-8">انضم لمئات الشركات اللي زادت مبيعاتها مع SalesMatic</p>
+          <p className="text-lg text-gray-300 mb-8">انضم لمئات الشركات اللي زادت مبيعاتها مع Dealix</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="/ar/register" className="bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-xl text-lg font-bold transition shadow-2xl">
               ابدأ مجاناً الآن
@@ -351,8 +351,8 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src="/logo.svg" alt="SalesMatic" className="h-8 w-8" />
-                <span className="text-white font-bold text-lg">SalesMatic</span>
+                <img src="/logo.svg" alt="Dealix" className="h-8 w-8" />
+                <span className="text-white font-bold text-lg">Dealix</span>
               </div>
               <p className="text-sm mb-4 leading-relaxed">مبيعاتك تشتغل وأنت ترتاح</p>
               <p className="text-sm">Sales on Autopilot</p>
@@ -383,7 +383,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-sm">© 2024 SalesMatic. جميع الحقوق محفوظة</p>
+            <p className="text-sm">© 2025 Dealix. جميع الحقوق محفوظة</p>
             <p className="text-sm flex items-center gap-1">صنع بـ ❤️ في السعودية 🇸🇦</p>
           </div>
         </div>
