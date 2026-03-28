@@ -13,6 +13,7 @@ celery_app = Celery(
         "app.workers.notification_tasks",
         "app.workers.ai_agent_tasks",
         "app.workers.sequence_worker",
+        "app.workers.appointment_tasks",
     ],
 )
 
@@ -59,5 +60,13 @@ celery_app.conf.beat_schedule = {
     "process-sequence-steps": {
         "task": "app.workers.sequence_worker.process_sequence_steps",
         "schedule": 60.0,  # every minute
+    },
+    "send-appointment-reminders": {
+        "task": "app.workers.appointment_tasks.send_appointment_reminders",
+        "schedule": 900.0,  # every 15 minutes
+    },
+    "mark-no-shows": {
+        "task": "app.workers.appointment_tasks.mark_no_shows",
+        "schedule": 1800.0,  # every 30 minutes
     },
 }

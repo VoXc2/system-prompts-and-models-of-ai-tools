@@ -23,6 +23,7 @@ from app.models.integration import IntegrationAccount, WebhookEvent
 from app.models.tag import Tag, Segment
 from app.models.custom_field import CustomField
 from app.models.file_upload import FileUpload
+from app.models.appointment import Appointment
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
@@ -33,5 +34,5 @@ __all__ = [
     "Consent", "Sequence", "SequenceStep", "SequenceEnrollment",
     "CallLog", "VoiceSession", "Contract", "Signature",
     "IntegrationAccount", "WebhookEvent", "Tag", "Segment",
-    "CustomField", "FileUpload",
+    "CustomField", "FileUpload", "Appointment",
 ]

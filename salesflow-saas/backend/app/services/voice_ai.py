@@ -188,6 +188,30 @@ CALL_FLOWS = {
         "هلا {name}! كيف حالك؟ أنا {agent_name} من {company}. "
         "ما شفناك من زمان وحبينا نطمّن عليك ونشوف إذا تحتاج أي شي."
     ),
+    "salon_booking": (
+        "أهلين، مرحباً بك في {company}! أنا {agent_name}. "
+        "كيف أقدر أساعدك اليوم؟ تبي تحجز موعد؟ "
+        "عندنا مواعيد متاحة اليوم وبكرة إن شاء الله."
+    ),
+    "clinic_booking": (
+        "السلام عليكم، أهلاً بك في {company}. أنا {agent_name}. "
+        "كيف أقدر أخدمك؟ تبي تحجز موعد مع الدكتور؟ "
+        "خلني أشوف لك أقرب موعد متاح."
+    ),
+    "service_inquiry": (
+        "أهلين {name}، أنا {agent_name} من {company}. "
+        "تبي أعطيك تفاصيل عن خدماتنا وأسعارنا؟ "
+        "عندنا عروض حلوة هالفترة بعد."
+    ),
+    "booking_confirmation": (
+        "تمام {name}، تم تأكيد موعدك يوم {appointment_date} الساعة {appointment_time}. "
+        "بنرسل لك تأكيد على الواتساب إن شاء الله. شكراً لاختيارك {company}!"
+    ),
+    "no_show_followup": (
+        "هلا {name}، أنا {agent_name} من {company}. "
+        "ما شفناك اليوم في موعدك، إن شاء الله كلشي تمام؟ "
+        "تبي نحجز لك موعد ثاني يناسبك؟"
+    ),
 }
 
 # Voice and transcription defaults
@@ -546,14 +570,16 @@ class VoiceAIService:
             if function_name == "book_demo":
                 logger.info("Book demo requested via voice for call %s", call_id)
                 return {
-                    "action": "book_demo",
+                    "action": "book_appointment",
                     "call_id": call_id,
                     "customer_name": params.get("name", ""),
                     "phone": params.get("phone", ""),
                     "preferred_time": params.get("time", ""),
+                    "service_type": params.get("service_type", "demo"),
                     "notes": params.get("notes", ""),
                     "timestamp": timestamp,
                     "persist": True,
+                    "booked_via": "voice_ai",
                 }
 
             if function_name == "transfer_to_human":
@@ -569,14 +595,16 @@ class VoiceAIService:
 
             if function_name == "schedule_callback":
                 return {
-                    "action": "schedule_callback",
+                    "action": "book_appointment",
                     "call_id": call_id,
                     "customer_name": params.get("name", ""),
                     "phone": params.get("phone", ""),
-                    "callback_time": params.get("time", ""),
-                    "reason": params.get("reason", ""),
+                    "preferred_time": params.get("time", ""),
+                    "service_type": "callback",
+                    "notes": params.get("reason", ""),
                     "timestamp": timestamp,
                     "persist": True,
+                    "booked_via": "voice_ai",
                 }
 
             if function_name == "send_info":
