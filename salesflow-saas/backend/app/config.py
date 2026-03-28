@@ -51,12 +51,22 @@ class Settings(BaseSettings):
     OPENAI_MODEL: str = "gpt-4o-mini"
     ANTHROPIC_API_KEY: str = ""
 
-    # Lead Discovery APIs
+    # Lead Generation (Legitimate B2B APIs)
+    APOLLO_API_KEY: str = ""
+    HUNTER_API_KEY: str = ""
+    META_CTWA_PIXEL_ID: str = ""
+
+    # Lead Discovery APIs (Optional)
     GOOGLE_MAPS_API_KEY: str = ""
     SERPAPI_KEY: str = ""
     TWITTER_BEARER_TOKEN: str = ""
     INSTAGRAM_ACCESS_TOKEN: str = ""
     INSTAGRAM_USER_ID: str = ""
+
+    # Voice AI
+    VAPI_API_KEY: str = ""
+    VAPI_ASSISTANT_ID: str = ""
+    VOICE_AI_ENABLED: bool = False
 
     class Config:
         env_file = ".env"

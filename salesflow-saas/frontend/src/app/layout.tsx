@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Dealix - ديليكس | منصة مبيعات ذكية للشركات",
-  description: "منصة ذكاء اصطناعي لأتمتة المبيعات. تدير عملاءك، تتابعهم تلقائياً، وتغلق الصفقات. مصممة للسوق السعودي.",
-  keywords: "مبيعات, CRM, SaaS, ذكاء اصطناعي, أتمتة, عيادات, عقارات, الرياض, السعودية",
+  title: "Dealix - نظام ذكاء تشغيلي للمبيعات | AI Revenue OS",
+  description: "نظام تشغيلي ذكي يرتب مبيعاتك، ينظم المتابعة، يسرّع الرد، ويزيد فرص الإغلاق. مصمم للشركات السعودية الصغيرة والمتوسطة.",
+  keywords: "Dealix, مبيعات, CRM, SaaS, ذكاء اصطناعي, أتمتة, عيادات, عقارات, الرياض, السعودية, Revenue OS",
 };
 
 export default function RootLayout({
