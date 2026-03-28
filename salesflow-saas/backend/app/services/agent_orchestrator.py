@@ -14,6 +14,7 @@ from app.services.lead_discovery import LeadDiscoveryAgent
 from app.services.lead_enrichment import LeadEnrichmentService
 from app.services.auto_outreach import AutoOutreachEngine
 from app.services.voice_ai import VoiceAIService
+from app.services.smart_sales import SmartSalesAgent
 from app.services.whatsapp_human import WhatsAppHumanEngine
 
 logger = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ class AgentType(str, Enum):
     QUALIFICATION = "qualification"
 
 
-# ── Agent registry: tracks running tasks per tenant ──────────────────────────
+# ── Agent registry: tracks running tasks per tenant ──────────────
 _agent_registry: dict[str, dict] = {}
 
 
@@ -60,37 +61,37 @@ def _log_task(tenant_id: str, agent_type: str, status: str, detail: str = "") ->
         "detail": detail,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
-    agent_key = entry["agent"]
-
     if status == "running":
         registry["active_tasks"].append(entry)
     elif status == "completed":
         registry["active_tasks"] = [
-            t for t in registry["active_tasks"] if t["agent"] != agent_key
+            t for t in registry["active_tasks"] if t["agent"] != entry["agent"]
         ]
         registry["completed_tasks"].append(entry)
-        registry["stats"].setdefault(agent_key, {"runs": 0, "successes": 0, "failures": 0})
-        registry["stats"][agent_key]["runs"] += 1
-        registry["stats"][agent_key]["successes"] += 1
+        stats = registry["stats"].setdefault(
+            entry["agent"], {"runs": 0, "successes": 0, "failures": 0}
+        )
+        stats["runs"] += 1
+        stats["successes"] += 1
     elif status == "failed":
         registry["active_tasks"] = [
-            t for t in registry["active_tasks"] if t["agent"] != agent_key
+            t for t in registry["active_tasks"] if t["agent"] != entry["agent"]
         ]
         registry["completed_tasks"].append(entry)
-        registry["stats"].setdefault(agent_key, {"runs": 0, "successes": 0, "failures": 0})
-        registry["stats"][agent_key]["runs"] += 1
-        registry["stats"][agent_key]["failures"] += 1
+        stats = registry["stats"].setdefault(
+            entry["agent"], {"runs": 0, "successes": 0, "failures": 0}
+        )
+        stats["runs"] += 1
+        stats["failures"] += 1
     elif status == "queued":
         registry["queued_tasks"].append(entry)
-
     return entry
 
 
 class AgentOrchestrator:
     """Central brain that coordinates every Dealix AI agent.
 
-    Workflow::
-
+    Workflow:
         discover_prospects() -> enrich_data() -> qualify_leads()
         -> engage() -> follow_up() -> convert()
     """
@@ -116,7 +117,7 @@ class AgentOrchestrator:
             tenant_id: Tenant identifier.
             industry:  Target industry (e.g. ``healthcare``, ``real_estate``).
             location:  Target city / region.
-            config:    Optional overrides -- keys include ``max_leads``,
+            config:    Optional overrides — keys include ``max_leads``,
                        ``channel``, ``owner_name``, ``auto_engage``,
                        ``sequence_length``.
 
@@ -140,7 +141,7 @@ class AgentOrchestrator:
 
         _log_task(tenant_id, AgentType.DATA_INTELLIGENCE, "running", "Full pipeline started")
 
-        # Stage 1: Discover & Enrich ──────────────────────────────────────
+        # Stage 1: Discover & Enrich ──────────────────────────────────
         try:
             prospects = await self.discover_and_enrich(industry, location, count=max_leads)
             summary["stages"]["discover_enrich"] = {
@@ -152,7 +153,7 @@ class AgentOrchestrator:
             prospects = []
             summary["stages"]["discover_enrich"] = {"status": "failed", "error": str(exc)}
 
-        # Stage 2: Qualify ─────────────────────────────────────────────────
+        # Stage 2: Qualify ─────────────────────────────────────────────
         qualified = []
         try:
             for prospect in prospects:
@@ -163,6 +164,7 @@ class AgentOrchestrator:
                 prospect["ai_next_action"] = qualification.get("next_action", "")
                 qualified.append(prospect)
 
+            # Sort by score descending
             qualified.sort(key=lambda p: p.get("ai_score", 0), reverse=True)
             summary["stages"]["qualification"] = {
                 "status": "completed",
@@ -174,7 +176,7 @@ class AgentOrchestrator:
             qualified = prospects  # fall through with unscored leads
             summary["stages"]["qualification"] = {"status": "failed", "error": str(exc)}
 
-        # Stage 3: Engage (optional) ──────────────────────────────────────
+        # Stage 3: Engage (optional) ──────────────────────────────────
         if auto_engage and qualified:
             try:
                 outreach = AutoOutreachEngine(tenant_id, industry)
@@ -194,20 +196,16 @@ class AgentOrchestrator:
                 logger.error("Pipeline engagement failed for %s: %s", tenant_id, exc)
                 summary["stages"]["engagement"] = {"status": "failed", "error": str(exc)}
         else:
-            summary["stages"]["engagement"] = {
-                "status": "skipped",
-                "reason": "auto_engage disabled",
-            }
+            summary["stages"]["engagement"] = {"status": "skipped", "reason": "auto_engage disabled"}
 
         summary["completed_at"] = datetime.now(timezone.utc).isoformat()
         summary["total_prospects"] = len(qualified)
 
         _log_task(
-            tenant_id,
-            AgentType.DATA_INTELLIGENCE,
-            "completed",
+            tenant_id, AgentType.DATA_INTELLIGENCE, "completed",
             f"{len(qualified)} prospects processed",
         )
+
         return summary
 
     # ------------------------------------------------------------------
@@ -223,7 +221,7 @@ class AgentOrchestrator:
         """Find prospects via DataIntelligence, then enrich each one.
 
         Calls :class:`LeadDiscoveryAgent` to find raw prospects, then
-        enriches each via :class:`LeadEnrichmentService` in parallel
+        runs :class:`LeadEnrichmentService` on every result in concurrent
         batches.  Results are scored and ranked.
 
         Args:
@@ -272,9 +270,10 @@ class AgentOrchestrator:
     ) -> dict:
         """Engage a single prospect via the appropriate agent.
 
-        Routes to the correct channel agent, generates a personalised
-        message via :class:`WhatsAppHumanEngine` (for WhatsApp) or the
-        AI brain, and logs the interaction.
+        Routes to WhatsApp, Voice, or Social Media channels.  For
+        WhatsApp the message is generated via
+        :class:`WhatsAppHumanEngine` so it reads like a real person
+        texting.
 
         Args:
             lead_data:  The enriched lead dict (must include ``phone`` for
@@ -288,10 +287,7 @@ class AgentOrchestrator:
         tenant_id = lead_data.get("tenant_id", settings.DEFAULT_TENANT_ID)
         industry = lead_data.get("industry", "general")
         name = lead_data.get("name", "العميل")
-        company = lead_data.get(
-            "company_name",
-            lead_data.get("company", {}).get("name", ""),
-        )
+        company = lead_data.get("company_name", lead_data.get("company", {}).get("name", ""))
 
         _log_task(tenant_id, channel, "running", f"Engaging {name}")
 
@@ -302,12 +298,10 @@ class AgentOrchestrator:
                     lead_data=lead_data,
                     message_type="first_contact",
                     owner_name=owner_name,
-                    company=company or "ديليكس",
+                    company=company,
                     industry=industry,
                 )
-                message = "\n".join(bubbles)
-
-                # Also generate an AI-personalised variant
+                # Also create an AI-powered personalised version
                 ai_message = await ai_brain.write_personalized_message(
                     name=name,
                     business=company,
@@ -316,17 +310,19 @@ class AgentOrchestrator:
                     source="واتساب",
                     message_type="أول تواصل",
                 )
+                humanised = self.whatsapp_engine.humanize_message(
+                    ai_message, owner_name=owner_name, company=company, lead_name=name,
+                )
 
                 # Send via outreach engine
                 outreach = AutoOutreachEngine(tenant_id, industry)
                 result = await outreach._cold_outreach(lead_data, "whatsapp")
-
                 _log_task(tenant_id, channel, "completed", f"WhatsApp sent to {name}")
                 return {
                     "success": result.get("success", False),
                     "channel": "whatsapp",
-                    "message": message,
-                    "ai_message": ai_message,
+                    "message_bubbles": bubbles,
+                    "message_humanised": humanised,
                     "details": result,
                 }
 
@@ -345,6 +341,7 @@ class AgentOrchestrator:
                 }
 
             elif channel == "social_media":
+                # Generate a DM-style message for social outreach
                 message = await ai_brain.write_personalized_message(
                     name=name,
                     business=company,
@@ -359,7 +356,7 @@ class AgentOrchestrator:
                     "channel": "social_media",
                     "message": message,
                     "details": {
-                        "note": "Message drafted -- manual send required for social platforms",
+                        "note": "Message drafted — manual send required for social platforms",
                         "instagram": lead_data.get("instagram_url", ""),
                         "twitter": lead_data.get("twitter_handle", ""),
                         "linkedin": lead_data.get("linkedin_url", ""),
@@ -367,11 +364,7 @@ class AgentOrchestrator:
                 }
 
             else:
-                return {
-                    "success": False,
-                    "channel": channel,
-                    "message": f"Unsupported channel: {channel}",
-                }
+                return {"success": False, "channel": channel, "message": f"Unsupported channel: {channel}"}
 
         except Exception as exc:
             logger.error("Engagement failed for %s via %s: %s", name, channel, exc)
@@ -386,7 +379,9 @@ class AgentOrchestrator:
         """Execute all due follow-up steps for a tenant.
 
         Iterates active sequences, checks which steps are due, and
-        dispatches each via the appropriate channel agent.
+        dispatches each via the appropriate channel.  For WhatsApp
+        follow-ups the :class:`WhatsAppHumanEngine` is used to generate
+        realistic message bubbles.
 
         Args:
             tenant_id: Tenant identifier.
@@ -406,7 +401,6 @@ class AgentOrchestrator:
         }
 
         try:
-            # In production this queries the sequences table.
             # Placeholder: fetch active sequences from DB
             # active_sequences = await db.fetch_due_sequence_steps(tenant_id)
             active_sequences: list[dict] = []
@@ -415,23 +409,43 @@ class AgentOrchestrator:
                 lead_data = step.get("lead_data", {})
                 channel = step.get("channel", "whatsapp")
                 step_type = step.get("type", "followup")
+                step_number = step.get("step_number", 1)
 
                 try:
                     if step_type == "followup":
-                        outreach = AutoOutreachEngine(
-                            tenant_id, lead_data.get("industry", "general"),
-                        )
-                        result = await outreach._warm_followup(lead_data, channel)
+                        # Map step number to follow-up template
+                        if channel == "whatsapp":
+                            template_map = {
+                                1: "followup_1day",
+                                2: "followup_3days",
+                                3: "followup_7days",
+                            }
+                            msg_type = template_map.get(step_number, "followup_7days")
+                            bubbles = self.whatsapp_engine.generate_human_message(
+                                lead_data=lead_data,
+                                message_type=msg_type,
+                                owner_name=step.get("owner_name", "فريق ديليكس"),
+                                company=step.get("company", "ديليكس"),
+                                industry=lead_data.get("industry", "general"),
+                            )
+                            # Send via outreach engine
+                            outreach = AutoOutreachEngine(tenant_id, lead_data.get("industry", "general"))
+                            result = await outreach._warm_followup(lead_data, channel)
+                            result["message_bubbles"] = bubbles
+                        else:
+                            outreach = AutoOutreachEngine(tenant_id, lead_data.get("industry", "general"))
+                            result = await outreach._warm_followup(lead_data, channel)
+
                     elif step_type == "reactivation":
-                        outreach = AutoOutreachEngine(
-                            tenant_id, lead_data.get("industry", "general"),
-                        )
+                        outreach = AutoOutreachEngine(tenant_id, lead_data.get("industry", "general"))
                         result = await outreach._reactivation(lead_data, channel)
+
                     elif step_type == "voice_call":
                         voice = VoiceAIService(tenant_id)
                         result = await voice.create_assistant(
                             industry=lead_data.get("industry", "general"),
                         )
+
                     else:
                         result = {"success": False, "reason": f"Unknown step type: {step_type}"}
 
@@ -443,6 +457,8 @@ class AgentOrchestrator:
                     summary["details"].append({
                         "lead": lead_data.get("name", "unknown"),
                         "step_type": step_type,
+                        "step_number": step_number,
+                        "channel": channel,
                         "result": "success" if result.get("success") else "failed",
                     })
 
@@ -464,9 +480,7 @@ class AgentOrchestrator:
 
         summary["completed_at"] = datetime.now(timezone.utc).isoformat()
         _log_task(
-            tenant_id,
-            AgentType.FOLLOWUP,
-            "completed",
+            tenant_id, AgentType.FOLLOWUP, "completed",
             f"Executed {summary['executed']}, failed {summary['failed']}",
         )
         return summary
@@ -480,38 +494,22 @@ class AgentOrchestrator:
 
         Returns:
             Dict keyed by agent type with ``active``, ``queued``,
-            ``completed`` task lists, cumulative ``stats``, and
-            performance metrics per agent.
+            ``completed`` task lists and cumulative ``stats``.
         """
         registry = _get_tenant_registry(tenant_id)
 
         agents_status: dict = {}
         for agent in AgentType:
             agent_key = agent.value
-            agent_stats = registry["stats"].get(
-                agent_key, {"runs": 0, "successes": 0, "failures": 0},
-            )
-
-            # Compute success rate
-            total_runs = agent_stats["runs"]
-            success_rate = (
-                round(agent_stats["successes"] / total_runs * 100, 1)
-                if total_runs > 0
-                else 0.0
-            )
-
             agents_status[agent_key] = {
                 "active": [t for t in registry["active_tasks"] if t["agent"] == agent_key],
                 "queued": [t for t in registry["queued_tasks"] if t["agent"] == agent_key],
                 "completed": [
                     t for t in registry["completed_tasks"] if t["agent"] == agent_key
                 ][-10:],  # last 10
-                "stats": agent_stats,
-                "performance": {
-                    "total_runs": total_runs,
-                    "success_rate": success_rate,
-                    "failures": agent_stats["failures"],
-                },
+                "stats": registry["stats"].get(
+                    agent_key, {"runs": 0, "successes": 0, "failures": 0},
+                ),
             }
 
         return {
@@ -534,7 +532,7 @@ class AgentOrchestrator:
 
         Args:
             lead_id:    Identifier of the lead to assign.
-            agent_type: One of the :class:`AgentType` values.
+            agent_type: One of the ``AgentType`` values.
 
         Returns:
             Confirmation dict with assignment details.
