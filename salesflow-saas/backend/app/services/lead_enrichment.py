@@ -3,9 +3,12 @@ Dealix Lead Enrichment Service - Enriches leads with company and contact
 data from external sources (Apollo.io, Hunter.io, and more).
 Includes Saudi-specific industry detection and lead scoring.
 """
+import json
 import httpx
 import logging
 from typing import Optional
+
+import redis.asyncio as aioredis
 
 from app.config import get_settings
 
@@ -58,10 +61,13 @@ INDUSTRY_KEYWORDS = {
 class LeadEnrichmentService:
     """Enriches lead records with company and contact data from external APIs."""
 
+    CACHE_TTL = 86400  # 24 hours
+
     def __init__(self):
         self.apollo_api_key = settings.APOLLO_API_KEY
         self.hunter_api_key = settings.HUNTER_API_KEY
         self.http_timeout = 15.0
+        self._redis = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
 
     # ------------------------------------------------------------------
     # Public API
@@ -78,6 +84,25 @@ class LeadEnrichmentService:
         Returns:
             The enriched lead dict with additional fields.
         """
+        # Build cache identifier from email, domain, or company name
+        identifier = (
+            lead_data.get("email")
+            or lead_data.get("domain")
+            or lead_data.get("company_name")
+            or ""
+        )
+
+        # Check Redis cache first
+        if identifier:
+            cache_key = f"enrichment:{identifier}"
+            try:
+                cached = await self._redis.get(cache_key)
+                if cached:
+                    logger.debug("Cache hit for %s", cache_key)
+                    return json.loads(cached)
+            except Exception as exc:
+                logger.warning("Redis cache read failed: %s", exc)
+
         enriched = dict(lead_data)
 
         email = lead_data.get("email", "")
@@ -124,6 +149,14 @@ class LeadEnrichmentService:
         # Step 5: Lead scoring
         enriched["lead_score"] = self._calculate_lead_score(enriched)
         enriched["enrichment_status"] = "completed"
+
+        # Store result in Redis cache
+        if identifier:
+            try:
+                await self._redis.set(cache_key, json.dumps(enriched), ex=self.CACHE_TTL)
+                logger.debug("Cached enrichment result for %s", cache_key)
+            except Exception as exc:
+                logger.warning("Redis cache write failed: %s", exc)
 
         return enriched
 

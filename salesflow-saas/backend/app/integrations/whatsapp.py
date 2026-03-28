@@ -1,4 +1,5 @@
 import httpx
+from tenacity import retry, stop_after_attempt, wait_exponential
 from app.config import get_settings
 
 settings = get_settings()
@@ -6,6 +7,7 @@ settings = get_settings()
 WHATSAPP_API_URL = "https://graph.facebook.com/v22.0"
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10), reraise=True)
 async def send_whatsapp_message(phone: str, message: str) -> dict:
     """Send a text message via WhatsApp Business API."""
     if not settings.WHATSAPP_API_TOKEN or not settings.WHATSAPP_PHONE_NUMBER_ID:
@@ -28,6 +30,7 @@ async def send_whatsapp_message(phone: str, message: str) -> dict:
         return response.json()
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10), reraise=True)
 async def send_whatsapp_template(phone: str, template_name: str, language: str = "ar", components: list = None) -> dict:
     """Send a template message via WhatsApp Business API."""
     if not settings.WHATSAPP_API_TOKEN:
