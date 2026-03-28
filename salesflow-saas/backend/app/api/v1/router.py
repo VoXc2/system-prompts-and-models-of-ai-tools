@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from app.api.v1 import auth, leads, deals, dashboard, tenants, users, ai_agents, webhooks
 from app.api.v1 import conversations, campaigns, consents, forms, voice
 from app.api.v1 import sequences, contracts, files, branding, tags
+from app.api.v1 import analytics, custom_fields
 
 api_router = APIRouter()
 
@@ -43,6 +44,12 @@ api_router.include_router(branding.router, prefix="/branding", tags=["Branding"]
 
 # Tags & Segments
 api_router.include_router(tags.router, prefix="", tags=["Tags & Segments"])
+
+# Analytics & Reporting
+api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
+
+# Custom Fields
+api_router.include_router(custom_fields.router, prefix="/custom-fields", tags=["Custom Fields"])
 
 # Public (no auth required)
 api_router.include_router(forms.router, prefix="/forms", tags=["Forms"])

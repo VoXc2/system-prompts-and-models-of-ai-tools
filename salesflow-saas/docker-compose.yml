@@ -35,6 +35,7 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./backend/app:/app/app
+      - uploads_data:/app/uploads
     env_file:
       - .env
     depends_on:
@@ -48,7 +49,7 @@ services:
   celery_worker:
     build: ./backend
     restart: always
-    command: celery -A app.workers.celery_app worker -l info -c 4
+    command: celery -A app.workers.celery_app worker -l info -c 4 -Q default,ai,sequences
     volumes:
       - ./backend/app:/app/app
     env_file:
@@ -95,3 +96,4 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:
