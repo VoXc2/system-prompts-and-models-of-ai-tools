@@ -523,7 +523,7 @@ class ResearchAgent:
 """
 
         try:
-            brief = await generate_response(
+            brief = await self._ai_brain.think(
                 system_prompt="أنت محلل مبيعات B2B خبير في السوق السعودي.",
                 user_message=prompt,
             )
