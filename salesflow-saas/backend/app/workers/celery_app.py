@@ -12,6 +12,7 @@ celery_app = Celery(
         "app.workers.message_tasks",
         "app.workers.notification_tasks",
         "app.workers.ai_agent_tasks",
+        "app.workers.sequence_worker",
     ],
 )
 
@@ -54,5 +55,9 @@ celery_app.conf.beat_schedule = {
             "minute": 0,
         },
         "args": ["default"],
+    },
+    "process-sequence-steps": {
+        "task": "app.workers.sequence_worker.process_sequence_steps",
+        "schedule": 60.0,  # every minute
     },
 }

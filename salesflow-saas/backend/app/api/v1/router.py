@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.api.v1 import auth, leads, deals, dashboard, tenants, users, ai_agents, webhooks
-from app.api.v1 import conversations, campaigns, consents, forms
+from app.api.v1 import conversations, campaigns, consents, forms, voice
 
 api_router = APIRouter()
 
@@ -24,6 +24,9 @@ api_router.include_router(campaigns.router, prefix="/campaigns", tags=["Campaign
 
 # Compliance
 api_router.include_router(consents.router, prefix="/consents", tags=["Consents"])
+
+# Voice AI
+api_router.include_router(voice.router, prefix="/voice", tags=["Voice AI"])
 
 # Public (no auth required)
 api_router.include_router(forms.router, prefix="/forms", tags=["Forms"])
