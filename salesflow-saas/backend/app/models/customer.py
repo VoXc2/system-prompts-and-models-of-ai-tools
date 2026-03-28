@@ -12,7 +12,7 @@ class Customer(TenantModel):
     phone = Column(String(20))
     email = Column(String(255))
     company_name = Column(String(255))
-    metadata = Column(JSONB, default=dict)
+    extra_data = Column("metadata", JSONB, default=dict)
     lifetime_value = Column(Numeric(12, 2), default=0)
 
     tenant = relationship("Tenant", back_populates="customers")

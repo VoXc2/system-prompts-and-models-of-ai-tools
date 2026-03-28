@@ -16,7 +16,7 @@ class Lead(TenantModel):
     status = Column(String(50), default="new")  # new, contacted, qualified, proposal, won, lost
     score = Column(Integer, default=0)
     notes = Column(Text)
-    metadata = Column(JSONB, default=dict)  # industry-specific flexible data
+    extra_data = Column("metadata", JSONB, default=dict)  # industry-specific flexible data
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     tenant = relationship("Tenant", back_populates="leads")
