@@ -4,7 +4,11 @@ AI Agents API - Manage AI sales agents, campaigns, and conversations.
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
-from app.api.deps import get_current_user, get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func
+
+from app.api.v1.deps import get_current_user, get_db
+from app.models.ai_agent import AIAgent, OutreachCampaign, AIConversation, DiscoveredLead
 from app.services.ai_brain import ai_brain
 from app.services.smart_sales import SmartSalesAgent
 from app.services.lead_discovery import LeadDiscoveryAgent, IndustryLeadFinder
@@ -17,7 +21,7 @@ router = APIRouter()
 
 class AgentCreateRequest(BaseModel):
     name: str
-    agent_type: str = "sales"  # sales, discovery, support, qualifier
+    agent_type: str = "sales"
     industry: str = "general"
     auto_reply: bool = True
     auto_discover: bool = False
@@ -64,42 +68,70 @@ class QualifyRequest(BaseModel):
     conversation: str = ""
 
 
+def _serialize_agent(a: AIAgent) -> dict:
+    return {
+        "id": str(a.id),
+        "name": a.name,
+        "type": a.agent_type,
+        "industry": a.industry,
+        "is_active": a.is_active,
+        "auto_reply": a.auto_reply,
+        "auto_discover": a.auto_discover,
+        "auto_outreach": a.auto_outreach,
+        "max_messages_per_day": a.max_messages_per_day,
+        "messages_sent_today": a.messages_sent_today or 0,
+        "total_messages_sent": a.total_messages_sent or 0,
+        "total_leads_discovered": a.total_leads_discovered or 0,
+        "total_deals_closed": a.total_deals_closed or 0,
+        "ai_provider": a.ai_provider,
+        "ai_model": a.ai_model,
+        "created_at": a.created_at.isoformat() if a.created_at else None,
+    }
+
+
 # ─── Agent Management ───
 
 @router.post("/agents")
-async def create_agent(req: AgentCreateRequest):
+async def create_agent(
+    req: AgentCreateRequest,
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     """Create a new AI sales agent."""
+    tenant_id = current_user["tenant_id"]
+    agent = AIAgent(
+        tenant_id=tenant_id,
+        name=req.name,
+        agent_type=req.agent_type,
+        industry=req.industry,
+        auto_reply=req.auto_reply,
+        auto_discover=req.auto_discover,
+        auto_outreach=req.auto_outreach,
+        max_messages_per_day=req.max_messages_per_day,
+    )
+    db.add(agent)
+    await db.commit()
+    await db.refresh(agent)
+
     return {
         "status": "success",
-        "agent": {
-            "name": req.name,
-            "type": req.agent_type,
-            "industry": req.industry,
-            "auto_reply": req.auto_reply,
-            "auto_discover": req.auto_discover,
-            "auto_outreach": req.auto_outreach,
-            "status": "active",
-        },
+        "agent": _serialize_agent(agent),
         "message": f"تم إنشاء الوكيل الذكي '{req.name}' بنجاح",
     }
 
 
 @router.get("/agents")
-async def list_agents():
+async def list_agents(
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     """List all AI agents for the tenant."""
-    return {
-        "agents": [
-            {
-                "name": "ديليكس - وكيل المبيعات",
-                "type": "sales",
-                "status": "active",
-                "auto_reply": True,
-                "messages_today": 0,
-                "total_messages": 0,
-                "deals_closed": 0,
-            }
-        ]
-    }
+    tenant_id = current_user["tenant_id"]
+    result = await db.execute(
+        select(AIAgent).where(AIAgent.tenant_id == tenant_id).order_by(AIAgent.created_at.desc())
+    )
+    agents = result.scalars().all()
+    return {"agents": [_serialize_agent(a) for a in agents]}
 
 
 # ─── AI Chat (Smart Sales) ───
@@ -244,17 +276,49 @@ async def create_outreach_sequence(req: OutreachRequest):
 
 
 @router.post("/outreach/campaign")
-async def launch_campaign(req: CampaignRequest):
+async def launch_campaign(
+    req: CampaignRequest,
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     """Launch an automated outreach campaign."""
+    tenant_id = current_user["tenant_id"]
+
+    # Get or create default agent
+    result = await db.execute(
+        select(AIAgent).where(AIAgent.tenant_id == tenant_id, AIAgent.is_active == True).limit(1)
+    )
+    agent = result.scalar_one_or_none()
+    if not agent:
+        agent = AIAgent(tenant_id=tenant_id, name="ديليكس - وكيل المبيعات", agent_type="sales")
+        db.add(agent)
+        await db.flush()
+
+    campaign = OutreachCampaign(
+        tenant_id=tenant_id,
+        agent_id=agent.id,
+        name=req.name,
+        campaign_type=req.campaign_type,
+        industry=req.industry,
+        channel=req.channel,
+        sequence=list(range(req.sequence_length)),
+        target_criteria=req.target_criteria or {},
+        status="ready",
+    )
+    db.add(campaign)
+    await db.commit()
+    await db.refresh(campaign)
+
     return {
         "status": "created",
         "campaign": {
-            "name": req.name,
-            "type": req.campaign_type,
-            "industry": req.industry,
-            "channel": req.channel,
+            "id": str(campaign.id),
+            "name": campaign.name,
+            "type": campaign.campaign_type,
+            "industry": campaign.industry,
+            "channel": campaign.channel,
             "sequence_length": req.sequence_length,
-            "status": "ready",
+            "status": campaign.status,
         },
         "message": f"تم إنشاء حملة '{req.name}' - جاهزة للإطلاق",
         "next_optimal_send_time": OutreachScheduler.get_next_send_time().isoformat(),
@@ -287,18 +351,40 @@ async def analyze_sentiment(message: str):
 
 
 @router.get("/stats")
-async def agent_stats():
+async def agent_stats(
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     """Get AI agent performance statistics."""
+    tenant_id = current_user["tenant_id"]
+
+    agents_active = (await db.execute(
+        select(func.count()).where(AIAgent.tenant_id == tenant_id, AIAgent.is_active == True)
+    )).scalar() or 0
+
+    total_conversations = (await db.execute(
+        select(func.count()).where(AIConversation.tenant_id == tenant_id)
+    )).scalar() or 0
+
+    total_msgs = (await db.execute(
+        select(func.coalesce(func.sum(AIAgent.total_messages_sent), 0)).where(AIAgent.tenant_id == tenant_id)
+    )).scalar() or 0
+
+    total_discovered = (await db.execute(
+        select(func.count()).where(DiscoveredLead.tenant_id == tenant_id)
+    )).scalar() or 0
+
+    total_deals = (await db.execute(
+        select(func.coalesce(func.sum(AIAgent.total_deals_closed), 0)).where(AIAgent.tenant_id == tenant_id)
+    )).scalar() or 0
+
     return {
-        "agents_active": 1,
-        "total_conversations": 0,
-        "total_messages_sent": 0,
-        "total_leads_discovered": 0,
-        "total_deals_from_ai": 0,
+        "agents_active": agents_active,
+        "total_conversations": total_conversations,
+        "total_messages_sent": total_msgs,
+        "total_leads_discovered": total_discovered,
+        "total_deals_from_ai": total_deals,
         "avg_response_time_seconds": 2.5,
-        "customer_satisfaction": 0,
-        "conversion_rate": 0,
-        "best_performing_agent": "ديليكس - وكيل المبيعات",
         "is_sending_optimal": OutreachScheduler.should_send_now(),
         "next_optimal_time": OutreachScheduler.get_next_send_time().isoformat(),
     }
