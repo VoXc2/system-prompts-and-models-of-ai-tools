@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from app.api.v1 import auth, leads, deals, dashboard, tenants, users, ai_agents, webhooks
 from app.api.v1 import conversations, campaigns, consents, forms, voice
+from app.api.v1 import sequences, contracts, files
 
 api_router = APIRouter()
 
@@ -27,6 +28,15 @@ api_router.include_router(consents.router, prefix="/consents", tags=["Consents"]
 
 # Voice AI
 api_router.include_router(voice.router, prefix="/voice", tags=["Voice AI"])
+
+# Sales Sequences
+api_router.include_router(sequences.router, prefix="/sequences", tags=["Sequences"])
+
+# Contracts & E-Sign
+api_router.include_router(contracts.router, prefix="/contracts", tags=["Contracts"])
+
+# File Management
+api_router.include_router(files.router, prefix="/files", tags=["Files"])
 
 # Public (no auth required)
 api_router.include_router(forms.router, prefix="/forms", tags=["Forms"])
