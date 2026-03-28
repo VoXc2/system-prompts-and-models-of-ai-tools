@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.api.v1 import auth, leads, deals, dashboard, tenants, users, ai_agents, webhooks
 from app.api.v1 import conversations, campaigns, consents, forms, voice
 from app.api.v1 import sequences, contracts, files, branding, tags
-from app.api.v1 import analytics, custom_fields
+from app.api.v1 import analytics, custom_fields, notifications
 
 api_router = APIRouter()
 
@@ -50,6 +50,9 @@ api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytic
 
 # Custom Fields
 api_router.include_router(custom_fields.router, prefix="/custom-fields", tags=["Custom Fields"])
+
+# Notifications
+api_router.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])
 
 # Public (no auth required)
 api_router.include_router(forms.router, prefix="/forms", tags=["Forms"])
