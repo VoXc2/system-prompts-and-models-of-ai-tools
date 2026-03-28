@@ -149,11 +149,15 @@ class AIBrain:
         self.openai_key = settings.OPENAI_API_KEY
         self.openai_model = settings.OPENAI_MODEL
         self.anthropic_key = settings.ANTHROPIC_API_KEY
-        self.ai_provider = settings.AI_PROVIDER  # "openai" or "anthropic"
+        self.gemini_key = settings.GEMINI_API_KEY
+        self.gemini_model = settings.GEMINI_MODEL
+        self.ai_provider = settings.AI_PROVIDER  # "openai", "anthropic", or "gemini"
 
     async def think(self, system_prompt: str, user_message: str, temperature: float = 0.7, max_tokens: int = 1000) -> str:
         """Send a prompt to the AI and get a response."""
-        if self.ai_provider == "anthropic" and self.anthropic_key:
+        if self.ai_provider == "gemini" and self.gemini_key:
+            return await self._call_gemini(system_prompt, user_message, temperature, max_tokens)
+        elif self.ai_provider == "anthropic" and self.anthropic_key:
             return await self._call_anthropic(system_prompt, user_message, temperature, max_tokens)
         elif self.openai_key:
             return await self._call_openai(system_prompt, user_message, temperature, max_tokens)
@@ -265,6 +269,57 @@ class AIBrain:
 
         logger.error(
             "Anthropic API call failed after %d retries. Last error: %s",
+            MAX_RETRIES,
+            str(last_error),
+        )
+        raise last_error  # type: ignore[misc]
+
+    async def _call_gemini(self, system_prompt: str, user_message: str, temperature: float, max_tokens: int) -> str:
+        """Call Google Gemini API with retry logic (3 retries, exponential backoff)."""
+        last_error: Optional[Exception] = None
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.gemini_model}:generateContent"
+
+        for attempt in range(MAX_RETRIES):
+            try:
+                async with httpx.AsyncClient(timeout=60) as client:
+                    response = await client.post(
+                        url,
+                        params={"key": self.gemini_key},
+                        headers={"Content-Type": "application/json"},
+                        json={
+                            "contents": [
+                                {
+                                    "parts": [
+                                        {"text": system_prompt + "\n\n" + user_message}
+                                    ]
+                                }
+                            ],
+                            "generationConfig": {
+                                "temperature": temperature,
+                                "maxOutputTokens": max_tokens,
+                            },
+                        },
+                    )
+                    response.raise_for_status()
+                    data = response.json()
+                    return data["candidates"][0]["content"]["parts"][0]["text"]
+
+            except (httpx.HTTPStatusError, httpx.RequestError, KeyError) as exc:
+                last_error = exc
+                backoff = RETRY_BACKOFF_SECONDS[attempt]
+                logger.warning(
+                    "Gemini API call failed (attempt %d/%d): %s. "
+                    "Retrying in %ds...",
+                    attempt + 1,
+                    MAX_RETRIES,
+                    str(exc),
+                    backoff,
+                )
+                if attempt < MAX_RETRIES - 1:
+                    await asyncio.sleep(backoff)
+
+        logger.error(
+            "Gemini API call failed after %d retries. Last error: %s",
             MAX_RETRIES,
             str(last_error),
         )

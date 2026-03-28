@@ -47,10 +47,12 @@ class Settings(BaseSettings):
     UNIFONIC_SENDER_ID: str = "Dealix"
 
     # AI Settings
-    AI_PROVIDER: str = "openai"  # "openai" or "anthropic"
+    AI_PROVIDER: str = "openai"  # "openai", "anthropic", or "gemini"
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
     ANTHROPIC_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.0-flash"
 
     # Lead Generation (Legitimate B2B APIs)
     APOLLO_API_KEY: str = ""
