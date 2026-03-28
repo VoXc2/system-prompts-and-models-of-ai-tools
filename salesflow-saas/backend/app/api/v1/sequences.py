@@ -1,12 +1,15 @@
 """Sales sequences - automated multi-step follow-up workflows for Dealix CRM."""
 from datetime import datetime, timezone
 from typing import Optional
-from uuid import uuid4
+from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
+from sqlalchemy import select, func
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.v1.deps import get_current_user, get_db
+from app.models.sequence import Sequence, SequenceStep, SequenceEnrollment
 
 router = APIRouter()
 
@@ -27,9 +30,18 @@ class SequenceStepCreate(BaseModel):
     settings: Optional[dict] = None
 
 
-class SequenceStepResponse(SequenceStepCreate):
+class SequenceStepResponse(BaseModel):
     id: str
     sequence_id: str
+    step_order: int
+    step_type: str
+    delay_days: int
+    delay_hours: int
+    channel: Optional[str] = None
+    template_name: Optional[str] = None
+    message_content: Optional[str] = None
+    ai_generated: bool
+    settings: Optional[dict] = None
     created_at: str
 
 
@@ -64,7 +76,7 @@ class SequenceResponse(BaseModel):
     total_converted: int
     steps: Optional[list[SequenceStepResponse]] = None
     created_at: str
-    updated_at: str
+    updated_at: Optional[str] = None
 
 
 class EnrollRequest(BaseModel):
@@ -117,50 +129,86 @@ STEP_TYPE_AR = {
 
 VALID_STEP_TYPES = set(STEP_TYPE_AR.keys())
 
-_now_iso = lambda: datetime.now(timezone.utc).isoformat()
+
+def _serialize_dt(dt: Optional[datetime]) -> Optional[str]:
+    """Convert a datetime to ISO string, or return None."""
+    return dt.isoformat() if dt else None
 
 
-def _mock_step(sequence_id: str, step: SequenceStepCreate) -> dict:
+def _step_to_response(step: SequenceStep) -> SequenceStepResponse:
     return SequenceStepResponse(
-        id=str(uuid4()),
-        sequence_id=sequence_id,
+        id=str(step.id),
+        sequence_id=str(step.sequence_id),
         step_order=step.step_order,
         step_type=step.step_type,
-        delay_days=step.delay_days,
-        delay_hours=step.delay_hours,
+        delay_days=step.delay_days or 0,
+        delay_hours=step.delay_hours or 0,
         channel=step.channel,
         template_name=step.template_name,
         message_content=step.message_content,
-        ai_generated=step.ai_generated,
+        ai_generated=step.ai_generated or False,
         settings=step.settings,
-        created_at=_now_iso(),
-    ).model_dump()
+        created_at=_serialize_dt(step.created_at) or "",
+    )
 
 
-def _mock_sequence(
-    tenant_id: str,
-    req: SequenceCreate,
-    sequence_id: Optional[str] = None,
-) -> dict:
-    sid = sequence_id or str(uuid4())
-    steps_out = [_mock_step(sid, s) for s in (req.steps or [])]
+def _sequence_to_response(
+    seq: Sequence,
+    steps: Optional[list[SequenceStep]] = None,
+) -> SequenceResponse:
+    steps_out = [_step_to_response(s) for s in steps] if steps is not None else None
     return SequenceResponse(
-        id=sid,
-        tenant_id=tenant_id,
-        name=req.name,
-        description=req.description,
-        industry=req.industry,
-        channel=req.channel,
-        status="draft",
-        status_ar=STATUS_AR["draft"],
-        total_steps=len(steps_out),
-        total_enrolled=0,
-        total_completed=0,
-        total_converted=0,
+        id=str(seq.id),
+        tenant_id=str(seq.tenant_id),
+        name=seq.name,
+        industry=seq.industry,
+        channel=seq.channel or "whatsapp",
+        status=seq.status or "draft",
+        status_ar=STATUS_AR.get(seq.status or "draft", seq.status or "draft"),
+        total_steps=seq.total_steps or 0,
+        total_enrolled=seq.total_enrolled or 0,
+        total_completed=seq.total_completed or 0,
+        total_converted=seq.total_converted or 0,
         steps=steps_out,
-        created_at=_now_iso(),
-        updated_at=_now_iso(),
-    ).model_dump()
+        created_at=_serialize_dt(seq.created_at) or "",
+        updated_at=None,
+    )
+
+
+def _enrollment_to_response(enrollment: SequenceEnrollment) -> EnrollmentResponse:
+    return EnrollmentResponse(
+        id=str(enrollment.id),
+        sequence_id=str(enrollment.sequence_id),
+        lead_id=str(enrollment.lead_id),
+        current_step=enrollment.current_step or 0,
+        status=enrollment.status or "active",
+        status_ar=STATUS_AR.get(enrollment.status or "active", enrollment.status or "active"),
+        enrolled_at=_serialize_dt(enrollment.enrolled_at) or "",
+        next_step_at=_serialize_dt(enrollment.next_step_at),
+        completed_at=_serialize_dt(enrollment.completed_at),
+        reply_received=enrollment.reply_received or False,
+    )
+
+
+async def _get_sequence_or_404(
+    db: AsyncSession,
+    sequence_id: str,
+    tenant_id: str,
+) -> Sequence:
+    """Fetch a sequence by id and tenant, or raise 404."""
+    result = await db.execute(
+        select(Sequence).where(
+            Sequence.id == sequence_id,
+            Sequence.tenant_id == tenant_id,
+        )
+    )
+    seq = result.scalars().first()
+    if not seq:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="التسلسل غير موجود",
+        )
+    return seq
 
 
 # ---------------------------------------------------------------------------
@@ -172,7 +220,7 @@ def _mock_sequence(
 async def create_sequence(
     req: SequenceCreate,
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Create a new sales sequence with optional initial steps.
 
@@ -186,45 +234,89 @@ async def create_sequence(
                     detail=f"نوع الخطوة غير صالح: {step.step_type}. الأنواع المتاحة: {', '.join(VALID_STEP_TYPES)}",
                 )
 
-    sequence = _mock_sequence(current_user["tenant_id"], req)
-    return {"status": "created", "الحالة": "تم الإنشاء", "sequence": sequence}
+    tenant_id = current_user["tenant_id"]
+
+    seq = Sequence(
+        tenant_id=tenant_id,
+        name=req.name,
+        industry=req.industry,
+        channel=req.channel,
+        status="draft",
+        total_steps=len(req.steps) if req.steps else 0,
+        total_enrolled=0,
+        total_completed=0,
+        total_converted=0,
+        settings={},
+    )
+    db.add(seq)
+    await db.flush()  # get seq.id before creating steps
+
+    created_steps: list[SequenceStep] = []
+    if req.steps:
+        for step_data in req.steps:
+            step = SequenceStep(
+                tenant_id=tenant_id,
+                sequence_id=seq.id,
+                step_order=step_data.step_order,
+                step_type=step_data.step_type,
+                delay_days=step_data.delay_days,
+                delay_hours=step_data.delay_hours,
+                channel=step_data.channel,
+                template_name=step_data.template_name,
+                message_content=step_data.message_content,
+                ai_generated=step_data.ai_generated,
+                settings=step_data.settings or {},
+            )
+            db.add(step)
+            created_steps.append(step)
+
+    await db.commit()
+    await db.refresh(seq)
+    for s in created_steps:
+        await db.refresh(s)
+
+    return {
+        "status": "created",
+        "الحالة": "تم الإنشاء",
+        "sequence": _sequence_to_response(seq, created_steps).model_dump(),
+    }
 
 
 @router.get("/")
 async def list_sequences(
     status_filter: Optional[str] = None,
     industry: Optional[str] = None,
-    limit: int = 50,
-    offset: int = 0,
+    limit: int = Query(default=50, le=200),
+    offset: int = Query(default=0, ge=0),
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """List all sequences for the current tenant.
 
     عرض جميع التسلسلات للمستأجر الحالي.
     """
-    # Mock: return a sample sequence to demonstrate shape
-    sample = SequenceResponse(
-        id=str(uuid4()),
-        tenant_id=current_user["tenant_id"],
-        name="متابعة العملاء المحتملين - عقارات",
-        description="تسلسل متابعة تلقائي للعملاء المهتمين بالعقارات",
-        industry="عقارات",
-        channel="whatsapp",
-        status="active",
-        status_ar=STATUS_AR["active"],
-        total_steps=4,
-        total_enrolled=23,
-        total_completed=8,
-        total_converted=3,
-        steps=None,
-        created_at=_now_iso(),
-        updated_at=_now_iso(),
-    ).model_dump()
+    tenant_id = current_user["tenant_id"]
+
+    query = select(Sequence).where(Sequence.tenant_id == tenant_id)
+
+    if status_filter:
+        query = query.where(Sequence.status == status_filter)
+    if industry:
+        query = query.where(Sequence.industry == industry)
+
+    # Total count
+    count_query = select(func.count()).select_from(query.subquery())
+    total_result = await db.execute(count_query)
+    total = total_result.scalar() or 0
+
+    # Paginated results
+    query = query.order_by(Sequence.created_at.desc()).offset(offset).limit(limit)
+    result = await db.execute(query)
+    sequences = result.scalars().all()
 
     return {
-        "sequences": [sample],
-        "total": 1,
+        "sequences": [_sequence_to_response(s).model_dump() for s in sequences],
+        "total": total,
         "limit": limit,
         "offset": offset,
     }
@@ -234,90 +326,27 @@ async def list_sequences(
 async def get_sequence(
     sequence_id: str,
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Get sequence details including all steps.
 
     عرض تفاصيل التسلسل مع جميع الخطوات.
     """
-    mock_steps = [
-        SequenceStepResponse(
-            id=str(uuid4()),
-            sequence_id=sequence_id,
-            step_order=1,
-            step_type="send_whatsapp",
-            delay_days=0,
-            delay_hours=0,
-            channel="whatsapp",
-            template_name="ترحيب_عميل_جديد",
-            message_content="مرحباً {name}، شكراً لاهتمامك! كيف يمكنني مساعدتك؟",
-            ai_generated=False,
-            settings=None,
-            created_at=_now_iso(),
-        ),
-        SequenceStepResponse(
-            id=str(uuid4()),
-            sequence_id=sequence_id,
-            step_order=2,
-            step_type="wait",
-            delay_days=1,
-            delay_hours=0,
-            channel=None,
-            template_name=None,
-            message_content=None,
-            ai_generated=False,
-            settings=None,
-            created_at=_now_iso(),
-        ),
-        SequenceStepResponse(
-            id=str(uuid4()),
-            sequence_id=sequence_id,
-            step_order=3,
-            step_type="ai_reply",
-            delay_days=0,
-            delay_hours=0,
-            channel="whatsapp",
-            template_name=None,
-            message_content=None,
-            ai_generated=True,
-            settings={"tone": "professional", "language": "ar"},
-            created_at=_now_iso(),
-        ),
-        SequenceStepResponse(
-            id=str(uuid4()),
-            sequence_id=sequence_id,
-            step_order=4,
-            step_type="create_task",
-            delay_days=3,
-            delay_hours=0,
-            channel=None,
-            template_name=None,
-            message_content="اتصال متابعة مع العميل",
-            ai_generated=False,
-            settings={"task_type": "call", "priority": "high"},
-            created_at=_now_iso(),
-        ),
-    ]
+    tenant_id = current_user["tenant_id"]
+    seq = await _get_sequence_or_404(db, sequence_id, tenant_id)
 
-    sequence = SequenceResponse(
-        id=sequence_id,
-        tenant_id=current_user["tenant_id"],
-        name="متابعة العملاء المحتملين - عقارات",
-        description="تسلسل متابعة تلقائي للعملاء المهتمين بالعقارات",
-        industry="عقارات",
-        channel="whatsapp",
-        status="active",
-        status_ar=STATUS_AR["active"],
-        total_steps=len(mock_steps),
-        total_enrolled=23,
-        total_completed=8,
-        total_converted=3,
-        steps=[s.model_dump() for s in mock_steps],
-        created_at=_now_iso(),
-        updated_at=_now_iso(),
+    # Fetch steps ordered by step_order
+    steps_result = await db.execute(
+        select(SequenceStep)
+        .where(
+            SequenceStep.sequence_id == seq.id,
+            SequenceStep.tenant_id == tenant_id,
+        )
+        .order_by(SequenceStep.step_order)
     )
+    steps = steps_result.scalars().all()
 
-    return {"sequence": sequence.model_dump()}
+    return {"sequence": _sequence_to_response(seq, steps).model_dump()}
 
 
 @router.put("/{sequence_id}")
@@ -325,7 +354,7 @@ async def update_sequence(
     sequence_id: str,
     req: SequenceUpdate,
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Update a sales sequence.
 
@@ -344,33 +373,40 @@ async def update_sequence(
             detail=f"حالة غير صالحة: {req.status}",
         )
 
-    result = {
-        "id": sequence_id,
-        "tenant_id": current_user["tenant_id"],
-        **updated_fields,
-        "updated_at": _now_iso(),
-    }
-    if "status" in result:
-        result["status_ar"] = STATUS_AR[result["status"]]
+    tenant_id = current_user["tenant_id"]
+    seq = await _get_sequence_or_404(db, sequence_id, tenant_id)
 
-    return {"status": "updated", "الحالة": "تم التحديث", "sequence": result}
+    for field, value in updated_fields.items():
+        setattr(seq, field, value)
+
+    await db.commit()
+    await db.refresh(seq)
+
+    resp = _sequence_to_response(seq)
+    return {"status": "updated", "الحالة": "تم التحديث", "sequence": resp.model_dump()}
 
 
 @router.delete("/{sequence_id}")
 async def delete_sequence(
     sequence_id: str,
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
-    """Soft-delete a sequence by setting is_active=False.
+    """Soft-delete a sequence by setting status to archived.
 
     حذف تسلسل (حذف ناعم).
     """
+    tenant_id = current_user["tenant_id"]
+    seq = await _get_sequence_or_404(db, sequence_id, tenant_id)
+
+    seq.status = "archived"
+    await db.commit()
+    await db.refresh(seq)
+
     return {
         "status": "deleted",
         "الحالة": "تم الحذف",
-        "sequence_id": sequence_id,
-        "is_active": False,
+        "sequence_id": str(seq.id),
         "message": "تم حذف التسلسل بنجاح (حذف ناعم)",
     }
 
@@ -385,7 +421,7 @@ async def add_step(
     sequence_id: str,
     req: SequenceStepCreate,
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Add a step to an existing sequence.
 
@@ -397,11 +433,34 @@ async def add_step(
             detail=f"نوع الخطوة غير صالح: {req.step_type}. الأنواع المتاحة: {', '.join(VALID_STEP_TYPES)}",
         )
 
-    step = _mock_step(sequence_id, req)
+    tenant_id = current_user["tenant_id"]
+    seq = await _get_sequence_or_404(db, sequence_id, tenant_id)
+
+    step = SequenceStep(
+        tenant_id=tenant_id,
+        sequence_id=seq.id,
+        step_order=req.step_order,
+        step_type=req.step_type,
+        delay_days=req.delay_days,
+        delay_hours=req.delay_hours,
+        channel=req.channel,
+        template_name=req.template_name,
+        message_content=req.message_content,
+        ai_generated=req.ai_generated,
+        settings=req.settings or {},
+    )
+    db.add(step)
+
+    seq.total_steps = (seq.total_steps or 0) + 1
+
+    await db.commit()
+    await db.refresh(step)
+    await db.refresh(seq)
+
     return {
         "status": "created",
         "الحالة": "تم الإنشاء",
-        "step": step,
+        "step": _step_to_response(step).model_dump(),
         "step_type_ar": STEP_TYPE_AR.get(req.step_type, req.step_type),
     }
 
@@ -416,29 +475,40 @@ async def enroll_lead(
     sequence_id: str,
     req: EnrollRequest,
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Enroll a lead in a sales sequence.
 
     تسجيل عميل محتمل في تسلسل مبيعات.
     """
-    enrollment = EnrollmentResponse(
-        id=str(uuid4()),
-        sequence_id=sequence_id,
+    tenant_id = current_user["tenant_id"]
+    seq = await _get_sequence_or_404(db, sequence_id, tenant_id)
+
+    now = datetime.now(timezone.utc)
+
+    enrollment = SequenceEnrollment(
+        tenant_id=tenant_id,
+        sequence_id=seq.id,
         lead_id=req.lead_id,
         current_step=0,
         status="active",
-        status_ar=STATUS_AR["active"],
-        enrolled_at=_now_iso(),
-        next_step_at=_now_iso(),
-        completed_at=None,
+        enrolled_at=now,
+        next_step_at=now,
         reply_received=False,
+        extra_data={},
     )
+    db.add(enrollment)
+
+    seq.total_enrolled = (seq.total_enrolled or 0) + 1
+
+    await db.commit()
+    await db.refresh(enrollment)
+    await db.refresh(seq)
 
     return {
         "status": "enrolled",
         "الحالة": "تم التسجيل",
-        "enrollment": enrollment.model_dump(),
+        "enrollment": _enrollment_to_response(enrollment).model_dump(),
     }
 
 
@@ -447,14 +517,36 @@ async def pause_enrollment(
     sequence_id: str,
     enrollment_id: str,
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Pause a lead's enrollment in a sequence.
 
     إيقاف تسجيل عميل محتمل مؤقتاً في تسلسل.
     """
+    tenant_id = current_user["tenant_id"]
+
+    result = await db.execute(
+        select(SequenceEnrollment).where(
+            SequenceEnrollment.id == enrollment_id,
+            SequenceEnrollment.sequence_id == sequence_id,
+            SequenceEnrollment.tenant_id == tenant_id,
+        )
+    )
+    enrollment = result.scalars().first()
+    if not enrollment:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="التسجيل غير موجود",
+        )
+
+    enrollment.status = "paused"
+    enrollment.next_step_at = None
+
+    await db.commit()
+    await db.refresh(enrollment)
+
     return PauseResponse(
-        enrollment_id=enrollment_id,
+        enrollment_id=str(enrollment.id),
         status="paused",
         status_ar=STATUS_AR["paused"],
         message="تم إيقاف التسجيل مؤقتاً بنجاح",
@@ -465,32 +557,42 @@ async def pause_enrollment(
 async def list_enrollments(
     sequence_id: str,
     status_filter: Optional[str] = None,
-    limit: int = 50,
-    offset: int = 0,
+    limit: int = Query(default=50, le=200),
+    offset: int = Query(default=0, ge=0),
     current_user: dict = Depends(get_current_user),
-    db=Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """List all enrollments for a sequence.
 
     عرض جميع التسجيلات في تسلسل.
     """
-    sample = EnrollmentResponse(
-        id=str(uuid4()),
-        sequence_id=sequence_id,
-        lead_id=str(uuid4()),
-        current_step=2,
-        status="active",
-        status_ar=STATUS_AR["active"],
-        enrolled_at=_now_iso(),
-        next_step_at=_now_iso(),
-        completed_at=None,
-        reply_received=False,
-    ).model_dump()
+    tenant_id = current_user["tenant_id"]
+
+    # Verify sequence exists and belongs to tenant
+    await _get_sequence_or_404(db, sequence_id, tenant_id)
+
+    query = select(SequenceEnrollment).where(
+        SequenceEnrollment.sequence_id == sequence_id,
+        SequenceEnrollment.tenant_id == tenant_id,
+    )
+
+    if status_filter:
+        query = query.where(SequenceEnrollment.status == status_filter)
+
+    # Total count
+    count_query = select(func.count()).select_from(query.subquery())
+    total_result = await db.execute(count_query)
+    total = total_result.scalar() or 0
+
+    # Paginated results
+    query = query.order_by(SequenceEnrollment.enrolled_at.desc()).offset(offset).limit(limit)
+    result = await db.execute(query)
+    enrollments = result.scalars().all()
 
     return {
         "sequence_id": sequence_id,
-        "enrollments": [sample],
-        "total": 1,
+        "enrollments": [_enrollment_to_response(e).model_dump() for e in enrollments],
+        "total": total,
         "limit": limit,
         "offset": offset,
     }

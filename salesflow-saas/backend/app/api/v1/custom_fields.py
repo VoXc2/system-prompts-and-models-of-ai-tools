@@ -1,10 +1,15 @@
 """Custom fields management API for leads, deals, and contacts."""
 from datetime import datetime, timezone
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, model_validator
+from sqlalchemy import select, delete
+from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional, Any
-from uuid import uuid4
+
 from app.api.v1.deps import get_current_user, get_db
+from app.models.custom_field import CustomField
 
 router = APIRouter()
 
@@ -68,6 +73,29 @@ class CustomFieldResponse(BaseModel):
     created_at: str
     updated_at: str
 
+    model_config = {"from_attributes": True}
+
+    @classmethod
+    def from_orm_model(cls, obj: CustomField) -> "CustomFieldResponse":
+        # updated_at is stored in settings JSON; fall back to created_at
+        settings = obj.settings or {}
+        updated_at = settings.get("updated_at", "")
+        if not updated_at and obj.created_at:
+            updated_at = obj.created_at.isoformat()
+        return cls(
+            id=str(obj.id),
+            entity_type=obj.entity_type or "",
+            field_name=obj.field_name or "",
+            field_label=obj.field_label or "",
+            field_type=obj.field_type or "text",
+            options=obj.options if obj.options else None,
+            is_required=obj.is_required or False,
+            sort_order=obj.sort_order or 0,
+            tenant_id=str(obj.tenant_id),
+            created_at=obj.created_at.isoformat() if obj.created_at else "",
+            updated_at=updated_at,
+        )
+
 
 class ReorderItem(BaseModel):
     field_id: str
@@ -92,132 +120,7 @@ class CustomFieldValueResponse(BaseModel):
     value: Any
     updated_at: str
 
-
-# --------------- Mock Data ---------------
-
-_mock_fields: dict[str, list[dict]] = {}
-_mock_values: dict[str, list[dict]] = {}
-
-_SEED_FIELDS = [
-    {
-        "entity_type": "lead",
-        "field_name": "lead_source",
-        "field_label": "مصدر العميل",
-        "field_type": "select",
-        "options": ["موقع إلكتروني", "معرض", "إحالة", "إعلان", "اتصال مباشر"],
-        "is_required": True,
-        "sort_order": 1,
-    },
-    {
-        "entity_type": "lead",
-        "field_name": "company_size",
-        "field_label": "حجم الشركة",
-        "field_type": "select",
-        "options": ["1-10", "11-50", "51-200", "201-500", "500+"],
-        "is_required": False,
-        "sort_order": 2,
-    },
-    {
-        "entity_type": "deal",
-        "field_name": "expected_budget",
-        "field_label": "الميزانية المتوقعة",
-        "field_type": "number",
-        "options": None,
-        "is_required": True,
-        "sort_order": 1,
-    },
-    {
-        "entity_type": "deal",
-        "field_name": "closing_date",
-        "field_label": "تاريخ الإغلاق المتوقع",
-        "field_type": "date",
-        "options": None,
-        "is_required": False,
-        "sort_order": 2,
-    },
-    {
-        "entity_type": "contact",
-        "field_name": "website",
-        "field_label": "الموقع الإلكتروني",
-        "field_type": "url",
-        "options": None,
-        "is_required": False,
-        "sort_order": 1,
-    },
-    {
-        "entity_type": "contact",
-        "field_name": "is_decision_maker",
-        "field_label": "صانع القرار",
-        "field_type": "boolean",
-        "options": None,
-        "is_required": False,
-        "sort_order": 2,
-    },
-    {
-        "entity_type": "contact",
-        "field_name": "secondary_phone",
-        "field_label": "رقم الهاتف الإضافي",
-        "field_type": "phone",
-        "options": None,
-        "is_required": False,
-        "sort_order": 3,
-    },
-]
-
-_SEED_VALUES = [
-    {
-        "field_name": "lead_source",
-        "field_label": "مصدر العميل",
-        "field_type": "select",
-        "entity_id": "lead-001",
-        "value": "معرض",
-    },
-    {
-        "field_name": "company_size",
-        "field_label": "حجم الشركة",
-        "field_type": "select",
-        "entity_id": "lead-001",
-        "value": "51-200",
-    },
-    {
-        "field_name": "expected_budget",
-        "field_label": "الميزانية المتوقعة",
-        "field_type": "number",
-        "entity_id": "deal-001",
-        "value": 75000,
-    },
-]
-
-
-def _ensure_seed(tenant_id: str):
-    if tenant_id not in _mock_fields:
-        now = datetime.now(timezone.utc).isoformat()
-        _mock_fields[tenant_id] = [
-            {
-                "id": str(uuid4()),
-                "tenant_id": tenant_id,
-                "created_at": now,
-                "updated_at": now,
-                **f,
-            }
-            for f in _SEED_FIELDS
-        ]
-        _mock_values[tenant_id] = []
-        for sv in _SEED_VALUES:
-            field = next(
-                f for f in _mock_fields[tenant_id] if f["field_name"] == sv["field_name"]
-            )
-            _mock_values[tenant_id].append(
-                {
-                    "field_id": field["id"],
-                    "field_name": sv["field_name"],
-                    "field_label": sv["field_label"],
-                    "field_type": sv["field_type"],
-                    "entity_id": sv["entity_id"],
-                    "value": sv["value"],
-                    "updated_at": now,
-                }
-            )
+    model_config = {"from_attributes": True}
 
 
 # --------------- Endpoints ---------------
@@ -225,135 +128,174 @@ def _ensure_seed(tenant_id: str):
 @router.post("/custom-fields", response_model=CustomFieldResponse, status_code=201)
 async def create_custom_field(
     data: CustomFieldCreate,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """Create a new custom field definition."""
     tenant_id = current_user["tenant_id"]
-    _ensure_seed(tenant_id)
 
     # Check for duplicate field_name within same entity_type
-    for f in _mock_fields[tenant_id]:
-        if f["field_name"] == data.field_name and f["entity_type"] == data.entity_type:
-            raise HTTPException(
-                status_code=400,
-                detail="اسم الحقل موجود مسبقاً لهذا النوع",
-            )
+    result = await db.execute(
+        select(CustomField).where(
+            CustomField.tenant_id == tenant_id,
+            CustomField.field_name == data.field_name,
+            CustomField.entity_type == data.entity_type,
+        )
+    )
+    if result.scalar_one_or_none():
+        raise HTTPException(
+            status_code=400,
+            detail="اسم الحقل موجود مسبقاً لهذا النوع",
+        )
 
     now = datetime.now(timezone.utc).isoformat()
-    field = {
-        "id": str(uuid4()),
-        "entity_type": data.entity_type,
-        "field_name": data.field_name,
-        "field_label": data.field_label,
-        "field_type": data.field_type,
-        "options": data.options,
-        "is_required": data.is_required,
-        "sort_order": data.sort_order,
-        "tenant_id": tenant_id,
-        "created_at": now,
-        "updated_at": now,
-    }
-    _mock_fields[tenant_id].append(field)
-    return CustomFieldResponse(**field)
+    field = CustomField(
+        tenant_id=tenant_id,
+        entity_type=data.entity_type,
+        field_name=data.field_name,
+        field_label=data.field_label,
+        field_type=data.field_type,
+        options=data.options,
+        is_required=data.is_required,
+        sort_order=data.sort_order,
+        settings={"updated_at": now},
+    )
+    db.add(field)
+    await db.commit()
+    await db.refresh(field)
+    return CustomFieldResponse.from_orm_model(field)
 
 
 @router.get("/custom-fields", response_model=list[CustomFieldResponse])
 async def list_custom_fields(
     entity_type: Optional[str] = Query(None, description="Filter by entity type: lead, deal, contact"),
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """List all custom fields, optionally filtered by entity_type."""
     tenant_id = current_user["tenant_id"]
-    _ensure_seed(tenant_id)
 
-    fields = _mock_fields[tenant_id]
+    stmt = select(CustomField).where(CustomField.tenant_id == tenant_id)
     if entity_type:
         if entity_type not in ALLOWED_ENTITY_TYPES:
             raise HTTPException(
                 status_code=400,
                 detail="entity_type يجب أن يكون lead أو deal أو contact",
             )
-        fields = [f for f in fields if f["entity_type"] == entity_type]
+        stmt = stmt.where(CustomField.entity_type == entity_type)
 
-    fields = sorted(fields, key=lambda f: f["sort_order"])
-    return [CustomFieldResponse(**f) for f in fields]
+    stmt = stmt.order_by(CustomField.sort_order)
+    result = await db.execute(stmt)
+    fields = result.scalars().all()
+    return [CustomFieldResponse.from_orm_model(f) for f in fields]
 
 
 @router.put("/custom-fields/{field_id}", response_model=CustomFieldResponse)
 async def update_custom_field(
     field_id: str,
     data: CustomFieldUpdate,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """Update an existing custom field definition."""
     tenant_id = current_user["tenant_id"]
-    _ensure_seed(tenant_id)
 
-    for field in _mock_fields[tenant_id]:
-        if field["id"] == field_id:
-            updates = data.model_dump(exclude_none=True)
-            # If changing to select type, require options
-            new_type = updates.get("field_type", field["field_type"])
-            new_options = updates.get("options", field["options"])
-            if new_type == "select" and not new_options:
-                raise HTTPException(
-                    status_code=400,
-                    detail="حقل القائمة المنسدلة يتطلب قائمة خيارات (options)",
-                )
-            for key, value in updates.items():
-                field[key] = value
-            field["updated_at"] = datetime.now(timezone.utc).isoformat()
-            return CustomFieldResponse(**field)
+    result = await db.execute(
+        select(CustomField).where(
+            CustomField.id == UUID(field_id),
+            CustomField.tenant_id == tenant_id,
+        )
+    )
+    field = result.scalar_one_or_none()
+    if not field:
+        raise HTTPException(status_code=404, detail="الحقل المخصص غير موجود")
 
-    raise HTTPException(status_code=404, detail="الحقل المخصص غير موجود")
+    updates = data.model_dump(exclude_none=True)
+
+    # If changing to select type, require options
+    new_type = updates.get("field_type", field.field_type)
+    new_options = updates.get("options", field.options)
+    if new_type == "select" and not new_options:
+        raise HTTPException(
+            status_code=400,
+            detail="حقل القائمة المنسدلة يتطلب قائمة خيارات (options)",
+        )
+
+    for key, value in updates.items():
+        setattr(field, key, value)
+
+    # Track updated_at in settings
+    settings = dict(field.settings or {})
+    settings["updated_at"] = datetime.now(timezone.utc).isoformat()
+    field.settings = settings
+
+    await db.commit()
+    await db.refresh(field)
+    return CustomFieldResponse.from_orm_model(field)
 
 
 @router.delete("/custom-fields/{field_id}", status_code=204)
 async def delete_custom_field(
     field_id: str,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
-    """Delete a custom field and its associated values."""
+    """Delete a custom field."""
     tenant_id = current_user["tenant_id"]
-    _ensure_seed(tenant_id)
 
-    for i, field in enumerate(_mock_fields[tenant_id]):
-        if field["id"] == field_id:
-            _mock_fields[tenant_id].pop(i)
-            # Remove associated values
-            _mock_values[tenant_id] = [
-                v for v in _mock_values[tenant_id] if v["field_id"] != field_id
-            ]
-            return
+    result = await db.execute(
+        select(CustomField).where(
+            CustomField.id == UUID(field_id),
+            CustomField.tenant_id == tenant_id,
+        )
+    )
+    field = result.scalar_one_or_none()
+    if not field:
+        raise HTTPException(status_code=404, detail="الحقل المخصص غير موجود")
 
-    raise HTTPException(status_code=404, detail="الحقل المخصص غير موجود")
+    await db.delete(field)
+    await db.commit()
 
 
 @router.put("/custom-fields/reorder", response_model=list[CustomFieldResponse])
 async def reorder_custom_fields(
     data: ReorderRequest,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """Reorder custom fields by updating their sort_order values."""
     tenant_id = current_user["tenant_id"]
-    _ensure_seed(tenant_id)
-
-    field_map = {f["id"]: f for f in _mock_fields[tenant_id]}
     now = datetime.now(timezone.utc).isoformat()
-    updated = []
 
+    field_ids = [UUID(item.field_id) for item in data.fields]
+    result = await db.execute(
+        select(CustomField).where(
+            CustomField.tenant_id == tenant_id,
+            CustomField.id.in_(field_ids),
+        )
+    )
+    fields_by_id = {str(f.id): f for f in result.scalars().all()}
+
+    updated = []
     for item in data.fields:
-        if item.field_id not in field_map:
+        field = fields_by_id.get(item.field_id)
+        if not field:
             raise HTTPException(
                 status_code=404,
                 detail=f"الحقل المخصص غير موجود: {item.field_id}",
             )
-        field_map[item.field_id]["sort_order"] = item.sort_order
-        field_map[item.field_id]["updated_at"] = now
-        updated.append(field_map[item.field_id])
+        field.sort_order = item.sort_order
+        settings = dict(field.settings or {})
+        settings["updated_at"] = now
+        field.settings = settings
+        updated.append(field)
 
-    updated = sorted(updated, key=lambda f: f["sort_order"])
-    return [CustomFieldResponse(**f) for f in updated]
+    await db.commit()
+    for f in updated:
+        await db.refresh(f)
+
+    updated.sort(key=lambda f: f.sort_order or 0)
+    return [CustomFieldResponse.from_orm_model(f) for f in updated]
 
 
 @router.post(
@@ -364,18 +306,22 @@ async def reorder_custom_fields(
 async def set_custom_field_value(
     field_id: str,
     data: CustomFieldValueSet,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
-    """Set or update a custom field value for a specific entity."""
-    tenant_id = current_user["tenant_id"]
-    _ensure_seed(tenant_id)
+    """Set or update a custom field value for a specific entity.
 
-    # Find the field definition
-    field = None
-    for f in _mock_fields[tenant_id]:
-        if f["id"] == field_id:
-            field = f
-            break
+    Values are stored in the custom field's settings JSONB under 'values' key.
+    """
+    tenant_id = current_user["tenant_id"]
+
+    result = await db.execute(
+        select(CustomField).where(
+            CustomField.id == UUID(field_id),
+            CustomField.tenant_id == tenant_id,
+        )
+    )
+    field = result.scalar_one_or_none()
     if not field:
         raise HTTPException(status_code=404, detail="الحقل المخصص غير موجود")
 
@@ -384,24 +330,25 @@ async def set_custom_field_value(
 
     now = datetime.now(timezone.utc).isoformat()
 
-    # Update existing or create new
-    for v in _mock_values[tenant_id]:
-        if v["field_id"] == field_id and v["entity_id"] == data.entity_id:
-            v["value"] = data.value
-            v["updated_at"] = now
-            return CustomFieldValueResponse(**v)
+    # Store values in settings JSONB under "values" -> {entity_id: {value, updated_at}}
+    settings = dict(field.settings or {})
+    values_map = dict(settings.get("values", {}))
+    values_map[data.entity_id] = {"value": data.value, "updated_at": now}
+    settings["values"] = values_map
+    field.settings = settings
 
-    value_record = {
-        "field_id": field_id,
-        "field_name": field["field_name"],
-        "field_label": field["field_label"],
-        "field_type": field["field_type"],
-        "entity_id": data.entity_id,
-        "value": data.value,
-        "updated_at": now,
-    }
-    _mock_values[tenant_id].append(value_record)
-    return CustomFieldValueResponse(**value_record)
+    await db.commit()
+    await db.refresh(field)
+
+    return CustomFieldValueResponse(
+        field_id=str(field.id),
+        field_name=field.field_name,
+        field_label=field.field_label,
+        field_type=field.field_type,
+        entity_id=data.entity_id,
+        value=data.value,
+        updated_at=now,
+    )
 
 
 @router.get(
@@ -411,11 +358,11 @@ async def set_custom_field_value(
 async def get_custom_field_values(
     entity_type: str,
     entity_id: str,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """Get all custom field values for a specific entity."""
     tenant_id = current_user["tenant_id"]
-    _ensure_seed(tenant_id)
 
     if entity_type not in ALLOWED_ENTITY_TYPES:
         raise HTTPException(
@@ -423,27 +370,43 @@ async def get_custom_field_values(
             detail="entity_type يجب أن يكون lead أو deal أو contact",
         )
 
-    # Get field IDs that belong to this entity_type
-    entity_field_ids = {
-        f["id"] for f in _mock_fields[tenant_id] if f["entity_type"] == entity_type
-    }
+    result = await db.execute(
+        select(CustomField).where(
+            CustomField.tenant_id == tenant_id,
+            CustomField.entity_type == entity_type,
+        )
+    )
+    fields = result.scalars().all()
 
-    values = [
-        v
-        for v in _mock_values[tenant_id]
-        if v["entity_id"] == entity_id and v["field_id"] in entity_field_ids
-    ]
-    return [CustomFieldValueResponse(**v) for v in values]
+    values = []
+    for field in fields:
+        settings = field.settings or {}
+        values_map = settings.get("values", {})
+        if entity_id in values_map:
+            entry = values_map[entity_id]
+            values.append(
+                CustomFieldValueResponse(
+                    field_id=str(field.id),
+                    field_name=field.field_name,
+                    field_label=field.field_label,
+                    field_type=field.field_type,
+                    entity_id=entity_id,
+                    value=entry["value"],
+                    updated_at=entry.get("updated_at", ""),
+                )
+            )
+
+    return values
 
 
 # --------------- Helpers ---------------
 
-def _validate_field_value(field: dict, value: Any):
+def _validate_field_value(field: CustomField, value: Any):
     """Validate a value against its field type definition."""
-    field_type = field["field_type"]
+    field_type = field.field_type
 
     if value is None:
-        if field.get("is_required"):
+        if field.is_required:
             raise HTTPException(status_code=400, detail="هذا الحقل مطلوب")
         return
 
@@ -458,10 +421,11 @@ def _validate_field_value(field: dict, value: Any):
                 status_code=400, detail="القيمة يجب أن تكون true أو false"
             )
     elif field_type == "select":
-        if value not in (field.get("options") or []):
+        options = field.options or []
+        if value not in options:
             raise HTTPException(
                 status_code=400,
-                detail=f"القيمة يجب أن تكون أحد الخيارات: {', '.join(field.get('options', []))}",
+                detail=f"القيمة يجب أن تكون أحد الخيارات: {', '.join(options)}",
             )
     elif field_type in ("text", "date", "url", "email", "phone"):
         if not isinstance(value, str):

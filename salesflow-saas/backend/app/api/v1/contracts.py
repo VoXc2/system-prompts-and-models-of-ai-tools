@@ -2,12 +2,15 @@
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, EmailStr
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.v1.deps import get_current_user, get_db
+from app.models.contract import Contract, Signature
 
 router = APIRouter()
 
@@ -72,59 +75,82 @@ class SignatureRequest(BaseModel):
     ip_address: str
 
 
+class ContractResponse(BaseModel):
+    id: str
+    tenant_id: str
+    title: str
+    contract_type: Optional[str] = None
+    contract_type_label: str = ""
+    content: Optional[str] = None
+    status: str
+    status_label: str = ""
+    public_url: Optional[str] = None
+    created_at: str
+    updated_at: str
+
+    model_config = {"from_attributes": True}
+
+    @classmethod
+    def from_orm_model(cls, obj: Contract) -> "ContractResponse":
+        ct = obj.contract_type or ""
+        st = obj.status or "draft"
+        return cls(
+            id=str(obj.id),
+            tenant_id=str(obj.tenant_id),
+            title=obj.title or "",
+            contract_type=ct,
+            contract_type_label=CONTRACT_TYPE_LABELS.get(ct, ct),
+            content=obj.content,
+            status=st,
+            status_label=STATUS_LABELS.get(st, st),
+            public_url=obj.public_url,
+            created_at=obj.created_at.isoformat() if obj.created_at else "",
+            updated_at=(obj.sent_at or obj.created_at or datetime.now(timezone.utc)).isoformat(),
+        )
+
+
+class SignatureResponse(BaseModel):
+    id: str
+    contract_id: str
+    signer_name: str
+    signer_email: Optional[str] = None
+    signature_data: Optional[str] = None
+    ip_address: Optional[str] = None
+    signed_at: str
+    label: str = "توقيع إلكتروني"
+
+    model_config = {"from_attributes": True}
+
+    @classmethod
+    def from_orm_model(cls, obj: Signature) -> "SignatureResponse":
+        return cls(
+            id=str(obj.id),
+            contract_id=str(obj.contract_id),
+            signer_name=obj.signer_name or "",
+            signer_email=obj.signer_email,
+            signature_data=obj.signature_data,
+            ip_address=str(obj.ip_address) if obj.ip_address else None,
+            signed_at=obj.signed_at.isoformat() if obj.signed_at else (obj.created_at.isoformat() if obj.created_at else ""),
+        )
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _mock_contract(
-    contract_id: str,
-    tenant_id: str,
-    *,
-    title: str = "عقد خدمات تقنية",
-    contract_type: str = "msa",
-    content: str = "محتوى العقد ...",
-    client_name: str = "شركة النجاح",
-    client_email: str = "client@alnajah.sa",
-    status: str = "draft",
-    signing_url: Optional[str] = None,
-) -> dict:
-    now = datetime.now(timezone.utc).isoformat()
-    return {
-        "id": contract_id,
-        "tenant_id": tenant_id,
-        "title": title,
-        "contract_type": contract_type,
-        "contract_type_label": CONTRACT_TYPE_LABELS.get(contract_type, contract_type),
-        "content": content,
-        "client_name": client_name,
-        "client_email": client_email,
-        "status": status,
-        "status_label": STATUS_LABELS.get(status, status),
-        "signing_url": signing_url,
-        "created_at": now,
-        "updated_at": now,
-    }
-
-
-def _mock_signature(
-    signature_id: str,
-    contract_id: str,
-    *,
-    signer_name: str = "أحمد الخالدي",
-    signer_email: str = "ahmed@alnajah.sa",
-    ip_address: str = "203.0.113.42",
-) -> dict:
-    now = datetime.now(timezone.utc).isoformat()
-    return {
-        "id": signature_id,
-        "contract_id": contract_id,
-        "signer_name": signer_name,
-        "signer_email": signer_email,
-        "signature_data": "data:image/png;base64,iVBOR...truncated",
-        "ip_address": ip_address,
-        "signed_at": now,
-        "label": "توقيع إلكتروني",
-    }
+async def _get_contract_or_404(
+    db: AsyncSession, contract_id: str, tenant_id: str
+) -> Contract:
+    result = await db.execute(
+        select(Contract).where(
+            Contract.id == UUID(contract_id),
+            Contract.tenant_id == tenant_id,
+        )
+    )
+    contract = result.scalar_one_or_none()
+    if not contract:
+        raise HTTPException(status_code=404, detail="العقد غير موجود")
+    return contract
 
 
 # ---------------------------------------------------------------------------
@@ -134,25 +160,28 @@ def _mock_signature(
 @router.post("", status_code=201)
 async def create_contract(
     data: ContractCreate,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """إنشاء عقد جديد - Create a new contract."""
-    contract_id = str(uuid4())
-    tenant_id = current_user.get("tenant_id", "tenant-mock-001")
+    tenant_id = current_user["tenant_id"]
+
+    contract = Contract(
+        tenant_id=tenant_id,
+        title=data.title,
+        contract_type=data.contract_type.value,
+        content=data.content,
+        status="draft",
+        extra_data={"client_name": data.client_name, "client_email": data.client_email},
+    )
+    db.add(contract)
+    await db.commit()
+    await db.refresh(contract)
 
     return {
         "status": "created",
         "message": "تم إنشاء العقد بنجاح",
-        "contract": _mock_contract(
-            contract_id,
-            tenant_id,
-            title=data.title,
-            contract_type=data.contract_type.value,
-            content=data.content,
-            client_name=data.client_name,
-            client_email=data.client_email,
-            status="draft",
-        ),
+        "contract": ContractResponse.from_orm_model(contract),
     }
 
 
@@ -160,126 +189,104 @@ async def create_contract(
 async def list_contracts(
     status: Optional[ContractStatus] = Query(None, description="تصفية حسب الحالة"),
     contract_type: Optional[ContractType] = Query(None, description="تصفية حسب نوع العقد"),
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """عرض جميع العقود - List contracts for the current tenant."""
-    tenant_id = current_user.get("tenant_id", "tenant-mock-001")
+    tenant_id = current_user["tenant_id"]
 
-    contracts = [
-        _mock_contract(
-            "c-00a1b2c3-1111-4444-aaaa-000000000001",
-            tenant_id,
-            title="عقد خدمات تقنية",
-            contract_type="msa",
-            client_name="شركة النجاح",
-            client_email="info@alnajah.sa",
-            status="draft",
-        ),
-        _mock_contract(
-            "c-00a1b2c3-2222-4444-aaaa-000000000002",
-            tenant_id,
-            title="اتفاقية عدم إفشاء - مشروع ألفا",
-            contract_type="nda",
-            client_name="مؤسسة التقدم",
-            client_email="legal@taqaddum.sa",
-            status="sent",
-            signing_url="https://sign.dealix.sa/c/abc123",
-        ),
-        _mock_contract(
-            "c-00a1b2c3-3333-4444-aaaa-000000000003",
-            tenant_id,
-            title="عقد اشتراك سنوي",
-            contract_type="subscription",
-            client_name="شركة الأمل",
-            client_email="accounts@alamal.sa",
-            status="signed",
-        ),
-    ]
-
+    stmt = select(Contract).where(Contract.tenant_id == tenant_id)
     if status:
-        contracts = [c for c in contracts if c["status"] == status.value]
+        stmt = stmt.where(Contract.status == status.value)
     if contract_type:
-        contracts = [c for c in contracts if c["contract_type"] == contract_type.value]
+        stmt = stmt.where(Contract.contract_type == contract_type.value)
+
+    result = await db.execute(stmt)
+    contracts = result.scalars().all()
 
     return {
         "total": len(contracts),
         "label": "العقود",
-        "contracts": contracts,
+        "contracts": [ContractResponse.from_orm_model(c) for c in contracts],
     }
 
 
 @router.get("/{contract_id}")
 async def get_contract(
     contract_id: str,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """عرض تفاصيل العقد - Get contract details."""
-    tenant_id = current_user.get("tenant_id", "tenant-mock-001")
-
-    return {
-        "contract": _mock_contract(
-            contract_id,
-            tenant_id,
-            title="عقد خدمات تقنية",
-            contract_type="msa",
-            client_name="شركة النجاح",
-            client_email="info@alnajah.sa",
-            status="draft",
-        ),
-    }
+    tenant_id = current_user["tenant_id"]
+    contract = await _get_contract_or_404(db, contract_id, tenant_id)
+    return {"contract": ContractResponse.from_orm_model(contract)}
 
 
 @router.put("/{contract_id}")
 async def update_contract(
     contract_id: str,
     data: ContractUpdate,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """تعديل العقد - Update an existing contract."""
-    tenant_id = current_user.get("tenant_id", "tenant-mock-001")
+    tenant_id = current_user["tenant_id"]
+    contract = await _get_contract_or_404(db, contract_id, tenant_id)
 
     updated_fields = data.model_dump(exclude_none=True)
     if not updated_fields:
         raise HTTPException(status_code=400, detail="لا توجد حقول للتحديث")
 
-    base = _mock_contract(
-        contract_id,
-        tenant_id,
-        title=data.title or "عقد خدمات تقنية",
-        content=data.content or "محتوى العقد ...",
-        client_name=data.client_name or "شركة النجاح",
-        client_email=data.client_email or "info@alnajah.sa",
-        status="draft",
-    )
+    # Map API fields to model fields
+    if "title" in updated_fields:
+        contract.title = updated_fields["title"]
+    if "content" in updated_fields:
+        contract.content = updated_fields["content"]
+    # client_name / client_email are stored in extra_data
+    extra = dict(contract.extra_data or {})
+    if "client_name" in updated_fields:
+        extra["client_name"] = updated_fields["client_name"]
+    if "client_email" in updated_fields:
+        extra["client_email"] = updated_fields["client_email"]
+    contract.extra_data = extra
+
+    await db.commit()
+    await db.refresh(contract)
 
     return {
         "status": "updated",
         "message": "تم تحديث العقد بنجاح",
         "updated_fields": list(updated_fields.keys()),
-        "contract": base,
+        "contract": ContractResponse.from_orm_model(contract),
     }
 
 
 @router.post("/{contract_id}/send")
 async def send_contract_for_signing(
     contract_id: str,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
-    """إرسال العقد للتوقيع - Send contract for e-signature (generates a public signing URL)."""
-    tenant_id = current_user.get("tenant_id", "tenant-mock-001")
+    """إرسال العقد للتوقيع - Send contract for e-signature."""
+    tenant_id = current_user["tenant_id"]
+    contract = await _get_contract_or_404(db, contract_id, tenant_id)
+
     signing_token = uuid4().hex[:12]
     signing_url = f"https://sign.dealix.sa/c/{signing_token}"
+
+    contract.status = "sent"
+    contract.sent_at = datetime.now(timezone.utc)
+    contract.public_url = signing_url
+
+    await db.commit()
+    await db.refresh(contract)
 
     return {
         "status": "sent",
         "message": "تم إرسال العقد للتوقيع بنجاح",
         "signing_url": signing_url,
-        "contract": _mock_contract(
-            contract_id,
-            tenant_id,
-            status="sent",
-            signing_url=signing_url,
-        ),
+        "contract": ContractResponse.from_orm_model(contract),
     }
 
 
@@ -287,20 +294,40 @@ async def send_contract_for_signing(
 async def sign_contract(
     contract_id: str,
     data: SignatureRequest,
+    db: AsyncSession = Depends(get_db),
 ):
     """تسجيل التوقيع - Record a signature on a contract."""
-    signature_id = str(uuid4())
+    # Look up contract (no tenant filter since this is a public signing endpoint)
+    result = await db.execute(
+        select(Contract).where(Contract.id == UUID(contract_id))
+    )
+    contract = result.scalar_one_or_none()
+    if not contract:
+        raise HTTPException(status_code=404, detail="العقد غير موجود")
+
+    now = datetime.now(timezone.utc)
+
+    signature = Signature(
+        tenant_id=contract.tenant_id,
+        contract_id=contract.id,
+        signer_name=data.signer_name,
+        signer_email=data.signer_email,
+        signature_data=data.signature_data,
+        ip_address=data.ip_address,
+        signed_at=now,
+    )
+    db.add(signature)
+
+    contract.status = "signed"
+    contract.signed_at = now
+
+    await db.commit()
+    await db.refresh(signature)
 
     return {
         "status": "signed",
         "message": "تم تسجيل التوقيع بنجاح",
-        "signature": _mock_signature(
-            signature_id,
-            contract_id,
-            signer_name=data.signer_name,
-            signer_email=data.signer_email,
-            ip_address=data.ip_address,
-        ),
+        "signature": SignatureResponse.from_orm_model(signature),
         "contract_status": "signed",
         "contract_status_label": STATUS_LABELS["signed"],
     }
@@ -309,48 +336,43 @@ async def sign_contract(
 @router.get("/{contract_id}/signatures")
 async def list_signatures(
     contract_id: str,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """عرض التوقيعات على العقد - List all signatures on a contract."""
-    signatures = [
-        _mock_signature(
-            "sig-0001",
-            contract_id,
-            signer_name="أحمد الخالدي",
-            signer_email="ahmed@alnajah.sa",
-            ip_address="203.0.113.42",
-        ),
-        _mock_signature(
-            "sig-0002",
-            contract_id,
-            signer_name="سارة المنصور",
-            signer_email="sara@dealix.sa",
-            ip_address="198.51.100.7",
-        ),
-    ]
+    tenant_id = current_user["tenant_id"]
+    # Verify the contract belongs to this tenant
+    await _get_contract_or_404(db, contract_id, tenant_id)
+
+    result = await db.execute(
+        select(Signature).where(Signature.contract_id == UUID(contract_id))
+    )
+    signatures = result.scalars().all()
 
     return {
         "contract_id": contract_id,
         "total": len(signatures),
         "label": "التوقيعات",
-        "signatures": signatures,
+        "signatures": [SignatureResponse.from_orm_model(s) for s in signatures],
     }
 
 
 @router.post("/{contract_id}/void")
 async def void_contract(
     contract_id: str,
+    db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ):
     """إلغاء العقد - Void a contract so it can no longer be signed."""
-    tenant_id = current_user.get("tenant_id", "tenant-mock-001")
+    tenant_id = current_user["tenant_id"]
+    contract = await _get_contract_or_404(db, contract_id, tenant_id)
+
+    contract.status = "voided"
+    await db.commit()
+    await db.refresh(contract)
 
     return {
         "status": "voided",
         "message": "تم إلغاء العقد",
-        "contract": _mock_contract(
-            contract_id,
-            tenant_id,
-            status="voided",
-        ),
+        "contract": ContractResponse.from_orm_model(contract),
     }

@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     DEFAULT_TIMEZONE: str = "Asia/Riyadh"
     DEFAULT_CURRENCY: str = "SAR"
     DEFAULT_LOCALE: str = "ar"
+    DEFAULT_TENANT_ID: str = ""
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://salesflow:salesflow_secret_2024@db:5432/salesflow"
@@ -67,6 +68,25 @@ class Settings(BaseSettings):
     VAPI_API_KEY: str = ""
     VAPI_ASSISTANT_ID: str = ""
     VOICE_AI_ENABLED: bool = False
+    VOICE_PROFILE: str = "khalid"  # khalid (male) or noura (female)
+    VOICE_OWNER_NAME: str = ""  # Business owner name for personalization
+
+    # Social Media
+    INSTAGRAM_BUSINESS_ACCOUNT_ID: str = ""
+    LINKEDIN_ACCESS_TOKEN: str = ""
+    TIKTOK_ACCESS_TOKEN: str = ""
+
+    # Data Intelligence
+    PROXYCURL_API_KEY: str = ""
+    CLEARBIT_API_KEY: str = ""
+    BUILTWITH_API_KEY: str = ""
+
+    # Agent Swarm
+    MAX_DAILY_WHATSAPP_MESSAGES: int = 200
+    MAX_DAILY_INSTAGRAM_DMS: int = 20
+    MAX_DAILY_TWITTER_DMS: int = 50
+    MAX_WEEKLY_LINKEDIN_CONNECTIONS: int = 100
+    AGENT_AUTO_ENGAGE: bool = True
 
     class Config:
         env_file = ".env"
