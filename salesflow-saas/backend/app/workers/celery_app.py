@@ -11,6 +11,7 @@ celery_app = Celery(
         "app.workers.follow_up_tasks",
         "app.workers.message_tasks",
         "app.workers.notification_tasks",
+        "app.workers.ai_agent_tasks",
     ],
 )
 
@@ -40,5 +41,18 @@ celery_app.conf.beat_schedule = {
             "hour": 8,
             "minute": 0,
         },
+    },
+    "ai-discover-leads": {
+        "task": "app.workers.ai_agent_tasks.discover_leads",
+        "schedule": 3600.0,  # every hour
+        "args": ["default", "healthcare", "الرياض", 10],
+    },
+    "ai-daily-report": {
+        "task": "app.workers.ai_agent_tasks.daily_ai_report",
+        "schedule": {
+            "hour": 20,
+            "minute": 0,
+        },
+        "args": ["default"],
     },
 }

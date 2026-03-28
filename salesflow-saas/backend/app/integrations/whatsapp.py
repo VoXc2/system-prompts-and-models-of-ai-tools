@@ -3,7 +3,7 @@ from app.config import get_settings
 
 settings = get_settings()
 
-WHATSAPP_API_URL = "https://graph.facebook.com/v21.0"
+WHATSAPP_API_URL = "https://graph.facebook.com/v22.0"
 
 
 async def send_whatsapp_message(phone: str, message: str) -> dict:

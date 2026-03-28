@@ -12,9 +12,11 @@ from app.models.subscription import Subscription
 from app.models.template import IndustryTemplate
 from app.models.property import Property
 from app.models.audit_log import AuditLog
+from app.models.ai_agent import AIAgent, OutreachCampaign, AIConversation, DiscoveredLead
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
     "Deal", "Activity", "Message", "Proposal", "Notification",
     "Subscription", "IndustryTemplate", "Property", "AuditLog",
+    "AIAgent", "OutreachCampaign", "AIConversation", "DiscoveredLead",
 ]

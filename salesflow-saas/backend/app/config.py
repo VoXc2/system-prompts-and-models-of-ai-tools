@@ -45,6 +45,19 @@ class Settings(BaseSettings):
     UNIFONIC_APP_SID: str = ""
     UNIFONIC_SENDER_ID: str = "Dealix"
 
+    # AI Settings
+    AI_PROVIDER: str = "openai"  # "openai" or "anthropic"
+    OPENAI_API_KEY: str = ""
+    OPENAI_MODEL: str = "gpt-4o-mini"
+    ANTHROPIC_API_KEY: str = ""
+
+    # Lead Discovery APIs
+    GOOGLE_MAPS_API_KEY: str = ""
+    SERPAPI_KEY: str = ""
+    TWITTER_BEARER_TOKEN: str = ""
+    INSTAGRAM_ACCESS_TOKEN: str = ""
+    INSTAGRAM_USER_ID: str = ""
+
     class Config:
         env_file = ".env"
         case_sensitive = True
