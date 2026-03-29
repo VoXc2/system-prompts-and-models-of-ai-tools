@@ -29,17 +29,22 @@ class AssistantCreateRequest(BaseModel):
 # ─── Voice Profiles ───
 
 @router.get("/profiles")
-async def list_voice_profiles():
+async def list_voice_profiles(
+    current_user: dict = Depends(get_current_user),
+):
     """List available Saudi voice profiles (Khalid, Noura)."""
-    service = VoiceAIService(tenant_id="default")
+    service = VoiceAIService(tenant_id=current_user["tenant_id"])
     profiles = service.get_voice_profiles()
     return {"profiles": profiles}
 
 
 @router.get("/profiles/{profile_id}")
-async def get_voice_profile(profile_id: str):
+async def get_voice_profile(
+    profile_id: str,
+    current_user: dict = Depends(get_current_user),
+):
     """Get details for a specific voice profile."""
-    service = VoiceAIService(tenant_id="default")
+    service = VoiceAIService(tenant_id=current_user["tenant_id"])
     profiles = service.get_voice_profiles()
     for p in profiles:
         if p["id"] == profile_id:
