@@ -5,6 +5,7 @@ Uses LLM APIs (OpenAI/Claude) to power all AI sales agents.
 import asyncio
 import json
 import logging
+import time
 import httpx
 from typing import Optional
 from app.config import get_settings
@@ -12,6 +13,53 @@ from app.config import get_settings
 logger = logging.getLogger(__name__)
 
 settings = get_settings()
+
+
+async def _log_ai_trace(
+    provider: str,
+    model: str,
+    system_prompt: str,
+    user_message: str,
+    response: str,
+    temperature: float,
+    max_tokens: int,
+    latency_ms: float,
+    input_tokens: int = 0,
+    output_tokens: int = 0,
+    error_message: str = "",
+    status: str = "success",
+):
+    """Log an AI call to the AITrace table for governance."""
+    try:
+        from app.database import async_session
+        from app.models.ai_trace import AITrace
+
+        total_tokens = input_tokens + output_tokens
+        # Rough cost estimate (varies by provider/model)
+        cost_usd = total_tokens * 0.000003 if total_tokens else 0.0
+
+        async with async_session() as db:
+            trace = AITrace(
+                agent_type="ai_brain",
+                action="think",
+                status=status,
+                provider=provider,
+                model=model,
+                temperature=temperature,
+                system_prompt=system_prompt[:2000],
+                user_message=user_message[:2000],
+                response=response[:2000] if response else "",
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                total_tokens=total_tokens,
+                cost_usd=cost_usd,
+                latency_ms=int(latency_ms),
+                error_message=error_message[:500] if error_message else "",
+            )
+            db.add(trace)
+            await db.commit()
+    except Exception as e:
+        logger.warning("Failed to log AI trace: %s", e)
 
 # ─── Retry Configuration ─────────────────────────────────────────────────────
 
@@ -154,15 +202,40 @@ class AIBrain:
         self.ai_provider = settings.AI_PROVIDER  # "openai", "anthropic", or "gemini"
 
     async def think(self, system_prompt: str, user_message: str, temperature: float = 0.7, max_tokens: int = 1000) -> str:
-        """Send a prompt to the AI and get a response."""
+        """Send a prompt to the AI and get a response. Logs every call to AITrace."""
+        start_ms = time.time() * 1000
+
+        # Determine provider and model
         if self.ai_provider == "gemini" and self.gemini_key:
-            return await self._call_gemini(system_prompt, user_message, temperature, max_tokens)
+            provider, model = "gemini", self.gemini_model
+            call_fn = self._call_gemini
         elif self.ai_provider == "anthropic" and self.anthropic_key:
-            return await self._call_anthropic(system_prompt, user_message, temperature, max_tokens)
-        elif self.openai_key:
-            return await self._call_openai(system_prompt, user_message, temperature, max_tokens)
+            provider, model = "anthropic", "claude-sonnet-4-20250514"
+            call_fn = self._call_anthropic
         else:
-            return await self._call_openai(system_prompt, user_message, temperature, max_tokens)
+            provider, model = "openai", self.openai_model
+            call_fn = self._call_openai
+
+        try:
+            response = await call_fn(system_prompt, user_message, temperature, max_tokens)
+            latency = time.time() * 1000 - start_ms
+            # Fire-and-forget trace logging
+            asyncio.create_task(_log_ai_trace(
+                provider=provider, model=model,
+                system_prompt=system_prompt, user_message=user_message,
+                response=response, temperature=temperature, max_tokens=max_tokens,
+                latency_ms=latency, status="success",
+            ))
+            return response
+        except Exception as exc:
+            latency = time.time() * 1000 - start_ms
+            asyncio.create_task(_log_ai_trace(
+                provider=provider, model=model,
+                system_prompt=system_prompt, user_message=user_message,
+                response="", temperature=temperature, max_tokens=max_tokens,
+                latency_ms=latency, status="error", error_message=str(exc),
+            ))
+            raise
 
     async def think_json(self, system_prompt: str, user_message: str, temperature: float = 0.3) -> dict:
         """Get a JSON response from the AI."""

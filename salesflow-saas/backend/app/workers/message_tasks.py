@@ -8,11 +8,19 @@ from sqlalchemy import select, update
 from app.workers.celery_app import celery_app
 from app.database import async_session
 from app.models.message import Message
+from app.services.consent_service import ConsentService
 from app.integrations.whatsapp import send_whatsapp_message
 from app.integrations.email_sender import send_email as _send_email_integration
 from app.integrations.sms import send_sms as _send_sms_integration
 
 logger = logging.getLogger(__name__)
+
+
+async def _check_suppression(db, tenant_id: str, phone: str = None, email: str = None, channel: str = "all") -> bool:
+    """Return True if contact is allowed, False if suppressed."""
+    consent_svc = ConsentService(db, tenant_id)
+    result = await consent_svc.can_contact(phone=phone, email=email, channel=channel, consent_type="marketing")
+    return result.get("allowed", True)
 
 
 async def _send_scheduled_messages():
@@ -29,14 +37,21 @@ async def _send_scheduled_messages():
         pending = result.scalars().all()
 
         sent_count = 0
+        suppressed_count = 0
         for msg in pending:
             try:
-                if msg.channel == "whatsapp" and msg.lead:
-                    phone = msg.lead.phone if hasattr(msg, "lead") and msg.lead else None
-                    if phone:
-                        await send_whatsapp_message(phone, msg.content)
-                        msg.status = "sent"
-                        sent_count += 1
+                # PDPL: Check suppression before sending
+                phone = msg.lead.phone if hasattr(msg, "lead") and msg.lead else None
+                tenant_id = str(msg.tenant_id) if hasattr(msg, "tenant_id") else None
+                if tenant_id and not await _check_suppression(db, tenant_id, phone=phone, channel=msg.channel or "all"):
+                    msg.status = "suppressed"
+                    suppressed_count += 1
+                    continue
+
+                if msg.channel == "whatsapp" and phone:
+                    await send_whatsapp_message(phone, msg.content)
+                    msg.status = "sent"
+                    sent_count += 1
                 elif msg.channel == "email":
                     msg.status = "sent"
                     sent_count += 1
@@ -50,7 +65,7 @@ async def _send_scheduled_messages():
                 logger.error("Failed to send message %s: %s", msg.id, e)
 
         await db.commit()
-        logger.info("Sent %d/%d scheduled messages", sent_count, len(pending))
+        logger.info("Sent %d/%d scheduled messages (%d suppressed)", sent_count, len(pending), suppressed_count)
 
 
 @celery_app.task(name="app.workers.message_tasks.send_scheduled_messages")

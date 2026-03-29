@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { tenant as tenantApi } from "@/lib/api";
 import {
   Settings,
   Building2,
@@ -14,6 +15,8 @@ import {
   MessageSquare,
   CreditCard,
   Shield,
+  Loader2,
+  Check,
 } from "lucide-react";
 
 type SettingsTab = "profile" | "integrations" | "team";
@@ -63,6 +66,69 @@ export default function SettingsPage() {
 }
 
 function ProfileSection() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    whatsapp_number: "",
+    industry: "",
+  });
+
+  useEffect(() => {
+    tenantApi
+      .get()
+      .then((data: any) => {
+        setForm({
+          name: data.name || "",
+          phone: data.phone || "",
+          email: data.email || "",
+          whatsapp_number: data.whatsapp_number || "",
+          industry: data.industry || "",
+        });
+      })
+      .catch((err: any) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError("");
+    setSaved(false);
+    try {
+      await tenantApi.update(form);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const updateField = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-secondary" />
+      </div>
+    );
+  }
+
+  const fields = [
+    { key: "name", label: "اسم الشركة", icon: Building2, placeholder: "شركة النجاح" },
+    { key: "phone", label: "رقم الهاتف", icon: Phone, placeholder: "+966 5XX XXX XXXX", dir: "ltr" as const },
+    { key: "email", label: "البريد الإلكتروني", icon: Mail, placeholder: "info@company.com", dir: "ltr" as const },
+    { key: "whatsapp_number", label: "واتساب بيزنس", icon: MessageSquare, placeholder: "+966 5XX XXX XXXX", dir: "ltr" as const },
+    { key: "industry", label: "القطاع", icon: Building2, placeholder: "عقارات، عيادات، مقاولات..." },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -70,15 +136,16 @@ function ProfileSection() {
           <Building2 className="w-5 h-5 text-secondary" />
           معلومات الشركة
         </h3>
+
+        {error && (
+          <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+            {error}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            { label: "اسم الشركة", icon: Building2, placeholder: "شركة النجاح" },
-            { label: "الموقع الإلكتروني", icon: Globe, placeholder: "www.example.com", dir: "ltr" as const },
-            { label: "رقم الهاتف", icon: Phone, placeholder: "+966 5XX XXX XXXX", dir: "ltr" as const },
-            { label: "البريد الإلكتروني", icon: Mail, placeholder: "info@company.com", dir: "ltr" as const },
-            { label: "المدينة", icon: MapPin, placeholder: "الرياض" },
-          ].map((field) => (
-            <div key={field.label}>
+          {fields.map((field) => (
+            <div key={field.key}>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {field.label}
               </label>
@@ -88,14 +155,27 @@ function ProfileSection() {
                   type="text"
                   placeholder={field.placeholder}
                   dir={field.dir || "rtl"}
+                  value={form[field.key as keyof typeof form]}
+                  onChange={(e) => updateField(field.key, e.target.value)}
                   className="w-full pr-9 pl-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
                 />
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-4 flex justify-end">
-          <button className="bg-secondary hover:bg-secondary-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition">
+        <div className="mt-4 flex items-center justify-end gap-3">
+          {saved && (
+            <span className="text-green-600 text-sm flex items-center gap-1">
+              <Check className="w-4 h-4" />
+              تم الحفظ
+            </span>
+          )}
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-secondary hover:bg-secondary-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
+          >
+            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             حفظ التغييرات
           </button>
         </div>

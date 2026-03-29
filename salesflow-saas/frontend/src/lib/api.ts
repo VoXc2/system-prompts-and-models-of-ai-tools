@@ -193,6 +193,13 @@ export const notifications = {
   markAllRead: () => apiFetch("/notifications/read-all", { method: "POST" }),
 };
 
+// ─── Tenant API ───
+
+export const tenant = {
+  get: () => apiFetch("/tenant"),
+  update: (data: any) => apiFetch("/tenant", { method: "PUT", body: JSON.stringify(data) }),
+};
+
 // ─── Voice API ───
 
 export const voice = {

@@ -24,6 +24,10 @@ from app.models.tag import Tag, Segment
 from app.models.custom_field import CustomField
 from app.models.file_upload import FileUpload
 from app.models.appointment import Appointment
+from app.models.suppression import SuppressionEntry
+from app.models.social_listening import SocialPost, CommentDraft, ListeningStream
+from app.models.ai_trace import AITrace
+from app.models.growth_event import GrowthEvent
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
@@ -35,4 +39,6 @@ __all__ = [
     "CallLog", "VoiceSession", "Contract", "Signature",
     "IntegrationAccount", "WebhookEvent", "Tag", "Segment",
     "CustomField", "FileUpload", "Appointment",
+    "SuppressionEntry", "SocialPost", "CommentDraft", "ListeningStream",
+    "AITrace", "GrowthEvent",
 ]

@@ -20,6 +20,20 @@ class AutoOutreachEngine:
         self.industry = industry
         self.sales_agent = SmartSalesAgent(tenant_id, industry)
 
+    async def _check_suppression(self, lead: dict, channel: str) -> dict:
+        """Check if a lead is suppressed before outreach (PDPL compliance)."""
+        from app.services.consent_service import ConsentService
+        from app.database import async_session
+
+        async with async_session() as db:
+            consent_svc = ConsentService(db, self.tenant_id)
+            return await consent_svc.can_contact(
+                phone=lead.get("phone"),
+                email=lead.get("email"),
+                channel=channel,
+                consent_type="marketing",
+            )
+
     async def launch_campaign(
         self, leads: list, campaign_type: str = "cold_outreach",
         channel: str = "whatsapp", sequence_length: int = 5
@@ -30,12 +44,19 @@ class AutoOutreachEngine:
             "total_leads": len(leads),
             "messages_sent": 0,
             "messages_failed": 0,
+            "messages_suppressed": 0,
             "sequences_created": 0,
             "started_at": datetime.now(timezone.utc).isoformat(),
         }
 
         for lead in leads:
             try:
+                # PDPL: Check suppression before any outreach
+                eligibility = await self._check_suppression(lead, channel)
+                if not eligibility.get("allowed", True):
+                    results["messages_suppressed"] += 1
+                    continue
+
                 if campaign_type == "cold_outreach":
                     result = await self._cold_outreach(lead, channel)
                 elif campaign_type == "warm_followup":
@@ -127,6 +148,15 @@ class AutoOutreachEngine:
             lead_data=lead_data,
             conversation_history=history,
         )
+
+        # PDPL: Check suppression before auto-sending
+        if not result["should_escalate"] and lead_data.get("phone"):
+            eligibility = await self._check_suppression(lead_data, "whatsapp")
+            if not eligibility.get("allowed", True):
+                result["sent"] = False
+                result["suppressed"] = True
+                result["suppression_reason"] = eligibility.get("reason", "suppressed")
+                return result
 
         # Auto-send response if not escalated
         if not result["should_escalate"] and lead_data.get("phone"):

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { deals } from "@/lib/api";
-import { Handshake, Loader2, Search } from "lucide-react";
+import Modal from "@/components/ui/Modal";
+import { Handshake, Loader2, Search, Plus, Pencil } from "lucide-react";
 
 interface Deal {
   id: string;
@@ -11,6 +12,8 @@ interface Deal {
   value: number;
   stage: string;
   status: string;
+  expected_close_date?: string;
+  notes?: string;
   created_at: string;
 }
 
@@ -22,19 +25,82 @@ const stageMap: Record<string, { label: string; color: string }> = {
   lost: { label: "مفقود", color: "bg-red-100 text-red-700" },
 };
 
+const emptyForm = {
+  title: "",
+  contact_name: "",
+  value: "",
+  stage: "discovery",
+  expected_close_date: "",
+  notes: "",
+};
+
 export default function DealsPage() {
   const [data, setData] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
+  const [form, setForm] = useState(emptyForm);
+  const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
+  const fetchDeals = () => {
+    setLoading(true);
     deals
       .list()
       .then((res: any) => setData(res.items || res.deals || res || []))
       .catch((err: any) => setError(err.message))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchDeals();
   }, []);
+
+  const openCreate = () => {
+    setEditingDeal(null);
+    setForm(emptyForm);
+    setModalOpen(true);
+  };
+
+  const openEdit = (deal: Deal) => {
+    setEditingDeal(deal);
+    setForm({
+      title: deal.title || "",
+      contact_name: deal.contact_name || "",
+      value: deal.value?.toString() || "",
+      stage: deal.stage || deal.status || "discovery",
+      expected_close_date: deal.expected_close_date || "",
+      notes: deal.notes || "",
+    });
+    setModalOpen(true);
+  };
+
+  const handleSave = async () => {
+    if (!form.title.trim()) return;
+    setSaving(true);
+    try {
+      const payload = {
+        ...form,
+        value: parseFloat(form.value) || 0,
+      };
+      if (editingDeal) {
+        await deals.update(editingDeal.id, payload);
+      } else {
+        await deals.create(payload);
+      }
+      setModalOpen(false);
+      fetchDeals();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const updateField = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
   const filtered = data.filter(
     (d) =>
@@ -50,7 +116,7 @@ export default function DealsPage() {
     );
   }
 
-  if (error) {
+  if (error && data.length === 0) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">
         {error}
@@ -60,8 +126,9 @@ export default function DealsPage() {
 
   return (
     <div>
-      <div className="mb-4">
-        <div className="relative max-w-sm">
+      {/* Header bar */}
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <div className="relative max-w-sm flex-1">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
@@ -71,6 +138,13 @@ export default function DealsPage() {
             className="w-full pr-9 pl-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
           />
         </div>
+        <button
+          onClick={openCreate}
+          className="bg-secondary hover:bg-secondary-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition flex items-center gap-2 shrink-0"
+        >
+          <Plus className="w-4 h-4" />
+          إضافة صفقة
+        </button>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -83,12 +157,13 @@ export default function DealsPage() {
                 <th className="text-right px-4 py-3 font-semibold text-gray-600">القيمة</th>
                 <th className="text-right px-4 py-3 font-semibold text-gray-600">المرحلة</th>
                 <th className="text-right px-4 py-3 font-semibold text-gray-600">التاريخ</th>
+                <th className="text-right px-4 py-3 font-semibold text-gray-600 w-10"></th>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-10 text-gray-400">
+                  <td colSpan={6} className="text-center py-10 text-gray-400">
                     <Handshake className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     لا توجد صفقات
                   </td>
@@ -114,6 +189,14 @@ export default function DealsPage() {
                       <td className="px-4 py-3 text-gray-500 text-xs">
                         {new Date(deal.created_at).toLocaleDateString("ar-SA")}
                       </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => openEdit(deal)}
+                          className="p-1.5 text-gray-400 hover:text-secondary hover:bg-secondary-50 rounded-lg transition"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                      </td>
                     </tr>
                   );
                 })
@@ -122,6 +205,103 @@ export default function DealsPage() {
           </table>
         </div>
       </div>
+
+      {/* Create/Edit Modal */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editingDeal ? "تعديل الصفقة" : "إضافة صفقة جديدة"}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              عنوان الصفقة *
+            </label>
+            <input
+              type="text"
+              value={form.title}
+              onChange={(e) => updateField("title", e.target.value)}
+              placeholder="مشروع تطوير الموقع"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">اسم العميل</label>
+              <input
+                type="text"
+                value={form.contact_name}
+                onChange={(e) => updateField("contact_name", e.target.value)}
+                placeholder="أحمد محمد"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">القيمة (ر.س)</label>
+              <input
+                type="number"
+                dir="ltr"
+                value={form.value}
+                onChange={(e) => updateField("value", e.target.value)}
+                placeholder="50000"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">المرحلة</label>
+              <select
+                value={form.stage}
+                onChange={(e) => updateField("stage", e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
+              >
+                <option value="discovery">اكتشاف</option>
+                <option value="proposal">عرض سعر</option>
+                <option value="negotiation">تفاوض</option>
+                <option value="won">مكتسب</option>
+                <option value="lost">مفقود</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">تاريخ الإغلاق المتوقع</label>
+              <input
+                type="date"
+                dir="ltr"
+                value={form.expected_close_date}
+                onChange={(e) => updateField("expected_close_date", e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">ملاحظات</label>
+            <textarea
+              value={form.notes}
+              onChange={(e) => updateField("notes", e.target.value)}
+              rows={3}
+              placeholder="ملاحظات إضافية..."
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none resize-none"
+            />
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition"
+            >
+              إلغاء
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving || !form.title.trim()}
+              className="bg-secondary hover:bg-secondary-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition disabled:opacity-50 flex items-center gap-2"
+            >
+              {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+              {editingDeal ? "حفظ التعديلات" : "إضافة"}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
