@@ -3,6 +3,7 @@ from app.api.v1 import auth, leads, deals, dashboard, tenants, users, ai_agents,
 from app.api.v1 import conversations, campaigns, consents, forms, voice
 from app.api.v1 import sequences, contracts, files, branding, tags
 from app.api.v1 import analytics, custom_fields, notifications, appointments, proposals
+from app.api.v1 import suppression, social_listening
 
 api_router = APIRouter()
 
@@ -26,6 +27,10 @@ api_router.include_router(campaigns.router, prefix="/campaigns", tags=["Campaign
 
 # Compliance
 api_router.include_router(consents.router, prefix="/consents", tags=["Consents"])
+api_router.include_router(suppression.router, prefix="/suppression", tags=["Suppression List"])
+
+# Social Listening
+api_router.include_router(social_listening.router, prefix="/social", tags=["Social Listening"])
 
 # Voice AI
 api_router.include_router(voice.router, prefix="/voice", tags=["Voice AI"])

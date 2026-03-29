@@ -8,6 +8,7 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from app.config import get_settings
 from app.api.v1.router import api_router
+from app.middleware.correlation import CorrelationIdMiddleware
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -33,6 +34,8 @@ if settings.DEBUG:
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+app.add_middleware(CorrelationIdMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
