@@ -39,6 +39,7 @@ export default function ConversationsPage() {
   const [replyText, setReplyText] = useState("");
   const [sending, setSending] = useState(false);
   const [search, setSearch] = useState("");
+  const [msgError, setMsgError] = useState("");
 
   useEffect(() => {
     conversations
@@ -59,6 +60,7 @@ export default function ConversationsPage() {
       setMessages(res.messages || res || []);
     } catch (err: any) {
       setMessages([]);
+      setMsgError("حدث خطأ في تحميل الرسائل. حاول مرة أخرى.");
     } finally {
       setMsgLoading(false);
     }
@@ -81,7 +83,7 @@ export default function ConversationsPage() {
       ]);
       setReplyText("");
     } catch (err: any) {
-      // silent
+      setMsgError("فشل إرسال الرسالة. حاول مرة أخرى.");
     } finally {
       setSending(false);
     }
@@ -113,7 +115,7 @@ export default function ConversationsPage() {
   return (
     <div className="bg-white rounded-xl border border-gray-200 flex h-[calc(100vh-10rem)] overflow-hidden">
       {/* Conversation list (left in RTL = right side visually) */}
-      <div className="w-80 border-l border-gray-200 flex flex-col shrink-0">
+      <div className="w-64 md:w-80 border-r border-gray-200 flex flex-col shrink-0">
         <div className="p-3 border-b border-gray-200">
           <div className="relative">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -191,11 +193,17 @@ export default function ConversationsPage() {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+              {msgError && (
+                <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg text-center mb-2">
+                  {msgError}
+                  <button onClick={() => setMsgError("")} className="mr-2 underline">إغلاق</button>
+                </div>
+              )}
               {msgLoading ? (
                 <div className="flex items-center justify-center py-10">
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
                 </div>
-              ) : messages.length === 0 ? (
+              ) : messages.length === 0 && !msgError ? (
                 <div className="text-center py-10 text-gray-400 text-sm">
                   لا توجد رسائل بعد
                 </div>
@@ -205,8 +213,8 @@ export default function ConversationsPage() {
                     key={msg.id}
                     className={`flex ${
                       msg.direction === "outbound"
-                        ? "justify-start"
-                        : "justify-end"
+                        ? "justify-end"
+                        : "justify-start"
                     }`}
                   >
                     <div

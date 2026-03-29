@@ -4,9 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
-from app.database import get_db
-from app.api.deps import get_current_user, get_current_tenant, require_role
-from app.models.user import User
+from app.api.v1.deps import get_current_user, get_current_tenant, get_db, require_role
 from app.models.tenant import Tenant
 
 router = APIRouter()
@@ -49,7 +47,7 @@ async def get_tenant(tenant: Tenant = Depends(get_current_tenant)):
 async def update_tenant(
     data: TenantUpdate,
     tenant: Tenant = Depends(get_current_tenant),
-    current_user: User = Depends(require_role("owner", "admin")),
+    current_user: dict = Depends(require_role("owner", "admin")),
     db: AsyncSession = Depends(get_db),
 ):
     for field, value in data.model_dump(exclude_none=True).items():

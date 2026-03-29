@@ -2,6 +2,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import get_settings
 from app.database import async_session
@@ -63,10 +64,31 @@ async def get_current_active_user(
     return current_user
 
 
-async def require_role(required_roles: list):
+async def get_current_tenant(
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Get the current user's tenant from DB."""
+    from app.models.tenant import Tenant
+    result = await db.execute(
+        select(Tenant).where(
+            Tenant.id == current_user["tenant_id"],
+            Tenant.is_active == True,
+        )
+    )
+    tenant = result.scalar_one_or_none()
+    if not tenant:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="المنشأة غير موجودة أو غير نشطة",
+        )
+    return tenant
+
+
+def require_role(*roles: str):
     """Dependency to require specific roles."""
     async def role_checker(current_user: dict = Depends(get_current_user)):
-        if current_user.get("role") not in required_roles:
+        if current_user.get("role") not in roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="صلاحيات غير كافية",

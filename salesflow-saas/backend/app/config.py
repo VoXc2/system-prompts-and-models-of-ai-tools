@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     # URLs
     API_URL: str = "http://localhost:8000"
     FRONTEND_URL: str = "http://localhost:3000"
+    ALLOWED_ORIGINS: str = ""  # Comma-separated additional CORS origins
 
     # WhatsApp
     WHATSAPP_API_TOKEN: str = ""

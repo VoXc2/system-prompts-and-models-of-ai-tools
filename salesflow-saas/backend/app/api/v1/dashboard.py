@@ -3,9 +3,7 @@ from decimal import Decimal
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from app.database import get_db
-from app.api.deps import get_current_user
-from app.models.user import User
+from app.api.v1.deps import get_current_user, get_db
 from app.models.lead import Lead
 from app.models.deal import Deal
 from app.models.message import Message
@@ -16,10 +14,10 @@ router = APIRouter()
 
 @router.get("/overview", response_model=DashboardOverview)
 async def dashboard_overview(
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    tid = current_user.tenant_id
+    tid = current_user["tenant_id"]
     today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
 
     total_leads = (await db.execute(select(func.count()).where(Lead.tenant_id == tid))).scalar() or 0
@@ -59,10 +57,10 @@ async def dashboard_overview(
 
 @router.get("/pipeline", response_model=PipelineSummary)
 async def pipeline_summary(
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    tid = current_user.tenant_id
+    tid = current_user["tenant_id"]
     result = await db.execute(
         select(Deal.stage, func.count(), func.coalesce(func.sum(Deal.value), 0))
         .where(Deal.tenant_id == tid)

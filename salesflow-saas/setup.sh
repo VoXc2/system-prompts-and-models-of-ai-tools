@@ -23,14 +23,17 @@ echo ""
 echo "[2/5] Creating .env file..."
 SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))" 2>/dev/null || openssl rand -hex 32)
 
+DB_PASSWORD=$(python3 -c "import secrets; print(secrets.token_hex(16))" 2>/dev/null || openssl rand -hex 16)
+
 cat > .env << ENVEOF
-DB_PASSWORD=Dealix2024SecureDB!
+DB_PASSWORD=${DB_PASSWORD}
 SECRET_KEY=${SECRET_KEY}
-DATABASE_URL=postgresql+asyncpg://salesflow:Dealix2024SecureDB!@db:5432/salesflow
+DATABASE_URL=postgresql+asyncpg://salesflow:${DB_PASSWORD}@db:5432/salesflow
 REDIS_URL=redis://redis:6379/0
-WHATSAPP_API_TOKEN=EAAP9TPQ1z2QBREZCHEg2RzJm1esQblTR8mqm1klCkyZA2qP8ZCyGZAvqZCdYtyGMtWq3ifVZB7OisZClPtQOOS0kF6nYmreQpntxVxDXkE4F8oCyfWB61ZCWlSaVEWRI9U2MuyCSz6MWcWa3GoWMcItF9dFHVSFO72LaLkGy1N6KFOhOd19fNefvZCtqH8xn9RZA5vWHWZB4YTQ9jHPEkb7e80TEjEPLIAw1ofIRZCPP
-WHATSAPP_PHONE_NUMBER_ID=1068891919637293
-WHATSAPP_BUSINESS_ACCOUNT_ID=2371037243416065
+# WhatsApp Business API — get from https://business.facebook.com
+WHATSAPP_API_TOKEN=
+WHATSAPP_PHONE_NUMBER_ID=
+WHATSAPP_BUSINESS_ACCOUNT_ID=
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=
@@ -45,8 +48,13 @@ echo ".env file created!"
 echo ""
 echo "[3/5] Creating WhatsApp message templates..."
 
-WA_TOKEN="EAAP9TPQ1z2QBREZCHEg2RzJm1esQblTR8mqm1klCkyZA2qP8ZCyGZAvqZCdYtyGMtWq3ifVZB7OisZClPtQOOS0kF6nYmreQpntxVxDXkE4F8oCyfWB61ZCWlSaVEWRI9U2MuyCSz6MWcWa3GoWMcItF9dFHVSFO72LaLkGy1N6KFOhOd19fNefvZCtqH8xn9RZA5vWHWZB4YTQ9jHPEkb7e80TEjEPLIAw1ofIRZCPP"
-WA_ACCOUNT="2371037243416065"
+# Read WhatsApp credentials from .env file
+WA_TOKEN=$(grep WHATSAPP_API_TOKEN .env | cut -d= -f2)
+WA_ACCOUNT=$(grep WHATSAPP_BUSINESS_ACCOUNT_ID .env | cut -d= -f2)
+
+if [ -z "$WA_TOKEN" ] || [ -z "$WA_ACCOUNT" ]; then
+    echo "  Skipping — set WHATSAPP_API_TOKEN and WHATSAPP_BUSINESS_ACCOUNT_ID in .env first"
+else
 WA_URL="https://graph.facebook.com/v22.0/${WA_ACCOUNT}/message_templates"
 
 echo "  Creating welcome template..."
@@ -72,6 +80,8 @@ curl -s -X POST "$WA_URL" \
   -H "Authorization: Bearer $WA_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"dealix_appointment","category":"UTILITY","language":"ar","components":[{"type":"BODY","text":"\u062a\u0630\u0643\u064a\u0631: \u0639\u0646\u062f\u0643 \u0645\u0648\u0639\u062f \u064a\u0648\u0645 {{1}} \u0627\u0644\u0633\u0627\u0639\u0629 {{2}}. \u0646\u062a\u0637\u0644\u0639 \u0644\u062e\u062f\u0645\u062a\u0643!","example":{"body_text":[["\u0627\u0644\u0623\u062d\u062f","10:00 \u0635\u0628\u0627\u062d\u0627\u064b"]]}}]}' && echo " OK" || echo " SKIP"
+
+fi  # end WhatsApp template creation
 
 # Step 4: Check Docker
 echo ""
@@ -100,9 +110,12 @@ echo "=============================="
 echo "  Setup Complete!"
 echo "=============================="
 echo ""
-echo "Phone Number ID: 1068891919637293"
-echo "WhatsApp Account: 2371037243416065"
 echo "Server: http://$(hostname -I | awk '{print $1}'):8000"
+echo ""
+echo "IMPORTANT: Set your WhatsApp credentials in .env:"
+echo "  WHATSAPP_API_TOKEN=your_token_here"
+echo "  WHATSAPP_PHONE_NUMBER_ID=your_phone_id"
+echo "  WHATSAPP_BUSINESS_ACCOUNT_ID=your_account_id"
 echo ""
 echo "Test API: curl http://localhost:8000/api/v1/health"
 echo "=============================="

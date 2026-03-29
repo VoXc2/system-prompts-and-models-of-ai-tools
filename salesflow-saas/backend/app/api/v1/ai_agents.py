@@ -199,13 +199,13 @@ async def ai_auto_reply(req: ChatRequest):
 # ─── Lead Discovery ───
 
 @router.post("/discover")
-async def discover_leads(req: DiscoveryRequest):
+async def discover_leads(req: DiscoveryRequest, current_user: dict = Depends(get_current_user)):
     """
     Launch AI lead discovery agent.
     Searches Google Maps, social media, and directories.
     """
     agent = LeadDiscoveryAgent(
-        tenant_id="default",
+        tenant_id=current_user["tenant_id"],
         industry=req.industry,
         location=req.location,
     )
@@ -232,9 +232,9 @@ async def get_industry_keywords(industry: str):
 # ─── Auto-Outreach ───
 
 @router.post("/outreach/message")
-async def generate_outreach_message(req: OutreachRequest):
+async def generate_outreach_message(req: OutreachRequest, current_user: dict = Depends(get_current_user)):
     """Generate a personalized outreach message for a lead."""
-    agent = SmartSalesAgent(tenant_id="default", industry=req.industry)
+    agent = SmartSalesAgent(tenant_id=current_user["tenant_id"], industry=req.industry)
 
     lead_data = {
         "name": req.lead_name,
@@ -256,9 +256,9 @@ async def generate_outreach_message(req: OutreachRequest):
 
 
 @router.post("/outreach/sequence")
-async def create_outreach_sequence(req: OutreachRequest):
+async def create_outreach_sequence(req: OutreachRequest, current_user: dict = Depends(get_current_user)):
     """Create a complete automated sales sequence for a lead."""
-    agent = SmartSalesAgent(tenant_id="default", industry=req.industry)
+    agent = SmartSalesAgent(tenant_id=current_user["tenant_id"], industry=req.industry)
 
     lead_data = {
         "name": req.lead_name,
@@ -328,14 +328,14 @@ async def launch_campaign(
 # ─── AI Tools ───
 
 @router.post("/qualify")
-async def qualify_lead(req: QualifyRequest):
+async def qualify_lead(req: QualifyRequest, current_user: dict = Depends(get_current_user)):
     """AI-powered lead qualification and scoring."""
     result = await ai_brain.qualify_lead(req.lead_data, req.conversation)
     return {"qualification": result}
 
 
 @router.post("/objection")
-async def handle_objection(req: ObjectionRequest):
+async def handle_objection(req: ObjectionRequest, current_user: dict = Depends(get_current_user)):
     """AI-powered objection handling."""
     result = await ai_brain.handle_objection(
         req.objection, req.industry, req.product
@@ -344,7 +344,7 @@ async def handle_objection(req: ObjectionRequest):
 
 
 @router.post("/analyze-sentiment")
-async def analyze_sentiment(message: str):
+async def analyze_sentiment(message: str, current_user: dict = Depends(get_current_user)):
     """Analyze customer message sentiment and intent."""
     result = await ai_brain.analyze_sentiment(message)
     return {"analysis": result}

@@ -2,9 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from uuid import UUID
-from app.database import get_db
-from app.api.deps import get_current_user
-from app.models.user import User
+from app.api.v1.deps import get_current_user, get_db
 from app.models.lead import Lead
 from app.schemas.lead import LeadCreate, LeadUpdate, LeadResponse, LeadListResponse
 
@@ -19,10 +17,10 @@ async def list_leads(
     search: str = Query(None),
     page: int = Query(1, ge=1),
     per_page: int = Query(20, ge=1, le=100),
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    query = select(Lead).where(Lead.tenant_id == current_user.tenant_id)
+    query = select(Lead).where(Lead.tenant_id == current_user["tenant_id"])
 
     if status:
         query = query.where(Lead.status == status)
@@ -46,10 +44,10 @@ async def list_leads(
 @router.post("", response_model=LeadResponse, status_code=201)
 async def create_lead(
     data: LeadCreate,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    lead = Lead(tenant_id=current_user.tenant_id, **data.model_dump(exclude_none=True))
+    lead = Lead(tenant_id=current_user["tenant_id"], **data.model_dump(exclude_none=True))
     db.add(lead)
     await db.flush()
     await db.refresh(lead)
@@ -59,10 +57,10 @@ async def create_lead(
 @router.get("/{lead_id}", response_model=LeadResponse)
 async def get_lead(
     lead_id: UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(select(Lead).where(Lead.id == lead_id, Lead.tenant_id == current_user.tenant_id))
+    result = await db.execute(select(Lead).where(Lead.id == lead_id, Lead.tenant_id == current_user["tenant_id"]))
     lead = result.scalar_one_or_none()
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
@@ -73,10 +71,10 @@ async def get_lead(
 async def update_lead(
     lead_id: UUID,
     data: LeadUpdate,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(select(Lead).where(Lead.id == lead_id, Lead.tenant_id == current_user.tenant_id))
+    result = await db.execute(select(Lead).where(Lead.id == lead_id, Lead.tenant_id == current_user["tenant_id"]))
     lead = result.scalar_one_or_none()
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
@@ -93,10 +91,10 @@ async def update_lead(
 async def assign_lead(
     lead_id: UUID,
     assigned_to: UUID = Query(...),
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(select(Lead).where(Lead.id == lead_id, Lead.tenant_id == current_user.tenant_id))
+    result = await db.execute(select(Lead).where(Lead.id == lead_id, Lead.tenant_id == current_user["tenant_id"]))
     lead = result.scalar_one_or_none()
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")

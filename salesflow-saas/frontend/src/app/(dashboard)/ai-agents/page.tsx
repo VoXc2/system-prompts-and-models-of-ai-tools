@@ -63,6 +63,7 @@ export default function AIAgentsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [discovering, setDiscovering] = useState(false);
+  const [discoverError, setDiscoverError] = useState("");
 
   useEffect(() => {
     Promise.all([
@@ -79,10 +80,11 @@ export default function AIAgentsPage() {
 
   async function handleDiscover() {
     setDiscovering(true);
+    setDiscoverError("");
     try {
       await aiAgents.discover({ type: "leads" });
     } catch {
-      // silent
+      setDiscoverError("فشل تشغيل الاكتشاف. تحقق من الإعدادات وحاول مرة أخرى.");
     } finally {
       setDiscovering(false);
     }
@@ -145,6 +147,11 @@ export default function AIAgentsPage() {
           اكتشاف عملاء
         </button>
       </div>
+      {discoverError && (
+        <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg mb-4">
+          {discoverError}
+        </div>
+      )}
 
       {/* Agent list */}
       <div className="bg-white rounded-xl border border-gray-200">

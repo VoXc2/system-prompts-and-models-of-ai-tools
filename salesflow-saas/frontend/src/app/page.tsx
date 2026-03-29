@@ -70,7 +70,7 @@ export default function LandingPage() {
               <a href="#pricing" className="text-gray-600 hover:text-primary transition">الأسعار</a>
             </div>
             <div className="flex items-center gap-3">
-              <a href="/ar/login" className="text-sm text-gray-600 hover:text-primary transition hidden sm:block">تسجيل دخول</a>
+              <a href="/login" className="text-sm text-gray-600 hover:text-primary transition hidden sm:block">تسجيل دخول</a>
               <a href="/book-demo" className="bg-accent hover:bg-accent-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition shadow-lg shadow-accent/25">
                 احجز عرض
               </a>

@@ -5,8 +5,7 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
-from app.database import get_db
-from app.api.deps import get_current_user, require_role
+from app.api.v1.deps import get_current_user, get_db, require_role
 from app.models.user import User
 from app.utils.security import hash_password
 
@@ -47,25 +46,25 @@ class UserUpdate(BaseModel):
 
 @router.get("", response_model=list[UserResponse])
 async def list_users(
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(select(User).where(User.tenant_id == current_user.tenant_id).order_by(User.created_at))
+    result = await db.execute(select(User).where(User.tenant_id == current_user["tenant_id"]).order_by(User.created_at))
     return [UserResponse.model_validate(u) for u in result.scalars().all()]
 
 
 @router.post("", response_model=UserResponse, status_code=201)
 async def create_user(
     data: UserCreate,
-    current_user: User = Depends(require_role("owner", "admin", "manager")),
+    current_user: dict = Depends(require_role("owner", "admin", "manager")),
     db: AsyncSession = Depends(get_db),
 ):
-    existing = await db.execute(select(User).where(User.email == data.email, User.tenant_id == current_user.tenant_id))
+    existing = await db.execute(select(User).where(User.email == data.email, User.tenant_id == current_user["tenant_id"]))
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email already exists in this company")
 
     user = User(
-        tenant_id=current_user.tenant_id,
+        tenant_id=current_user["tenant_id"],
         email=data.email,
         password_hash=hash_password(data.password),
         full_name=data.full_name,
@@ -83,10 +82,10 @@ async def create_user(
 async def update_user(
     user_id: UUID,
     data: UserUpdate,
-    current_user: User = Depends(require_role("owner", "admin")),
+    current_user: dict = Depends(require_role("owner", "admin")),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(select(User).where(User.id == user_id, User.tenant_id == current_user.tenant_id))
+    result = await db.execute(select(User).where(User.id == user_id, User.tenant_id == current_user["tenant_id"]))
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -102,14 +101,14 @@ async def update_user(
 @router.delete("/{user_id}", status_code=204)
 async def delete_user(
     user_id: UUID,
-    current_user: User = Depends(require_role("owner", "admin")),
+    current_user: dict = Depends(require_role("owner", "admin")),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(select(User).where(User.id == user_id, User.tenant_id == current_user.tenant_id))
+    result = await db.execute(select(User).where(User.id == user_id, User.tenant_id == current_user["tenant_id"]))
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    if user.id == current_user.id:
+    if user.id == current_user["user_id"]:
         raise HTTPException(status_code=400, detail="Cannot delete yourself")
 
     user.is_active = False

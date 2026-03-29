@@ -8,9 +8,7 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.database import get_db
-from app.api.deps import get_current_user
-from app.models.user import User
+from app.api.v1.deps import get_current_user, get_db
 from app.models.conversation import Conversation, ConversationMessage
 
 
@@ -130,11 +128,11 @@ async def list_conversations(
     assigned_to: UUID | None = Query(None),
     page: int = Query(1, ge=1),
     per_page: int = Query(20, ge=1, le=100),
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """List all conversations with optional filters, ordered by last_message_at desc."""
-    query = select(Conversation).where(Conversation.tenant_id == current_user.tenant_id)
+    query = select(Conversation).where(Conversation.tenant_id == current_user["tenant_id"])
 
     if status:
         query = query.where(Conversation.status == status)
@@ -166,7 +164,7 @@ async def list_conversations(
 @router.get("/{conversation_id}", response_model=ConversationDetailResponse)
 async def get_conversation(
     conversation_id: UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Get a conversation with its messages (eager loaded)."""
@@ -174,7 +172,7 @@ async def get_conversation(
         select(Conversation)
         .where(
             Conversation.id == conversation_id,
-            Conversation.tenant_id == current_user.tenant_id,
+            Conversation.tenant_id == current_user["tenant_id"],
         )
         .options(selectinload(Conversation.messages))
     )
@@ -191,14 +189,14 @@ async def get_conversation(
 @router.post("", response_model=ConversationResponse, status_code=201)
 async def create_conversation(
     req: ConversationCreate,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Create a new conversation, optionally with an initial message."""
     now = datetime.now(timezone.utc)
 
     conv = Conversation(
-        tenant_id=current_user.tenant_id,
+        tenant_id=current_user["tenant_id"],
         contact_name=req.contact_name,
         contact_phone=req.contact_phone,
         contact_email=req.contact_email,
@@ -218,10 +216,10 @@ async def create_conversation(
 
     if req.initial_message:
         msg = ConversationMessage(
-            tenant_id=current_user.tenant_id,
+            tenant_id=current_user["tenant_id"],
             conversation_id=conv.id,
             sender_type="user",
-            sender_id=current_user.id,
+            sender_id=current_user["user_id"],
             channel=req.channel,
             direction="outbound",
             content_type="text",
@@ -240,18 +238,18 @@ async def create_conversation(
 async def reply_to_conversation(
     conversation_id: UUID,
     req: ConversationReply,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Send a reply in a conversation. Updates conversation metadata."""
-    conv = await _get_conversation_or_404(db, conversation_id, current_user.tenant_id)
+    conv = await _get_conversation_or_404(db, conversation_id, current_user["tenant_id"])
     now = datetime.now(timezone.utc)
 
     msg = ConversationMessage(
-        tenant_id=current_user.tenant_id,
+        tenant_id=current_user["tenant_id"],
         conversation_id=conv.id,
         sender_type=req.sender_type,
-        sender_id=current_user.id,
+        sender_id=current_user["user_id"],
         channel=req.channel or conv.channel,
         direction=req.direction,
         content_type=req.content_type,
@@ -274,11 +272,11 @@ async def reply_to_conversation(
 async def assign_conversation(
     conversation_id: UUID,
     req: AssignRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Assign conversation to a team member."""
-    conv = await _get_conversation_or_404(db, conversation_id, current_user.tenant_id)
+    conv = await _get_conversation_or_404(db, conversation_id, current_user["tenant_id"])
 
     conv.assigned_to = req.user_id
     conv.updated_at = datetime.now(timezone.utc)
@@ -291,11 +289,11 @@ async def assign_conversation(
 @router.post("/{conversation_id}/close", response_model=ConversationResponse)
 async def close_conversation(
     conversation_id: UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Close/resolve a conversation."""
-    conv = await _get_conversation_or_404(db, conversation_id, current_user.tenant_id)
+    conv = await _get_conversation_or_404(db, conversation_id, current_user["tenant_id"])
 
     conv.status = "closed"
     conv.updated_at = datetime.now(timezone.utc)
