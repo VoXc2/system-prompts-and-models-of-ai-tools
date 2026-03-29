@@ -8,12 +8,12 @@ class Consent(TenantModel):
     """Records consent given by a contact (PDPL compliance)."""
     __tablename__ = "consents"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
+    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True, index=True)
     contact_phone = Column(String(20))
     contact_email = Column(String(255))
     consent_type = Column(String(100), nullable=False)  # marketing_whatsapp, marketing_email, marketing_sms, data_processing, call_recording
-    status = Column(String(50), default="granted")  # granted, revoked
+    status = Column(String(50), default="granted", index=True)  # granted, revoked
     granted_at = Column(DateTime(timezone=True))
     revoked_at = Column(DateTime(timezone=True))
     source = Column(String(100))  # web_form, whatsapp_optin, manual, api, ctwa_ad

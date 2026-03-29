@@ -11,7 +11,7 @@ class Sequence(TenantModel):
     name = Column(String(255), nullable=False)
     industry = Column(String(100))
     channel = Column(String(50), default="whatsapp")  # whatsapp, email, multi
-    status = Column(String(50), default="active")  # draft, active, paused, archived
+    status = Column(String(50), default="active", index=True)  # draft, active, paused, archived
     total_steps = Column(Integer, default=0)
     total_enrolled = Column(Integer, default=0)
     total_completed = Column(Integer, default=0)
@@ -42,7 +42,7 @@ class SequenceEnrollment(TenantModel):
     sequence_id = Column(UUID(as_uuid=True), ForeignKey("sequences.id"), nullable=False)
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=False)
     current_step = Column(Integer, default=0)
-    status = Column(String(50), default="active")  # active, paused, completed, replied, converted, bounced
+    status = Column(String(50), default="active", index=True)  # active, paused, completed, replied, converted, bounced
     enrolled_at = Column(DateTime(timezone=True))
     next_step_at = Column(DateTime(timezone=True))
     completed_at = Column(DateTime(timezone=True))

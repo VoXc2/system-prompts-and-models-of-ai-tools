@@ -9,11 +9,11 @@ class Conversation(TenantModel):
     """A conversation thread with a lead/customer across any channel."""
     __tablename__ = "conversations"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
+    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True, index=True)
     assigned_to = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     channel = Column(String(50), nullable=False)  # whatsapp, email, sms, phone, web_form
-    status = Column(String(50), default="open")  # open, waiting, resolved, closed
+    status = Column(String(50), default="open", index=True)  # open, waiting, resolved, closed
     subject = Column(String(500))
     contact_name = Column(String(255))
     contact_phone = Column(String(20))
@@ -43,7 +43,7 @@ class ConversationMessage(TenantModel):
     direction = Column(String(10), nullable=False)  # inbound, outbound
     content_type = Column(String(50), default="text")  # text, image, document, template, audio
     content = Column(Text)
-    status = Column(String(50), default="sent")  # pending, sent, delivered, read, failed
+    status = Column(String(50), default="sent", index=True)  # pending, sent, delivered, read, failed
     external_id = Column(String(255))  # WhatsApp message ID, email ID, etc.
     extra_data = Column("metadata", JSONB, default=dict)
 

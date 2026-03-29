@@ -8,16 +8,16 @@ class Contract(TenantModel):
     """Client contract / agreement."""
     __tablename__ = "contracts"
 
-    deal_id = Column(UUID(as_uuid=True), ForeignKey("deals.id"), nullable=True)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True)
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
+    deal_id = Column(UUID(as_uuid=True), ForeignKey("deals.id"), nullable=True, index=True)
+    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True, index=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
     title = Column(String(255), nullable=False)
     contract_type = Column(String(100))  # msa, sow, nda, subscription, service_agreement
     content = Column(Text)  # HTML/Markdown content
     template_id = Column(String(255))
     total_value = Column(Numeric(14, 2))
     currency = Column(String(3), default="SAR")
-    status = Column(String(50), default="draft")  # draft, sent, viewed, signed, expired, cancelled
+    status = Column(String(50), default="draft", index=True)  # draft, sent, viewed, signed, expired, cancelled
     sent_at = Column(DateTime(timezone=True))
     viewed_at = Column(DateTime(timezone=True))
     signed_at = Column(DateTime(timezone=True))

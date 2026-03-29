@@ -102,12 +102,20 @@ async def _mark_no_shows():
 @celery_app.task(name="app.workers.appointment_tasks.send_appointment_reminders")
 def send_appointment_reminders():
     """Celery task: Send appointment reminders via WhatsApp."""
-    asyncio.get_event_loop().run_until_complete(_send_reminders())
+    loop = asyncio.new_event_loop()
+    try:
+        loop.run_until_complete(_send_reminders())
+    finally:
+        loop.close()
     return {"status": "ok"}
 
 
 @celery_app.task(name="app.workers.appointment_tasks.mark_no_shows")
 def mark_no_shows():
     """Celery task: Mark overdue appointments as no-show."""
-    asyncio.get_event_loop().run_until_complete(_mark_no_shows())
+    loop = asyncio.new_event_loop()
+    try:
+        loop.run_until_complete(_mark_no_shows())
+    finally:
+        loop.close()
     return {"status": "ok"}

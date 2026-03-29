@@ -36,12 +36,12 @@ class OutreachCampaign(TenantModel):
     """Automated outreach campaign."""
     __tablename__ = "outreach_campaigns"
 
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("ai_agents.id"), nullable=False)
+    agent_id = Column(UUID(as_uuid=True), ForeignKey("ai_agents.id"), nullable=False, index=True)
     name = Column(String(255), nullable=False)
     campaign_type = Column(String(50), default="cold_outreach")  # cold_outreach, warm_followup, reactivation
     industry = Column(String(100))
     channel = Column(String(50), default="whatsapp")  # whatsapp, email, sms
-    status = Column(String(50), default="draft")  # draft, active, paused, completed
+    status = Column(String(50), default="draft", index=True)  # draft, active, paused, completed
     target_criteria = Column(JSONB, default=dict)  # Filters for target leads
     sequence = Column(JSONB, default=list)  # Array of message steps
     total_leads = Column(Integer, default=0)
@@ -60,11 +60,11 @@ class AIConversation(TenantModel):
     """AI-managed conversation with a lead/customer."""
     __tablename__ = "ai_conversations"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("ai_agents.id"), nullable=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
+    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True, index=True)
+    agent_id = Column(UUID(as_uuid=True), ForeignKey("ai_agents.id"), nullable=True, index=True)
     channel = Column(String(50), default="whatsapp")
-    status = Column(String(50), default="active")  # active, paused, escalated, closed
+    status = Column(String(50), default="active", index=True)  # active, paused, escalated, closed
     sentiment = Column(String(50))  # positive, negative, neutral
     intent = Column(String(100))  # inquiry, interested, ready_to_buy, etc.
     lead_score = Column(Integer, default=0)
@@ -94,6 +94,6 @@ class DiscoveredLead(TenantModel):
     ai_score = Column(Integer, default=50)
     ai_priority = Column(String(20), default="medium")  # low, medium, high, urgent
     ai_notes = Column(Text)
-    status = Column(String(50), default="new")  # new, contacted, converted, rejected
+    status = Column(String(50), default="new", index=True)  # new, contacted, converted, rejected
     converted_lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
     extra_data = Column("metadata", JSONB, default=dict)

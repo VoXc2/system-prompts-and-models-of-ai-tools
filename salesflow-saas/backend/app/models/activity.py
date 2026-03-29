@@ -7,9 +7,9 @@ from app.models.base import TenantModel
 class Activity(TenantModel):
     __tablename__ = "activities"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
-    deal_id = Column(UUID(as_uuid=True), ForeignKey("deals.id"), nullable=True)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
+    deal_id = Column(UUID(as_uuid=True), ForeignKey("deals.id"), nullable=True, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True, index=True)
     type = Column(String(50), nullable=False)  # call, email, whatsapp, meeting, note, follow_up
     subject = Column(String(255))
     description = Column(Text)

@@ -11,7 +11,7 @@ class Property(TenantModel):
     title = Column(String(255), nullable=False)
     title_ar = Column(String(255))
     property_type = Column(String(50))  # apartment, villa, land, office, commercial
-    status = Column(String(50), default="available")  # available, reserved, sold, rented
+    status = Column(String(50), default="available", index=True)  # available, reserved, sold, rented
     price = Column(Numeric(14, 2))
     currency = Column(String(3), default="SAR")
     area_sqm = Column(Numeric(10, 2))

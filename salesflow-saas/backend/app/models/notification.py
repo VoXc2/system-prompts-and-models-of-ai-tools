@@ -6,7 +6,7 @@ from app.models.base import TenantModel
 class Notification(TenantModel):
     __tablename__ = "notifications"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
     type = Column(String(50))
     title = Column(String(255))
     body = Column(Text)

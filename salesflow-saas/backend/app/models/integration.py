@@ -27,7 +27,7 @@ class WebhookEvent(TenantModel):
     source = Column(String(100), nullable=False)  # whatsapp, meta, stripe, vapi
     event_type = Column(String(255))
     payload = Column(JSONB)
-    status = Column(String(50), default="received")  # received, processing, processed, failed
+    status = Column(String(50), default="received", index=True)  # received, processing, processed, failed
     processed_at = Column(DateTime(timezone=True))
     error_message = Column(Text)
     retry_count = Column(Integer, default=0)

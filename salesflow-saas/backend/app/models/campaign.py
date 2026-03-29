@@ -11,7 +11,7 @@ class Campaign(TenantModel):
     name = Column(String(255), nullable=False)
     campaign_type = Column(String(50))  # meta_ctwa, linkedin, google_ads, email, whatsapp, referral, manual
     channel = Column(String(50))  # whatsapp, email, linkedin, instagram, google, tiktok
-    status = Column(String(50), default="draft")  # draft, active, paused, completed
+    status = Column(String(50), default="draft", index=True)  # draft, active, paused, completed
     budget = Column(Numeric(12, 2))
     currency = Column(String(3), default="SAR")
     start_date = Column(DateTime(timezone=True))
@@ -33,7 +33,7 @@ class LeadSource(TenantModel):
     """Tracks how each lead was acquired (UTM, campaign, referral)."""
     __tablename__ = "lead_sources"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=False)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=False, index=True)
     campaign_id = Column(UUID(as_uuid=True), ForeignKey("campaigns.id"), nullable=True)
     source = Column(String(100))  # google, facebook, linkedin, whatsapp, direct, referral
     medium = Column(String(100))  # cpc, organic, social, email, referral

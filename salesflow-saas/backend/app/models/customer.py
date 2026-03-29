@@ -7,7 +7,7 @@ from app.models.base import TenantModel
 class Customer(TenantModel):
     __tablename__ = "customers"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
     name = Column(String(255), nullable=False)
     phone = Column(String(20))
     email = Column(String(255))

@@ -13,7 +13,7 @@ class Lead(TenantModel):
     phone = Column(String(20))
     email = Column(String(255))
     source = Column(String(100))  # whatsapp, website, referral, social, phone
-    status = Column(String(50), default="new")  # new, contacted, qualified, proposal, won, lost
+    status = Column(String(50), default="new", index=True)  # new, contacted, qualified, proposal, won, lost
     score = Column(Integer, default=0)
     notes = Column(Text)
     extra_data = Column("metadata", JSONB, default=dict)  # industry-specific flexible data

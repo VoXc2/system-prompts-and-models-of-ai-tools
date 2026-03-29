@@ -8,13 +8,13 @@ class CallLog(TenantModel):
     """Record of a phone call (voice AI or manual)."""
     __tablename__ = "call_logs"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
+    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True, index=True)
     direction = Column(String(10), nullable=False)  # inbound, outbound
     caller_number = Column(String(20))
     callee_number = Column(String(20))
-    status = Column(String(50))  # ringing, answered, missed, voicemail, completed, failed
+    status = Column(String(50), index=True)  # ringing, answered, missed, voicemail, completed, failed
     duration_seconds = Column(Integer)
     is_ai_call = Column(Boolean, default=False)
     ai_agent_id = Column(UUID(as_uuid=True), ForeignKey("ai_agents.id"), nullable=True)
@@ -36,7 +36,7 @@ class VoiceSession(TenantModel):
     ai_agent_id = Column(UUID(as_uuid=True), ForeignKey("ai_agents.id"), nullable=True)
     provider = Column(String(50))  # vapi, retell
     external_session_id = Column(String(255))
-    status = Column(String(50), default="active")  # active, completed, failed, transferred
+    status = Column(String(50), default="active", index=True)  # active, completed, failed, transferred
     language = Column(String(10), default="ar")
     handoff_to_user = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     handoff_reason = Column(Text)

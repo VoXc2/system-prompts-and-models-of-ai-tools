@@ -9,8 +9,8 @@ class Appointment(TenantModel):
     """Appointment booking — core feature for salons, clinics, and service businesses."""
     __tablename__ = "appointments"
 
-    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True)
+    lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id"), nullable=True, index=True)
+    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.id"), nullable=True, index=True)
     assigned_to = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
 
     # Booking details
@@ -21,7 +21,7 @@ class Appointment(TenantModel):
     duration_minutes = Column(Integer, default=30)
 
     # Status workflow
-    status = Column(String(50), default="pending")
+    status = Column(String(50), default="pending", index=True)
     # pending -> confirmed -> completed
     # pending -> cancelled
     # confirmed -> no_show
