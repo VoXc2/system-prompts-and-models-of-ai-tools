@@ -193,6 +193,15 @@ export const notifications = {
   markAllRead: () => apiFetch("/notifications/read-all", { method: "POST" }),
 };
 
+// ─── Users (Team) API ───
+
+export const users = {
+  list: () => apiFetch("/users"),
+  create: (data: any) => apiFetch("/users", { method: "POST", body: JSON.stringify(data) }),
+  update: (id: string, data: any) => apiFetch(`/users/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  delete: (id: string) => apiFetch(`/users/${id}`, { method: "DELETE" }),
+};
+
 // ─── Tenant API ───
 
 export const tenant = {
