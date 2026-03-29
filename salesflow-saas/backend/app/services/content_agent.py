@@ -333,8 +333,8 @@ class ContentAgent:
                 parsed = json.loads(ai_text[start:end])
                 for item in parsed:
                     calendar.append(item)
-        except (json.JSONDecodeError, ValueError):
-            pass
+        except (json.JSONDecodeError, ValueError) as e:
+            logger.warning("Failed to parse AI calendar response: %s", e)
 
         # Fallback: build a balanced calendar programmatically
         if not calendar:

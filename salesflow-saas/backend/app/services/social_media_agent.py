@@ -25,23 +25,45 @@ RATE_LIMITS = {
     "linkedin": {"connections_per_week": 100, "messages_per_day": 150},
 }
 
-# In-memory counters (replace with Redis in production)
-_counters: dict = {}
+# Redis-backed rate limiting for production (multi-instance safe)
+def _get_redis():
+    """Get Redis client from settings."""
+    try:
+        import redis
+        return redis.Redis.from_url(settings.REDIS_URL, decode_responses=True)
+    except Exception:
+        return None
 
 
 def _counter_key(platform: str, action: str) -> str:
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    return f"{platform}:{action}:{today}"
+    return f"dealix:ratelimit:{platform}:{action}:{today}"
 
 
 def _check_rate_limit(platform: str, action: str, limit: int) -> bool:
-    """Return True if within rate limit, False if exceeded."""
+    """Return True if within rate limit, False if exceeded. Uses Redis if available."""
     key = _counter_key(platform, action)
-    current = _counters.get(key, 0)
+    r = _get_redis()
+    if r:
+        try:
+            current = r.incr(key)
+            if current == 1:
+                r.expire(key, 86400)  # 24h TTL
+            if current > limit:
+                logger.warning("Rate limit reached: %s (%d/%d)", key, current, limit)
+                return False
+            return True
+        except Exception as e:
+            logger.warning("Redis rate limit check failed, allowing: %s", e)
+            return True
+    # Fallback to in-memory if Redis unavailable
+    if not hasattr(_check_rate_limit, "_counters"):
+        _check_rate_limit._counters = {}
+    current = _check_rate_limit._counters.get(key, 0)
     if current >= limit:
         logger.warning("Rate limit reached: %s (%d/%d)", key, current, limit)
         return False
-    _counters[key] = current + 1
+    _check_rate_limit._counters[key] = current + 1
     return True
 
 

@@ -8,11 +8,14 @@ import { notifications as notificationsApi } from "@/lib/api";
 import {
   LayoutDashboard,
   Users,
+  UserCheck,
   Handshake,
   MessageSquare,
   Calendar,
   Bot,
+  Brain,
   BarChart3,
+  Ear,
   Settings,
   Bell,
   LogOut,
@@ -25,10 +28,13 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 const navItems = [
   { href: "/dashboard", label: "لوحة التحكم", icon: LayoutDashboard },
   { href: "/dashboard/leads", label: "العملاء المحتملين", icon: Users },
+  { href: "/dashboard/customers", label: "العملاء", icon: UserCheck },
   { href: "/dashboard/deals", label: "الصفقات", icon: Handshake },
   { href: "/dashboard/conversations", label: "المحادثات", icon: MessageSquare },
   { href: "/dashboard/appointments", label: "المواعيد", icon: Calendar },
+  { href: "/dashboard/social-listening", label: "الاستماع الاجتماعي", icon: Ear },
   { href: "/dashboard/ai-agents", label: "الوكلاء الأذكياء", icon: Bot },
+  { href: "/dashboard/ai-traces", label: "حوكمة AI", icon: Brain },
   { href: "/dashboard/analytics", label: "التحليلات", icon: BarChart3 },
   { href: "/dashboard/settings", label: "الإعدادات", icon: Settings },
 ];

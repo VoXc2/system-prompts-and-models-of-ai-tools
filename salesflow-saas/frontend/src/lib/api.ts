@@ -207,3 +207,93 @@ export const voice = {
   call: (data: any) => apiFetch("/voice/call", { method: "POST", body: JSON.stringify(data) }),
   calls: () => apiFetch("/voice/calls"),
 };
+
+// ─── Customers API ───
+
+export const customers = {
+  list: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/customers${qs}`);
+  },
+  get: (id: string) => apiFetch(`/customers/${id}`),
+  create: (data: any) => apiFetch("/customers", { method: "POST", body: JSON.stringify(data) }),
+  update: (id: string, data: any) => apiFetch(`/customers/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+};
+
+// ─── Activities API ───
+
+export const activities = {
+  list: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/activities${qs}`);
+  },
+  create: (data: any) => apiFetch("/activities", { method: "POST", body: JSON.stringify(data) }),
+};
+
+// ─── AI Traces (Governance) API ───
+
+export const aiTraces = {
+  list: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/ai/traces${qs}`);
+  },
+  stats: () => apiFetch("/ai/traces/stats"),
+};
+
+// ─── Social Listening API ───
+
+export const socialListening = {
+  streams: () => apiFetch("/social/streams"),
+  createStream: (data: any) => apiFetch("/social/streams", { method: "POST", body: JSON.stringify(data) }),
+  posts: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/social/posts${qs}`);
+  },
+  pendingComments: () => apiFetch("/social/comments/pending"),
+  reviewComment: (id: string, data: any) => apiFetch(`/social/comments/${id}/review`, { method: "POST", body: JSON.stringify(data) }),
+  stats: () => apiFetch("/social/stats"),
+};
+
+// ─── Growth Events / Attribution API ───
+
+export const growthEvents = {
+  track: (data: any) => apiFetch("/growth-events/track", { method: "POST", body: JSON.stringify(data) }),
+  journey: (leadId: string) => apiFetch(`/growth-events/journey/${leadId}`),
+  channels: () => apiFetch("/growth-events/channels"),
+  campaigns: () => apiFetch("/growth-events/campaigns"),
+};
+
+// ─── Integrations API ───
+
+export const integrations = {
+  list: () => apiFetch("/integrations"),
+  connect: (data: any) => apiFetch("/integrations", { method: "POST", body: JSON.stringify(data) }),
+  disconnect: (id: string) => apiFetch(`/integrations/${id}`, { method: "DELETE" }),
+  status: (id: string) => apiFetch(`/integrations/${id}/status`),
+};
+
+// ─── Audit Logs API ───
+
+export const auditLogs = {
+  list: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/audit-logs${qs}`);
+  },
+};
+
+// ─── Subscription API ───
+
+export const subscription = {
+  get: () => apiFetch("/subscription"),
+  update: (data: any) => apiFetch("/subscription", { method: "PUT", body: JSON.stringify(data) }),
+};
+
+// ─── Messages API ───
+
+export const messages = {
+  list: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/messages${qs}`);
+  },
+  scheduled: () => apiFetch("/messages/scheduled"),
+};

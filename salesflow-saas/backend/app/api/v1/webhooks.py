@@ -4,13 +4,36 @@ Auto-triggers AI agents to respond to incoming messages.
 """
 import logging
 from fastapi import APIRouter, Request, HTTPException
+from sqlalchemy import select
 from app.config import get_settings
 from app.workers.ai_agent_tasks import process_incoming_message
+from app.database import async_session
+from app.models.integration import IntegrationAccount
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 settings = get_settings()
+
+
+async def _resolve_tenant_from_phone_number_id(phone_number_id: str) -> str:
+    """Map WhatsApp phone_number_id to tenant_id via IntegrationAccount."""
+    if not phone_number_id:
+        return settings.DEFAULT_TENANT_ID or "default"
+    try:
+        async with async_session() as db:
+            stmt = select(IntegrationAccount).where(
+                IntegrationAccount.provider == "whatsapp",
+                IntegrationAccount.account_id == phone_number_id,
+                IntegrationAccount.is_active == True,
+            )
+            result = await db.execute(stmt)
+            account = result.scalar_one_or_none()
+            if account:
+                return str(account.tenant_id)
+    except Exception as e:
+        logger.warning("Failed to resolve tenant for phone_number_id=%s: %s", phone_number_id, e)
+    return settings.DEFAULT_TENANT_ID or "default"
 
 
 @router.get("/whatsapp")
@@ -68,13 +91,11 @@ async def whatsapp_webhook(request: Request):
 
                 if text:
                     # Resolve tenant from the WhatsApp phone number ID
-                    # The phone_number_id in the webhook identifies which business number received it
+                    # Maps phone_number_id → tenant_id via IntegrationAccount table
                     phone_number_id = value.get("metadata", {}).get("phone_number_id", "")
                     display_phone = value.get("metadata", {}).get("display_phone_number", "")
 
-                    # TODO: Map phone_number_id to tenant_id via IntegrationAccount table
-                    # For now use default tenant, but log for debugging
-                    tenant_id = settings.DEFAULT_TENANT_ID or "default"
+                    tenant_id = await _resolve_tenant_from_phone_number_id(phone_number_id)
                     logger.info(
                         f"WhatsApp incoming from {sender_phone} to business phone {display_phone} "
                         f"(phone_number_id={phone_number_id}), routing to tenant={tenant_id}"

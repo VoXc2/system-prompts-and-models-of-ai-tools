@@ -2,9 +2,12 @@
 Dealix Notification Service - In-app notifications, email alerts, and WhatsApp notifications.
 Handles all notification dispatch for the Dealix CRM platform.
 """
+import logging
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 from app.config import get_settings
 from app.database import get_db
@@ -126,10 +129,10 @@ class NotificationService:
             )
             db.add(notification)
             db.commit()
-        except Exception:
+        except Exception as e:
             # If persistence fails we still return the record so callers
             # can handle gracefully (e.g. during tests or DB downtime).
-            pass
+            logger.warning("Failed to persist notification: %s", e)
 
         return {"success": True, "notification": notification_record}
 

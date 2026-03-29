@@ -4,6 +4,9 @@ from app.api.v1 import conversations, campaigns, consents, forms, voice
 from app.api.v1 import sequences, contracts, files, branding, tags
 from app.api.v1 import analytics, custom_fields, notifications, appointments, proposals
 from app.api.v1 import suppression, social_listening
+from app.api.v1 import customers, activities, ai_traces, audit_logs
+from app.api.v1 import growth_events, integrations, subscriptions
+from app.api.v1 import messages_api
 
 api_router = APIRouter()
 
@@ -13,17 +16,24 @@ api_router.include_router(tenants.router, prefix="/tenant", tags=["Tenant"])
 api_router.include_router(users.router, prefix="/users", tags=["Users"])
 api_router.include_router(leads.router, prefix="/leads", tags=["Leads"])
 api_router.include_router(deals.router, prefix="/deals", tags=["Deals"])
+api_router.include_router(customers.router, prefix="/customers", tags=["Customers"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 
-# AI Agents
+# Activities
+api_router.include_router(activities.router, prefix="/activities", tags=["Activities"])
+
+# AI Agents & Governance
 api_router.include_router(ai_agents.router, prefix="/ai", tags=["AI Agents"])
+api_router.include_router(ai_traces.router, prefix="/ai", tags=["AI Governance"])
 
 # Conversations & Communication
 api_router.include_router(conversations.router, prefix="/conversations", tags=["Conversations"])
+api_router.include_router(messages_api.router, prefix="/messages", tags=["Messages"])
 api_router.include_router(webhooks.router, prefix="/webhooks", tags=["Webhooks"])
 
 # Marketing & Attribution
 api_router.include_router(campaigns.router, prefix="/campaigns", tags=["Campaigns"])
+api_router.include_router(growth_events.router, prefix="/growth-events", tags=["Growth Events"])
 
 # Compliance
 api_router.include_router(consents.router, prefix="/consents", tags=["Consents"])
@@ -40,6 +50,12 @@ api_router.include_router(sequences.router, prefix="/sequences", tags=["Sequence
 
 # Contracts & E-Sign
 api_router.include_router(contracts.router, prefix="/contracts", tags=["Contracts"])
+
+# Integrations
+api_router.include_router(integrations.router, prefix="/integrations", tags=["Integrations"])
+
+# Subscriptions
+api_router.include_router(subscriptions.router, prefix="/subscription", tags=["Subscriptions"])
 
 # File Management
 api_router.include_router(files.router, prefix="/files", tags=["Files"])
@@ -64,6 +80,9 @@ api_router.include_router(appointments.router, prefix="/appointments", tags=["Ap
 
 # Proposals
 api_router.include_router(proposals.router, prefix="/proposals", tags=["Proposals"])
+
+# Audit Logs
+api_router.include_router(audit_logs.router, prefix="/audit-logs", tags=["Audit Logs"])
 
 # Public (no auth required)
 api_router.include_router(forms.router, prefix="/forms", tags=["Forms"])
