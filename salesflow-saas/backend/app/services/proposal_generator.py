@@ -8,7 +8,7 @@ import json
 import logging
 from typing import Optional
 
-from app.services.ai_brain import AIBrain
+from app.services.ai_brain import ai_brain as _ai_brain_singleton
 from app.config import get_settings
 
 logger = logging.getLogger(__name__)
@@ -283,7 +283,7 @@ class ProposalGenerator:
     """Generates structured Arabic proposal content using AI and industry templates."""
 
     def __init__(self):
-        self.ai = AIBrain()
+        self.ai = _ai_brain_singleton
 
     async def generate_proposal_content(
         self,

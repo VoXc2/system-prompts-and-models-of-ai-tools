@@ -82,7 +82,7 @@ class AutoOutreachEngine:
                     "parameters": [{"type": "text", "text": lead.get("name", "")}],
                 }],
             )
-            return {"success": "error" not in str(result).lower(), "channel": "whatsapp", "result": result}
+            return {"success": result.get("status") == "success", "channel": "whatsapp", "result": result}
 
         return {"success": False, "reason": "no_phone"}
 
@@ -92,7 +92,7 @@ class AutoOutreachEngine:
 
         if channel == "whatsapp" and lead.get("phone"):
             result = await send_whatsapp_message(lead["phone"], message)
-            return {"success": "error" not in str(result).lower(), "channel": "whatsapp", "result": result}
+            return {"success": result.get("status") == "success", "channel": "whatsapp", "result": result}
 
         return {"success": False, "reason": "no_phone"}
 
@@ -116,7 +116,7 @@ class AutoOutreachEngine:
                     ],
                 }],
             )
-            return {"success": "error" not in str(result).lower(), "channel": "whatsapp", "result": result}
+            return {"success": result.get("status") == "success", "channel": "whatsapp", "result": result}
 
         return {"success": False, "reason": "no_phone"}
 

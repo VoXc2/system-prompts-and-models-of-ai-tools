@@ -12,10 +12,14 @@ security = HTTPBearer(auto_error=False)
 
 
 async def get_db():
-    """Get async database session."""
+    """Get async database session with auto-commit."""
     async with async_session() as session:
         try:
             yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
         finally:
             await session.close()
 

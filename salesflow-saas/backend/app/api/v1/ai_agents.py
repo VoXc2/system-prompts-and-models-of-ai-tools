@@ -137,12 +137,12 @@ async def list_agents(
 # ─── AI Chat (Smart Sales) ───
 
 @router.post("/chat")
-async def ai_chat(req: ChatRequest):
+async def ai_chat(req: ChatRequest, current_user: dict = Depends(get_current_user)):
     """
     Chat with the AI sales agent. Send a customer message,
     get an intelligent sales response back.
     """
-    agent = SmartSalesAgent(tenant_id="default", industry=req.industry)
+    agent = SmartSalesAgent(tenant_id=current_user["tenant_id"], industry=req.industry)
 
     lead_data = {
         "name": req.lead_name or "عميل",
@@ -171,12 +171,12 @@ async def ai_chat(req: ChatRequest):
 
 
 @router.post("/chat/reply")
-async def ai_auto_reply(req: ChatRequest):
+async def ai_auto_reply(req: ChatRequest, current_user: dict = Depends(get_current_user)):
     """
     Process incoming WhatsApp message and auto-reply.
     This is what the webhook calls for automatic responses.
     """
-    engine = AutoOutreachEngine(tenant_id="default", industry=req.industry)
+    engine = AutoOutreachEngine(tenant_id=current_user["tenant_id"], industry=req.industry)
 
     lead_data = {
         "name": req.lead_name or "عميل",

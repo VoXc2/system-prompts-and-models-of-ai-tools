@@ -67,7 +67,19 @@ async def whatsapp_webhook(request: Request):
                         text = interactive.get("list_reply", {}).get("title", "")
 
                 if text:
-                    # Trigger AI agent to process and respond
+                    # Resolve tenant from the WhatsApp phone number ID
+                    # The phone_number_id in the webhook identifies which business number received it
+                    phone_number_id = value.get("metadata", {}).get("phone_number_id", "")
+                    display_phone = value.get("metadata", {}).get("display_phone_number", "")
+
+                    # TODO: Map phone_number_id to tenant_id via IntegrationAccount table
+                    # For now use default tenant, but log for debugging
+                    tenant_id = settings.DEFAULT_TENANT_ID or "default"
+                    logger.info(
+                        f"WhatsApp incoming from {sender_phone} to business phone {display_phone} "
+                        f"(phone_number_id={phone_number_id}), routing to tenant={tenant_id}"
+                    )
+
                     lead_data = {
                         "name": contact_name,
                         "phone": sender_phone,
@@ -77,7 +89,7 @@ async def whatsapp_webhook(request: Request):
 
                     # Send to Celery for async processing
                     process_incoming_message.delay(
-                        tenant_id="default",
+                        tenant_id=tenant_id,
                         message=text,
                         lead_data=lead_data,
                         industry="general",

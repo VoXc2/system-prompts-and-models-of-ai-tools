@@ -129,8 +129,12 @@ class ContentAgent:
             f"اكتب المحتوى فقط بدون مقدمات أو شرح."
         )
 
-        response = await ai_brain(prompt)
-        text = response.get("reply", "")
+        text = await ai_brain.think(
+            system_prompt="أنت خبير تسويق رقمي سعودي متخصص في إنشاء محتوى جذاب للشركات السعودية.",
+            user_message=prompt,
+            temperature=0.7,
+            max_tokens=500,
+        )
 
         # Enforce Twitter limit
         if platform == "twitter" and len(text) > 280:
@@ -195,8 +199,12 @@ class ContentAgent:
             f"اكتب التعليق فقط:"
         )
 
-        response = await ai_brain(prompt)
-        return response.get("reply", "")
+        return await ai_brain.think(
+            system_prompt="أنت خبير تسويق سعودي. أنشئ هاشتاقات مناسبة.",
+            user_message=prompt,
+            temperature=0.5,
+            max_tokens=200,
+        )
 
     async def generate_dm_sequence(
         self,
@@ -254,8 +262,12 @@ class ContentAgent:
                 f"اكتب الرسالة فقط بدون مقدمات:"
             )
 
-            response = await ai_brain(prompt)
-            message_text = response.get("reply", "")
+            message_text = await ai_brain.think(
+                system_prompt="أنت خبير مبيعات سعودي. اكتب رسائل تسويقية جذابة.",
+                user_message=prompt,
+                temperature=0.7,
+                max_tokens=500,
+            )
 
             # Enforce Twitter DM softness
             if platform == "twitter" and len(message_text) > 1000:
@@ -303,8 +315,12 @@ class ContentAgent:
             f"اكتب الخطة بصيغة JSON array."
         )
 
-        response = await ai_brain(prompt)
-        ai_text = response.get("reply", "")
+        ai_text = await ai_brain.think(
+            system_prompt="أنت خبير تسويق رقمي سعودي.",
+            user_message=prompt,
+            temperature=0.7,
+            max_tokens=500,
+        )
 
         # Try to parse AI response as JSON, fall back to generating a balanced plan
         calendar: list[dict] = []

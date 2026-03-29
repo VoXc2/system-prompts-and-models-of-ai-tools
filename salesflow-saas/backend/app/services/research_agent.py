@@ -10,7 +10,7 @@ from typing import Optional
 
 from app.config import get_settings
 from app.services.data_intelligence import DataIntelligenceService
-from app.services.ai_brain import AIBrain
+from app.services.ai_brain import ai_brain as _ai_brain_singleton
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class ResearchAgent:
 
     def __init__(self):
         self._data_intel = DataIntelligenceService()
-        self._ai_brain = AIBrain()
+        self._ai_brain = _ai_brain_singleton
         self._http_client: Optional[httpx.AsyncClient] = None
 
     async def _client(self) -> httpx.AsyncClient:

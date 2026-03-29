@@ -574,8 +574,12 @@ class SocialMediaAgent:
             f"اكتب الرسالة فقط بدون مقدمات."
         )
 
-        response = await ai_brain(prompt)
-        generated = response.get("reply", "")
+        generated = await ai_brain.think(
+            system_prompt="أنت خبير تواصل اجتماعي سعودي. اكتب رسائل تواصل مهنية وجذابة.",
+            user_message=prompt,
+            temperature=0.7,
+            max_tokens=300,
+        )
 
         # Enforce Twitter character limit
         if platform == "twitter" and len(generated) > 280:
