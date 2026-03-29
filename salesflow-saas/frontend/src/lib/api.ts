@@ -153,6 +153,9 @@ export const appointments = {
   confirm: (id: string) => apiFetch(`/appointments/${id}/confirm`, { method: "POST" }),
   complete: (id: string) => apiFetch(`/appointments/${id}/complete`, { method: "POST" }),
   cancel: (id: string) => apiFetch(`/appointments/${id}`, { method: "DELETE" }),
+  noShow: (id: string) => apiFetch(`/appointments/${id}/no-show`, { method: "POST" }),
+  update: (id: string, data: any) => apiFetch(`/appointments/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  get: (id: string) => apiFetch(`/appointments/${id}`),
 };
 
 // ─── Analytics API ───
@@ -343,4 +346,15 @@ export const velocity = {
     const qs = params ? "?" + new URLSearchParams(params).toString() : "";
     return apiFetch(`/analytics/velocity${qs}`);
   },
+};
+
+// ─── Sequences (Automations) API ───
+
+export const sequences = {
+  list: () => apiFetch("/sequences"),
+  get: (id: string) => apiFetch(`/sequences/${id}`),
+  create: (data: any) => apiFetch("/sequences", { method: "POST", body: JSON.stringify(data) }),
+  update: (id: string, data: any) => apiFetch(`/sequences/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  delete: (id: string) => apiFetch(`/sequences/${id}`, { method: "DELETE" }),
+  enroll: (id: string, data: any) => apiFetch(`/sequences/${id}/enroll`, { method: "POST", body: JSON.stringify(data) }),
 };

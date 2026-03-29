@@ -22,6 +22,8 @@ import {
   Menu,
   X,
   ChevronDown,
+  Zap,
+  Code2,
 } from "lucide-react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
@@ -36,6 +38,8 @@ const navItems = [
   { href: "/dashboard/ai-agents", label: "الوكلاء الأذكياء", icon: Bot },
   { href: "/dashboard/ai-traces", label: "حوكمة AI", icon: Brain },
   { href: "/dashboard/analytics", label: "التحليلات", icon: BarChart3 },
+  { href: "/dashboard/automations", label: "الأتمتة", icon: Zap },
+  { href: "/dashboard/widget", label: "الودجت", icon: Code2 },
   { href: "/dashboard/settings", label: "الإعدادات", icon: Settings },
 ];
 
