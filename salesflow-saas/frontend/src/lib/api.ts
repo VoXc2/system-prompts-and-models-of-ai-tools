@@ -297,3 +297,41 @@ export const messages = {
   },
   scheduled: () => apiFetch("/messages/scheduled"),
 };
+
+// ─── Playbooks (Revenue Engine) API ───
+
+export const playbooks = {
+  list: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/playbooks${qs}`);
+  },
+  get: (id: string) => apiFetch(`/playbooks/${id}`),
+  create: (data: any) => apiFetch("/playbooks", { method: "POST", body: JSON.stringify(data) }),
+  update: (id: string, data: any) => apiFetch(`/playbooks/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  delete: (id: string) => apiFetch(`/playbooks/${id}`, { method: "DELETE" }),
+};
+
+// ─── SLA Tracking API ───
+
+export const sla = {
+  policies: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/sla/policies${qs}`);
+  },
+  createPolicy: (data: any) => apiFetch("/sla/policies", { method: "POST", body: JSON.stringify(data) }),
+  updatePolicy: (id: string, data: any) => apiFetch(`/sla/policies/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  breaches: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/sla/breaches${qs}`);
+  },
+  stats: () => apiFetch("/sla/stats"),
+};
+
+// ─── Pipeline Velocity API ───
+
+export const velocity = {
+  get: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch(`/analytics/velocity${qs}`);
+  },
+};

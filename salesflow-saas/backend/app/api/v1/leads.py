@@ -5,6 +5,7 @@ from uuid import UUID
 from app.api.v1.deps import get_current_user, get_db
 from app.models.lead import Lead
 from app.schemas.lead import LeadCreate, LeadUpdate, LeadResponse, LeadListResponse
+from app.services.audit import log_action
 
 router = APIRouter()
 
@@ -51,6 +52,7 @@ async def create_lead(
     db.add(lead)
     await db.flush()
     await db.refresh(lead)
+    await log_action(db, current_user["tenant_id"], current_user["user_id"], "create", "lead", str(lead.id))
     return LeadResponse.model_validate(lead)
 
 
@@ -79,11 +81,13 @@ async def update_lead(
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
 
-    for field, value in data.model_dump(exclude_none=True).items():
+    changes = data.model_dump(exclude_none=True)
+    for field, value in changes.items():
         setattr(lead, field, value)
 
     await db.flush()
     await db.refresh(lead)
+    await log_action(db, current_user["tenant_id"], current_user["user_id"], "update", "lead", str(lead.id), changes=changes)
     return LeadResponse.model_validate(lead)
 
 

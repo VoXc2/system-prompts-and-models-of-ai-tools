@@ -7,6 +7,7 @@ from app.api.v1 import suppression, social_listening
 from app.api.v1 import customers, activities, ai_traces, audit_logs
 from app.api.v1 import growth_events, integrations, subscriptions
 from app.api.v1 import messages_api
+from app.api.v1 import playbooks, sla
 
 api_router = APIRouter()
 
@@ -83,6 +84,12 @@ api_router.include_router(proposals.router, prefix="/proposals", tags=["Proposal
 
 # Audit Logs
 api_router.include_router(audit_logs.router, prefix="/audit-logs", tags=["Audit Logs"])
+
+# Industry Playbooks (Revenue Engine)
+api_router.include_router(playbooks.router, prefix="/playbooks", tags=["Playbooks"])
+
+# SLA Tracking
+api_router.include_router(sla.router, prefix="/sla", tags=["SLA"])
 
 # Public (no auth required)
 api_router.include_router(forms.router, prefix="/forms", tags=["Forms"])

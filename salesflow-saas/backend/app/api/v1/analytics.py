@@ -745,7 +745,102 @@ async def analytics_campaigns(
 
 
 # ---------------------------------------------------------------------------
-# 7. GET /analytics/export
+# 7. GET /analytics/velocity — Pipeline velocity + revenue forecasting
+# ---------------------------------------------------------------------------
+
+@router.get("/velocity")
+async def analytics_velocity(
+    date_from: Optional[date] = Query(None),
+    date_to: Optional[date] = Query(None),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_active_user),
+):
+    """سرعة خط الأنابيب والتنبؤ بالإيرادات — Pipeline velocity & revenue forecast."""
+    d_from, d_to = _default_dates(date_from, date_to)
+    tenant_id = current_user["tenant_id"]
+    d_from_dt = datetime.combine(d_from, datetime.min.time())
+    d_to_dt = datetime.combine(d_to, datetime.max.time())
+
+    # Pipeline velocity = (num_deals * avg_deal_size * win_rate) / avg_sales_cycle_days
+    # Get all deals in period
+    deals_result = await db.execute(
+        select(Deal).where(
+            Deal.tenant_id == tenant_id,
+            Deal.created_at >= d_from_dt,
+            Deal.created_at <= d_to_dt,
+        )
+    )
+    all_deals = deals_result.scalars().all()
+
+    total_deals = len(all_deals)
+    won_deals = [d for d in all_deals if d.stage == "closed_won"]
+    lost_deals = [d for d in all_deals if d.stage == "closed_lost"]
+    open_deals = [d for d in all_deals if d.stage not in ("closed_won", "closed_lost")]
+
+    # Average deal size (won deals)
+    avg_deal_size = (
+        sum(float(d.value or 0) for d in won_deals) / len(won_deals)
+        if won_deals else 0
+    )
+
+    # Win rate
+    decided = len(won_deals) + len(lost_deals)
+    win_rate = round(len(won_deals) / decided * 100, 1) if decided > 0 else 0
+
+    # Average sales cycle (days from created_at to closed_at for won deals)
+    cycle_days = []
+    for d in won_deals:
+        if d.closed_at and d.created_at:
+            delta = (d.closed_at - d.created_at).days
+            if delta > 0:
+                cycle_days.append(delta)
+    avg_cycle = round(sum(cycle_days) / len(cycle_days), 1) if cycle_days else 30
+
+    # Pipeline velocity (SAR/day)
+    velocity = round(
+        (total_deals * avg_deal_size * (win_rate / 100)) / max(avg_cycle, 1), 2
+    )
+
+    # Revenue forecast (next 30/60/90 days based on open pipeline)
+    open_pipeline_value = sum(float(d.value or 0) for d in open_deals)
+    weighted_pipeline = sum(
+        float(d.value or 0) * (float(d.probability or 50) / 100)
+        for d in open_deals
+    )
+
+    return {
+        "date_from": str(d_from),
+        "date_to": str(d_to),
+        "velocity": {
+            "pipeline_velocity_sar_per_day": velocity,
+            "total_deals_in_period": total_deals,
+            "avg_deal_size": round(avg_deal_size, 2),
+            "win_rate_pct": win_rate,
+            "avg_sales_cycle_days": avg_cycle,
+        },
+        "pipeline": {
+            "open_deals": len(open_deals),
+            "open_pipeline_value": open_pipeline_value,
+            "weighted_pipeline": round(weighted_pipeline, 2),
+        },
+        "forecast": {
+            "30_day": round(velocity * 30, 2),
+            "60_day": round(velocity * 60, 2),
+            "90_day": round(velocity * 90, 2),
+            "weighted_forecast": round(weighted_pipeline, 2),
+        },
+        "conversion_funnel": {
+            "total_leads": total_deals,
+            "won": len(won_deals),
+            "lost": len(lost_deals),
+            "open": len(open_deals),
+        },
+        "currency": "SAR",
+    }
+
+
+# ---------------------------------------------------------------------------
+# 8. GET /analytics/export
 # ---------------------------------------------------------------------------
 
 @router.get("/export")

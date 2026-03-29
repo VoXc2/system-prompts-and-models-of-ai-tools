@@ -13,6 +13,7 @@ from app.models.user import User
 from app.models.subscription import Subscription
 from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, RefreshRequest
 from app.utils.security import hash_password, verify_password, create_access_token, create_refresh_token, decode_token
+from app.services.audit import log_action
 
 router = APIRouter()
 
@@ -68,6 +69,9 @@ async def register(request: Request, data: RegisterRequest, db: AsyncSession = D
     access_token = create_access_token({"sub": str(user.id), "tenant_id": str(tenant.id), "role": user.role})
     refresh_token = create_refresh_token({"sub": str(user.id)})
 
+    await log_action(db, str(tenant.id), str(user.id), "register", "user", str(user.id),
+                     ip_address=request.client.host if request.client else None)
+
     return TokenResponse(
         access_token=access_token,
         refresh_token=refresh_token,
@@ -88,6 +92,9 @@ async def login(request: Request, data: LoginRequest, db: AsyncSession = Depends
 
     user.last_login = datetime.now(timezone.utc)
     await db.flush()
+
+    await log_action(db, str(user.tenant_id), str(user.id), "login", "user", str(user.id),
+                     ip_address=request.client.host if request.client else None)
 
     access_token = create_access_token({"sub": str(user.id), "tenant_id": str(user.tenant_id), "role": user.role})
     refresh_token = create_refresh_token({"sub": str(user.id)})

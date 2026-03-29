@@ -28,6 +28,8 @@ from app.models.suppression import SuppressionEntry
 from app.models.social_listening import SocialPost, CommentDraft, ListeningStream
 from app.models.ai_trace import AITrace
 from app.models.growth_event import GrowthEvent
+from app.models.playbook import Playbook
+from app.models.sla import SLAPolicy, SLABreach
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
@@ -40,5 +42,5 @@ __all__ = [
     "IntegrationAccount", "WebhookEvent", "Tag", "Segment",
     "CustomField", "FileUpload", "Appointment",
     "SuppressionEntry", "SocialPost", "CommentDraft", "ListeningStream",
-    "AITrace", "GrowthEvent",
+    "AITrace", "GrowthEvent", "Playbook", "SLAPolicy", "SLABreach",
 ]

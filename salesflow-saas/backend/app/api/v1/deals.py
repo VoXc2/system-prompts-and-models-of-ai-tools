@@ -7,6 +7,7 @@ from decimal import Decimal
 from app.api.v1.deps import get_current_user, get_db
 from app.models.deal import Deal
 from app.schemas.deal import DealCreate, DealUpdate, DealResponse, StageUpdate, PipelineResponse
+from app.services.audit import log_action
 
 router = APIRouter()
 
@@ -60,6 +61,7 @@ async def create_deal(
     db.add(deal)
     await db.flush()
     await db.refresh(deal)
+    await log_action(db, current_user["tenant_id"], current_user["user_id"], "create", "deal", str(deal.id))
     return DealResponse.model_validate(deal)
 
 
@@ -75,8 +77,13 @@ async def update_deal(
     if not deal:
         raise HTTPException(status_code=404, detail="Deal not found")
 
-    for field, value in data.model_dump(exclude_none=True).items():
+    changes = data.model_dump(exclude_none=True)
+    old_stage = deal.stage
+    for field, value in changes.items():
         setattr(deal, field, value)
+    if "stage" in changes and changes["stage"] != old_stage:
+        await log_action(db, current_user["tenant_id"], current_user["user_id"], "stage_change", "deal", str(deal.id),
+                         changes={"from": old_stage, "to": changes["stage"]})
 
     await db.flush()
     await db.refresh(deal)
