@@ -1,17 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <!-- Background circle with gradient -->
   <defs>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0B3B66"/>
-      <stop offset="100%" stop-color="#0A2D4E"/>
+      <stop offset="0%" stop-color="#0E4A7C"/>
+      <stop offset="100%" stop-color="#0B3B66"/>
     </linearGradient>
+    <linearGradient id="xGr" x1="192" y1="192" x2="320" y2="384" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#14C8AD"/>
+      <stop offset="100%" stop-color="#0FAF9A"/>
+    </linearGradient>
+    <linearGradient id="aGr" x1="240" y1="120" x2="280" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FB923C"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
+  <!-- Background -->
   <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
-  <!-- D shape -->
-  <path d="M128 128h112c70.7 0 128 57.3 128 128s-57.3 128-128 128H128V128z" fill="#1E4D7B" opacity="0.6"/>
-  <!-- X lines -->
-  <path d="M224 352L272 208" stroke="#0FAF9A" stroke-width="24" stroke-linecap="round"/>
-  <path d="M320 352L272 208" stroke="#0FAF9A" stroke-width="24" stroke-linecap="round"/>
-  <!-- Arrow -->
-  <path d="M272 168L272 208M272 168L240 200M272 168L304 200" stroke="#F97316" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Subtle inner D shape -->
+  <path d="M120 120h120c75.1 0 136 60.9 136 136s-60.9 136-136 136H120V120z" fill="#0A2D4E" opacity="0.35"/>
+  <!-- Revenue X lines -->
+  <path d="M200 376L264 184" stroke="url(#xGr)" stroke-width="28" stroke-linecap="round"/>
+  <path d="M328 376L264 184" stroke="url(#xGr)" stroke-width="28" stroke-linecap="round"/>
+  <!-- Growth arrow -->
+  <path d="M264 136L264 184" stroke="url(#aGr)" stroke-width="24" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M228 168L264 136L300 168" stroke="url(#aGr)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Glow at peak -->
+  <circle cx="264" cy="136" r="16" fill="#F97316" opacity="0.4"/>
+  <circle cx="264" cy="136" r="8" fill="#FB923C" opacity="0.8"/>
 </svg>

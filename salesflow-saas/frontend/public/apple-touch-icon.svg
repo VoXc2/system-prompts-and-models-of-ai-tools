@@ -1,13 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
   <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0B3B66"/>
-      <stop offset="100%" stop-color="#0A2D4E"/>
+    <linearGradient id="bgG" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0E4A7C"/>
+      <stop offset="100%" stop-color="#0B3B66"/>
+    </linearGradient>
+    <linearGradient id="xG" x1="70" y1="70" x2="115" y2="130" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#14C8AD"/>
+      <stop offset="100%" stop-color="#0FAF9A"/>
+    </linearGradient>
+    <linearGradient id="aG" x1="88" y1="50" x2="96" y2="72" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FB923C"/>
     </linearGradient>
   </defs>
-  <rect width="180" height="180" rx="40" fill="url(#bgGrad)"/>
-  <path d="M45 45h40c25 0 45 20 45 45s-20 45-45 45H45V45z" fill="#1E4D7B" opacity="0.6"/>
-  <path d="M79 123L95 75" stroke="#0FAF9A" stroke-width="8" stroke-linecap="round"/>
-  <path d="M113 123L97 75" stroke="#0FAF9A" stroke-width="8" stroke-linecap="round"/>
-  <path d="M96 60L96 75M96 60L84 72M96 60L108 72" stroke="#F97316" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="180" height="180" rx="40" fill="url(#bgG)"/>
+  <!-- D shape -->
+  <path d="M45 45h40c25 0 45 20 45 45s-20 45-45 45H45V45z" fill="#0A2D4E" opacity="0.35"/>
+  <!-- X lines -->
+  <path d="M75 125L96 72" stroke="url(#xG)" stroke-width="9" stroke-linecap="round"/>
+  <path d="M117 125L96 72" stroke="url(#xG)" stroke-width="9" stroke-linecap="round"/>
+  <!-- Arrow -->
+  <path d="M96 52L96 72" stroke="url(#aG)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M82 64L96 52L110 64" stroke="url(#aG)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Glow -->
+  <circle cx="96" cy="52" r="6" fill="#F97316" opacity="0.4"/>
 </svg>

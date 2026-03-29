@@ -1,9 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <!-- D shape as base -->
-  <path d="M8 8h14c8.837 0 16 7.163 16 16s-7.163 16-16 16H8V8z" fill="#0B3B66" opacity="0.9"/>
-  <!-- X mark integrated as upward arrow -->
-  <path d="M20 32L26 18" stroke="#0FAF9A" stroke-width="3" stroke-linecap="round"/>
-  <path d="M30 32L24 18" stroke="#0FAF9A" stroke-width="3" stroke-linecap="round"/>
-  <!-- Arrow tip pointing up -->
-  <path d="M25 14L25 18M25 14L21 18M25 14L29 18" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="dGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0E4A7C"/>
+      <stop offset="100%" stop-color="#0B3B66"/>
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="22" y1="12" x2="28" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FB923C"/>
+    </linearGradient>
+    <linearGradient id="xGrad" x1="18" y1="18" x2="30" y2="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#14C8AD"/>
+      <stop offset="100%" stop-color="#0FAF9A"/>
+    </linearGradient>
+  </defs>
+  <!-- D shape — refined with smooth curve -->
+  <path d="M6 6h16c9.941 0 18 8.059 18 18s-8.059 18-18 18H6V6z" fill="url(#dGrad)"/>
+  <!-- Inner shadow for depth -->
+  <path d="M6 6h16c9.941 0 18 8.059 18 18s-8.059 18-18 18H6V6z" fill="black" opacity="0.08"/>
+  <path d="M8 8h14c8.837 0 16 7.163 16 16s-7.163 16-16 16H8V8z" fill="url(#dGrad)"/>
+  <!-- Revenue growth lines (X as upward trajectory) -->
+  <path d="M18 34L25 17" stroke="url(#xGrad)" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M32 34L25 17" stroke="url(#xGrad)" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Arrow tip — symbolizing growth -->
+  <path d="M25 11L25 17" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M21 15L25 11L29 15" stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Subtle glow dot at peak -->
+  <circle cx="25" cy="11" r="2" fill="#F97316" opacity="0.6"/>
 </svg>
