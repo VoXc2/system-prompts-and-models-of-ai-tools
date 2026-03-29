@@ -1,0 +1,216 @@
+OpenClaw Setup Guide & Configuration
+======================================
+(Source: docs.openclaw.ai/start/openclaw — March 2026)
+
+═══════════════════════════════════════════════════════════════
+OVERVIEW
+═══════════════════════════════════════════════════════════════
+
+OpenClaw is a self-hosted AI agent gateway that connects messaging
+platforms (WhatsApp, Telegram, Discord, Slack, Signal, iMessage)
+to AI models (Claude, GPT, DeepSeek, Ollama local models).
+
+Created by Peter Steinberger (Austrian developer).
+Previously named: Clawdbot → Moltbot → OpenClaw
+GitHub: 100,000+ stars (Feb 2026)
+License: MIT (open source)
+
+═══════════════════════════════════════════════════════════════
+QUICK START (5 MINUTES)
+═══════════════════════════════════════════════════════════════
+
+Step 1: Install OpenClaw
+  # macOS/Linux
+  curl -fsSL https://openclaw.ai/install.sh | bash
+
+  # Windows
+  irm https://openclaw.ai/install.ps1 | iex
+
+  # npm
+  npm i -g openclaw
+
+Step 2: Run onboarding wizard
+  openclaw onboard
+
+Step 3: Pair WhatsApp Web
+  openclaw channels login
+  (Scan QR code with assistant phone)
+
+Step 4: Start the Gateway
+  openclaw gateway --port 18789
+
+Step 5: Configure allowlist (~/.openclaw/openclaw.json)
+  {
+    channels: {
+      whatsapp: {
+        allowFrom: ["+966XXXXXXXXX"]
+      }
+    }
+  }
+
+Step 6: Initialize workspace
+  openclaw setup
+  (Creates: AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md,
+   USER.md, HEARTBEAT.md, MEMORY.md)
+
+═══════════════════════════════════════════════════════════════
+RECOMMENDED: TWO-PHONE SETUP
+═══════════════════════════════════════════════════════════════
+
+Personal phone: Your WhatsApp (your number)
+Assistant phone: Dedicated WhatsApp (separate SIM/eSIM)
+
+This prevents every incoming message from becoming agent input.
+Treat agent like a new employee — separate accounts for everything.
+
+═══════════════════════════════════════════════════════════════
+COMPLETE CONFIG EXAMPLE (openclaw.json)
+═══════════════════════════════════════════════════════════════
+
+{
+  logging: { level: "info" },
+  agent: {
+    model: "anthropic/claude-opus-4-6",
+    workspace: "~/.openclaw/workspace",
+    thinkingDefault: "high",
+    timeoutSeconds: 1800,
+    heartbeat: { every: "0m" }
+  },
+  channels: {
+    whatsapp: {
+      allowFrom: ["+966XXXXXXXXX"],
+      dmPolicy: "allowlist",
+      groups: {
+        "*": { requireMention: true }
+      }
+    }
+  },
+  routing: {
+    groupChat: {
+      mentionPatterns: ["@openclaw", "openclaw"]
+    }
+  },
+  session: {
+    scope: "per-sender",
+    resetTriggers: ["/new", "/reset"],
+    reset: {
+      mode: "daily",
+      atHour: 4,
+      idleMinutes: 10080
+    }
+  }
+}
+
+═══════════════════════════════════════════════════════════════
+KEY CONFIGURATION OPTIONS
+═══════════════════════════════════════════════════════════════
+
+┌────────────────────────────┬─────────────────────────┬──────────┐
+│ Setting                    │ Purpose                 │ Default  │
+├────────────────────────────┼─────────────────────────┼──────────┤
+│ agent.model                │ AI model to use         │ varies   │
+│ channels.whatsapp.allowFrom│ Restrict to numbers     │ required │
+│ agent.thinkingDefault      │ Extended thinking       │ varies   │
+│ heartbeat.every            │ Proactive check interval│ 30m      │
+│ session.resetTriggers      │ Commands for fresh start│ /new     │
+│ session.reset.idleMinutes  │ Auto-reset timeout      │ 10080    │
+│ agent.timeoutSeconds       │ Max response time       │ 1800     │
+└────────────────────────────┴─────────────────────────┴──────────┘
+
+═══════════════════════════════════════════════════════════════
+SUPPORTED AI MODELS
+═══════════════════════════════════════════════════════════════
+
+Cloud models:
+- anthropic/claude-opus-4-6 (recommended)
+- anthropic/claude-sonnet-4-6
+- openai/gpt-5.4
+- deepseek/deepseek-v3
+- google/gemini-2.5-pro
+
+Local models (via Ollama):
+- llama3.3
+- mistral
+- qwen2.5
+- MiniMax (mentioned in tweet)
+
+NVIDIA NemoClaw:
+- nvidia/nemotron models (announced GTC March 2026)
+- Single command install with privacy controls
+
+═══════════════════════════════════════════════════════════════
+SESSION MANAGEMENT
+═══════════════════════════════════════════════════════════════
+
+Session files: ~/.openclaw/agents/<agentId>/sessions/*.jsonl
+Metadata: ~/.openclaw/agents/<agentId>/sessions/sessions.json
+
+Commands:
+- /new or /reset — Start fresh conversation
+- /compact [instructions] — Compress context, report remaining budget
+
+Auto-reset: daily at configured hour + idle timeout
+
+═══════════════════════════════════════════════════════════════
+MEDIA HANDLING
+═══════════════════════════════════════════════════════════════
+
+Inbound (receiving files):
+- {{MediaPath}} — Local temp file path
+- {{MediaUrl}} — Pseudo-URL reference
+- {{Transcript}} — Audio transcription (if enabled)
+
+Outbound (sending files):
+  Here's the screenshot.
+  MEDIA:https://example.com/screenshot.png
+
+═══════════════════════════════════════════════════════════════
+OPERATIONS & MONITORING
+═══════════════════════════════════════════════════════════════
+
+openclaw status              — Local status
+openclaw status --all        — Full diagnosis
+openclaw status --deep       — Includes gateway health
+openclaw health --json       — Gateway health snapshot
+openclaw doctor              — Config warnings
+
+Logs: /tmp/openclaw/openclaw-YYYY-MM-DD.log
+
+═══════════════════════════════════════════════════════════════
+DOCKER DEPLOYMENT (RECOMMENDED FOR SECURITY)
+═══════════════════════════════════════════════════════════════
+
+Docker isolates the agent — important for security.
+Running as a Docker image makes it easy to move and backup.
+
+Cloud options:
+- AWS Lightsail (1-click deploy, pre-configured with Bedrock)
+- DigitalOcean
+- Any VPS with Docker
+
+═══════════════════════════════════════════════════════════════
+SECURITY BEST PRACTICES
+═══════════════════════════════════════════════════════════════
+
+1. ALWAYS configure allowFrom with specific phone numbers
+2. Use dedicated phone number (never personal account)
+3. Start with heartbeats disabled (every: "0m")
+4. Use Docker for isolation
+5. Never expose gateway to open internet (bind localhost only)
+6. Use SSH tunneling for remote access
+7. Store API keys in .env files (add to .gitignore)
+8. Start with minimal tool permissions
+9. Audit ClawHub skills before installing (12% were malicious)
+10. Make workspace folder a private git repo for backup
+
+═══════════════════════════════════════════════════════════════
+PLATFORMS
+═══════════════════════════════════════════════════════════════
+
+- macOS (native app + CLI)
+- Windows (WSL2 + CLI)
+- Linux (CLI)
+- iOS (native app)
+- Android (native app)
+- Docker (recommended for servers)
+- AWS Lightsail (1-click)

@@ -1,0 +1,153 @@
+OpenClaw Top Skills & ClawHub Registry
+=======================================
+(Source: ClawHub, GitHub, KDnuggets, Composio — March 2026)
+
+═══════════════════════════════════════════════════════════════
+CLAWHUB OVERVIEW
+═══════════════════════════════════════════════════════════════
+
+ClawHub = OpenClaw's public skill marketplace
+Total skills: 13,729+ (as of March 2026)
+Curated collection: 5,211 filtered & categorized
+
+WARNING: Snyk audit flagged 12-13% of skills as malicious.
+Always verify before installing.
+
+═══════════════════════════════════════════════════════════════
+TOP 10 ESSENTIAL SKILLS
+═══════════════════════════════════════════════════════════════
+
+1. Agent Browser (Web Browsing)
+   - 180,000+ installs — most installed skill
+   - Navigate pages, extract content, follow links
+   - Essential for any research/web tasks
+
+2. GOG (Google Workspace)
+   - Gmail, Calendar, Drive, Contacts, Sheets, Docs
+   - Single integration for entire Google ecosystem
+   - Top downloaded skill
+
+3. Tavily Search
+   - Search tool built specifically for AI agents
+   - Fast, reliable web search
+   - Best for research and fact-finding
+
+4. Capability Evolver
+   - 35K downloads — tops ClawHub charts
+   - Agent automatically evolves its own capabilities
+   - Self-improving during operation
+
+5. Summarize
+   - Top-3 download on ClawHub
+   - Condenses articles, videos, podcasts
+   - Quick briefings from any content
+
+6. N8N Workflow Automation
+   - Connects to N8N instance
+   - Spin up/manage complex multi-step workflows
+   - Trigger via cron jobs and plain chat
+
+7. Self-Improving Agent
+   - Memory optimization
+   - Automated prompt self-correction
+   - Learns from failure logs
+
+8. Mission Control
+   - Part of "Efficiency Trio" (+ Evolver + GOG)
+   - Capability evolution + schedule management
+   - Office collaboration
+
+9. ElevenLabs Agents (Voice AI)
+   - Integrates with 11Labs CLI
+   - Gives agent an actual voice
+   - Auto-pivots to phone call if text/email fails
+
+10. GitHub Integration
+    - Full GitHub workflow management
+    - PRs, issues, code review
+    - CI/CD monitoring
+
+═══════════════════════════════════════════════════════════════
+SKILL CATEGORIES (5,211 CURATED)
+═══════════════════════════════════════════════════════════════
+
+- Productivity & Office
+- Development & Coding
+- Marketing & Social Media
+- Finance & Accounting
+- Research & Analysis
+- Communication & Messaging
+- Data & Analytics
+- Automation & Workflows
+- Media & Content
+- Security & Privacy
+- E-commerce & Sales
+- Education & Learning
+- Health & Wellness
+- Home & IoT
+- Entertainment
+
+═══════════════════════════════════════════════════════════════
+SKILL CHAINING (PRO TIP)
+═══════════════════════════════════════════════════════════════
+
+Chain skills together for powerful workflows:
+
+Example: "Use Tavily to research X, then Summarize to compress it,
+then Notion to save it."
+
+Example: "Use GOG to check calendar, then message via WhatsApp
+to confirm appointments."
+
+Skill chaining is where autonomous magic happens.
+
+═══════════════════════════════════════════════════════════════
+SECURITY WARNINGS
+═══════════════════════════════════════════════════════════════
+
+- 341 out of 2,857 scanned skills were actively stealing data
+- ClawHavoc attack campaign planted hundreds of typosquatted skills
+- Always check: download counts, source code, VirusTotal scan
+- Install "Security Auditor" skill for runtime protection
+- For business use: vet integrations, use enterprise-grade controls
+
+═══════════════════════════════════════════════════════════════
+MULTI-AGENT TEMPLATES (187 PRODUCTION-READY)
+═══════════════════════════════════════════════════════════════
+
+Source: github.com/mergisi/awesome-openclaw-agents
+
+Every template is a copy-paste ready SOUL.md file.
+Config-first: write a SOUL.md, run a command, agent is live.
+No Python, no chains, no graphs needed.
+
+Categories include:
+- Business assistant
+- Sales agent
+- Customer support
+- Content creator
+- Research analyst
+- Code reviewer
+- Data analyst
+- Personal trainer
+- Financial advisor
+- And 170+ more...
+
+═══════════════════════════════════════════════════════════════
+MULTI-AGENT ORCHESTRATION
+═══════════════════════════════════════════════════════════════
+
+Antfarm (github.com/snarktank/antfarm):
+Build agent teams with one command:
+- Planner agent
+- Developer agent
+- Verifier agent
+- Tester agent
+- Reviewer agent
+
+Mission Control (github.com/abhi1693/openclaw-mission-control):
+Centralized dashboard for:
+- Work orchestration
+- Agent/gateway management
+- Approval-driven governance
+- API-backed automation

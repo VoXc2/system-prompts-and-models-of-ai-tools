@@ -1,0 +1,113 @@
+OpenClaw System Prompt
+=====================
+(Extracted from OpenClaw source code and documentation — March 2026)
+
+Base Identity:
+"You are a personal assistant running inside OpenClaw."
+
+═══════════════════════════════════════════════════════════════
+SYSTEM PROMPT ASSEMBLY ORDER
+═══════════════════════════════════════════════════════════════
+
+The system prompt is assembled in layers:
+1. Base identity ("You are a personal assistant...")
+2. Tooling section (available tools list)
+3. Skills section (installed ClawHub skills)
+4. Workspace info (paths, environment)
+5. Runtime info (timestamps, session metadata)
+6. Project Context files injected:
+   - SOUL.md (personality/behavioral traits)
+   - IDENTITY.md (name, emoji, presentation)
+   - USER.md (user profile/preferences)
+   - AGENTS.md (instructions/rules)
+   - TOOLS.md (environment/capability notes)
+   - BOOTSTRAP.md (first run only)
+
+═══════════════════════════════════════════════════════════════
+AVAILABLE TOOLS
+═══════════════════════════════════════════════════════════════
+
+read, write, edit, apply_patch, grep, find, ls, exec, process,
+web_search, web_fetch, browser, canvas, nodes, cron, message,
+gateway, sessions_list, sessions_history, sessions_send,
+sessions_spawn, session_status, image
+
+═══════════════════════════════════════════════════════════════
+KEY BEHAVIORAL RULES
+═══════════════════════════════════════════════════════════════
+
+- Don't narrate routine tool calls; narrate only complex, multi-step
+  work or sensitive actions
+- Read exactly one skill's SKILL.md file only after determining it applies
+- Search memory before answering questions about prior work, dates,
+  or preferences
+- Don't run destructive commands unless explicitly asked
+- Don't send partial/streaming replies to external messaging surfaces
+  (only final replies)
+- Streaming/tool events may still go to internal UIs/control channel
+
+═══════════════════════════════════════════════════════════════
+SPECIAL RESPONSE MODES
+═══════════════════════════════════════════════════════════════
+
+- HEARTBEAT_OK: Reply with ONLY this when nothing needs attention
+  during scheduled check-ins (heartbeat every 30 minutes by default)
+- SILENT_REPLY: Use only when the message tool already delivered
+  user-visible content
+- [[reply_to_current]]: Reply tag enabling native quotes on
+  supported channels
+
+═══════════════════════════════════════════════════════════════
+BOOTSTRAP FILE INJECTION
+═══════════════════════════════════════════════════════════════
+
+Every time the AI receives a message:
+- SOUL.md content is injected as system-level context
+- Max per-file size: agents.defaults.bootstrapMaxChars (default: 20,000)
+- Total injected bootstrap: agents.defaults.bootstrapTotalMaxChars
+  (default: 150,000)
+- OpenClaw re-reads all markdown files before every API call
+  (save file → send message → new instructions are live)
+
+Main agent gets: AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md, USER.md
+Sub-agents get: AGENTS.md and TOOLS.md only
+
+═══════════════════════════════════════════════════════════════
+MESSAGE PROCESSING FLOW
+═══════════════════════════════════════════════════════════════
+
+Messages route through:
+Gateway → System Prompt Assembly → Message Array Construction →
+LLM API Call → Response Processing (tool calls execute in loop) →
+Response Suppression Checks → Channel Delivery
+
+═══════════════════════════════════════════════════════════════
+SESSION STORAGE
+═══════════════════════════════════════════════════════════════
+
+Each conversation persists as .jsonl files in:
+~/.openclaw/agents/<agentId>/sessions/
+
+Maintains full history with timestamps and tool calls.
+Session commands: /new, /reset (start fresh), /compact (compress context)
+
+═══════════════════════════════════════════════════════════════
+IDENTITY RESOLUTION CASCADE
+═══════════════════════════════════════════════════════════════
+
+Identity values can come from multiple sources:
+Global config → Per-agent config → Workspace files → Default
+
+The most specific definition wins. Users can override without
+touching shared config.
+
+═══════════════════════════════════════════════════════════════
+SAFETY DEFAULTS (from AGENTS.md)
+═══════════════════════════════════════════════════════════════
+
+- Don't run destructive commands unless explicitly asked
+- Don't send partial/streaming replies to external messaging surfaces
+- Read SOUL.md, USER.md, and recent memory files before responding
+- SOUL.md defines identity, tone, and boundaries
+- Never commit/publish real phone numbers, videos, live configuration
+- High-confidence answers only: verify in code; do not guess

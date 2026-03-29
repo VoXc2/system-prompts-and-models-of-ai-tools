@@ -1,0 +1,297 @@
+OpenClaw — Comprehensive Usage Plan
+=====================================
+(Prepared March 2026)
+
+═══════════════════════════════════════════════════════════════
+PHASE 1: INSTALLATION & BASIC SETUP
+═══════════════════════════════════════════════════════════════
+
+1. Install OpenClaw:
+   curl -fsSL https://openclaw.ai/install.sh | bash
+
+2. Run onboarding wizard:
+   openclaw onboard
+
+3. Choose AI model:
+   Option A: Claude Opus 4.6 (best quality, paid API)
+   Option B: MiniMax (cheaper cloud alternative)
+   Option C: Ollama local (free, private, no internet needed)
+     - Install Ollama: curl -fsSL https://ollama.ai/install.sh | sh
+     - Pull model: ollama pull llama3.3
+     - Set in config: model: "ollama/llama3.3"
+
+4. Get a dedicated phone number:
+   - Buy prepaid SIM or eSIM
+   - Register WhatsApp on it
+   - This is the agent's number (not yours)
+
+5. Connect WhatsApp:
+   openclaw channels login
+   (Scan QR with agent's phone)
+
+6. Start gateway:
+   openclaw gateway --port 18789
+
+═══════════════════════════════════════════════════════════════
+PHASE 2: AGENT PERSONALITY (SOUL.md)
+═══════════════════════════════════════════════════════════════
+
+Create ~/.openclaw/workspace/SOUL.md:
+
+--- EXAMPLE FOR SAUDI BUSINESS ASSISTANT ---
+
+# Core Identity
+You are Dealix Assistant, a professional Arabic-speaking
+AI business assistant for a Saudi SME company.
+
+# Language
+- Primary language: Arabic (Saudi dialect preferred)
+- Switch to English when discussing technical terms
+- Use professional but warm tone
+- Address users with appropriate Arabic greetings
+
+# Communication Style
+- Keep responses concise (2-3 sentences max for simple queries)
+- Use bullet points for lists
+- Include relevant emojis sparingly
+- Always confirm before taking actions
+
+# Business Focus
+- CRM management and lead tracking
+- Appointment scheduling and reminders
+- WhatsApp customer communication
+- Sales pipeline monitoring
+- Daily/weekly business reports
+
+# Values
+- Customer privacy (PDPL compliance)
+- Accuracy over speed
+- Proactive reminders for follow-ups
+- Saudi business culture awareness
+
+# Boundaries
+- Never share customer data outside the company
+- Never make financial commitments without approval
+- Always verify before sending messages to customers
+- Escalate complex issues to the team
+
+--- END EXAMPLE ---
+
+═══════════════════════════════════════════════════════════════
+PHASE 3: ESSENTIAL SKILLS INSTALLATION
+═══════════════════════════════════════════════════════════════
+
+Install in this order:
+
+1. GOG (Google Workspace):
+   openclaw skill install gog
+   → Gmail, Calendar, Drive, Contacts
+
+2. Agent Browser:
+   openclaw skill install agent-browser
+   → Web browsing and research
+
+3. Tavily Search:
+   openclaw skill install tavily-search
+   → Fast web search for agents
+
+4. Summarize:
+   openclaw skill install summarize
+   → Quick briefings from content
+
+5. N8N (if using workflow automation):
+   openclaw skill install n8n
+   → Complex multi-step workflows
+
+═══════════════════════════════════════════════════════════════
+PHASE 4: BUSINESS WORKFLOWS
+═══════════════════════════════════════════════════════════════
+
+A. Daily Morning Briefing (HEARTBEAT.md):
+   - Check calendar for today's appointments
+   - Check Gmail for unread important emails
+   - Summarize pending tasks
+   - Send WhatsApp summary to owner
+
+B. Lead Management:
+   - Monitor WhatsApp for new inquiries
+   - Auto-categorize leads (hot/warm/cold)
+   - Create follow-up reminders
+   - Send personalized follow-up messages
+
+C. Appointment Scheduling:
+   - Check Google Calendar availability
+   - Propose available slots to customers
+   - Create calendar events
+   - Send WhatsApp confirmations/reminders
+
+D. Customer Communication:
+   - Draft professional Arabic responses
+   - Schedule messages for optimal timing
+   - Track conversation history
+   - Escalate urgent issues
+
+E. Sales Reporting:
+   - Weekly pipeline summary
+   - Monthly performance metrics
+   - Revenue tracking
+   - Customer feedback analysis
+
+═══════════════════════════════════════════════════════════════
+PHASE 5: HEARTBEAT AUTOMATION
+═══════════════════════════════════════════════════════════════
+
+Enable heartbeats (config: heartbeat.every: "30m")
+
+HEARTBEAT.md example:
+
+--- EXAMPLE ---
+# Morning Check (08:00 Saudi time)
+- Check calendar for today
+- Check unread emails
+- Send daily briefing via WhatsApp
+
+# Afternoon Check (14:00)
+- Review pending follow-ups
+- Send reminder for overdue tasks
+
+# Evening Check (20:00)
+- Summarize today's activities
+- Prepare tomorrow's schedule
+--- END EXAMPLE ---
+
+═══════════════════════════════════════════════════════════════
+PHASE 6: MULTI-AGENT SETUP (ADVANCED)
+═══════════════════════════════════════════════════════════════
+
+For larger operations, create specialized agents:
+
+Agent 1: Sales Assistant
+- Handle leads and customer inquiries
+- Manage sales pipeline
+- Send proposals
+
+Agent 2: Operations Manager
+- Schedule management
+- Team coordination
+- Workflow automation
+
+Agent 3: Content Creator
+- Social media posts
+- Marketing materials
+- Customer newsletters
+
+Agent 4: Research Analyst
+- Market research
+- Competitor analysis
+- Industry trends
+
+Use Antfarm for team setup:
+  git clone https://github.com/snarktank/antfarm
+  Follow setup instructions
+
+═══════════════════════════════════════════════════════════════
+PHASE 7: SECURITY HARDENING
+═══════════════════════════════════════════════════════════════
+
+1. Use Docker for isolation:
+   docker run -d --name openclaw \
+     -v ~/.openclaw:/root/.openclaw \
+     -p 18789:18789 \
+     openclaw/openclaw
+
+2. Restrict WhatsApp access:
+   allowFrom: ["+966XXXXXXXXX"]  (your number only)
+
+3. Secure API keys:
+   - Store in .env file
+   - Never commit to git
+   - Rotate regularly
+
+4. Audit skills:
+   - Install Security Auditor skill
+   - Check download counts before installing
+   - Read source code of unfamiliar skills
+   - Avoid skills with < 100 downloads
+
+5. Network security:
+   - Bind gateway to localhost only
+   - Use SSH tunnel for remote access
+   - Never expose port 18789 publicly
+
+6. Backup workspace:
+   - Make workspace a private git repo
+   - Regular commits for version history
+   - Store credentials separately
+
+═══════════════════════════════════════════════════════════════
+PHASE 8: CLOUD DEPLOYMENT (24/7 OPERATION)
+═══════════════════════════════════════════════════════════════
+
+Option A: AWS Lightsail (easiest)
+- 1-click OpenClaw deployment
+- Pre-configured with Amazon Bedrock
+- $5/month for basic instance
+
+Option B: Any VPS with Docker
+- DigitalOcean $5/month droplet
+- Install Docker + OpenClaw
+- Setup systemd service for auto-restart
+
+Option C: Home server
+- Old laptop or Raspberry Pi
+- Always-on power
+- No monthly costs
+
+═══════════════════════════════════════════════════════════════
+COST ESTIMATES
+═══════════════════════════════════════════════════════════════
+
+Free tier (Ollama local):
+- $0/month (your hardware only)
+- Limited model quality
+
+Budget tier (MiniMax / DeepSeek):
+- ~$5-15/month for API tokens
+- Good quality for basic tasks
+
+Pro tier (Claude / GPT):
+- ~$30-100/month depending on usage
+- Best quality and reasoning
+- Recommended for business use
+
+Server costs (optional):
+- $5-20/month for cloud VPS
+- Free if running on home hardware
+
+═══════════════════════════════════════════════════════════════
+USEFUL RESOURCES
+═══════════════════════════════════════════════════════════════
+
+Official:
+- Website: openclaw.ai
+- Docs: docs.openclaw.ai
+- GitHub: github.com/openclaw/openclaw
+- ClawHub: clawhub.openclaw.ai (skill marketplace)
+
+Community:
+- 187 agent templates: github.com/mergisi/awesome-openclaw-agents
+- 5,211 curated skills: github.com/VoltAgent/awesome-openclaw-skills
+- Build from scratch: github.com/czl9707/build-your-own-openclaw
+- Agent Builder UI: github.com/nathancarlton/openclaw-agent-builder
+- Mission Control: github.com/abhi1693/openclaw-mission-control
+- Multi-agent teams: github.com/snarktank/antfarm
+
+Tutorials:
+- docs.openclaw.ai/start/openclaw (official setup)
+- freecodecamp.org/news/how-to-deploy-your-own-24x7-ai-agent
+- towardsdatascience.com/use-openclaw-to-make-a-personal-ai-assistant
+- every.to/source-code/openclaw-setting-up-your-first-personal-ai-agent
+
+YouTube (search for):
+- "OpenClaw setup tutorial 2026"
+- "OpenClaw WhatsApp integration"
+- "OpenClaw SOUL.md configuration"
+- "OpenClaw business automation"
+- "OpenClaw Ollama local setup"
+- "openclaw شرح عربي" (Arabic tutorials)

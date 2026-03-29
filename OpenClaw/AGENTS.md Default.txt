@@ -1,0 +1,122 @@
+OpenClaw AGENTS.md — Repository Guidelines (Complete)
+=====================================================
+(Source: github.com/openclaw/openclaw/blob/main/AGENTS.md)
+
+Repository: https://github.com/openclaw/openclaw
+File references: Repo-root relative (e.g., src/telegram/index.ts:80)
+CODEOWNERS restrictions: Do not edit security-focused paths unless
+explicitly requested by listed owners.
+
+═══════════════════════════════════════════════════════════════
+PROJECT STRUCTURE
+═══════════════════════════════════════════════════════════════
+
+Source organization:
+- src/cli         — CLI wiring
+- src/commands    — Command implementations
+- src/provider-web.ts — Web provider
+- src/infra       — Infrastructure
+- src/media       — Media pipeline
+- src/            — General source
+- *.test.ts       — Colocated tests
+- docs/           — Documentation
+- dist/           — Built output
+
+Nomenclature: Use "plugin" in docs, UI, changelogs; internal
+package layout keeps "workspace plugin."
+
+Plugin naming standards:
+- Align openclaw.plugin.json:id, default workspace folder, package names
+- Use @openclaw/<id> or approved suffixes (-provider, -plugin, -speech,
+  -sandbox, -media-understanding)
+
+═══════════════════════════════════════════════════════════════
+MESSAGING CHANNELS
+═══════════════════════════════════════════════════════════════
+
+Built-in + extension channels:
+Telegram, Discord, Slack, Signal, iMessage, Web/WhatsApp,
+Matrix, Zalo, Voice Call
+
+Core code: src/telegram, src/discord, src/slack, src/signal,
+src/imessage, src/web, src/channels, src/routing
+
+═══════════════════════════════════════════════════════════════
+ARCHITECTURE BOUNDARIES
+═══════════════════════════════════════════════════════════════
+
+Key repo sections:
+- Bundled workspace plugin tree = bundled plugins + third-party examples
+- src/plugin-sdk/* = public plugin contract
+- src/channels/* = core channel implementation
+- src/plugins/* = plugin discovery, manifest validation, loader, registry
+- src/gateway/protocol/* = typed Gateway control-plane and wire protocol
+
+Rules:
+- Extensions cross into core only through openclaw/plugin-sdk/*
+- Core code must not deep-import bundled plugin internals
+- Protocol changes are contract changes; prefer additive evolution
+- New plugin seams must be documented, backwards-compatible
+
+═══════════════════════════════════════════════════════════════
+BUILD, TEST, AND DEVELOPMENT COMMANDS
+═══════════════════════════════════════════════════════════════
+
+Runtime: Node 22+
+
+Key commands:
+- pnpm install              — Install dependencies
+- pnpm openclaw ...         — Run CLI in dev
+- pnpm build                — Type-check/build
+- pnpm tsgo                 — TypeScript checks
+- pnpm check                — Lint/format
+- pnpm format:fix           — Format fix
+- pnpm test                 — Vitest
+- pnpm test:coverage        — Coverage report
+
+Testing:
+- Framework: Vitest with V8 coverage (70% threshold)
+- Naming: *.test.ts (e2e in *.e2e.test.ts)
+- Model constants: prefer sonnet-4.6 and gpt-5.4
+- Run pnpm test before pushing when touching logic
+
+═══════════════════════════════════════════════════════════════
+CODING STYLE
+═══════════════════════════════════════════════════════════════
+
+- Language: TypeScript (ESM); prefer strict typing; avoid `any`
+- Formatting/linting via Oxlint and Oxfmt
+- Never add @ts-nocheck or inline suppressions by default
+- Prefer zod or schema helpers at external boundaries
+- Keep files under ~700 LOC; extract helpers instead of V2 copies
+- Naming: OpenClaw for product/docs; openclaw for CLI/packages/paths
+- Written English: American spelling
+
+═══════════════════════════════════════════════════════════════
+COMMIT & PR GUIDELINES
+═══════════════════════════════════════════════════════════════
+
+- Create commits with scripts/committer "<msg>" <file...>
+- Use concise, action-oriented messages
+- Group related changes; avoid bundling unrelated refactors
+
+═══════════════════════════════════════════════════════════════
+MULTI-AGENT SAFETY
+═══════════════════════════════════════════════════════════════
+
+- Do NOT create/apply/drop git stash unless explicitly requested
+- Assume other agents may be working; keep unrelated WIP untouched
+- When user says "push": git pull --rebase (never discard others' work)
+- When user says "commit": scope to your changes only
+- Do NOT create/remove/modify git worktree unless explicitly requested
+- Do NOT switch branches unless explicitly requested
+- When seeing unrecognized files, keep going; focus on your changes
+
+═══════════════════════════════════════════════════════════════
+SECURITY
+═══════════════════════════════════════════════════════════════
+
+- Web provider creds: ~/.openclaw/credentials/
+- Never commit/publish real phone numbers, videos, live config
+- Use obviously fake placeholders in docs/tests/examples
+- Release guardrails: do not change version numbers without consent

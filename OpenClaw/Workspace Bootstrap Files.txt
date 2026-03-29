@@ -1,0 +1,105 @@
+OpenClaw Workspace Bootstrap Files
+====================================
+(Source: docs.openclaw.ai — March 2026)
+
+OpenClaw uses a set of special markdown files in the agent workspace
+that are injected into the system prompt on every interaction.
+
+═══════════════════════════════════════════════════════════════
+FILE OVERVIEW
+═══════════════════════════════════════════════════════════════
+
+Location: ~/.openclaw/agents/<agent_id>/
+
+┌──────────────┬────────────────────────────────────────────────┐
+│ File         │ Purpose                                        │
+├──────────────┼────────────────────────────────────────────────┤
+│ SOUL.md      │ Deep behavioral traits, personality, values,   │
+│              │ communication style, long-term goals            │
+├──────────────┼────────────────────────────────────────────────┤
+│ IDENTITY.md  │ Core persona, name, emoji, quirks,             │
+│              │ presentation layer                              │
+├──────────────┼────────────────────────────────────────────────┤
+│ USER.md      │ Known info about the user — preferences,       │
+│              │ style, timezone, language                       │
+├──────────────┼────────────────────────────────────────────────┤
+│ AGENTS.md    │ Operating instructions, rules, safety          │
+│              │ defaults, behavioral guardrails                 │
+├──────────────┼────────────────────────────────────────────────┤
+│ TOOLS.md     │ Available tools, environment notes,            │
+│              │ capability descriptions                         │
+├──────────────┼────────────────────────────────────────────────┤
+│ MEMORY.md    │ Persistent learned patterns, facts,            │
+│              │ user-created knowledge base                     │
+├──────────────┼────────────────────────────────────────────────┤
+│ HEARTBEAT.md │ Scheduling brain — read every 30 min,          │
+│              │ contains scheduled/recurring tasks              │
+├──────────────┼────────────────────────────────────────────────┤
+│ BOOTSTRAP.md │ First-run only instructions, onboarding        │
+└──────────────┴────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+INJECTION RULES
+═══════════════════════════════════════════════════════════════
+
+Main Agent receives: SOUL.md + IDENTITY.md + USER.md + AGENTS.md + TOOLS.md
+Sub-Agents receive: AGENTS.md + TOOLS.md only
+
+Max per-file: 20,000 characters (bootstrapMaxChars)
+Total across all files: 150,000 characters (bootstrapTotalMaxChars)
+
+Files are re-read before EVERY API call — no restart needed.
+Save the file → send a message → new instructions are live.
+
+═══════════════════════════════════════════════════════════════
+SOUL.md — PERSONALITY LAYER
+═══════════════════════════════════════════════════════════════
+
+Purpose: Defines WHO the agent is — personality, values, tone, style.
+Injected as system-level context into every LLM call.
+
+Best practices:
+- Keep between 500-1,500 words
+- Be specific: "Keep responses under 3 sentences" (not "Be concise")
+- SOUL.md defines identity, Skills define capabilities, Memory defines knowledge
+- Supports channel-specific overrides in config.yaml
+
+Example SOUL.md structure:
+```markdown
+# Core Identity
+You are [Name], a [role description].
+
+# Communication Style
+- Speak in [language/tone]
+- Keep responses [length preference]
+- Use [formatting preferences]
+
+# Values & Priorities
+- [Priority 1]
+- [Priority 2]
+
+# Boundaries
+- Never [restriction 1]
+- Always [requirement 1]
+```
+
+═══════════════════════════════════════════════════════════════
+HEARTBEAT.md — SCHEDULED TASKS
+═══════════════════════════════════════════════════════════════
+
+Default interval: every 30 minutes
+Default prompt: "Read HEARTBEAT.md if it exists. Follow it strictly.
+Do not infer or repeat old tasks from prior chats. If nothing needs
+attention, reply HEARTBEAT_OK."
+
+Disable: Set agents.defaults.heartbeat.every: "0m"
+Empty heartbeat files skip execution to save tokens.
+
+═══════════════════════════════════════════════════════════════
+IDENTITY RESOLUTION CASCADE
+═══════════════════════════════════════════════════════════════
+
+When values conflict across sources:
+Global config → Per-agent config → Workspace files → Default
+
+Most specific definition wins.
