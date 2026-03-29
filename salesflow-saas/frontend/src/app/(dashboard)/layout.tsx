@@ -94,7 +94,10 @@ export default function DashboardLayout({
         } lg:static lg:z-auto`}
       >
         <div className="p-5 border-b border-primary-700 flex items-center justify-between">
-          <h1 className="text-xl font-bold tracking-wide">Dealix</h1>
+          <div className="flex items-center gap-3">
+            <img src="/logo-dark.svg" alt="Dealix" className="h-8 w-8" />
+            <h1 className="text-xl font-bold tracking-wide">Dealix</h1>
+          </div>
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-primary-300 hover:text-white"

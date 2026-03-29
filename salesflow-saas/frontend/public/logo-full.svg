@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" fill="none">
+  <!-- D shape icon -->
+  <path d="M8 8h14c8.837 0 16 7.163 16 16s-7.163 16-16 16H8V8z" fill="#0B3B66" opacity="0.9"/>
+  <path d="M20 32L26 18" stroke="#0FAF9A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M30 32L24 18" stroke="#0FAF9A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M25 14L25 18M25 14L21 18M25 14L29 18" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Wordmark -->
+  <text x="54" y="22" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="700" fill="#0B3B66" letter-spacing="1">DEALIX</text>
+  <text x="54" y="38" font-family="IBM Plex Sans Arabic, Tajawal, sans-serif" font-size="11" fill="#64748B" letter-spacing="0.5">نظام الإيرادات الذكي</text>
+</svg>

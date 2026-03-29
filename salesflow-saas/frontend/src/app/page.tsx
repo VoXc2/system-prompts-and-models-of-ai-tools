@@ -60,11 +60,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
-              <img src="/logo.svg" alt="Dealix" className="h-9 w-9" />
-              <div>
-                <span className="text-xl font-bold text-primary">Dealix</span>
-                <span className="text-[10px] text-gray-400 block -mt-1 leading-none">Revenue OS</span>
-              </div>
+              <img src="/logo-full.svg" alt="Dealix" className="h-10 hidden sm:block" />
+              <img src="/logo.svg" alt="Dealix" className="h-9 w-9 sm:hidden" />
             </div>
             <div className="hidden md:flex items-center gap-8 text-sm">
               <a href="#features" className="text-gray-600 hover:text-primary transition">المميزات</a>
@@ -358,11 +355,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src="/logo.svg" alt="Dealix" className="h-8 w-8" />
-                <div>
-                  <span className="text-white font-bold text-lg">Dealix</span>
-                  <span className="text-[10px] text-gray-500 block -mt-0.5">Revenue OS</span>
-                </div>
+                <img src="/logo-full-dark.svg" alt="Dealix" className="h-10" />
               </div>
               <p className="text-sm mb-2 leading-relaxed">خلّي البيع يمشي بنظام</p>
               <p className="text-xs text-gray-500">Revenue, Systemized.</p>

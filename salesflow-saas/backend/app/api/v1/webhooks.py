@@ -2,9 +2,12 @@
 Webhook handlers - WhatsApp incoming messages, payment callbacks, etc.
 Auto-triggers AI agents to respond to incoming messages.
 """
+import logging
 from fastapi import APIRouter, Request, HTTPException
 from app.config import get_settings
 from app.workers.ai_agent_tasks import process_incoming_message
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 settings = get_settings()
@@ -83,7 +86,19 @@ async def whatsapp_webhook(request: Request):
             # Handle message status updates
             statuses = value.get("statuses", [])
             for status in statuses:
-                # Log delivery status: sent, delivered, read, failed
-                pass
+                status_type = status.get("status", "unknown")
+                recipient_id = status.get("recipient_id", "unknown")
+                timestamp = status.get("timestamp", "")
+                msg_id = status.get("id", "")
+                if status_type == "failed":
+                    errors = status.get("errors", [])
+                    error_detail = errors[0] if errors else {}
+                    logger.error(
+                        f"WhatsApp delivery FAILED to {recipient_id}: "
+                        f"code={error_detail.get('code')}, title={error_detail.get('title')}, "
+                        f"message={error_detail.get('message')}, msg_id={msg_id}"
+                    )
+                else:
+                    logger.info(f"WhatsApp status: {status_type} for {recipient_id} (msg={msg_id}, ts={timestamp})")
 
     return {"status": "ok"}

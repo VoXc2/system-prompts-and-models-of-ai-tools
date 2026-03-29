@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B3B66"/>
+      <stop offset="100%" stop-color="#0A2D4E"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  <!-- D shape -->
+  <path d="M128 128h112c70.7 0 128 57.3 128 128s-57.3 128-128 128H128V128z" fill="#1E4D7B" opacity="0.6"/>
+  <!-- X lines -->
+  <path d="M224 352L272 208" stroke="#0FAF9A" stroke-width="24" stroke-linecap="round"/>
+  <path d="M320 352L272 208" stroke="#0FAF9A" stroke-width="24" stroke-linecap="round"/>
+  <!-- Arrow -->
+  <path d="M272 168L272 208M272 168L240 200M272 168L304 200" stroke="#F97316" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

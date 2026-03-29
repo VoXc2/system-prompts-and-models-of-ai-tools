@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B3B66"/>
+      <stop offset="50%" stop-color="#0A2D4E"/>
+      <stop offset="100%" stop-color="#071E33"/>
+    </linearGradient>
+    <linearGradient id="accentLine" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0FAF9A"/>
+      <stop offset="100%" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <!-- Subtle grid pattern -->
+  <g opacity="0.04" stroke="#0FAF9A" stroke-width="1">
+    <line x1="0" y1="100" x2="1200" y2="100"/><line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="630"/><line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/><line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+  <!-- Logo icon large -->
+  <g transform="translate(100, 180)">
+    <path d="M0 0h56c35.3 0 64 28.7 64 64s-28.7 64-64 64H0V0z" fill="#E2E8F0" opacity="0.9"/>
+    <path d="M24 112L40 56" stroke="#0FAF9A" stroke-width="8" stroke-linecap="round"/>
+    <path d="M56 112L40 56" stroke="#0FAF9A" stroke-width="8" stroke-linecap="round"/>
+    <path d="M40 40L40 56M40 40L32 48M40 40L48 48" stroke="#F97316" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Brand name -->
+  <text x="200" y="240" font-family="Inter, system-ui, sans-serif" font-size="72" font-weight="800" fill="#F8FAFC" letter-spacing="3">DEALIX</text>
+  <!-- Accent line -->
+  <rect x="200" y="260" width="300" height="4" rx="2" fill="url(#accentLine)"/>
+  <!-- Tagline Arabic -->
+  <text x="200" y="310" font-family="IBM Plex Sans Arabic, Tajawal, sans-serif" font-size="32" fill="#94A3B8">نظام الإيرادات الذكي</text>
+  <!-- Tagline English -->
+  <text x="200" y="350" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#64748B">AI Revenue Operating System for Saudi SMEs</text>
+  <!-- Feature pills -->
+  <g transform="translate(200, 400)">
+    <rect x="0" y="0" width="160" height="40" rx="20" fill="#0FAF9A" opacity="0.15"/>
+    <text x="80" y="26" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#0FAF9A" text-anchor="middle">Voice AI Agent</text>
+    <rect x="180" y="0" width="180" height="40" rx="20" fill="#F97316" opacity="0.15"/>
+    <text x="270" y="26" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#F97316" text-anchor="middle">Smart Booking</text>
+    <rect x="380" y="0" width="200" height="40" rx="20" fill="#C89B3C" opacity="0.15"/>
+    <text x="480" y="26" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#C89B3C" text-anchor="middle">WhatsApp CRM</text>
+  </g>
+  <!-- Saudi flag colors accent -->
+  <rect x="0" y="620" width="1200" height="10" fill="#0FAF9A"/>
+  <!-- Domain -->
+  <text x="1080" y="580" font-family="Inter, sans-serif" font-size="18" fill="#475569" text-anchor="end">dealix.ai</text>
+</svg>
