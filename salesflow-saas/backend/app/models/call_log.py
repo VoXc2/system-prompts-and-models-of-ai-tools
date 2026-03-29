@@ -1,5 +1,5 @@
 """Voice AI call logs and sessions."""
-from sqlalchemy import Column, String, Text, Integer, DateTime, ForeignKey, Numeric, Boolean
+from sqlalchemy import Column, String, Text, Integer, DateTime, ForeignKey, Numeric, Boolean, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from app.models.base import TenantModel
 
@@ -31,11 +31,15 @@ class CallLog(TenantModel):
 class VoiceSession(TenantModel):
     """Voice AI session tracking."""
     __tablename__ = "voice_sessions"
+    __table_args__ = (
+        UniqueConstraint("provider", "external_session_id", name="uq_voice_session_provider_external_id"),
+        {"extend_existing": True},
+    )
 
     call_log_id = Column(UUID(as_uuid=True), ForeignKey("call_logs.id"), nullable=True)
     ai_agent_id = Column(UUID(as_uuid=True), ForeignKey("ai_agents.id"), nullable=True)
     provider = Column(String(50))  # vapi, retell
-    external_session_id = Column(String(255))
+    external_session_id = Column(String(255), index=True)
     status = Column(String(50), default="active", index=True)  # active, completed, failed, transferred
     language = Column(String(10), default="ar")
     handoff_to_user = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)

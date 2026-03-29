@@ -1,5 +1,5 @@
 """External integrations and webhook events."""
-from sqlalchemy import Column, String, Text, DateTime, ForeignKey, Boolean, Integer
+from sqlalchemy import Column, String, Text, DateTime, ForeignKey, Boolean, Integer, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from app.models.base import TenantModel
 
@@ -7,8 +7,12 @@ from app.models.base import TenantModel
 class IntegrationAccount(TenantModel):
     """Connected external service account."""
     __tablename__ = "integration_accounts"
+    __table_args__ = (
+        UniqueConstraint("tenant_id", "provider", "account_id", name="uq_integration_tenant_provider_account"),
+        {"extend_existing": True},
+    )
 
-    provider = Column(String(100), nullable=False)  # meta, google, linkedin, apollo, hunter, vapi, sendgrid
+    provider = Column(String(100), nullable=False, index=True)  # meta, google, linkedin, apollo, hunter, vapi, sendgrid
     account_name = Column(String(255))
     account_id = Column(String(255))
     access_token = Column(Text)  # Encrypted
