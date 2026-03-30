@@ -9,12 +9,12 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
-from personal_brand_engine.agents.base_agent import BaseAgent
-from personal_brand_engine.agents.cv_optimizer.formatter import (
+from agents.base_agent import BaseAgent
+from agents.cv_optimizer.formatter import (
     generate_pdf,
     render_cv_html,
 )
-from personal_brand_engine.agents.cv_optimizer.updater import enhance_cv_content
+from agents.cv_optimizer.updater import enhance_cv_content
 
 logger = logging.getLogger(__name__)
 

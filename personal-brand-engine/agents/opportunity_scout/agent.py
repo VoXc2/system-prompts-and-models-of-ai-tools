@@ -14,23 +14,23 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from personal_brand_engine.agents.base_agent import BaseAgent
-from personal_brand_engine.agents.opportunity_scout.notifier import (
+from agents.base_agent import BaseAgent
+from agents.opportunity_scout.notifier import (
     send_daily_digest,
     send_email_notification,
     send_whatsapp_notification,
 )
-from personal_brand_engine.agents.opportunity_scout.scanners import (
+from agents.opportunity_scout.scanners import (
     scan_gaca_announcements,
     scan_google_jobs,
     scan_linkedin_jobs_api,
     scan_news,
     scan_smiths_detection_careers,
 )
-from personal_brand_engine.agents.opportunity_scout.scorer import score_opportunity
-from personal_brand_engine.config.settings import get_settings
-from personal_brand_engine.storage.models import Opportunity
-from personal_brand_engine.utils.logger import get_logger
+from agents.opportunity_scout.scorer import score_opportunity
+from config.settings import get_settings
+from storage.models import Opportunity
+from utils.logger import get_logger
 
 logger = get_logger(__name__)
 

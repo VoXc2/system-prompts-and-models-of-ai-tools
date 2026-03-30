@@ -9,8 +9,8 @@ from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from personal_brand_engine.config.settings import get_settings
-from personal_brand_engine.storage.models import Base
+from config.settings import get_settings
+from storage.models import Base
 
 _engine = None
 _SessionLocal: sessionmaker[Session] | None = None

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from personal_brand_engine.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger(__name__)
 

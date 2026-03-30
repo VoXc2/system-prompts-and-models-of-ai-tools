@@ -15,7 +15,7 @@ from typing import Any
 
 import httpx
 
-from personal_brand_engine.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -271,7 +271,7 @@ async def send_daily_digest(settings: Any, opportunities: list[dict]) -> dict:
     telegram_token = getattr(settings, "telegram_bot_token", "") or ""
     telegram_chat = getattr(settings, "telegram_chat_id", "") or ""
     if telegram_token and telegram_chat:
-        from personal_brand_engine.utils.notifications import send_telegram
+        from utils.notifications import send_telegram
 
         results["telegram"] = await send_telegram(
             telegram_token, telegram_chat, message

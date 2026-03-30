@@ -8,14 +8,14 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
-from personal_brand_engine.config.settings import (
+from config.settings import (
     get_brand_profile,
     get_content_strategy,
     get_settings,
 )
-from personal_brand_engine.storage.models import AgentLog
-from personal_brand_engine.utils.logger import get_logger
-from personal_brand_engine.utils.notifications import send_notification
+from storage.models import AgentLog
+from utils.logger import get_logger
+from utils.notifications import send_notification
 
 logger = get_logger(__name__)
 

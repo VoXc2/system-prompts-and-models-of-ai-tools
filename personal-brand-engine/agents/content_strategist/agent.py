@@ -8,14 +8,14 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
-from personal_brand_engine.agents.base_agent import BaseAgent
-from personal_brand_engine.agents.content_strategist.calendar_planner import (
+from agents.base_agent import BaseAgent
+from agents.content_strategist.calendar_planner import (
     generate_weekly_calendar,
 )
-from personal_brand_engine.agents.content_strategist.trend_analyzer import (
+from agents.content_strategist.trend_analyzer import (
     analyze_trends,
 )
-from personal_brand_engine.storage.models import ContentCalendar
+from storage.models import ContentCalendar
 
 logger = logging.getLogger(__name__)
 

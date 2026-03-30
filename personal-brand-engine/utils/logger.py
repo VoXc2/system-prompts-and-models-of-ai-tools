@@ -6,7 +6,7 @@ import logging
 import sys
 from functools import lru_cache
 
-from personal_brand_engine.config.settings import get_settings
+from config.settings import get_settings
 
 
 class _StructuredFormatter(logging.Formatter):

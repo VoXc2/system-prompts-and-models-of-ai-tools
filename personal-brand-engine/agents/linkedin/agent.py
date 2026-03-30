@@ -11,11 +11,11 @@ from typing import Any
 from linkedin_api import Linkedin
 from sqlalchemy.orm import Session
 
-from personal_brand_engine.agents.base_agent import BaseAgent
-from personal_brand_engine.agents.linkedin.content_generator import generate_post
-from personal_brand_engine.agents.linkedin.engagement import engage_with_feed
-from personal_brand_engine.agents.linkedin.profile_optimizer import optimize_profile
-from personal_brand_engine.storage.models import Post
+from agents.base_agent import BaseAgent
+from agents.linkedin.content_generator import generate_post
+from agents.linkedin.engagement import engage_with_feed
+from agents.linkedin.profile_optimizer import optimize_profile
+from storage.models import Post
 
 logger = logging.getLogger(__name__)
 

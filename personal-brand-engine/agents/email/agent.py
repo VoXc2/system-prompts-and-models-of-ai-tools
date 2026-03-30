@@ -11,11 +11,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typing import Any
 
-from personal_brand_engine.agents.base_agent import BaseAgent
-from personal_brand_engine.agents.email.classifier import classify_email
-from personal_brand_engine.agents.email.responder import draft_response
-from personal_brand_engine.storage.models import Email
-from personal_brand_engine.utils.logger import get_logger
+from agents.base_agent import BaseAgent
+from agents.email.classifier import classify_email
+from agents.email.responder import draft_response
+from storage.models import Email
+from utils.logger import get_logger
 
 logger = get_logger(__name__)
 

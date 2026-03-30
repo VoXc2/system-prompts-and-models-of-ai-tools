@@ -8,11 +8,11 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
-from personal_brand_engine.agents.base_agent import BaseAgent
-from personal_brand_engine.agents.social_media.content_repurposer import (
+from agents.base_agent import BaseAgent
+from agents.social_media.content_repurposer import (
     repurpose_linkedin_to_twitter,
 )
-from personal_brand_engine.agents.social_media.twitter import (
+from agents.social_media.twitter import (
     create_thread,
     post_tweet,
 )

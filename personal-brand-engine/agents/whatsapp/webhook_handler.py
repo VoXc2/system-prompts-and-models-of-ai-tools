@@ -12,7 +12,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 
-from personal_brand_engine.config.settings import get_settings
+from config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -30,13 +30,13 @@ def _get_agent():
     Here we import lazily to avoid circular imports and create
     a fresh agent per request (or pull from a singleton pool).
     """
-    from personal_brand_engine.agents.whatsapp.agent import WhatsAppAgent
-    from personal_brand_engine.storage.database import get_db_session
-    from personal_brand_engine.llm.client import get_llm_client
+    from agents.whatsapp.agent import WhatsAppAgent
+    from storage.database import get_db
+    from llm.client import get_llm_client
 
     settings = get_settings()
-    db = get_db_session()
-    llm = get_llm_client(settings)
+    db = get_db()
+    llm = get_llm_client()
 
     return WhatsAppAgent(config=settings, llm_client=llm, db_session=db)
 
