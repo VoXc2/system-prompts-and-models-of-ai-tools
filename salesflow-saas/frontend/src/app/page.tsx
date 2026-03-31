@@ -28,16 +28,20 @@ const steps = [
 
 const plans = [
   {
-    name: "أساسي", nameEn: "Basic", price: "299", popular: false,
-    features: ["2 مستخدمين", "100 عميل محتمل/شهر", "500 رسالة واتساب", "3 أتمتة", "تقارير أساسية", "دعم بالإيميل"],
+    name: "انطلاقة", nameEn: "Starter", price: "199", setup: "2,500", popular: false,
+    features: ["2 مستخدمين", "100 عميل محتمل/شهر", "300 رسالة واتساب", "3 أتمتة", "تقارير أساسية", "دعم بالإيميل", "تأسيس: 2,500 ر.س"],
   },
   {
-    name: "احترافي", nameEn: "Professional", price: "699", popular: true,
-    features: ["10 مستخدمين", "1,000 عميل محتمل/شهر", "5,000 رسالة واتساب", "20 أتمتة", "تقارير متقدمة", "دعم أولوية", "قوالب قطاعية"],
+    name: "نمو", nameEn: "Growth", price: "499", setup: "3,500", popular: false,
+    features: ["5 مستخدمين", "500 عميل محتمل/شهر", "2,000 رسالة واتساب", "10 أتمتة", "تقارير متقدمة", "قوالب قطاعية", "تأسيس: 3,500 ر.س"],
   },
   {
-    name: "مؤسسات", nameEn: "Enterprise", price: "1,499", popular: false,
-    features: ["مستخدمين بلا حدود", "عملاء بلا حدود", "رسائل بلا حدود", "أتمتة بلا حدود", "تقارير مخصصة", "دعم مخصص", "API كامل", "مدير حساب خاص"],
+    name: "احترافي", nameEn: "Professional", price: "899", setup: "4,500", popular: true,
+    features: ["15 مستخدمين", "2,000 عميل محتمل/شهر", "10,000 رسالة واتساب", "أتمتة غير محدودة", "AI Agents ذكية", "تقارير مخصصة", "دعم أولوية", "تأسيس: 4,500 ر.س"],
+  },
+  {
+    name: "مؤسسات", nameEn: "Enterprise", price: "1,799", setup: "7,500+", popular: false,
+    features: ["مستخدمين بلا حدود", "عملاء بلا حدود", "رسائل بلا حدود", "AI Agents متقدمة", "API كامل", "مدير حساب خاص", "SLA مضمون", "تأسيس: 7,500+ ر.س"],
   },
 ];
 
@@ -92,13 +96,13 @@ export default function LandingPage() {
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm mb-6 backdrop-blur-sm">
               <span className="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
-              صنع في السعودية للسوق السعودي
+              منصة B2B سعودية | صُنعت للشركات
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-arabic leading-tight mb-6">
-              حوّل مبيعاتك إلى
+              ضاعف مبيعات شركتك
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-l from-secondary to-emerald-300">
-                ماكينة أرباح تعمل 24/7
+                بالذكاء الاصطناعي
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -248,6 +252,20 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Trusted By Sectors */}
+      <section className="py-12 bg-white border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-4 text-center">
+          <p className="text-sm text-gray-400 mb-6 font-medium">نخدم شركات من أكثر من 10 قطاعات في السعودية</p>
+          <div className="flex flex-wrap justify-center gap-6 text-gray-300">
+            {["🏥 صحة", "🏠 عقارات", "🍽️ مطاعم", "💇 تجميل", "🎓 تعليم", "🚗 سيارات", "⚖️ محاماة", "🏗️ مقاولات", "🛒 تجارة إلكترونية", "🏪 تجزئة"].map((sector, i) => (
+              <div key={i} className="bg-gray-50 rounded-full px-4 py-2 text-sm text-gray-600 font-medium">
+                {sector}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Stats */}
       <section className="py-16 bg-dark text-white">
         <div className="max-w-5xl mx-auto px-4">
@@ -262,6 +280,57 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* B2B Lead Generation Pipeline */}
+      <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">كيف نجيب لك عملاء جدد كل يوم</h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto">الذكاء الاصطناعي يبحث عن الشركات المناسبة، يتواصل معهم، ويحجز لك اجتماعات تلقائياً</p>
+          </div>
+          <div className="grid md:grid-cols-5 gap-4 items-center">
+            {[
+              { step: "01", icon: "🔍", title: "البحث الذكي", desc: "نبحث في Google Maps ولينكدن والأدلة التجارية عن شركات تحتاج خدماتك" },
+              { step: "02", icon: "📊", title: "التأهيل", desc: "الذكاء الاصطناعي يقيّم كل شركة ويحدد الأنسب لقطاعك" },
+              { step: "03", icon: "💬", title: "التواصل", desc: "رسائل واتساب وإيميل ومكالمات احترافية مخصصة لكل عميل" },
+              { step: "04", icon: "📅", title: "حجز اجتماع", desc: "يحجز اجتماع تلقائياً مع فريق مبيعاتك للعملاء المهتمين" },
+              { step: "05", icon: "🤝", title: "إغلاق الصفقة", desc: "فريقك يركز على الإغلاق بدل ما يضيع وقته بالبحث والمتابعة" },
+            ].map((s, i) => (
+              <div key={i} className="text-center bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-lg transition-all">
+                <div className="text-3xl mb-2">{s.icon}</div>
+                <div className="text-xs text-primary font-bold mb-1">الخطوة {s.step}</div>
+                <h3 className="text-sm font-bold mb-1">{s.title}</h3>
+                <p className="text-xs text-gray-500">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ROI Section */}
+      <section className="py-20 px-4 bg-primary/5">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">العائد على الاستثمار</h2>
+          <p className="text-gray-500 text-lg mb-10">أرقام حقيقية من شركات تستخدم Dealix</p>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="text-5xl font-bold text-primary mb-2">40%</div>
+              <div className="text-lg font-medium mb-1">زيادة في المبيعات</div>
+              <div className="text-sm text-gray-500">خلال أول 3 أشهر من الاستخدام</div>
+            </div>
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="text-5xl font-bold text-secondary mb-2">15+</div>
+              <div className="text-lg font-medium mb-1">ساعة توفير أسبوعياً</div>
+              <div className="text-sm text-gray-500">من وقت فريق المبيعات بالأتمتة</div>
+            </div>
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="text-5xl font-bold text-accent mb-2">60%</div>
+              <div className="text-lg font-medium mb-1">تقليل فقدان العملاء</div>
+              <div className="text-sm text-gray-500">بالمتابعة التلقائية الذكية</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing" className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
@@ -269,11 +338,11 @@ export default function LandingPage() {
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">خطط تناسب حجم شركتك</h2>
             <p className="text-gray-500 text-lg">ابدأ مجاناً 14 يوم • بدون بطاقة ائتمان</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {plans.map((plan, i) => (
               <div key={i} className={`rounded-2xl p-6 border-2 transition-all ${
                 plan.popular
-                  ? "border-primary bg-primary/5 shadow-xl scale-105 relative"
+                  ? "border-primary bg-primary/5 shadow-xl scale-[1.02] relative"
                   : "border-gray-100 bg-white hover:border-gray-200"
               }`}>
                 {plan.popular && (
@@ -500,6 +569,17 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/966XXXXXXXXXX?text=مرحباً، أبي أعرف أكثر عن Dealix"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-50 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30 transition-all hover:scale-110"
+        aria-label="تواصل عبر واتساب"
+      >
+        <Phone className="w-6 h-6" />
+      </a>
     </div>
   );
 }
