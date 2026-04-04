@@ -6,6 +6,7 @@ from app.middleware.internal_api import _exempt_path
 def test_internal_api_exempt_paths():
     assert _exempt_path("/api/v1/health")
     assert _exempt_path("/api/v1/ready")
+    assert _exempt_path("/api/v1/deployment-readiness")
     assert _exempt_path("/api/v1/webhooks/whatsapp")
     assert _exempt_path("/api/v1/marketing/hub")
     assert _exempt_path("/api/v1/strategy/summary")

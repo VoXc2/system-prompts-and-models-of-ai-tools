@@ -3,94 +3,938 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dealix — بوابة الأصول التسويقية</title>
+  <meta name="description" content="أصول Dealix التسويقية: حزمة تحميل، عروض قطاعية سعودية، قوالب تواصل، ودعم — بواجهة عربية للمسوّقين والشركاء." />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Dealix — مركز الأصول التسويقية</title>
   <style>
-    :root { --bg: #0f172a; --card: #1e293b; --accent: #14b8a6; --text: #f1f5f9; --muted: #94a3b8; }
+    :root {
+      --bg-deep: #030712;
+      --bg-mid: #0f172a;
+      --card: rgba(30, 41, 59, 0.65);
+      --accent: #14b8a6;
+      --accent-glow: rgba(45, 212, 191, 0.35);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: rgba(51, 65, 85, 0.85);
+    }
     * { box-sizing: border-box; }
-    body { font-family: "Segoe UI", Tahoma, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 32px 20px 60px; line-height: 1.6; max-width: 880px; margin-inline: auto; }
-    h1 { font-size: 1.5rem; color: var(--accent); margin: 0 0 8px; }
-    .sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 28px; }
-    section { background: var(--card); border-radius: 12px; padding: 20px 22px; margin-bottom: 18px; border: 1px solid #334155; }
-    section h2 { margin: 0 0 14px; font-size: 1.05rem; color: #5eead4; }
-    ul { margin: 0; padding-right: 20px; }
-    li { margin: 8px 0; }
-    a { color: #5eead4; text-decoration: none; word-break: break-all; }
-    a:hover { text-decoration: underline; }
-    .btn { display: inline-block; background: #0d9488; color: #fff !important; padding: 10px 18px; border-radius: 8px; font-weight: 600; margin-top: 8px; }
-    .btn:hover { background: #0f766e; text-decoration: none; }
-    .en { direction: ltr; text-align: left; color: var(--muted); font-size: 0.88rem; margin-top: 12px; }
-    code { background: #334155; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      margin: 0;
+      padding: 0 20px 64px;
+      line-height: 1.65;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 100% 80% at 100% -20%, rgba(20, 184, 166, 0.14), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 0% 50%, rgba(99, 102, 241, 0.08), transparent 45%),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 35%, #0b1224 100%);
+    }
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      right: 16px;
+      z-index: 100;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: #0d9488;
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus {
+      top: 16px;
+      outline: 2px solid #99f6e4;
+      outline-offset: 2px;
+    }
+    .top-bar {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 12px 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #f1f5f9;
+      letter-spacing: -0.02em;
+    }
+    .brand-lockup span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(45, 212, 191, 0.25), rgba(20, 184, 166, 0.08));
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      font-size: 1.25rem;
+    }
+    .top-bar-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      align-items: center;
+    }
+    .top-bar-nav a {
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(51, 65, 85, 0.75);
+      background: rgba(15, 23, 42, 0.5);
+    }
+    .top-bar-nav a:hover {
+      border-color: rgba(45, 212, 191, 0.4);
+      background: rgba(30, 41, 59, 0.65);
+    }
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+      padding-top: 16px;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 36px;
+      padding: 32px 22px 36px;
+      border-radius: 24px;
+      border: 1px solid rgba(45, 212, 191, 0.22);
+      background: linear-gradient(165deg, rgba(30, 41, 59, 0.55) 0%, rgba(15, 23, 42, 0.85) 100%);
+      box-shadow:
+        0 4px 32px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #2dd4bf;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      background: linear-gradient(105deg, #5eead4 0%, #38bdf8 40%, #a78bfa 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 8px 0 0;
+      max-width: 38em;
+      margin-inline: auto;
+    }
+    .sub strong { color: #cbd5e1; }
+    .hero-lead {
+      font-size: clamp(1rem, 2.4vw, 1.15rem);
+      line-height: 1.75;
+      color: #cbd5e1;
+      max-width: 36em;
+      margin: 0 auto 20px;
+    }
+    .trust-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 16px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    .trust-strip span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .hero-cta a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      background: rgba(20, 184, 166, 0.1);
+      color: #99f6e4 !important;
+    }
+    .hero-cta a:hover {
+      background: rgba(20, 184, 166, 0.2);
+      border-color: rgba(45, 212, 191, 0.55);
+    }
+    .doc-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .doc-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(51, 65, 85, 0.85);
+      background: rgba(15, 23, 42, 0.55);
+      text-decoration: none !important;
+      color: inherit !important;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .doc-card:hover {
+      border-color: rgba(45, 212, 191, 0.35);
+      background: rgba(30, 41, 59, 0.65);
+    }
+    .doc-card-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #f1f5f9;
+    }
+    .doc-card-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .surface {
+      position: relative;
+      margin-bottom: 22px;
+      padding: 22px 24px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: linear-gradient(155deg, rgba(30, 41, 59, 0.45) 0%, rgba(15, 23, 42, 0.75) 100%);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+    .surface:hover {
+      border-color: rgba(45, 212, 191, 0.28);
+      box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(45, 212, 191, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transform: translateY(-2px);
+    }
+    .surface h2 {
+      margin: 0 0 14px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #ccfbf1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .surface h2 .ico {
+      font-size: 1.35rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+    }
+    .surface p { margin: 0 0 12px; color: #e2e8f0; }
+    ul { margin: 0; padding-right: 22px; }
+    li { margin: 10px 0; }
+    a {
+      color: #5eead4;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.15s ease, text-shadow 0.15s ease;
+    }
+    a:hover {
+      color: #99f6e4;
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+    code {
+      background: rgba(51, 65, 85, 0.85);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 12px;
+      line-height: 1.55;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 12px 22px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #fff !important;
+      background: linear-gradient(135deg, #0d9488 0%, #059669 50%, #0d9488 100%);
+      background-size: 200% 200%;
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-position 0.4s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 36px rgba(13, 148, 136, 0.45);
+      background-position: 100% 50%;
+      text-decoration: none;
+    }
+    .btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* حالات الاستخدام — شبكة ثلاثية الأبعاد خفيفة */
+    .uc-lead {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0 0 20px;
+      line-height: 1.65;
+    }
+    .uc-stage {
+      perspective: 1200px;
+    }
+    .uc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+    }
+    .uc-card {
+      position: relative;
+      background: linear-gradient(165deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.55) 100%);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      transform-style: preserve-3d;
+      transition:
+        transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1),
+        box-shadow 0.4s ease,
+        border-color 0.25s ease;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+    }
+    .uc-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(45, 212, 191, 0.25), transparent 40%, rgba(167, 139, 250, 0.15));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    .uc-card:hover {
+      transform: translateY(-8px) rotateX(4deg) rotateY(-3deg) translateZ(12px);
+      border-color: rgba(45, 212, 191, 0.45);
+      box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.45),
+        0 0 40px rgba(45, 212, 191, 0.12);
+    }
+    .uc-card:focus-within {
+      outline: 2px solid rgba(45, 212, 191, 0.5);
+      outline-offset: 3px;
+    }
+    .uc-card.uc-wide { grid-column: 1 / -1; }
+    .uc-emoji {
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: 10px;
+      display: block;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+    }
+    .uc-card a {
+      display: block;
+      font-weight: 800;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      word-break: normal;
+    }
+    .uc-card .uc-desc {
+      margin-top: 10px;
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .uc-foot {
+      margin-top: 18px;
+      font-size: 0.82rem;
+      color: #64748b;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(51, 65, 85, 0.75);
+    }
+    .tag-pill {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #99f6e4;
+      background: rgba(20, 184, 166, 0.12);
+      border: 1px solid rgba(45, 212, 191, 0.25);
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 8px;
+    }
+    .link-row a {
+      padding: 8px 14px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      font-size: 0.88rem;
+    }
+    .link-row a:hover {
+      border-color: rgba(45, 212, 191, 0.35);
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    /* عروض القطاعات — بطاقات تفاعلية */
+    .sector-lead {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0 0 18px;
+      line-height: 1.65;
+    }
+    .sector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 6px;
+    }
+    .sector-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 18px 16px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: linear-gradient(165deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.55) 100%);
+      text-decoration: none !important;
+      color: inherit !important;
+      transform-style: preserve-3d;
+      transition:
+        transform 0.38s cubic-bezier(0.34, 1.15, 0.64, 1),
+        box-shadow 0.38s ease,
+        border-color 0.25s ease;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.32);
+      min-height: 128px;
+    }
+    .sector-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.18), transparent 55%);
+      transition: opacity 0.35s ease;
+    }
+    .sector-card:hover {
+      transform: translateY(-6px) rotateX(3deg) rotateY(-2deg) translateZ(10px);
+      border-color: rgba(45, 212, 191, 0.42);
+      box-shadow:
+        0 20px 44px rgba(0, 0, 0, 0.42),
+        0 0 36px rgba(45, 212, 191, 0.1);
+    }
+    .sector-card:hover::after { opacity: 1; }
+    .sector-card:focus-visible {
+      outline: 2px solid rgba(45, 212, 191, 0.55);
+      outline-offset: 3px;
+    }
+    .sc-emoji {
+      font-size: 1.75rem;
+      line-height: 1;
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
+    }
+    .sc-num {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #5eead4;
+      text-transform: uppercase;
+    }
+    .sc-title {
+      font-weight: 800;
+      font-size: 1.02rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+    }
+    .sc-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-top: 2px;
+    }
+
+    /* اختصارات — بدون مسارات خام */
+    .quick-nav-lead {
+      color: var(--muted);
+      font-size: 0.93rem;
+      margin: 0 0 16px;
+      line-height: 1.6;
+    }
+    .quick-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px;
+    }
+    .quick-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      text-decoration: none !important;
+      color: inherit !important;
+      border: 1px solid rgba(51, 65, 85, 0.85);
+      background:
+        linear-gradient(145deg, rgba(20, 184, 166, 0.09) 0%, transparent 42%),
+        linear-gradient(165deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.5) 100%);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .quick-tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(45, 212, 191, 0.35), transparent 50%, rgba(167, 139, 250, 0.12));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+    .quick-tile:hover {
+      transform: translateY(-4px);
+      border-color: rgba(45, 212, 191, 0.4);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38), 0 0 28px rgba(45, 212, 191, 0.08);
+    }
+    .quick-tile:focus-visible {
+      outline: 2px solid rgba(45, 212, 191, 0.55);
+      outline-offset: 3px;
+    }
+    .qt-emoji {
+      font-size: 1.6rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+    }
+    .qt-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #e2e8f0;
+      line-height: 1.35;
+    }
+    .qt-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .qt-go {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #5eead4;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* الدعم والتواصل */
+    .support-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .support-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .support-grid {
+      display: grid;
+      gap: 22px;
+      margin-top: 8px;
+    }
+    @media (min-width: 720px) {
+      .support-grid { grid-template-columns: 1fr 1fr; align-items: start; }
+    }
+    .support-phone-block {
+      position: relative;
+      z-index: 1;
+      padding: 4px 0 8px;
+    }
+    .support-kicker {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5eead4;
+      margin-bottom: 8px;
+    }
+    .support-phone {
+      display: inline-block;
+      font-size: clamp(1.65rem, 4vw, 2.15rem);
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: #f8fafc;
+      text-decoration: none !important;
+      text-shadow: 0 2px 24px rgba(45, 212, 191, 0.25);
+      transition: color 0.2s ease;
+    }
+    .support-phone:hover { color: #99f6e4; }
+    .support-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .support-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none !important;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: rgba(15, 23, 42, 0.75);
+      color: #e2e8f0 !important;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+    .support-chip:hover {
+      border-color: rgba(45, 212, 191, 0.45);
+      background: rgba(30, 41, 59, 0.9);
+      transform: translateY(-2px);
+    }
+    .support-chip.primary {
+      background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+      border-color: rgba(45, 212, 191, 0.5);
+      color: #fff !important;
+      box-shadow: 0 6px 22px rgba(13, 148, 136, 0.35);
+    }
+    .support-faq-inline {
+      position: relative;
+      z-index: 1;
+    }
+    .support-faq-inline details {
+      border: 1px solid rgba(51, 65, 85, 0.85);
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.55);
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+    .support-faq-inline details[open] {
+      border-color: rgba(45, 212, 191, 0.35);
+    }
+    .support-faq-inline summary {
+      cursor: pointer;
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #e2e8f0;
+      list-style: none;
+    }
+    .support-faq-inline summary::-webkit-details-marker { display: none; }
+    .support-faq-inline summary::after {
+      content: "▼";
+      float: left;
+      font-size: 0.65rem;
+      margin-top: 4px;
+      color: #5eead4;
+      transition: transform 0.25s ease;
+    }
+    .support-faq-inline details[open] summary::after {
+      transform: rotate(-180deg);
+    }
+    .support-faq-inline .faq-a {
+      padding: 0 16px 14px;
+      font-size: 0.86rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      border-top: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    .support-more {
+      margin-top: 14px;
+      text-align: center;
+    }
+    .support-more a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      background: rgba(20, 184, 166, 0.12);
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      color: #5eead4 !important;
+    }
+    .support-more a:hover {
+      background: rgba(20, 184, 166, 0.2);
+      border-color: rgba(45, 212, 191, 0.5);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .surface:hover,
+      .uc-card:hover,
+      .sector-card:hover,
+      .quick-tile:hover,
+      .btn:hover {
+        transform: none;
+      }
+      .uc-card {
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Dealix — بوابة الأصول التسويقية والعروض</h1>
-  <p class="sub"><strong>بدون خادم 8000:</strong> إذا فتحت هذه الصفحة من Next.js فهي تخدم من <code>public/dealix-marketing</code> — شغّل فقط <code>npm run dev</code> داخل مجلد <code>frontend</code> ثم افتح <a href="http://localhost:3000/dealix-marketing/">http://localhost:3000/dealix-marketing/</a></p>
-  <p class="sub">صفحة موحّدة: <a href="http://localhost:3000/resources">http://localhost:3000/resources</a></p>
+  <a class="skip-link" href="#main-content">تخطّي إلى المحتوى</a>
+  <div class="top-bar">
+    <div class="brand-lockup">
+      <span aria-hidden="true">📊</span>
+      Dealix
+    </div>
+    <nav class="top-bar-nav" aria-label="روابط سريعة">
+      <a href="/resources">مركز الموارد</a>
+      <a href="/marketers">بوابة المسوّقين</a>
+      <a href="/help">المساعدة</a>
+    </nav>
+  </div>
+  <div class="shell">
+    <header class="hero">
+      <p class="hero-badge">✨ <span lang="en">Dealix</span> — تشغيل الإيرادات للشركات</p>
+      <h1>مركز الأصول التسويقية والعروض</h1>
+      <p class="hero-lead">
+        مكان واحد لكل ما يحتاجه فريقك لتقديم Dealix بثقة: حزمة تحميل كاملة، عروض قطاعية جاهزة للعميل،
+        وقوالب تواصل بالعربية — بدون مصطلحات تقنية، وبصياغة مهنية تلتقي مع قرارات الشراء في السوق السعودي.
+      </p>
+      <div class="trust-strip" aria-hidden="true">
+        <span>✓ عربي أولاً</span>
+        <span>✓ جاهز للمشاركة</span>
+        <span>✓ دعم محلي</span>
+      </div>
+      <div class="hero-cta">
+        <a href="/resources">استكشف كل الروابط في صفحة واحدة</a>
+        <a href="#sec-dl">ابدأ من التحميل</a>
+      </div>
+    </header>
 
-  <section>
-    <h2>تحميل مباشر (كل الأصول)</h2>
-    <p>ملف واحد يضم <code>sales_assets</code> وعروض القطاعات <code>presentations/dealix-2026-sectors</code>.</p>
-    <p><a class="btn" href="dealix-marketing-bundle.zip" download>تحميل dealix-marketing-bundle.zip</a></p>
-    <p class="en">If the ZIP is missing, run <code>salesflow-saas/scripts/package_dealix_marketing_assets.ps1</code> (or .sh) once, then refresh.</p>
-  </section>
+    <main id="main-content">
 
-  <section>
-    <h2>حالات الاستخدام السبع (Autonomous Revenue OS)</h2>
-    <ul>
-      <li><a href="dealix-use-cases-2026/00-master-use-cases-ar.html">الوثيقة الرئيسية — PDF جاهز للطباعة</a></li>
-      <li><a href="dealix-use-cases-2026/diagrams-viewer.html">عارض مخططات Mermaid</a></li>
-      <li><a href="dealix-use-cases-2026/INDEX.txt">فهرس الملفات (نص)</a></li>
-      <li><a href="dealix-use-cases-2026/use_case_registry.json">use_case_registry.json</a></li>
-    </ul>
-  </section>
+    <section class="surface" aria-labelledby="sec-dl">
+      <h2 id="sec-dl"><span class="ico" aria-hidden="true">📦</span> تحميل مباشر (كل الأصول)</h2>
+      <p>أرشيف مضغوط واحد يضم الأصول التسويقية وعروض القطاعات السعودية الجاهزة للمشاركة.</p>
+      <p><a class="btn" href="dealix-marketing-bundle.zip" download><span aria-hidden="true">⬇️</span> تحميل الحزمة الكاملة</a></p>
+      <p class="hint">إذا لم يكتمل التحميل، أعد المحاولة لاحقاً أو تواصل معنا من قسم الدعم في أسفل الصفحة — أو زر <a href="/resources">مركز الموارد</a> للبدائل.</p>
+    </section>
 
-  <section>
-    <h2>عروض القطاعات السعودية (10 + الملف الشامل)</h2>
-    <p>تُخدم من مسار منفصل للحفاظ على روابط CSS الصحيحة:</p>
-    <ul>
-      <li><a href="/dealix-presentations/00-dealix-company-master-ar.html">00 — الملف التعريفي للشركة</a></li>
-      <li><a href="/dealix-presentations/01-sector-healthcare-ar.html">01 — قطاع الصحة</a> … <a href="/dealix-presentations/10-sector-automotive-ar.html">10 — السيارات</a></li>
-    </ul>
-    <p class="en">On Next.js, use the same host (e.g. localhost:3000) — paths start with /dealix-presentations/</p>
-  </section>
+    <section class="surface" aria-labelledby="sec-uc">
+      <h2 id="sec-uc"><span class="ico" aria-hidden="true">🧩</span> حالات الاستخدام السبع</h2>
+      <span class="tag-pill">سبع قصص تشغيل كاملة</span>
+      <p class="uc-lead">قصص واقعية من السوق: من أول رسالة إلى الإغلاق والتجديد — وثيقة واحدة للعرض، ومخططات بصرية للاجتماعات.</p>
+      <div class="uc-stage">
+        <div class="uc-grid">
+          <div class="uc-card uc-wide">
+            <span class="uc-emoji" aria-hidden="true">📄</span>
+            <a href="dealix-use-cases-2026/00-master-use-cases-ar.html">الوثيقة الرئيسية</a>
+            <p class="uc-desc">السيناريوهات السبعة في صفحة واحدة — جاهزة للطباعة أو العرض أمام العميل.</p>
+          </div>
+          <div class="uc-card">
+            <span class="uc-emoji" aria-hidden="true">📊</span>
+            <a href="dealix-use-cases-2026/diagrams-viewer.html">مخططات تفاعلية</a>
+            <p class="uc-desc">مسارات بصرية للعرض أثناء الاجتماع — ألوان Dealix وشرح تحت كل مخطط.</p>
+          </div>
+          <div class="uc-card">
+            <span class="uc-emoji" aria-hidden="true">📝</span>
+            <a href="dealix-use-cases-2026/INDEX.txt">فهرس سريع</a>
+            <p class="uc-desc">قائمة مرجعية بكل ما داخل الحزمة — للمراجعة السريعة قبل الاجتماع.</p>
+          </div>
+        </div>
+      </div>
+      <p class="uc-foot">تفاصيل إضافية لكل سيناريو متوفرة داخل الحزمة عند التحميل.</p>
+    </section>
 
-  <section>
-    <h2>المستثمرون — عرض شامل</h2>
-    <ul>
-      <li><a href="investor/00-investor-dealix-full-ar.html">العرض الاستثماري الكامل (طباعة PDF)</a></li>
-    </ul>
-  </section>
+    <section class="surface sector-hub" aria-labelledby="sec-sec">
+      <h2 id="sec-sec"><span class="ico" aria-hidden="true">🏭</span> عروض القطاعات السعودية — 11 وثيقة جاهزة</h2>
+      <p class="sector-lead">كل رابط يفتح عرضاً كاملاً للقطاع: تحليل واقعي، جداول مقارنة، ومؤشرات أثر — جاهز للمشاركة مع العميل أو الطباعة كنسخة PDF من متصفحك.</p>
+      <div class="sector-grid">
+        <a class="sector-card" href="../dealix-presentations/00-dealix-company-master-ar.html"><span class="sc-emoji" aria-hidden="true">🏢</span><span class="sc-num">00</span><span class="sc-title">الملف التعريفي الشامل</span><span class="sc-desc">الرؤية، القيمة، والنمو</span></a>
+        <a class="sector-card" href="../dealix-presentations/01-sector-healthcare-ar.html"><span class="sc-emoji" aria-hidden="true">🏥</span><span class="sc-num">01</span><span class="sc-title">الرعاية الصحية والعيادات</span><span class="sc-desc">مواعيد، ليدات، ومتابعة منظّمة</span></a>
+        <a class="sector-card" href="../dealix-presentations/02-sector-realestate-ar.html"><span class="sc-emoji" aria-hidden="true">🏗️</span><span class="sc-num">02</span><span class="sc-title">العقارات والتطوير</span><span class="sc-desc">مشاريع، زيارات، وتأهيل المشترين</span></a>
+        <a class="sector-card" href="../dealix-presentations/03-sector-manufacturing-ar.html"><span class="sc-emoji" aria-hidden="true">🏭</span><span class="sc-num">03</span><span class="sc-title">التصنيع والصناعة</span><span class="sc-desc">عروض أسعار طويلة الأمد وفرق مبيعات</span></a>
+        <a class="sector-card" href="../dealix-presentations/04-sector-logistics-ar.html"><span class="sc-emoji" aria-hidden="true">🚚</span><span class="sc-num">04</span><span class="sc-title">اللوجستيات والشحن</span><span class="sc-desc">عقود، مواعيد خدمة، وتجديد الالتزامات</span></a>
+        <a class="sector-card" href="../dealix-presentations/05-sector-retail-ar.html"><span class="sc-emoji" aria-hidden="true">🛒</span><span class="sc-num">05</span><span class="sc-title">التجزئة</span><span class="sc-desc">حملات، قنوات، ولاء العملاء</span></a>
+        <a class="sector-card" href="../dealix-presentations/06-sector-it-ar.html"><span class="sc-emoji" aria-hidden="true">💻</span><span class="sc-num">06</span><span class="sc-title">التقنية والبرمجيات</span><span class="sc-desc">تجربة تقييمية، أمان، ومسار الشراء</span></a>
+        <a class="sector-card" href="../dealix-presentations/07-sector-education-ar.html"><span class="sc-emoji" aria-hidden="true">🎓</span><span class="sc-num">07</span><span class="sc-title">التعليم والتدريب</span><span class="sc-desc">تسجيلات ومتابعة أصحاب المصلحة</span></a>
+        <a class="sector-card" href="../dealix-presentations/08-sector-hospitality-ar.html"><span class="sc-emoji" aria-hidden="true">🏨</span><span class="sc-num">08</span><span class="sc-title">الضيافة والمطاعم</span><span class="sc-desc">حجوزات، مجموعات، وشركات</span></a>
+        <a class="sector-card" href="../dealix-presentations/09-sector-professional-ar.html"><span class="sc-emoji" aria-hidden="true">📋</span><span class="sc-num">09</span><span class="sc-title">الخدمات المهنية</span><span class="sc-desc">استشارات، عقود، وحوكمة</span></a>
+        <a class="sector-card" href="../dealix-presentations/10-sector-automotive-ar.html"><span class="sc-emoji" aria-hidden="true">🚗</span><span class="sc-num">10</span><span class="sc-title">السيارات والنقل</span><span class="sc-desc">مخزون، تمويل، وما بعد البيع</span></a>
+      </div>
+    </section>
 
-  <section>
-    <h2>المسوّقون — دخول وتعليمات</h2>
-    <ul>
-      <li><a href="/marketers">صفحة المسوّقين (تطبيق Next — أنسب للمشاركة)</a></li>
-      <li><a href="marketers/marketer-hub-ar.html">بوابة HTML ثابتة</a></li>
-      <li><a href="marketers/whatsapp-playbook-ar.txt">قوالب واتساب جاهزة</a></li>
-      <li><a href="marketers/entry-checklist-ar.txt">قائمة تحقق للدخول</a></li>
-    </ul>
-  </section>
+    <section class="surface" aria-labelledby="sec-mkt">
+      <h2 id="sec-mkt"><span class="ico" aria-hidden="true">📣</span> مسار الشركاء والمسوّقين</h2>
+      <p>مواد عامة جاهزة للمشاركة، ثم متابعة الصفقات والعمولات من لوحة الشركاء عند تفعيل حسابك.</p>
+      <div class="link-row">
+        <a href="../marketers">لوحة الشركاء</a>
+        <a href="marketers/marketer-hub-ar.html">دليل البدء السريع</a>
+        <a href="investor/00-investor-dealix-full-ar.html">العرض الاستثماري للطباعة</a>
+        <a href="marketers/whatsapp-playbook-ar.txt">قوالب واتساب</a>
+        <a href="marketers/entry-checklist-ar.txt">قائمة تحقق قبل التواصل</a>
+      </div>
+      <p class="hint"><strong>مكافأة إحالة مستثمر:</strong> المسوّق الذي يحيل مستثمراً يُغلق معه الاستثمار يستحق مكافأة نقدية مباشرة كبيرة وفق اتفاقية الشريك المعتمدة — سجّل الإحالة مع فريق Dealix قبل الإغلاق لربطها.</p>
+    </section>
 
-  <section>
-    <h2>ملفات تسويق إضافية</h2>
-    <ul>
-      <li><a href="Dealix_Marketing_Arsenal.md">Dealix_Marketing_Arsenal.md</a></li>
-      <li><a href="Dealix_Company_Profile.md">Dealix_Company_Profile.md</a></li>
-      <li><a href="Dealix_Enterprise_Pitch_Deck.md">Dealix_Enterprise_Pitch_Deck.md</a></li>
-      <li><a href="Medical_Presentation.md">Medical_Presentation.md</a></li>
-      <li><a href="Real_Estate_Presentation.md">Real_Estate_Presentation.md</a></li>
-      <li><a href="Industrial_Retail_Logistics.md">Industrial_Retail_Logistics.md</a></li>
-    </ul>
-  </section>
+    <section class="surface" aria-labelledby="sec-md">
+      <h2 id="sec-md"><span class="ico" aria-hidden="true">📚</span> وثائق تفصيلية إضافية</h2>
+      <p class="sector-lead" style="margin-bottom:12px">نصوص عميقة لقطاعات محددة وللعرض المؤسسي — افتح الملف المناسب لمجال عميلك.</p>
+      <div class="doc-grid">
+        <a class="doc-card" href="Dealix_Marketing_Arsenal.md"><span class="doc-card-title">هيكل التسويق والعمولات</span><span class="doc-card-hint">الأدوات، المستويات، وقواعد المشاركة</span></a>
+        <a class="doc-card" href="Dealix_Company_Profile.md"><span class="doc-card-title">الملف التعريفي للشركة</span><span class="doc-card-hint">نظرة شاملة على Dealix للعرض الداخلي</span></a>
+        <a class="doc-card" href="Dealix_Enterprise_Pitch_Deck.md"><span class="doc-card-title">عرض المؤسسات</span><span class="doc-card-hint">قيمة مقنعة للصفقات الكبيرة والعقود الطويلة</span></a>
+        <a class="doc-card" href="Medical_Presentation.md"><span class="doc-card-title">قطاع الصحة</span><span class="doc-card-hint">سياق ورسائل مخصصة للقطاع الصحي</span></a>
+        <a class="doc-card" href="Real_Estate_Presentation.md"><span class="doc-card-title">العقار والتطوير</span><span class="doc-card-hint">محاور بيع وتأهيل للمشترين والمطورين</span></a>
+        <a class="doc-card" href="Industrial_Retail_Logistics.md"><span class="doc-card-title">صناعة، تجزئة، ولوجستيات</span><span class="doc-card-hint">دمج بين القطاعات الصناعية والتشغيل</span></a>
+      </div>
+    </section>
 
-  <section>
-    <h2>عناوين سريعة للوصول بعد تشغيل الخادم</h2>
-    <ul>
-      <li><code>/dealix-marketing/</code> — هذه الصفحة</li>
-      <li><code>/dealix-presentations/</code> — مجلد العروض الطباعية</li>
-    </ul>
-  </section>
+    <section class="surface" aria-labelledby="sec-quick">
+      <h2 id="sec-quick"><span class="ico" aria-hidden="true">✨</span> تنقّل بسرعة</h2>
+      <p class="quick-nav-lead">اقفز مباشرة إلى القسم الذي يناسب اجتماعك أو عميلك.</p>
+      <div class="quick-nav-grid">
+        <a class="quick-tile" href="#sec-dl">
+          <span class="qt-emoji" aria-hidden="true">📦</span>
+          <span class="qt-title">التحميل والحزمة الكاملة</span>
+          <span class="qt-desc">أرشيف واحد بكل الأصول الجاهزة للمشاركة.</span>
+          <span class="qt-go">انتقال إلى القسم <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="quick-tile" href="#sec-sec">
+          <span class="qt-emoji" aria-hidden="true">🏭</span>
+          <span class="qt-title">عروض القطاعات</span>
+          <span class="qt-desc">أحد عشر عرضاً تحليلياً للطباعة أو الإرسال للعميل.</span>
+          <span class="qt-go">انتقال إلى القسم <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="quick-tile" href="#sec-mkt">
+          <span class="qt-emoji" aria-hidden="true">📣</span>
+          <span class="qt-title">مسار المسوّقين</span>
+          <span class="qt-desc">البوابة، العرض الاستثماري، وقوالب التواصل.</span>
+          <span class="qt-go">انتقال إلى القسم <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="quick-tile" href="#sec-md">
+          <span class="qt-emoji" aria-hidden="true">📚</span>
+          <span class="qt-title">ملفات تسويق إضافية</span>
+          <span class="qt-desc">وثائق تفصيلية حسب القطاع والعرض المؤسسي.</span>
+          <span class="qt-go">انتقال إلى القسم <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="quick-tile" href="#sec-support">
+          <span class="qt-emoji" aria-hidden="true">💬</span>
+          <span class="qt-title">الدعم والأسئلة</span>
+          <span class="qt-desc">هاتف، واتساب، وصفحة أسئلة كاملة.</span>
+          <span class="qt-go">انتقال إلى القسم <span aria-hidden="true">←</span></span>
+        </a>
+      </div>
+    </section>
 
-  <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-top:32px;">© Dealix 2026</p>
+    <section class="surface support-wrap" id="sec-support" aria-labelledby="sec-support-h">
+      <h2 id="sec-support-h"><span class="ico" aria-hidden="true">💬</span> التواصل والدعم</h2>
+      <p class="sector-lead">للاستفسارات التشغيلية، تفعيل الشراكة، أو طلب مواد إضافية — نحن على هاتف وواتساب داخل السعودية.</p>
+      <div class="support-grid">
+        <div class="support-phone-block">
+          <p class="support-kicker">هاتف وواتساب</p>
+          <a class="support-phone" href="tel:+966597788539">05 977 885 39</a>
+          <div class="support-chips">
+            <a class="support-chip primary" href="https://wa.me/966597788539" target="_blank" rel="noopener noreferrer">واتساب — محادثة فورية</a>
+            <a class="support-chip" href="/help">صفحة المساعدة الكاملة</a>
+            <a class="support-chip" href="/marketers">بوابة المسوّقين</a>
+            <a class="support-chip" href="/resources">مركز الموارد</a>
+          </div>
+        </div>
+        <div class="support-faq-inline" aria-label="أسئلة سريعة">
+          <details>
+            <summary>كيف أُفعّل شراكة مسوّق رسمياً؟</summary>
+            <div class="faq-a">راجع بوابة المسوّقين ثم نسّق معنا لتسجيل الإحالة قبل أول اجتماع إغلاق — يُربط الحساب باتفاقية الشريك.</div>
+          </details>
+          <details>
+            <summary>ما الفرق بين Dealix وبوت واتساب عام؟</summary>
+            <div class="faq-a">منصّة إيرادات كاملة: حوكمة، ذاكرة صفقات، وربط بأنظمة العملاء — وليس ردوداً معزولة على رسالة واحدة.</div>
+          </details>
+          <details>
+            <summary>أين العرض الاستثماري والعروض القطاعية؟</summary>
+            <div class="faq-a">من مركز الموارد ومن هذه الصفحة أعلاه: قسم القطاعات ومسار المسوّقين يضم الروابط المباشرة.</div>
+          </details>
+          <div class="support-more">
+            <a href="/help">عرض كل الأسئلة الاستراتيجية والتفصيلية</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    </main>
+
+    <footer>
+      <p>© Dealix 2026 — أصول تسويقية للشركات والشركاء في السعودية.</p>
+      <p style="margin-top:10px;font-size:0.82rem;color:#64748b;">
+        <a href="/help">المساعدة</a>
+        ·
+        <a href="/resources">الموارد</a>
+        ·
+        <a href="/marketers">المسوّقون</a>
+      </p>
+    </footer>
+  </div>
 </body>
 </html>

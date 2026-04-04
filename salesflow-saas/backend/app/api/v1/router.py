@@ -11,6 +11,7 @@ from app.api.v1 import master as master_router
 from app.api.v1 import revenue_room as revenue_room_router
 from app.api.v1 import outreach_engine as outreach_router
 from app.api.v1 import lead_prospector as prospector_router
+from app.api.v1 import lead_intelligence_api as lead_intelligence_router
 from app.api.v1 import pipeline as pipeline_router
 from app.api.v1 import agent_system as agent_system_router
 from app.api.v1 import autonomous_foundation as autonomous_foundation_router
@@ -70,6 +71,7 @@ api_router.include_router(outreach_router.router)
 
 # ── Lead Prospector — AI-Powered Lead Generation ─────────────
 api_router.include_router(prospector_router.router)
+api_router.include_router(lead_intelligence_router.router)
 
 # ── Autonomous Pipeline — Self-Running Sales Machine ─────────
 api_router.include_router(pipeline_router.router)

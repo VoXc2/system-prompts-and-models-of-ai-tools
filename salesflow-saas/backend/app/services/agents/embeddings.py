@@ -29,8 +29,11 @@ class EmbeddingsEngine:
             )
             return response.data[0].embedding
         else:
-            # Fallback for local models
-            raise NotImplementedError(f"Embedding provider {settings.EMBEDDING_PROVIDER} not fully implemented yet.")
+            logger.warning(
+                "Embedding provider %s not implemented — returning zero vector (RAG degraded). Set EMBEDDING_PROVIDER=openai + OPENAI_API_KEY.",
+                settings.EMBEDDING_PROVIDER,
+            )
+            return [0.0] * settings.EMBEDDING_DIMENSIONS
 
     async def add_knowledge(self, tenant_id: str, title: str, content: str, metadata: dict = None) -> str:
         """Embed document and store in database vector index."""

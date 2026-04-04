@@ -70,6 +70,15 @@ async def lifespan(app: FastAPI):
     print(f"   Environment: {settings.ENVIRONMENT}")
     print(f"   LLM Primary: {settings.LLM_PRIMARY_PROVIDER}")
     print(f"   LLM Fallback: {settings.LLM_FALLBACK_PROVIDER}")
+    if settings.ENVIRONMENT.lower() == "production":
+        if not settings.SECRET_KEY or settings.SECRET_KEY == "change-this-to-a-random-secret-key":
+            print("   [WARN] SECRET_KEY is default — set a strong random value before serving traffic.")
+        if "salesflow_secret_2024" in (settings.DATABASE_URL or ""):
+            print("   [WARN] DATABASE_URL uses example password — rotate credentials.")
+        if settings.WHATSAPP_MOCK_MODE:
+            print("   [WARN] WHATSAPP_MOCK_MODE=True — outbound WhatsApp is simulated.")
+        if not (settings.GROQ_API_KEY or settings.OPENAI_API_KEY):
+            print("   [WARN] No GROQ_API_KEY / OPENAI_API_KEY — AI routes will fail or degrade.")
     yield
     # Shutdown
     stop_event.set()

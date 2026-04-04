@@ -84,9 +84,7 @@ export function BusinessImpactView() {
         <div className="rounded-xl border border-border/80 bg-muted/30 px-4 py-3 text-sm text-right text-muted-foreground flex items-start gap-3">
           <Info className="h-5 w-5 shrink-0 text-primary/80 mt-0.5" />
           <span>
-            يُعرض محتوى مضمّناً في الواجهة. عند تشغيل الـ API وضبط{" "}
-            <code className="rounded bg-background/80 px-1 py-0.5 text-[11px]">NEXT_PUBLIC_API_URL</code>{" "}
-            تُحدَّث البيانات تلقائياً من الخادم.
+            يُعرض محتوى مضمّناً في الواجهة. عند تشغيل خادم Dealix تُحدَّث البيانات تلقائياً من الخادم.
           </span>
         </div>
       )}

@@ -110,7 +110,9 @@ export function SalesOsView() {
           <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
           <div>
             <p className="font-bold text-destructive">تعذّر الاتصال بالـ API</p>
-            <p className="text-muted-foreground mt-1">{err} — تأكد من تشغيل الخادم و<code className="rounded bg-background/80 px-1">NEXT_PUBLIC_API_URL</code>.</p>
+            <p className="text-muted-foreground mt-1">
+              {err} — تأكد من تشغيل خادم Dealix (الواجهة الخلفية) وأن إعدادات الاتصال في بيئة التشغيل صحيحة.
+            </p>
           </div>
         </div>
       )}

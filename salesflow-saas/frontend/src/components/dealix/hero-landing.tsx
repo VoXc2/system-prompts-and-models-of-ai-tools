@@ -68,7 +68,7 @@ export default function HeroLanding() {
             <button onClick={() => setLang(lang === "ar" ? "en" : "ar")} style={styles.langToggle}>
               {lang === "ar" ? "EN" : "عربي"}
             </button>
-            <a href="#demo" style={styles.navCTA}>{t.nav.demo}</a>
+            <a href="#contact" style={styles.navCTA}>{t.nav.demo}</a>
           </div>
         </div>
       </nav>
@@ -87,7 +87,7 @@ export default function HeroLanding() {
           </h1>
           <p style={styles.heroSub}>{t.hero.subtitle}</p>
           <div style={styles.heroCTAs}>
-            <a href="#demo" style={styles.btnPrimary}>{t.hero.cta1} →</a>
+            <a href="#contact" style={styles.btnPrimary}>{t.hero.cta1} →</a>
             <a href="#features" style={styles.btnSecondary}>
               ▶ {t.hero.cta2}
             </a>
@@ -284,7 +284,7 @@ export default function HeroLanding() {
                   <li key={fi} style={styles.planFeature}>✓ {f}</li>
                 ))}
               </ul>
-              <a href="#demo" style={plan.popular ? styles.btnPrimary : styles.btnSecondary}>
+              <a href="#contact" style={plan.popular ? styles.btnPrimary : styles.btnSecondary}>
                 {plan.cta}
               </a>
             </div>

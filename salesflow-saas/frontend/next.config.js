@@ -5,6 +5,11 @@
  */
 const nextConfig = {
   output: "standalone",
+  /** إخفاء مؤشر Next Dev Tools (النقطة الزرقاء / nextjs-portal) أثناء التطوير */
+  devIndicators: false,
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
   async headers() {
     return [
       {
@@ -31,6 +36,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      /* ملفات .md تحت dealix-marketing: إعادة التوجيه من middleware (src/middleware.ts) */
       {
         source: "/dealix-marketing",
         destination: "/dealix-marketing/index.html",
@@ -49,16 +55,6 @@ const nextConfig = {
       {
         source: "/dealix-presentations/",
         destination: "/dealix-presentations/00-dealix-company-master-ar.html",
-        permanent: false,
-      },
-      {
-        source: "/investors",
-        destination: "/dealix-marketing/investor/00-investor-dealix-full-ar.html",
-        permanent: false,
-      },
-      {
-        source: "/investors/",
-        destination: "/dealix-marketing/investor/00-investor-dealix-full-ar.html",
         permanent: false,
       },
     ];

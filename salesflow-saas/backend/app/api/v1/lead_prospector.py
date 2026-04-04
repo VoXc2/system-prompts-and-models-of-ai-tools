@@ -39,63 +39,38 @@ class ProspectResult(BaseModel):
     status: str = "new"
 
 
-# ═══ Google Maps Text Search ═══
+# ═══ Google Maps Text Search (مشترك مع lead_intelligence_engine) ═══
 async def _search_google_maps(query: str, city: str, max_results: int = 50) -> list:
     """Search Google Maps Places API for businesses."""
-    api_key = os.getenv("GOOGLE_API_KEY", "")
+    from app.services.lead_intelligence_engine import places_text_search
+
+    api_key = os.getenv("GOOGLE_API_KEY", "") or os.getenv("GOOGLE_MAPS_API_KEY", "")
     if not api_key:
         logger.warning("GOOGLE_API_KEY not set, using Gemini-based search")
         return await _search_via_gemini(query, city, max_results)
 
-    results = []
-    url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-    search_query = f"{query} في {city} السعودية"
-
     try:
-        async with httpx.AsyncClient(timeout=15) as client:
-            params = {
-                "query": search_query,
-                "key": api_key,
-                "language": "ar",
-                "region": "sa",
+        raw = await places_text_search(query, city, max_results, api_key)
+        results = [
+            {
+                "id": r["id"],
+                "name": r["name"],
+                "phone": r["phone"],
+                "address": r["address"],
+                "city": r["city"],
+                "rating": r["rating"],
+                "website": r["website"],
+                "status": "new",
             }
-            resp = await client.get(url, params=params)
-            data = resp.json()
-
-            for place in data.get("results", [])[:max_results]:
-                place_id = place.get("place_id", "")
-
-                # Get details (phone number)
-                phone = ""
-                website = ""
-                if place_id:
-                    detail_resp = await client.get(
-                        "https://maps.googleapis.com/maps/api/place/details/json",
-                        params={
-                            "place_id": place_id,
-                            "fields": "formatted_phone_number,international_phone_number,website",
-                            "key": api_key,
-                        }
-                    )
-                    details = detail_resp.json().get("result", {})
-                    phone = details.get("international_phone_number", details.get("formatted_phone_number", ""))
-                    website = details.get("website", "")
-
-                if phone:  # Only include if we have a phone
-                    results.append({
-                        "id": str(uuid.uuid4())[:8],
-                        "name": place.get("name", ""),
-                        "phone": phone.replace(" ", ""),
-                        "address": place.get("formatted_address", ""),
-                        "city": city,
-                        "rating": place.get("rating", 0),
-                        "website": website,
-                        "status": "new",
-                    })
+            for r in raw
+            if r.get("phone")
+        ]
+        if not results:
+            return await _search_via_gemini(query, city, max_results)
+        return results
     except Exception as e:
         logger.error(f"Google Maps search error: {e}")
-
-    return results
+        return await _search_via_gemini(query, city, max_results)
 
 
 async def _search_via_gemini(query: str, city: str, max_results: int = 20) -> list:

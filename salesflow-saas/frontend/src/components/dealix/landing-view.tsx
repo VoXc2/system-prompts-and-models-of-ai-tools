@@ -55,9 +55,9 @@ export function LandingView({ onEnterApp }: { onEnterApp: () => void }) {
           <span className="text-2xl font-bold tracking-tighter gold-glow">DEALIX OS</span>
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium opacity-80">
-          <a href="#" className="hover:text-primary transition-colors">المميزات</a>
-          <a href="#" className="hover:text-primary transition-colors">الأسعار</a>
-          <a href="#" className="hover:text-primary transition-colors">عنا</a>
+          <a href="#features" className="hover:text-primary transition-colors">المميزات</a>
+          <a href="/resources" className="hover:text-primary transition-colors">الموارد والأسعار</a>
+          <a href="/help" className="hover:text-primary transition-colors">المساعدة</a>
         </div>
         <button 
           onClick={onEnterApp}
@@ -98,7 +98,7 @@ export function LandingView({ onEnterApp }: { onEnterApp: () => void }) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-32 w-full max-w-4xl">
+        <div id="features" className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-32 w-full max-w-4xl scroll-mt-24">
           {[
             { label: "عمليات بيع ناجحة", value: "+٥,٠٠٠", icon: TrendingUp },
             { label: "وكلاء فاعلين", value: "+١٨", icon: Zap },

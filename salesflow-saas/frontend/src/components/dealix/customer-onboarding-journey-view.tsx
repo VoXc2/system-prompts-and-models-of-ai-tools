@@ -76,7 +76,7 @@ export function CustomerOnboardingJourneyView() {
         <h1 className="text-2xl md:text-3xl font-bold">من العقد إلى OS كامل</h1>
         <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-3xl mr-0 ml-auto">
           {journey?.summary_ar ??
-            "تحميل الرحلة من الـ API — عيّن NEXT_PUBLIC_API_URL إن لزم."}
+            "جاري تحميل الرحلة من الخادم… إن استمر التعطيل، تأكد من تشغيل خادم Dealix."}
         </p>
       </div>
 

@@ -1,32 +1,78 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import { DealixAuthBrandMark } from "@/components/dealix-auth-brand-mark";
 import { useAuth } from "@/contexts/auth-context";
+import { setParentRef } from "@/lib/marketer-team";
+import { authFormMsg, isValidEmailFormat } from "@/lib/auth-form-validation";
 
-function RegisterForm() {
+type RegisterFieldKey = "company" | "fullName" | "email" | "password";
+
+export default function RegisterPage() {
   const { register } = useAuth();
+  const [nextParam, setNextParam] = useState<string | null>(null);
+  const [refParam, setRefParam] = useState<string | null>(null);
   const [companyName, setCompanyName] = useState("");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<RegisterFieldKey, string>>>({});
   const [pending, setPending] = useState(false);
+
+  function clearFieldError(key: RegisterFieldKey) {
+    setFieldErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  }
+
+  function validateRegister(): boolean {
+    const errs: Partial<Record<RegisterFieldKey, string>> = {};
+    if (!companyName.trim()) errs.company = authFormMsg.companyRequired;
+    if (!fullName.trim()) errs.fullName = authFormMsg.fullNameRequired;
+    const em = email.trim();
+    if (!em) errs.email = authFormMsg.emailRequired;
+    else if (!isValidEmailFormat(em)) errs.email = authFormMsg.emailInvalid;
+    if (!password) errs.password = authFormMsg.passwordRequired;
+    else if (password.length < 8) errs.password = authFormMsg.passwordShort;
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  }
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    setNextParam(p.get("next"));
+    setRefParam(p.get("ref"));
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    if (!validateRegister()) return;
     setPending(true);
     try {
-      await register({
-        company_name: companyName,
-        full_name: fullName,
-        email,
-        password,
-        phone: phone || undefined,
-      });
+      await register(
+        {
+          company_name: companyName.trim(),
+          full_name: fullName.trim(),
+          email: email.trim(),
+          password,
+          phone: phone || undefined,
+        },
+        nextParam
+      );
+      if (refParam) {
+        try {
+          setParentRef(refParam);
+        } catch {
+          /* ignore */
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "فشل التسجيل");
     } finally {
@@ -34,68 +80,149 @@ function RegisterForm() {
     }
   }
 
+  const loginHref = nextParam ? `/login?next=${encodeURIComponent(nextParam)}` : "/login";
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-accent shadow-lg shadow-primary/20">
-            <Zap className="w-7 h-7 text-primary-foreground" />
-          </div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-6">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(20,184,166,0.12),transparent)]"
+        aria-hidden
+      />
+      <div className="relative w-full max-w-md space-y-8">
+        <div className="space-y-3 text-center">
+          <DealixAuthBrandMark />
           <h1 className="text-2xl font-black tracking-tight">إنشاء حساب شركة</h1>
-          <p className="text-sm text-muted-foreground">مستأجر جديد + مالك (owner) تلقائياً.</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            مستأجر جديد + مالك (owner) تلقائياً.
+          </p>
+          {refParam && (
+            <div className="rounded-xl border border-teal-500/30 bg-teal-950/40 px-4 py-3 text-sm text-teal-100">
+              أنت تُسجّل ضمن فريق مسوّق: رمز الدعوة{" "}
+              <span className="font-mono font-bold text-white">{refParam}</span> — بعد الإتمام يُربط
+              حسابك بالهرم عند تفعيل الخادم.
+            </div>
+          )}
         </div>
 
-        <form onSubmit={onSubmit} className="glass-card p-8 space-y-4 border border-border/50 rounded-2xl">
+        <form
+          noValidate
+          onSubmit={onSubmit}
+          className="space-y-4 rounded-2xl border border-border/60 bg-card/40 p-8 shadow-2xl shadow-black/25 backdrop-blur-md"
+        >
           {error && (
             <div className="text-sm text-destructive bg-destructive/10 border border-destructive/30 rounded-lg px-3 py-2">
               {error}
             </div>
           )}
           <div className="space-y-2 text-right">
-            <label className="text-sm font-medium">اسم الشركة</label>
+            <label htmlFor="company" className="text-sm font-medium">
+              اسم الشركة
+            </label>
             <input
-              required
+              id="company"
+              type="text"
               value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              onChange={(e) => {
+                setCompanyName(e.target.value);
+                clearFieldError("company");
+              }}
+              aria-invalid={fieldErrors.company ? true : undefined}
+              aria-describedby={fieldErrors.company ? "company-error" : undefined}
+              className={`w-full rounded-xl border bg-secondary/40 px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                fieldErrors.company ? "border-destructive/60" : "border-border"
+              }`}
             />
+            {fieldErrors.company && (
+              <p id="company-error" className="text-xs text-destructive" role="alert">
+                {fieldErrors.company}
+              </p>
+            )}
           </div>
           <div className="space-y-2 text-right">
-            <label className="text-sm font-medium">اسمك الكامل</label>
+            <label htmlFor="fullName" className="text-sm font-medium">
+              الاسم الكامل
+            </label>
             <input
-              required
+              id="fullName"
+              type="text"
               value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              onChange={(e) => {
+                setFullName(e.target.value);
+                clearFieldError("fullName");
+              }}
+              aria-invalid={fieldErrors.fullName ? true : undefined}
+              aria-describedby={fieldErrors.fullName ? "fullName-error" : undefined}
+              className={`w-full rounded-xl border bg-secondary/40 px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                fieldErrors.fullName ? "border-destructive/60" : "border-border"
+              }`}
             />
+            {fieldErrors.fullName && (
+              <p id="fullName-error" className="text-xs text-destructive" role="alert">
+                {fieldErrors.fullName}
+              </p>
+            )}
           </div>
           <div className="space-y-2 text-right">
-            <label className="text-sm font-medium">البريد الإلكتروني</label>
+            <label htmlFor="email" className="text-sm font-medium">
+              البريد الإلكتروني
+            </label>
             <input
+              id="email"
               type="email"
-              required
+              inputMode="email"
+              autoComplete="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearFieldError("email");
+              }}
+              aria-invalid={fieldErrors.email ? true : undefined}
+              aria-describedby={fieldErrors.email ? "reg-email-error" : undefined}
+              className={`w-full rounded-xl border bg-secondary/40 px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                fieldErrors.email ? "border-destructive/60" : "border-border"
+              }`}
             />
+            {fieldErrors.email && (
+              <p id="reg-email-error" className="text-xs text-destructive" role="alert">
+                {fieldErrors.email}
+              </p>
+            )}
           </div>
           <div className="space-y-2 text-right">
-            <label className="text-sm font-medium">كلمة المرور</label>
+            <label htmlFor="password" className="text-sm font-medium">
+              كلمة المرور
+            </label>
             <input
+              id="password"
               type="password"
-              required
-              minLength={8}
+              autoComplete="new-password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                clearFieldError("password");
+              }}
+              aria-invalid={fieldErrors.password ? true : undefined}
+              aria-describedby={fieldErrors.password ? "reg-password-error" : undefined}
+              className={`w-full rounded-xl border bg-secondary/40 px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                fieldErrors.password ? "border-destructive/60" : "border-border"
+              }`}
             />
+            {fieldErrors.password && (
+              <p id="reg-password-error" className="text-xs text-destructive" role="alert">
+                {fieldErrors.password}
+              </p>
+            )}
           </div>
           <div className="space-y-2 text-right">
-            <label className="text-sm font-medium">الجوال (اختياري)</label>
+            <label htmlFor="phone" className="text-sm font-medium">
+              الجوال (اختياري)
+            </label>
             <input
+              id="phone"
+              type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              className="w-full rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40"
             />
           </div>
           <button
@@ -107,7 +234,7 @@ function RegisterForm() {
           </button>
           <p className="text-center text-sm text-muted-foreground">
             لديك حساب؟{" "}
-            <Link href="/login" className="text-primary font-semibold hover:underline">
+            <Link href={loginHref} className="text-primary font-semibold hover:underline">
               تسجيل الدخول
             </Link>
           </p>
@@ -115,8 +242,4 @@ function RegisterForm() {
       </div>
     </div>
   );
-}
-
-export default function RegisterPage() {
-  return <RegisterForm />;
 }

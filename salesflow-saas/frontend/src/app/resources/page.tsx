@@ -9,6 +9,8 @@ import {
   Megaphone,
   Landmark,
   Compass,
+  BookOpen,
+  Clapperboard,
 } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
@@ -16,7 +18,7 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 export const metadata = {
   title: "موارد Dealix — عروض وحالات استخدام",
   description:
-    "تعمل من Next.js فقط (منفذ 3000). لا حاجة لخادم FastAPI لعرض الملفات — الملفات في public/dealix-*.",
+    "روابط موحّدة للعروض، الأدلة، المسوّقين، ودليل لوحة التحكم — من موقع Dealix.",
 };
 
 export default function ResourcesPage() {
@@ -26,6 +28,18 @@ export default function ResourcesPage() {
       href: "/strategy",
       desc: "تمييز، مقارنة سوق، مراحل، مخاطر، ووثيقة كاملة.",
       icon: Compass,
+    },
+    {
+      title: "دليل لوحة التحكم (قراءة للعميل)",
+      href: "/dealix-marketing/dashboard-guide",
+      desc: "ما الذي تراه الشركة داخل المنصة بعد التسجيل — بصياغة مهنية.",
+      icon: BookOpen,
+    },
+    {
+      title: "سكربتات فيديو + إطار إنتاج بالذكاء الاصطناعي",
+      href: "/dealix-marketing/Dealix_Video_Scripts_Master_AR.md",
+      desc: "خمسة مقاطع أساسية (مسوّقون، داشبورد، موقع) ومقطعا ترويج — نصوص VO سنمائية وجاهزة.",
+      icon: Clapperboard,
     },
     {
       title: "بوابة المسوّقين (دخول سريع)",
@@ -83,11 +97,7 @@ export default function ResourcesPage() {
             موارد احترافية للعروض والتحميل
           </h1>
           <p className="text-slate-400 leading-relaxed">
-            الملفات تُخدم من مجلد{" "}
-            <code className="text-teal-300/90">public/dealix-marketing</code> و{" "}
-            <code className="text-teal-300/90">public/dealix-presentations</code>{" "}
-            بعد <code className="text-teal-300/90">npm run dev</code> —{" "}
-            <strong className="text-slate-200">لا تحتاج المنفذ 8000</strong> لعرض العروض والـ ZIP.
+            صفحة واحدة لكل الروابط المهمة للعروض والتحميل والمساعدة. التحميلات تعمل من نفس موقع Dealix بعد تشغيل بيئة التطوير أو النشر — دون الحاجة لإعدادات تقنية إضافية للعرض.
           </p>
         </header>
 

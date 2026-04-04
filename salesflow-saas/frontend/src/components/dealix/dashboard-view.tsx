@@ -2,6 +2,7 @@
 
 import { BarChart3, Users, Target, TrendingUp, Calendar, ArrowUpRight, BrainCircuit, Zap, MapPin, Search, Sparkles } from "lucide-react";
 import { StrategyBriefPanel } from "./strategy-brief-panel";
+import { DeploymentReadinessBanner } from "./deployment-readiness-banner";
 
 export function DashboardView() {
   const stats = [
@@ -25,6 +26,8 @@ export function DashboardView() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <DeploymentReadinessBanner />
+
       {/* Welcome Intro */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div className="text-right">
@@ -59,6 +62,10 @@ export function DashboardView() {
           </div>
         ))}
       </div>
+
+      <p className="text-[11px] text-muted-foreground/80 text-center md:text-right">
+        الأرقام أعلاه تمثيل بصري للوحة حتى يُربط الحساب ببيانات CRM/المنصة الفعلية.
+      </p>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">

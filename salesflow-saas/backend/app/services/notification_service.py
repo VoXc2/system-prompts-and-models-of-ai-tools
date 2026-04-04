@@ -193,9 +193,13 @@ class NotificationService:
     # ── Channel Dispatchers ───────────────────────
 
     async def _send_whatsapp(self, user_id: str, message: str):
-        # In a real scenario, we'd fetch the user's phone from the DB
-        # For the empire simulation, we use the configured admin phone or lead phone
-        await send_whatsapp_message("966500000000", message)
+        from app.config import get_settings
+
+        phone = (get_settings().OPS_ALERT_PHONE or "").strip().replace("+", "").replace(" ", "")
+        if not phone:
+            logger.warning("[WhatsApp dispatch skipped] OPS_ALERT_PHONE not set — configure in .env")
+            return
+        await send_whatsapp_message(phone, message)
 
     async def _send_email(self, user_id: str, subject: str, body: str):
         logger.info(f"[EMAIL DISPATCH] Subject: {subject} | Body: {body[:50]}...")

@@ -17,6 +17,12 @@ async def test_health_ready_strategy_value_prop():
         assert r.status_code == 200
         assert r.json().get("status") in ("ready", "not_ready")
 
+        d = await ac.get("/api/v1/deployment-readiness")
+        assert d.status_code == 200
+        dj = d.json()
+        assert "score_percent" in dj
+        assert "gaps_ar" in dj
+
         s = await ac.get("/api/v1/strategy/summary")
         assert s.status_code == 200
         assert s.json().get("product") == "Dealix"

@@ -7,10 +7,15 @@ from pydantic import BaseModel, ConfigDict
 from uuid import UUID
 import uuid
 
-from app.database import get_db
+from app.database import get_db, IS_SQLITE
 from app.models.affiliate import AffiliateMarketer, AffiliatePerformance, AffiliateDeal, AffiliateStatus
 
 router = APIRouter(prefix="/affiliates", tags=["affiliates"])
+
+
+def _aff_pk(affiliate_id: UUID):
+    """SQLite يخزّن UUID كسلسلة؛ المقارنة بكائن UUID تفشل في WHERE."""
+    return str(affiliate_id) if IS_SQLITE else affiliate_id
 
 
 # ─── Schemas ─────────────────────────────────────────────
@@ -148,7 +153,7 @@ async def get_leaderboard(limit: int = 10, db: AsyncSession = Depends(get_db)):
 async def get_affiliate(affiliate_id: UUID, db: AsyncSession = Depends(get_db)):
     """Get affiliate details."""
     result = await db.execute(
-        select(AffiliateMarketer).where(AffiliateMarketer.id == affiliate_id)
+        select(AffiliateMarketer).where(AffiliateMarketer.id == _aff_pk(affiliate_id))
     )
     affiliate = result.scalar_one_or_none()
     if not affiliate:
@@ -160,7 +165,7 @@ async def get_affiliate(affiliate_id: UUID, db: AsyncSession = Depends(get_db)):
 async def activate_affiliate(affiliate_id: UUID, db: AsyncSession = Depends(get_db)):
     """Activate an affiliate after onboarding."""
     result = await db.execute(
-        select(AffiliateMarketer).where(AffiliateMarketer.id == affiliate_id)
+        select(AffiliateMarketer).where(AffiliateMarketer.id == _aff_pk(affiliate_id))
     )
     affiliate = result.scalar_one_or_none()
     if not affiliate:
@@ -181,7 +186,7 @@ async def submit_deal(
 ):
     """Submit a new deal for commission tracking."""
     result = await db.execute(
-        select(AffiliateMarketer).where(AffiliateMarketer.id == affiliate_id)
+        select(AffiliateMarketer).where(AffiliateMarketer.id == _aff_pk(affiliate_id))
     )
     affiliate = result.scalar_one_or_none()
     if not affiliate:
@@ -194,7 +199,7 @@ async def submit_deal(
     commission = rate_info["price"] * rate_info["rate"]
 
     deal = AffiliateDeal(
-        affiliate_id=affiliate_id,
+        affiliate_id=_aff_pk(affiliate_id),
         client_company=data.client_company,
         client_contact=data.client_contact,
         client_phone=data.client_phone,
@@ -225,7 +230,7 @@ async def get_performance(affiliate_id: UUID, db: AsyncSession = Depends(get_db)
     """Get affiliate performance history."""
     result = await db.execute(
         select(AffiliatePerformance)
-        .where(AffiliatePerformance.affiliate_id == affiliate_id)
+        .where(AffiliatePerformance.affiliate_id == _aff_pk(affiliate_id))
         .order_by(AffiliatePerformance.month.desc())
     )
     return result.scalars().all()

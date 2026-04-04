@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    # ── Demo / ops ─────────────────────────────────────────
+    # عند True: الواجهة تعرض تنبيهاً بأن البيانات/التكاملات قد تكون تجريبية
+    DEALIX_DEMO_MODE: bool = True
+    # رقم واتساب للتنبيهات التشغيلية (بدون +) — إن وُضع يُستخدم بدل أي رقم ثابت في الكود
+    OPS_ALERT_PHONE: str = ""
+
     # ── URLs ─────────────────────────────────────────────
     API_URL: str = "http://localhost:8000"
     FRONTEND_URL: str = "http://localhost:3000"
@@ -128,6 +134,13 @@ class Settings(BaseSettings):
     # ── Scraping / Lead Gen ──────────────────────────────
     GOOGLE_MAPS_API_KEY: str = ""
     RAPIDAPI_KEY: str = ""  # For LinkedIn data enrichment
+    # SerpAPI — بحث Google / Google Maps موحّد (https://serpapi.com)
+    SERPAPI_KEY: str = ""
+    # Google Programmable Search — محرك بحث مخصص (JSON API)
+    GOOGLE_CSE_ID: str = ""
+    GOOGLE_CSE_API_KEY: str = ""
+    # Bing Web Search API (Azure Cognitive Services)
+    AZURE_BING_SEARCH_KEY: str = ""
 
     # ── Rate Limiting ────────────────────────────────────
     RATE_LIMIT_PER_MINUTE: int = 60

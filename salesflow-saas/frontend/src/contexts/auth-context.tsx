@@ -25,15 +25,18 @@ type AuthContextValue = {
   user: StoredUser | null;
   loading: boolean;
   login: (email: string, password: string, redirectTo?: string | null) => Promise<void>;
-  register: (data: {
-    company_name: string;
-    full_name: string;
-    email: string;
-    password: string;
-    phone?: string;
-    industry?: string;
-    company_name_ar?: string;
-  }) => Promise<void>;
+  register: (
+    data: {
+      company_name: string;
+      full_name: string;
+      email: string;
+      password: string;
+      phone?: string;
+      industry?: string;
+      company_name_ar?: string;
+    },
+    redirectTo?: string | null
+  ) => Promise<void>;
   logout: () => void;
 };
 
@@ -71,15 +74,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [router]);
 
   const register = useCallback(
-    async (body: {
-      company_name: string;
-      full_name: string;
-      email: string;
-      password: string;
-      phone?: string;
-      industry?: string;
-      company_name_ar?: string;
-    }) => {
+    async (
+      body: {
+        company_name: string;
+        full_name: string;
+        email: string;
+        password: string;
+        phone?: string;
+        industry?: string;
+        company_name_ar?: string;
+      },
+      redirectTo?: string | null
+    ) => {
       const data = await registerRequest(body);
       const next: StoredUser = {
         userId: data.user_id,
@@ -89,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       persistSession(data.access_token, data.refresh_token, next);
       setUser(next);
-      router.replace("/dashboard");
+      router.replace(safeInternalNextPath(redirectTo, "/dashboard"));
     },
     [router]
   );

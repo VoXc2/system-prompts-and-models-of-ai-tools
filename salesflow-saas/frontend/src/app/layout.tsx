@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${kufi.variable} font-sans antialiased`}>
         {/* Background Gradients for depth */}
         <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background pointer-events-none" />
-        <div className="fixed top-20 left-10 w-96 h-96 bg-accent/10 rounded-full mix-blend-multiply filter blur-[100px] opacity-50 z-[-1]" />
+        <div className="pointer-events-none fixed top-20 left-10 z-[-1] h-96 w-96 rounded-full bg-accent/10 opacity-50 mix-blend-multiply blur-[100px]" />
 
         <AppProviders>{children}</AppProviders>
       </body>

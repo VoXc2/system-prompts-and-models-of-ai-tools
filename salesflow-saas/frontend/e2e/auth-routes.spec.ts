@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { TEST_ORIGIN } from "./test-origin";
 
 test.describe("Auth & shell", () => {
   test("login page renders Arabic heading and form", async ({ page }) => {
@@ -35,7 +36,7 @@ test.describe("Auth & shell", () => {
       {
         name: "dealix_has_session",
         value: "1",
-        url: "http://127.0.0.1:3000/",
+        url: `${TEST_ORIGIN}/`,
       },
     ]);
     await page.goto("/dashboard");

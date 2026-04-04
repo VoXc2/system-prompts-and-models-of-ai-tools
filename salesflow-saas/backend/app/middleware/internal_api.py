@@ -10,7 +10,7 @@ from app.config import get_settings
 
 
 def _exempt_path(path: str) -> bool:
-    if path in ("/api/v1/health", "/api/v1/ready"):
+    if path in ("/api/v1/health", "/api/v1/ready", "/api/v1/deployment-readiness"):
         return True
     if path.startswith("/api/v1/webhooks"):
         return True

@@ -6,25 +6,228 @@
   <title>Dealix — عارض مخططات Mermaid (7 حالات)</title>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
-    body { font-family: "Segoe UI", Tahoma, sans-serif; background: #0f172a; color: #e2e8f0; padding: 24px; max-width: 1200px; margin: 0 auto; }
-    h1 { color: #5eead4; font-size: 1.4rem; }
-    h2 { color: #99f6e4; font-size: 1.1rem; margin-top: 32px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
-    .mermaid { background: #fff; border-radius: 12px; padding: 16px; margin: 16px 0; }
-    p.note { color: #94a3b8; font-size: 0.9rem; }
+    :root {
+      --bg: #0b1220;
+      --card: rgba(30, 41, 59, 0.55);
+      --accent: #14b8a6;
+      --accent-soft: rgba(20, 184, 166, 0.22);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: radial-gradient(ellipse 120% 80% at 50% -30%, rgba(20, 184, 166, 0.12), transparent),
+        linear-gradient(180deg, #0f172a 0%, var(--bg) 45%);
+      color: var(--text);
+      padding: 28px 20px 48px;
+      max-width: 1180px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+    h2 {
+      color: #ccfbf1;
+      font-size: 1.12rem;
+      font-weight: 800;
+      margin: 36px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(45, 212, 191, 0.25);
+      letter-spacing: -0.02em;
+    }
+    p.note { color: var(--muted); font-size: 0.9rem; margin: 0 0 8px; }
+    .deck-header {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(20, 184, 166, 0.2);
+    }
+    .deck-kicker {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #2dd4bf;
+      margin-bottom: 10px;
+    }
+    .deck-title {
+      background: linear-gradient(105deg, #5eead4 0%, #38bdf8 45%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-size: 1.65rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin: 0 0 10px;
+    }
+    @keyframes deckIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .diagram-wrap {
+      margin: 18px 0;
+      border-radius: 16px;
+      border: 1px solid var(--accent-soft);
+      background: linear-gradient(155deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.92) 100%);
+      box-shadow:
+        0 4px 28px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      padding: 18px 20px;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+      animation: deckIn 0.5s ease-out backwards;
+    }
+    .diagram-wrap:hover,
+    .diagram-wrap:focus-within {
+      border-color: rgba(20, 184, 166, 0.45);
+      box-shadow:
+        0 10px 40px rgba(15, 118, 110, 0.12),
+        0 4px 28px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transform: translateY(-2px);
+    }
+    .diagram-wrap .mermaid {
+      background: transparent !important;
+      padding: 4px 0;
+      margin: 0;
+    }
+    .diagram-wrap svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    /* مخططات تدفق (ليست تسلسل): خلفية داكنة + عُقد أوضح */
+    .diagram-wrap:not(.sequence-chart) svg {
+      background: #0f172a !important;
+      border-radius: 12px;
+    }
+    .diagram-wrap:not(.sequence-chart) svg .node rect,
+    .diagram-wrap:not(.sequence-chart) svg .node circle,
+    .diagram-wrap:not(.sequence-chart) svg .node polygon {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+    }
+    .diagram-wrap:not(.sequence-chart) svg .edgePath path,
+    .diagram-wrap:not(.sequence-chart) svg path.flowchart-link {
+      stroke: #2dd4bf !important;
+      stroke-width: 2px !important;
+    }
+    .diagram-wrap:not(.sequence-chart) svg .arrowheadPath {
+      fill: #2dd4bf !important;
+    }
+    .diagram-wrap:not(.sequence-chart) svg .nodeLabel,
+    .diagram-wrap:not(.sequence-chart) svg .edgeLabel {
+      color: #f1f5f9 !important;
+    }
+    .diagram-wrap:not(.sequence-chart) svg foreignObject div {
+      color: #f1f5f9 !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+      line-height: 1.35 !important;
+    }
+    .diagram-wrap:not(.sequence-chart) svg .cluster text,
+    .diagram-wrap:not(.sequence-chart) svg .cluster-label {
+      fill: #5eead4 !important;
+      font-weight: 700 !important;
+    }
+    /* مخططات تسلسل: أوضح وأغمق (Mermaid لا يطبّق كل المتغيرات على السيكوانس) */
+    .diagram-wrap.sequence-chart {
+      overflow-x: auto;
+      padding: 22px 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .diagram-wrap.sequence-chart svg {
+      min-height: 280px;
+    }
+    .diagram-wrap.sequence-chart svg .actor {
+      stroke: #2dd4bf !important;
+      stroke-width: 2px !important;
+      fill: #1e293b !important;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+    }
+    .diagram-wrap.sequence-chart svg .actor-line {
+      stroke: #475569 !important;
+      stroke-width: 1.5px !important;
+    }
+    .diagram-wrap.sequence-chart svg text,
+    .diagram-wrap.sequence-chart svg .messageText,
+    .diagram-wrap.sequence-chart svg tspan {
+      fill: #f1f5f9 !important;
+      font-size: 14.5px !important;
+      font-weight: 600 !important;
+    }
+    .diagram-wrap.sequence-chart svg .sequenceNumber {
+      fill: #0f766e !important;
+      font-weight: 800 !important;
+    }
+    .diagram-wrap.sequence-chart svg .loopText,
+    .diagram-wrap.sequence-chart svg .labelText {
+      fill: #cbd5e1 !important;
+    }
+    .diagram-wrap.sequence-chart svg {
+      background: #0f172a !important;
+      border-radius: 12px;
+    }
+    .diagram-wrap.sequence-chart svg line {
+      stroke: #64748b !important;
+    }
+    .diagram-wrap.sequence-chart svg .messageLine0,
+    .diagram-wrap.sequence-chart svg .messageLine1 {
+      stroke: #2dd4bf !important;
+      stroke-width: 2px !important;
+    }
+    .diagram-wrap.sequence-chart svg path.arrowheadPath {
+      fill: #2dd4bf !important;
+      stroke: #2dd4bf !important;
+    }
+    .diagram-wrap.sequence-chart svg rect.note {
+      fill: rgba(30, 41, 59, 0.95) !important;
+      stroke: #14b8a6 !important;
+    }
+    p.wf-desc {
+      margin: 14px 0 28px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(51, 65, 85, 0.65);
+      background: rgba(15, 23, 42, 0.4);
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+      max-width: 52em;
+    }
   </style>
 </head>
 <body>
-  <h1>Dealix — مخططات تدفق الحالات السبع</h1>
-  <p class="note">للعرض على الشاشة. للطباعة استخدم الملفات ‎.mmd‎ في mermaid.live أو انسخ إلى Notion/GitHub.</p>
+  <header class="deck-header">
+    <p class="deck-kicker">Dealix · Revenue OS</p>
+    <h1 class="deck-title">مخططات تدفق الحالات السبع</h1>
+    <p class="note" dir="rtl">مرجع بصري لمسارات التشغيل — تحت كل مخطط شرح مختصر بالعربية.</p>
+  </header>
 
   <h2>نظرة عامة</h2>
+  <div class="diagram-wrap" tabindex="0" aria-label="مخطط نظرة عامة">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "14px",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f8fafc",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#2dd4bf",
+    "secondaryColor": "#334155",
+    "mainBkg": "#1e293b",
+    "nodeBorder": "#14b8a6",
+    "clusterBkg": "#0f172a",
+    "clusterBorder": "#14b8a6",
+    "textColor": "#f1f5f9"
+  }
+}}%%
 flowchart TB
   subgraph OS["Autonomous Revenue &amp; Operations OS"]
     M["Mem0 + ذاكرة لكل مستأجر"]
     SH["Self-Improvement / Durable Flows"]
     GC["Governance checkpoints"]
   end
+  style OS fill:#152238,stroke:#14b8a6,stroke-width:2px,color:#5eead4
   OS --> U1["1 واتساب→إغلاق"]
   OS --> U2["2 سلة مهجورة"]
   OS --> U3["3 دعم"]
@@ -32,104 +235,409 @@ flowchart TB
   OS --> U5["5 حملة"]
   OS --> U6["6 فوترة"]
   OS --> U7["7 تشغيل كامل"]
+  style U1 fill:#0c4a6e,stroke:#38bdf8,color:#f0f9ff
+  style U2 fill:#0c4a6e,stroke:#38bdf8,color:#f0f9ff
+  style U3 fill:#0c4a6e,stroke:#38bdf8,color:#f0f9ff
+  style U4 fill:#0c4a6e,stroke:#38bdf8,color:#f0f9ff
+  style U5 fill:#0c4a6e,stroke:#38bdf8,color:#f0f9ff
+  style U6 fill:#0c4a6e,stroke:#38bdf8,color:#f0f9ff
+  style U7 fill:#0c4a6e,stroke:#38bdf8,color:#f0f9ff
+  style M fill:#134e4a,stroke:#2dd4bf,color:#ecfdf5
+  style SH fill:#134e4a,stroke:#2dd4bf,color:#ecfdf5
+  style GC fill:#134e4a,stroke:#2dd4bf,color:#ecfdf5
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">الطبقة العليا لنظام التشغيل: ذاكرة لكل عميل، تدفقات تتحسّن مع الوقت، ونقاط حوكمة قبل الإجراءات الحساسة؛ منها تتفرّع سبعة مسارات تغطي رحلة الإيراد من القناة حتى التشغيل الكامل.</p>
 
   <h2>1 — واتساب → إغلاق (تسلسل)</h2>
+  <div class="diagram-wrap sequence-chart" tabindex="0" aria-label="مخطط تسلسل واتساب">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "15px",
+    "fontFamily": "Segoe UI, Tahoma, sans-serif",
+    "primaryColor": "#134e4a",
+    "primaryTextColor": "#ecfdf5",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#64748b",
+    "secondaryColor": "#1e293b",
+    "tertiaryColor": "#334155",
+    "actorBkg": "#1e293b",
+    "actorBorder": "#14b8a6",
+    "actorTextColor": "#f8fafc",
+    "actorLineColor": "#475569",
+    "signalColor": "#5eead4",
+    "signalTextColor": "#e2e8f0",
+    "labelBoxBkgColor": "#1e293b",
+    "labelBoxBorderColor": "#14b8a6",
+    "labelTextColor": "#f1f5f9",
+    "loopTextColor": "#94a3b8",
+    "noteBkgColor": "#0f172a",
+    "noteBorderColor": "#14b8a6",
+    "noteTextColor": "#e2e8f0",
+    "activationBorderColor": "#2dd4bf",
+    "activationBkgColor": "#134e4a"
+  }
+}}%%
 sequenceDiagram
+  autonumber
   participant WA as WhatsApp
   participant ID as Intent + Crew
   participant Q as Qualification
   participant SF as Salesforce
   participant DO as Deal Orchestrator
   participant P as Proposal
-  participant N as Objections memory
-  participant C as Closing + Stripe + eSign
-  WA->>ID: inbound message
-  ID->>Q: qualify
-  Q->>SF: account data
-  Q->>DO: qualified lead
-  DO->>P: proposal + pricing
-  P->>N: objection
-  N->>DO: reply from memory
-  DO->>C: contract + pay + sign
-  C->>WA: confirmation
+  participant N as Objections
+  participant C as Closing + Stripe
+  WA->>ID: رسالة واردة
+  ID->>Q: تأهيل
+  Q->>SF: بيانات الحساب
+  Q->>DO: عميل مؤهل
+  DO->>P: عرض + تسعير
+  P->>N: اعتراض
+  N->>DO: رد من الذاكرة
+  DO->>C: عقد + دفع + توقيع
+  C->>WA: تأكيد
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">من أول رسالة واتساب إلى تأكيد الإغلاق: تأهيل النية، مزامنة بيانات الحساب في CRM، بناء العرض والتسعير، التعامل مع الاعتراضات عبر الذاكرة، ثم الدفع والعقد والتوقيع الإلكتروني وإشعار العميل. إذا كان المخطط عريضاً، اسحب أفقياً داخل الإطار.</p>
 
   <h2>2 — سلة مهجورة</h2>
+  <div class="diagram-wrap" tabindex="0" aria-label="مخطط سلة مهجورة">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "14px",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f8fafc",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#2dd4bf",
+    "secondaryColor": "#334155",
+    "tertiaryColor": "#475569",
+    "mainBkg": "#1e293b",
+    "nodeBorder": "#14b8a6",
+    "clusterBkg": "#0f172a",
+    "clusterBorder": "#14b8a6",
+    "titleColor": "#5eead4",
+    "edgeLabelBackground": "#1e293b",
+    "textColor": "#f1f5f9"
+  }
+}}%%
 flowchart LR
-  W[Webhook] --> PS[Post-Sale Crew]
-  PS --> PE[Personalizer]
-  PE --> WA[WhatsApp]
-  PE --> MA[Marketing seq]
-  MA --> EM[Email]
-  MA --> LI[LinkedIn]
-  WA --> DG[Scoped memory]
+  classDef ingest fill:#134e4a,stroke:#5eead4,color:#ecfdf5,stroke-width:2px
+  classDef core fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  classDef channel fill:#0c4a6e,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  classDef memory fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:2px
+  W[Webhook]:::ingest --> PS[Post-Sale Crew]:::ingest --> PE[Personalizer]:::core
+  PE --> WA[WhatsApp]:::channel
+  PE --> MA[Marketing seq]:::channel
+  MA --> EM[Email]:::channel
+  MA --> LI[LinkedIn]:::channel
+  WA --> DG[Scoped memory]:::memory
   EM --> DG
   LI --> DG
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">بعد حدث ما بعد الشراء: الويب هوك يغذي الطاقم، ثم المُخصّص يوجّه الرسائل عبر واتساب والتسويق متعدد القنوات (بريد، لينكدإن)، وكل القنوات تُحدّث «ذاكرة» موحّدة للاستهداف لاحقاً.</p>
 
   <h2>3 — دعم واتساب</h2>
+  <div class="diagram-wrap" tabindex="0" aria-label="مخطط دعم">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "14px",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f8fafc",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#2dd4bf",
+    "secondaryColor": "#334155",
+    "tertiaryColor": "#475569",
+    "mainBkg": "#1e293b",
+    "nodeBorder": "#14b8a6",
+    "clusterBkg": "#0f172a",
+    "clusterBorder": "#14b8a6",
+    "titleColor": "#5eead4",
+    "edgeLabelBackground": "#1e293b",
+    "textColor": "#f1f5f9"
+  }
+}}%%
 flowchart TB
-  A[Inbound WhatsApp] --> CS[Support Crew]
-  CS --> KB{Knowledge + tools}
-  KB -->|auto| RES[Resolve]
-  KB -->|escalate| HS[Human handoff]
-  HS --> T[Ticket + summary]
-  CS --> KD[Knowledge distiller]
-  KD --> MEM[Customer memory]
+  classDef inbound fill:#134e4a,stroke:#5eead4,color:#ecfdf5,stroke-width:2px
+  classDef crew fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  classDef decision fill:#713f12,stroke:#fbbf24,color:#fffbeb,stroke-width:2px
+  classDef ok fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:2px
+  classDef escalate fill:#7f1d1d,stroke:#f87171,color:#fef2f2,stroke-width:2px
+  classDef ops fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  classDef mem fill:#0c4a6e,stroke:#22d3ee,color:#ecfeff,stroke-width:2px
+  A[Inbound WhatsApp]:::inbound --> CS[Support Crew]:::crew
+  CS --> KB{Knowledge + tools}:::decision
+  KB -->|تلقائي| RES[Resolve]:::ok
+  KB -->|تصعيد بشري| HS[Human handoff]:::escalate
+  HS --> T[Ticket + summary]:::ops
+  CS --> KD[Knowledge distiller]:::crew
+  KD --> MEM[Customer memory]:::mem
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">دعم واتساب: فريق دعم يمر عبر قرار «معرفة + أدوات» — إما حل تلقائي أو تصعيد بشري مع تذكرة وملخص، مع مقطر معرفة يغذي ذاكرة العميل على المدى الطويل.</p>
 
   <h2>4 — Upsell وتجديد</h2>
+  <div class="diagram-wrap" tabindex="0" aria-label="مخطط تجديد">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "14px",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f8fafc",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#2dd4bf",
+    "secondaryColor": "#334155",
+    "tertiaryColor": "#475569",
+    "mainBkg": "#1e293b",
+    "nodeBorder": "#14b8a6",
+    "clusterBkg": "#0f172a",
+    "clusterBorder": "#14b8a6",
+    "titleColor": "#5eead4",
+    "edgeLabelBackground": "#1e293b",
+    "textColor": "#f1f5f9"
+  }
+}}%%
 flowchart LR
-  SF[Salesforce] --> AF[Forecasting]
-  G[Gong] --> AF
-  AF --> CR[churn risk]
-  CR --> UC[Upsell Crew]
-  UC --> WA[WhatsApp]
-  UC --> EM[Email]
-  UC --> DO[Deal Orchestrator]
-  DO --> RN[Renewal closed]
+  classDef crm fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  classDef intel fill:#713f12,stroke:#fbbf24,color:#fffbeb,stroke-width:2px
+  classDef risk fill:#7c2d12,stroke:#fb923c,color:#fff7ed,stroke-width:2px
+  classDef crew fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  classDef channel fill:#0c4a6e,stroke:#22d3ee,color:#ecfeff,stroke-width:2px
+  classDef orchestrate fill:#134e4a,stroke:#5eead4,color:#ecfdf5,stroke-width:2px
+  classDef win fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:2px
+  SF[Salesforce]:::crm --> AF[Forecasting]:::intel
+  G[Gong]:::crm --> AF
+  AF --> CR[churn risk]:::risk
+  CR --> UC[Upsell Crew]:::crew
+  UC --> WA[WhatsApp]:::channel
+  UC --> EM[Email]:::channel
+  UC --> DO[Deal Orchestrator]:::orchestrate
+  DO --> RN[Renewal closed]:::win
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">بيانات CRM وتسجيلات المكالمات تُغذي التنبؤ؛ عند ظهور مخاطر تراجع يتدخل فريق Upsell عبر القنوات ويُغلق التجديد عبر منسّق الصفقات.</p>
 
   <h2>5 — حملة وتأهيل</h2>
+  <div class="diagram-wrap" tabindex="0" aria-label="مخطط حملة">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "15px",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f8fafc",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#2dd4bf",
+    "secondaryColor": "#334155",
+    "tertiaryColor": "#475569",
+    "mainBkg": "#1e293b",
+    "nodeBorder": "#14b8a6",
+    "clusterBkg": "rgba(15, 23, 42, 0.75)",
+    "clusterBorder": "#14b8a6",
+    "titleColor": "#5eead4",
+    "edgeLabelBackground": "#1e293b",
+    "textColor": "#f1f5f9"
+  }
+}}%%
 flowchart TB
-  MAC[Marketing automation] --> PC[Prospecting]
-  PC --> QC[Qualification]
-  QC --> CRM[(Pipeline)]
-  PAS[Performance supervisor] --> MAC
-  PAS --> PC
-  CRM --> PAS
+  classDef auto fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  classDef prospect fill:#134e4a,stroke:#5eead4,color:#ecfdf5,stroke-width:2px
+  classDef qualify fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  classDef pipe fill:#0f766e,stroke:#2dd4bf,color:#ecfdf5,stroke-width:2px
+  classDef monitor fill:#713f12,stroke:#fbbf24,color:#fffbeb,stroke-width:2px
+  subgraph main["المسار الرئيسي — من الحملة إلى الأنبوب"]
+    direction TB
+    MAC[Marketing automation]:::auto --> PC[Prospecting]:::prospect --> QC[Qualification]:::qualify --> PIPE[(Pipeline)]:::pipe
+  end
+  PIPE --> PAS[Performance supervisor]:::monitor
+  PAS -->|ضبط الحملة| MAC
+  PAS -->|تحسين الاستهداف| PC
+  style MAC fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style PC fill:#134e4a,stroke:#5eead4,color:#ecfdf5,stroke-width:2px
+  style QC fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  style PIPE fill:#0f766e,stroke:#2dd4bf,color:#ecfdf5,stroke-width:2px
+  style PAS fill:#713f12,stroke:#fbbf24,color:#fffbeb,stroke-width:2px
+  style main fill:#0c1220,stroke:#14b8a6,stroke-width:1px,color:#5eead4
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">حلقة الحملة: أتمتة تسويق → استكشاف → تأهيل → أنبوب مبيعات؛ المشرف على الأداء يعيد ضبط الحملة والاستهداف وفق ما يدخل الأنبوب ويخرج منه.</p>
 
   <h2>6 — فوترة وعقود</h2>
+  <div class="diagram-wrap" tabindex="0" aria-label="مخطط فوترة">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "15px",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f8fafc",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#2dd4bf",
+    "secondaryColor": "#334155",
+    "tertiaryColor": "#475569",
+    "mainBkg": "#1e293b",
+    "nodeBorder": "#14b8a6",
+    "clusterBkg": "rgba(12, 18, 32, 0.88)",
+    "clusterBorder": "#14b8a6",
+    "titleColor": "#5eead4",
+    "edgeLabelBackground": "#1e293b",
+    "textColor": "#f1f5f9"
+  }
+}}%%
 flowchart TB
-  BC[Billing] --> WA2[WhatsApp + Email]
-  BC --> RA[Reminders]
-  RA --> ST[Stripe]
-  CC[Contracts] --> ES[eSign]
-  BC --> CRS[Compliance]
+  classDef bill fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  classDef comm fill:#0c4a6e,stroke:#22d3ee,color:#ecfeff,stroke-width:2px
+  classDef pay fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:2px
+  classDef legal fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  classDef guard fill:#713f12,stroke:#fbbf24,color:#fffbeb,stroke-width:2px
+  subgraph SG_B["الفوترة والتحصيل"]
+    direction LR
+    BC[Billing]:::bill
+    WA2[WhatsApp + Email]:::comm
+    RA[Reminders]:::bill
+    ST[Stripe]:::pay
+    BC --> WA2
+    BC --> RA --> ST
+  end
+  subgraph SG_C["العقود والتوقيع الإلكتروني"]
+    direction LR
+    CC[Contracts]:::legal
+    ES[eSign]:::legal
+    CC --> ES
+  end
+  CRS[Compliance]:::guard
+  BC --> CRS
   CC --> CRS
+  style BC fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style WA2 fill:#0c4a6e,stroke:#22d3ee,color:#ecfeff,stroke-width:2px
+  style RA fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style ST fill:#14532d,stroke:#4ade80,color:#dcfce7,stroke-width:2px
+  style CC fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  style ES fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  style CRS fill:#713f12,stroke:#fbbf24,color:#fffbeb,stroke-width:2px
+  style SG_B fill:#0a1628,stroke:#14b8a6,stroke-width:1px,color:#5eead4
+  style SG_C fill:#0a1628,stroke:#a78bfa,stroke-width:1px,color:#e9d5ff
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">مساران متوازيان: الفوترة تصل العميل عبر واتساب/البريد والتذكيرات حتى Stripe؛ العقود تمر بالتوقيع الإلكتروني؛ وخط الامتثال يجمع ما يلزم من الطرفين للمراجعة والتدقيق.</p>
 
   <h2>7 — تشغيل كامل</h2>
+  <div class="diagram-wrap" tabindex="0" aria-label="مخطط تشغيل كامل">
   <div class="mermaid">
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "15px",
+    "primaryColor": "#1e293b",
+    "primaryTextColor": "#f8fafc",
+    "primaryBorderColor": "#14b8a6",
+    "lineColor": "#2dd4bf",
+    "secondaryColor": "#334155",
+    "tertiaryColor": "#475569",
+    "mainBkg": "#1e293b",
+    "nodeBorder": "#14b8a6",
+    "clusterBkg": "rgba(12, 18, 32, 0.88)",
+    "clusterBorder": "#14b8a6",
+    "titleColor": "#5eead4",
+    "edgeLabelBackground": "#1e293b",
+    "textColor": "#f1f5f9"
+  }
+}}%%
 flowchart TB
-  CEO[CEO Orchestrator] --> PL[Sales pipeline]
-  CEO --> CM[Marketing]
-  CEO --> SP[Support]
-  CEO --> BI[Billing]
-  CEO --> CT[Contracts]
-  CEO --> AN[Analytics / CEO reports]
+  classDef hub fill:#134e4a,stroke:#5eead4,color:#ecfdf5,stroke-width:2px
+  classDef domain fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  classDef insight fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  subgraph SG7["طبقة التشغيل — من CEO إلى الأقسام"]
+    CEO[CEO Orchestrator]:::hub --> PL[Sales pipeline]:::domain
+    CEO --> CM[Marketing]:::domain
+    CEO --> SP[Support]:::domain
+    CEO --> BI[Billing]:::domain
+    CEO --> CT[Contracts]:::domain
+    CEO --> AN[Analytics / CEO reports]:::insight
+  end
+  style CEO fill:#134e4a,stroke:#5eead4,color:#ecfdf5,stroke-width:2px
+  style PL fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style CM fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style SP fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style BI fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style CT fill:#1e3a5f,stroke:#38bdf8,color:#e0f2fe,stroke-width:2px
+  style AN fill:#4c1d95,stroke:#c4b5fd,color:#faf5ff,stroke-width:2px
+  style SG7 fill:#0a1628,stroke:#14b8a6,stroke-width:1px,color:#5eead4
   </div>
+  </div>
+  <p class="wf-desc" dir="rtl">منظومة موحّدة: محور تنفيذي علوي (CEO Orchestrator) يربط المبيعات والتسويق والدعم والفوترة والعقود، مع طبقة تحليلات وتقارير لقيادة القرار.</p>
 
   <script>
-    mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+    mermaid.initialize({
+      startOnLoad: true,
+      securityLevel: "loose",
+      theme: "dark",
+      themeVariables: {
+        fontFamily: '"Segoe UI", Tahoma, sans-serif',
+        fontSize: "13px",
+        primaryColor: "#134e4a",
+        primaryTextColor: "#ecfdf5",
+        primaryBorderColor: "#14b8a6",
+        secondaryColor: "#1e293b",
+        secondaryTextColor: "#e2e8f0",
+        secondaryBorderColor: "#475569",
+        tertiaryColor: "#334155",
+        tertiaryTextColor: "#cbd5e1",
+        lineColor: "#64748b",
+        textColor: "#f1f5f9",
+        mainBkg: "#1e293b",
+        nodeBorder: "#14b8a6",
+        clusterBkg: "rgba(21, 34, 56, 0.92)",
+        clusterBorder: "#14b8a6",
+        titleColor: "#5eead4",
+        edgeLabelBackground: "#1e293b",
+        actorBkg: "#1e293b",
+        actorBorder: "#14b8a6",
+        actorTextColor: "#e2e8f0",
+        signalColor: "#5eead4",
+        signalTextColor: "#e2e8f0",
+        sequenceNumberColor: "#ccfbf1",
+        labelBoxBkgColor: "#1e293b",
+        labelBoxBorderColor: "#14b8a6",
+        labelTextColor: "#f1f5f9",
+        loopTextColor: "#94a3b8",
+        noteBkgColor: "#0f172a",
+        noteBorderColor: "#14b8a6",
+        noteTextColor: "#e2e8f0",
+        actorLineColor: "#475569",
+        activationBkgColor: "#134e4a",
+        activationBorderColor: "#2dd4bf",
+      },
+      flowchart: {
+        htmlLabels: true,
+        curve: "basis",
+        padding: 14,
+        nodeSpacing: 42,
+        rankSpacing: 48,
+        useMaxWidth: true,
+      },
+      sequence: {
+        useMaxWidth: false,
+        diagramMarginX: 12,
+        diagramMarginY: 12,
+        actorMargin: 72,
+        boxMargin: 14,
+        boxTextMargin: 10,
+        messageMargin: 42,
+        mirrorActors: false,
+        width: 170,
+        height: 58,
+        boxManuallySized: false,
+      },
+    });
   </script>
   <p class="note">© Dealix 2026</p>
 </body>

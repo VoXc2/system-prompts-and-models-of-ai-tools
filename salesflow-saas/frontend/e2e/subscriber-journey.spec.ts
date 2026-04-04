@@ -18,7 +18,7 @@ test.describe("Subscriber journey (public shell)", () => {
 
   test("marketers hub lists resources and strategy link", async ({ page }) => {
     await page.goto("/marketers");
-    await expect(page.getByRole("heading", { name: /مسوّق|Dealix|بوابة/ })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /بوابة المسوّقين/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /استراتيجية|الخطة|الاستراتيجية/ })).toBeVisible();
   });
 
