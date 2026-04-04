@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Zap } from "lucide-react";
-import { AuthProvider, useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts/auth-context";
 
 function RegisterForm() {
   const { register } = useAuth();
@@ -118,9 +118,5 @@ function RegisterForm() {
 }
 
 export default function RegisterPage() {
-  return (
-    <AuthProvider>
-      <RegisterForm />
-    </AuthProvider>
-  );
+  return <RegisterForm />;
 }

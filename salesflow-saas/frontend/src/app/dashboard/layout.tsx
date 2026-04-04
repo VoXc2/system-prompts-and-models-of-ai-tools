@@ -1,8 +1,6 @@
-"use client";
-
 import type { ReactNode } from "react";
-import { AuthProvider } from "@/contexts/auth-context";
 
+/** Auth is provided by root `AppProviders`; layout kept for future dashboard-only UI. */
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  return <AuthProvider>{children}</AuthProvider>;
+  return children;
 }

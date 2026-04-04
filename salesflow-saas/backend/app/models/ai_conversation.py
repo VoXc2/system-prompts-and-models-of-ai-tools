@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, Enum, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from app.models.compat import JSONB, UUID
 from app.models.base import BaseModel, TenantModel
 import enum
 

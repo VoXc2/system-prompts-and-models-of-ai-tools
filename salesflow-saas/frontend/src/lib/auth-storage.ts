@@ -1,8 +1,20 @@
+import { DEALIX_SESSION_COOKIE } from "./auth-gate";
+
 /** Browser session for Dealix API (JWT). Prefer httpOnly cookies in a future BFF. */
 
 const ACCESS = "dealix_access_token";
 const REFRESH = "dealix_refresh_token";
 const USER = "dealix_user_json";
+
+export function syncSessionCookie(hasSession: boolean): void {
+  if (typeof document === "undefined") return;
+  if (hasSession) {
+    const maxAge = 60 * 60 * 24 * 30;
+    document.cookie = `${DEALIX_SESSION_COOKIE}=1; path=/; max-age=${maxAge}; SameSite=Lax`;
+  } else {
+    document.cookie = `${DEALIX_SESSION_COOKIE}=; path=/; max-age=0`;
+  }
+}
 
 export type StoredUser = {
   userId: string;
@@ -36,10 +48,12 @@ export function persistSession(access: string, refresh: string, user: StoredUser
   localStorage.setItem(ACCESS, access);
   localStorage.setItem(REFRESH, refresh);
   localStorage.setItem(USER, JSON.stringify(user));
+  syncSessionCookie(true);
 }
 
 export function clearSession(): void {
   localStorage.removeItem(ACCESS);
   localStorage.removeItem(REFRESH);
   localStorage.removeItem(USER);
+  syncSessionCookie(false);
 }

@@ -18,4 +18,28 @@ test.describe("Auth & shell", () => {
     await page.waitForURL(/\/login/, { timeout: 15_000 });
     await expect(page).toHaveURL(/\/login/);
   });
+
+  test("deep dashboard path preserves next query for return after login", async ({ page }) => {
+    await page.goto("/dashboard/pipeline");
+    await page.waitForURL(/\/login/, { timeout: 15_000 });
+    const u = new URL(page.url());
+    expect(u.pathname).toBe("/login");
+    expect(u.searchParams.get("next")).toBe("/dashboard/pipeline");
+  });
+
+  test("session cookie alone does not bypass client auth (redirects to login without JWT)", async ({
+    page,
+    context,
+  }) => {
+    await context.addCookies([
+      {
+        name: "dealix_has_session",
+        value: "1",
+        url: "http://127.0.0.1:3000/",
+      },
+    ]);
+    await page.goto("/dashboard");
+    await page.waitForURL(/\/login/, { timeout: 15_000 });
+    await expect(page).toHaveURL(/\/login/);
+  });
 });

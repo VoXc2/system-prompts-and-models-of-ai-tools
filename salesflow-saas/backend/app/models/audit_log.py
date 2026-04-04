@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID, JSONB, INET
+from app.models.compat import INET, JSONB, UUID
 from app.models.base import TenantModel
 
 

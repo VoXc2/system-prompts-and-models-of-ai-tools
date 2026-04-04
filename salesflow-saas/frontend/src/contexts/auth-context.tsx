@@ -15,9 +15,11 @@ import {
   getAccessToken,
   getStoredUser,
   persistSession,
+  syncSessionCookie,
   type StoredUser,
 } from "@/lib/auth-storage";
 import { loginRequest, registerRequest } from "@/lib/api-client";
+import { safeInternalNextPath } from "@/lib/safe-redirect";
 
 type AuthContextValue = {
   user: StoredUser | null;
@@ -39,15 +41,19 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
   const [user, setUser] = useState<StoredUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const t = getAccessToken();
     const u = getStoredUser();
-    if (t && u) setUser(u);
-    else setUser(null);
+    if (t && u) {
+      setUser(u);
+      syncSessionCookie(true);
+    } else {
+      setUser(null);
+      syncSessionCookie(false);
+    }
     setLoading(false);
   }, []);
 
@@ -61,8 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     persistSession(data.access_token, data.refresh_token, nextUser);
     setUser(nextUser);
-    const dest = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
-    router.replace(dest);
+    router.replace(safeInternalNextPath(redirectTo, "/dashboard"));
   }, [router]);
 
   const register = useCallback(
@@ -109,7 +114,7 @@ export function useAuth(): AuthContextValue {
   return ctx;
 }
 
-/** Call from dashboard subtree to enforce login (client-side). */
+/** Call from dashboard subtree to enforce login (client-side). Middleware handles cold loads. */
 export function useRequireAuth(): AuthContextValue {
   const auth = useAuth();
   const router = useRouter();
@@ -117,11 +122,11 @@ export function useRequireAuth(): AuthContextValue {
 
   useEffect(() => {
     if (auth.loading) return;
-    if (!getAccessToken()) {
+    if (!auth.user) {
       const next = pathname ? `?next=${encodeURIComponent(pathname)}` : "";
       router.replace(`/login${next}`);
     }
-  }, [auth.loading, router, pathname]);
+  }, [auth.loading, auth.user, router, pathname]);
 
   return auth;
 }

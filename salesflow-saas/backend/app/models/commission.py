@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, Enum, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from app.models.compat import UUID
 from sqlalchemy.orm import relationship
 from app.models.base import TenantModel, BaseModel
 

@@ -1,7 +1,7 @@
 """Trust Score & Prospect models — new additions to Dealix architecture."""
 import enum
 from sqlalchemy import Column, String, Integer, Float, Text, DateTime, Boolean, Enum, ForeignKey, Date
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from app.models.compat import JSONB, UUID
 from sqlalchemy.orm import relationship
 from app.models.base import TenantModel, BaseModel
 

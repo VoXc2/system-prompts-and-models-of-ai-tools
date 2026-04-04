@@ -4,10 +4,9 @@ Import from here instead of sqlalchemy.dialects.postgresql directly.
 """
 import uuid
 import json
-from app.config import get_settings
 
-_settings = get_settings()
-IS_SQLITE = "sqlite" in _settings.DATABASE_URL
+# Must match `app.database` URL resolution (Settings alone can default to Postgres while DB uses SQLite).
+from app.database import IS_SQLITE
 
 from sqlalchemy import Column, String, Text, TypeDecorator
 
@@ -49,9 +48,12 @@ if IS_SQLITE:
         _val = val if val is not None else {}
         return lambda: json.dumps(_val)
 
+    # INET → VARCHAR for SQLite (audit logs, etc.)
+    INET = String(45)
+
 else:
     # ── Real PostgreSQL types ───────────────────────────────────
-    from sqlalchemy.dialects.postgresql import UUID, JSONB
+    from sqlalchemy.dialects.postgresql import INET, JSONB, UUID
 
     def default_uuid():
         return uuid.uuid4()

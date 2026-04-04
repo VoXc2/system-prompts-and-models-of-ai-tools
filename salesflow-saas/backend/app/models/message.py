@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Text, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from app.models.compat import JSONB, UUID
 from sqlalchemy.orm import relationship
 from app.models.base import TenantModel
 

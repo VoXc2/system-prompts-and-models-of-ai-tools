@@ -22,7 +22,24 @@ class HealthResponse(Schema):
 class ReadyResponse(Schema):
     status: str
     database: str
+    redis: str | None = None
     timestamp: str
+
+
+async def _redis_ping_status() -> str:
+    """Best-effort broker/cache check (Celery uses REDIS_URL)."""
+    url = _settings.REDIS_URL
+    if not url:
+        return "skipped"
+    try:
+        import redis.asyncio as aioredis
+
+        client = aioredis.from_url(url, socket_connect_timeout=1.5)
+        await client.ping()
+        await client.aclose()
+        return "connected"
+    except Exception:
+        return "unavailable"
 
 
 @router.get("/health", response_model=HealthResponse)
@@ -44,9 +61,11 @@ async def readiness_check(db: AsyncSession = Depends(get_db)):
     except Exception:
         db_status = "unavailable"
 
+    redis_status = await _redis_ping_status()
     overall = "ready" if db_status == "connected" else "not_ready"
     return ReadyResponse(
         status=overall,
         database=db_status,
+        redis=redis_status,
         timestamp=datetime.now(timezone.utc).isoformat(),
     )

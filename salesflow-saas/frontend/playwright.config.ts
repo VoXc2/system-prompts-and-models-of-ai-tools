@@ -12,9 +12,12 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:3000",
     trace: "on-first-retry",
   },
-  // Next `output: "standalone"` — use bundled server (not `next start`).
+  // `next dev` works without a prior `next build`; set PW_WEB_SERVER=standalone to use `.next/standalone/server.js` after build.
   webServer: {
-    command: "node .next/standalone/server.js",
+    command:
+      process.env.PW_WEB_SERVER === "standalone"
+        ? "node .next/standalone/server.js"
+        : "npx next dev -H 127.0.0.1 -p 3000",
     url: "http://127.0.0.1:3000",
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,

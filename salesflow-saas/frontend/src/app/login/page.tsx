@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { Zap } from "lucide-react";
-import { AuthProvider, useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts/auth-context";
 
-function LoginForm() {
+export default function LoginPage() {
   const { login } = useAuth();
-  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +17,9 @@ function LoginForm() {
     setError(null);
     setPending(true);
     try {
-      await login(email, password, searchParams.get("next"));
+      const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+      const next = params.get("next");
+      await login(email, password, next);
     } catch (err) {
       setError(err instanceof Error ? err.message : "فشل تسجيل الدخول");
     } finally {
@@ -34,7 +34,8 @@ function LoginForm() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-accent shadow-lg shadow-primary/20">
             <Zap className="w-7 h-7 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight">تسجيل الدخول — Dealix</h1>
+          <h1 className="text-2xl font-black tracking-tight">تسجيل الدخول</h1>
+          <p className="text-sm font-semibold text-muted-foreground">Dealix</p>
           <p className="text-sm text-muted-foreground">أدخل بريدك وكلمة المرور للوصول إلى لوحة التشغيل.</p>
         </div>
 
@@ -91,15 +92,5 @@ function LoginForm() {
         </form>
       </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <AuthProvider>
-      <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-muted-foreground">…</div>}>
-        <LoginForm />
-      </Suspense>
-    </AuthProvider>
   );
 }

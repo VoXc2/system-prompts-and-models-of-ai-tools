@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Boolean
-from sqlalchemy.dialects.postgresql import JSONB
+from app.models.compat import JSONB
 from app.models.base import BaseModel
 
 

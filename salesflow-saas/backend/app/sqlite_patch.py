@@ -19,7 +19,8 @@ def _get_db_url() -> str:
                             break
             except FileNotFoundError:
                 continue
-    return url
+    # Keep in sync with `app.database._get_db_url()` — empty env must default to SQLite for tests/local.
+    return url or "sqlite+aiosqlite:///./dealix.db"
 
 
 class _FakeUUID(TypeDecorator):
