@@ -10,14 +10,22 @@ from app.config import get_settings
 
 
 def _exempt_path(path: str) -> bool:
-    if path in ("/api/v1/health", "/api/v1/ready", "/api/v1/deployment-readiness"):
+    settings = get_settings()
+    if path in (
+        "/api/v1/health",
+        "/api/v1/ready",
+        "/api/v1/deployment-readiness",
+        "/api/v1/agent-frameworks",
+        "/api/v1/brain/health",
+    ):
         return True
     if path.startswith("/api/v1/webhooks"):
         return True
-    if path.startswith("/api/v1/marketing"):
-        return True
-    if path.startswith("/api/v1/strategy"):
-        return True
+    if settings.DEALIX_PUBLIC_STRATEGY_MARKETING:
+        if path.startswith("/api/v1/marketing"):
+            return True
+        if path.startswith("/api/v1/strategy"):
+            return True
     if path.startswith("/api/v1/value-proposition"):
         return True
     if path.startswith("/api/v1/customer-onboarding"):

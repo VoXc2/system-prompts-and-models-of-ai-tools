@@ -41,4 +41,11 @@ run("Backend: pytest (full)", py, backend, testEnv);
 run("Backend: pytest (-m launch)", launch, backend, testEnv);
 run("Frontend: npm run verify", "npm run verify", frontend, process.env);
 
+if (process.env.RUN_PLAYWRIGHT === "1") {
+  run("Frontend: Playwright e2e", "npx playwright test", frontend, process.env);
+}
+
 console.log("\n✅ verify-stack: اكتمل التحقق بنجاح.\n");
+if (process.env.RUN_PLAYWRIGHT !== "1") {
+  console.log("Optional: RUN_PLAYWRIGHT=1 node scripts/verify-stack.cjs\n");
+}

@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
@@ -6,6 +8,7 @@ from pydantic import BaseModel as Schema
 
 from app.database import get_db
 from app.config import get_settings
+from app.services.agent_framework_report import build_agent_framework_report
 
 router = APIRouter()
 _settings = get_settings()
@@ -17,6 +20,7 @@ class HealthResponse(Schema):
     version: str = "2.0.0"
     app: str = "Dealix"
     environment: str = "production"
+    git_sha: str | None = None
 
 
 class ReadyResponse(Schema):
@@ -64,6 +68,11 @@ async def _redis_ping_status() -> str:
                 pass
 
 
+def _git_sha() -> str | None:
+    s = (os.environ.get("DEALIX_GIT_SHA") or os.environ.get("GIT_COMMIT") or os.environ.get("VERCEL_GIT_COMMIT_SHA") or "").strip()
+    return s[:40] if s else None
+
+
 @router.get("/health", response_model=HealthResponse)
 async def health_check():
     return HealthResponse(
@@ -72,6 +81,7 @@ async def health_check():
         version="2.0.0",
         app=_settings.APP_NAME,
         environment=_settings.ENVIRONMENT,
+        git_sha=_git_sha(),
     )
 
 
@@ -125,6 +135,12 @@ def _deployment_readiness_payload() -> DeploymentReadinessResponse:
 async def deployment_readiness():
     """فحص جاهزية الخدمة الحقيقية — بدون كشف أسرار."""
     return _deployment_readiness_payload()
+
+
+@router.get("/agent-frameworks")
+async def agent_frameworks():
+    """إصدارات مكتبات الوكلاء والأتمتة (LangGraph، CrewAI، AutoGen، …) — بدون أسرار."""
+    return build_agent_framework_report()
 
 
 @router.get("/ready", response_model=ReadyResponse)

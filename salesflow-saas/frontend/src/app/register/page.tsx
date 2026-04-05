@@ -5,9 +5,14 @@ import Link from "next/link";
 import { DealixAuthBrandMark } from "@/components/dealix-auth-brand-mark";
 import { useAuth } from "@/contexts/auth-context";
 import { setParentRef } from "@/lib/marketer-team";
-import { authFormMsg, isValidEmailFormat } from "@/lib/auth-form-validation";
+import {
+  authFormMsg,
+  isValidEmailFormat,
+  isValidSaMobile,
+  normalizeSaMobileDigits,
+} from "@/lib/auth-form-validation";
 
-type RegisterFieldKey = "company" | "fullName" | "email" | "password";
+type RegisterFieldKey = "company" | "fullName" | "email" | "password" | "phone";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -40,6 +45,9 @@ export default function RegisterPage() {
     else if (!isValidEmailFormat(em)) errs.email = authFormMsg.emailInvalid;
     if (!password) errs.password = authFormMsg.passwordRequired;
     else if (password.length < 8) errs.password = authFormMsg.passwordShort;
+    const ph = phone.trim();
+    if (!ph) errs.phone = authFormMsg.phoneRequired;
+    else if (!isValidSaMobile(ph)) errs.phone = authFormMsg.phoneInvalid;
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -56,13 +64,14 @@ export default function RegisterPage() {
     if (!validateRegister()) return;
     setPending(true);
     try {
+      const phoneNorm = normalizeSaMobileDigits(phone.trim());
       await register(
         {
           company_name: companyName.trim(),
           full_name: fullName.trim(),
           email: email.trim(),
           password,
-          phone: phone || undefined,
+          phone: phoneNorm,
         },
         nextParam
       );
@@ -93,7 +102,7 @@ export default function RegisterPage() {
           <DealixAuthBrandMark />
           <h1 className="text-2xl font-black tracking-tight">إنشاء حساب شركة</h1>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            مستأجر جديد + مالك (owner) تلقائياً.
+            مستأجر جديد + مالك (owner) تلقائياً. الجوال مطلوب للتواصل والتحقق لاحقاً.
           </p>
           {refParam && (
             <div className="rounded-xl border border-teal-500/30 bg-teal-950/40 px-4 py-3 text-sm text-teal-100">
@@ -189,6 +198,33 @@ export default function RegisterPage() {
             )}
           </div>
           <div className="space-y-2 text-right">
+            <label htmlFor="phone" className="text-sm font-medium">
+              الجوال <span className="text-destructive">*</span>
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              placeholder="05xxxxxxxx أو 9665xxxxxxxx"
+              value={phone}
+              onChange={(e) => {
+                setPhone(e.target.value);
+                clearFieldError("phone");
+              }}
+              aria-invalid={fieldErrors.phone ? true : undefined}
+              aria-describedby={fieldErrors.phone ? "reg-phone-error" : undefined}
+              className={`w-full rounded-xl border bg-secondary/40 px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                fieldErrors.phone ? "border-destructive/60" : "border-border"
+              }`}
+            />
+            {fieldErrors.phone && (
+              <p id="reg-phone-error" className="text-xs text-destructive" role="alert">
+                {fieldErrors.phone}
+              </p>
+            )}
+          </div>
+          <div className="space-y-2 text-right">
             <label htmlFor="password" className="text-sm font-medium">
               كلمة المرور
             </label>
@@ -212,18 +248,6 @@ export default function RegisterPage() {
                 {fieldErrors.password}
               </p>
             )}
-          </div>
-          <div className="space-y-2 text-right">
-            <label htmlFor="phone" className="text-sm font-medium">
-              الجوال (اختياري)
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
           </div>
           <button
             type="submit"

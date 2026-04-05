@@ -3,6 +3,8 @@ import os
 
 # JWT-based API tests require this gate to be off (production may set .env).
 os.environ["DEALIX_INTERNAL_API_TOKEN"] = ""
+# Fresh schema per test run (avoids stale SQLite files missing new columns).
+os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///:memory:")
 
 import pytest
 import pytest_asyncio

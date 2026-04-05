@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
@@ -9,7 +9,7 @@ class RegisterRequest(BaseModel):
     full_name: str
     email: str
     password: str
-    phone: Optional[str] = None
+    phone: str = Field(..., min_length=8, max_length=24, description="رقم جوال سعودي (مطلوب)")
 
 
 class LoginRequest(BaseModel):

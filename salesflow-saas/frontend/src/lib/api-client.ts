@@ -1,5 +1,18 @@
 import { getApiBaseUrl } from "@/lib/api-base";
+import { parseApiErrorDetail } from "@/lib/api-error";
 import { clearSession, getAccessToken, getRefreshToken, persistSession, getStoredUser } from "@/lib/auth-storage";
+
+/** رسالة عربية عندما لا يصل الطلب للخادم (الباكند متوقف، عنوان خاطئ، إلخ). */
+function networkFailureMessage(err: unknown, base: string): string {
+  const raw = err instanceof Error ? err.message : String(err);
+  const isNetwork =
+    raw === "Failed to fetch" ||
+    /networkerror|load failed|fetch.*failed|connection refused/i.test(raw);
+  if (isNetwork) {
+    return `لا يوجد اتصال بخادم Dealix (${base}). شغّل الباكند (مثلاً من مجلد backend: uvicorn على المنفذ 8000) أو اضبط NEXT_PUBLIC_API_URL ليطابق عنوان الـ API.`;
+  }
+  return raw;
+}
 
 export type TokenResponse = {
   access_token: string;
@@ -73,14 +86,19 @@ export async function apiFetch(path: string, init: RequestInit = {}): Promise<Re
 
 export async function loginRequest(email: string, password: string): Promise<TokenResponse> {
   const base = getApiBaseUrl();
-  const r = await fetch(`${base}/api/v1/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
+  let r: Response;
+  try {
+    r = await fetch(`${base}/api/v1/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+  } catch (e) {
+    throw new Error(networkFailureMessage(e, base));
+  }
   if (!r.ok) {
     const err = await r.json().catch(() => ({}));
-    throw new Error((err as { detail?: string }).detail || `Login failed (${r.status})`);
+    throw new Error(parseApiErrorDetail(err) || `Login failed (${r.status})`);
   }
   return r.json() as Promise<TokenResponse>;
 }
@@ -92,17 +110,22 @@ export async function registerRequest(body: {
   full_name: string;
   email: string;
   password: string;
-  phone?: string;
+  phone: string;
 }): Promise<TokenResponse> {
   const base = getApiBaseUrl();
-  const r = await fetch(`${base}/api/v1/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  let r: Response;
+  try {
+    r = await fetch(`${base}/api/v1/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch (e) {
+    throw new Error(networkFailureMessage(e, base));
+  }
   if (!r.ok) {
     const err = await r.json().catch(() => ({}));
-    throw new Error((err as { detail?: string }).detail || `Register failed (${r.status})`);
+    throw new Error(parseApiErrorDetail(err) || `Register failed (${r.status})`);
   }
   return r.json() as Promise<TokenResponse>;
 }

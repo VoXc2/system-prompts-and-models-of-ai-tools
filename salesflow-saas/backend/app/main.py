@@ -14,7 +14,9 @@ import asyncio
 from app.config import get_settings
 from app.api.v1.router import api_router
 from app.flows.self_improvement_flow import self_improvement_flow
+from app.ai.evolution.signals import evolution_signals_for_flow
 from app.middleware.internal_api import InternalApiTokenMiddleware
+from app.middleware.security_headers import SecurityHeadersMiddleware
 
 settings = get_settings()
 
@@ -50,10 +52,16 @@ async def lifespan(app: FastAPI):
 
     async def _self_improvement_worker():
         while not stop_event.is_set():
+            signals: list = []
+            if settings.DEALIX_SELF_EVOLUTION_SIGNALS:
+                try:
+                    signals = evolution_signals_for_flow()
+                except Exception:
+                    signals = []
             self_improvement_flow.run(
                 tenant_id="system_tenant",
                 input_state={
-                    "signals": [],
+                    "signals": signals,
                     "bottlenecks": [],
                     "experiments": [{"name": "always-on-ab-loop"}],
                     "ab_results": {},
@@ -103,6 +111,7 @@ app = FastAPI(
 )
 
 app.add_middleware(InternalApiTokenMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 # CORS runs outermost (added last) so browser preflight is handled first
 app.add_middleware(
     CORSMiddleware,

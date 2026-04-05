@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.internal/schemas/log-record.json",
+  "title": "StructuredLogRecord",
+  "description": "Ingest from structlog JSON lines or OpenTelemetry log body → SystemMemoryRecord canonical_type log.*",
+  "type": "object",
+  "required": ["level", "logger", "message", "ts"],
+  "properties": {
+    "level": { "enum": ["debug", "info", "warning", "error", "critical"] },
+    "logger": { "type": "string" },
+    "message": { "type": "string" },
+    "ts": { "type": "string", "format": "date-time" },
+    "tenant_id": { "type": ["string", "null"], "format": "uuid" },
+    "trace_id": { "type": ["string", "null"] },
+    "span_id": { "type": ["string", "null"] },
+    "http": {
+      "type": "object",
+      "properties": {
+        "method": { "type": "string" },
+        "path": { "type": "string" },
+        "status": { "type": "integer" }
+      }
+    },
+    "extra": { "type": "object" }
+  },
+  "additionalProperties": false
+}

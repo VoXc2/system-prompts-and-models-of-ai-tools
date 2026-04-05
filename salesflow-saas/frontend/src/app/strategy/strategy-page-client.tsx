@@ -18,7 +18,6 @@ import {
   BookOpen,
 } from "lucide-react";
 import { useStrategySummary } from "@/hooks/use-strategy-summary";
-import { getApiBaseUrl } from "@/lib/api-base";
 
 const moatIcons = [Globe2, Shield, Layers, Zap, Sparkles];
 
@@ -78,7 +77,6 @@ const FALLBACK_TARGETS = [
 
 export function StrategyPageClient() {
   const { data, loading } = useStrategySummary();
-  const api = getApiBaseUrl();
 
   const quote = data?.vision.tagline_ar ? `«${data.vision.tagline_ar}»` : FALLBACK_QUOTE;
   const auditableRows =
@@ -137,7 +135,7 @@ export function StrategyPageClient() {
               الرئيسية
             </Link>
             <a
-              href={`${api}/api/v1/strategy/summary`}
+              href="/api/strategy-summary"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 rounded-full border border-teal-500/40 bg-teal-950/50 px-4 py-2 text-sm text-teal-200 hover:bg-teal-900/40"

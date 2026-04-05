@@ -74,6 +74,10 @@ async def create_lead(
     db.add(lead)
     await db.flush()
     await db.refresh(lead)
+    if raw.get("notes") or (meta and str(meta).strip() not in ("", "{}")):
+        from app.services.text_intelligence.enqueue import enqueue_lead_text_intel
+
+        enqueue_lead_text_intel(str(lead.id), str(current_user.tenant_id))
     return LeadResponse.model_validate(lead)
 
 
@@ -117,6 +121,10 @@ async def update_lead(
 
     await db.flush()
     await db.refresh(lead)
+    if "notes" in payload or "metadata" in payload:
+        from app.services.text_intelligence.enqueue import enqueue_lead_text_intel
+
+        enqueue_lead_text_intel(str(lead.id), str(current_user.tenant_id))
     return LeadResponse.model_validate(lead)
 
 

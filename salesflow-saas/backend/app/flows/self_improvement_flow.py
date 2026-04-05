@@ -6,7 +6,11 @@ from app.openclaw.durable_flow import DurableTaskFlow
 
 
 class SelfImprovementFlow:
-    """6-phase self-improvement loop v2.0 as durable flow."""
+    """6-phase self-improvement loop v2.0 as durable flow.
+
+    يمكن تغذية `signals` من `app.ai.evolution.evolution_signals_for_flow()` (إصدارات الوكلاء، جاهزية AutoGen/Celery)
+    بدلاً من قوائم فارغة — حتى تنعكس حالة المكدس الفعلية في الـ checkpoints.
+    """
 
     def run(self, tenant_id: str, input_state: Dict[str, Any]) -> Dict[str, Any]:
         flow = DurableTaskFlow(flow_name="self_improvement_v2", tenant_id=tenant_id)

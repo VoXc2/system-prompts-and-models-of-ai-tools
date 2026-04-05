@@ -82,7 +82,7 @@ export function PropertiesView() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {properties.map((prop) => (
             <div key={prop.id} className="glass-card group overflow-hidden border border-border/50 hover:border-primary/30 transition-all">
-              <div className="aspect-video relative overflow-hidden">
+              <div className="aspect-[4/3] relative overflow-hidden">
                 <Image
                   src={prop.image}
                   alt={prop.title}

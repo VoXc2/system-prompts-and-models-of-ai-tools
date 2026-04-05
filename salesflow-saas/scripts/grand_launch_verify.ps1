@@ -6,12 +6,14 @@
 # From salesflow-saas\frontend: ..\scripts\grand_launch_verify.ps1 -HttpCheck
 #
 # -HttpOnly : only hit the API (py scripts/full_stack_launch_test.py --http-only); skips pytest/lint/build.
+# -Playwright : after frontend build, run Playwright e2e (Chromium).
 # -BaseUrl : sets DEALIX_BASE_URL for HTTP phase (e.g. http://127.0.0.1:8001 when 8000 runs an old build).
 
 param(
     [switch]$HttpCheck,
     [switch]$SoftReady,
     [switch]$HttpOnly,
+    [switch]$Playwright,
     [string]$BaseUrl = ""
 )
 
@@ -90,6 +92,19 @@ if ($HttpCheck) {
     }
 } else {
     Write-Host 'Skip HTTP. To verify API: .\scripts\grand_launch_verify.ps1 -HttpCheck' -ForegroundColor Yellow
+}
+
+if ($Playwright) {
+    Write-Host "== Frontend: Playwright (e2e) ==" -ForegroundColor Cyan
+    Push-Location $frontend
+    try {
+        & npx playwright test
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    } finally {
+        Pop-Location
+    }
+} else {
+    Write-Host 'Skip Playwright. Full UI gate: .\scripts\grand_launch_verify.ps1 -Playwright' -ForegroundColor Yellow
 }
 
 Write-Host "Grand launch verify OK." -ForegroundColor Green

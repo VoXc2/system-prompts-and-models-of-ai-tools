@@ -21,6 +21,11 @@ from app.api.v1 import value_proposition as value_proposition_router
 from app.api.v1 import customer_onboarding as customer_onboarding_router
 from app.api.v1 import sales_os as sales_os_router
 from app.api.v1 import operations as operations_router
+from app.api.v1 import brain as brain_router
+from app.api.v1 import upgrade_director as upgrade_director_router
+from app.api.v1 import seo_engine as seo_engine_router
+from app.api.v1 import lead_engine as lead_engine_router
+from app.api.v1 import text_intelligence as text_intelligence_router
 
 api_router = APIRouter()
 
@@ -54,6 +59,11 @@ api_router.include_router(value_proposition_router.router)
 api_router.include_router(customer_onboarding_router.router)
 api_router.include_router(sales_os_router.router)
 api_router.include_router(operations_router.router)
+api_router.include_router(brain_router.router)
+api_router.include_router(upgrade_director_router.router, prefix="/admin", tags=["Upgrade Director"])
+api_router.include_router(seo_engine_router.router)
+api_router.include_router(lead_engine_router.router)
+api_router.include_router(text_intelligence_router.router)
 api_router.include_router(analytics.router, tags=["Analytics & AI"])
 api_router.include_router(webhooks.router, tags=["Webhooks"])
 api_router.include_router(prospecting.router, prefix="/prospecting", tags=["Prospecting"])

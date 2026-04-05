@@ -68,6 +68,20 @@ def run_ai_agent(self, agent_type: str, input_data: dict, tenant_id: str = None,
         self.retry(exc=exc)
 
 
+@shared_task(bind=True, max_retries=1)
+def snapshot_agent_framework_stack(self):
+    """للجدولة: تسجيل لقطة من `build_agent_framework_report` في السجلات (مراقبة، لا أسرار)."""
+    try:
+        from app.services.agent_framework_report import build_agent_framework_report
+
+        snap = build_agent_framework_report()
+        logger.info("agent_framework_snapshot keys=%s", list(snap.keys()))
+        return snap
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("agent_framework_snapshot failed: %s", exc)
+        raise
+
+
 @shared_task(bind=True, max_retries=3)
 def process_agent_event(self, event_type: str, input_data: dict, tenant_id: str = None, 
                         lead_id: str = None, conversation_id: str = None):

@@ -19,21 +19,29 @@ const PRESETS: Record<AssistantVariant, string[]> = {
     "لماذا Dealix أقوى من أداة عادية؟",
     "هل لديكم عروض لقطاعي؟",
   ],
+  preview: [
+    "ما الفرق بين الجولة والحساب الحقيقي؟",
+    "اشرح لي التبويبات بالترتيب",
+    "هل أحتاج دفعاً لأستكشف المنصة؟",
+    "ماذا أرى بعد التسجيل؟",
+  ],
 };
+
+function welcomeMessage(variant: AssistantVariant): string {
+  if (variant === "marketer") {
+    return "أنا مساعد Dealix للشركاء والمسوّقين. اسألني عن العمولات، العروض، الواتساب، أو لوحة التحكم — أو اختر سؤالاً سريعاً أدناه.";
+  }
+  if (variant === "preview") {
+    return "أنا دليلك التفاعلي في جولة المنصة: اسأل عن أي تبويب، ماذا يتغيّر بعد التسجيل، أو الدفع — أو اختر سؤالاً جاهزاً. أجيب من معرفة محلية فورية، وأكمّل من الخادم عند توفره.";
+  }
+  return "أنا مساعد Dealix للشركات. اسألني عن القيمة، لوحة التحكم، القطاعات، الأمان، أو التجربة — أو اختر سؤالاً سريعاً.";
+}
 
 export function DealixAssistantWidget({ variant }: { variant: AssistantVariant }) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>(() => [
-    {
-      role: "assistant",
-      text:
-        variant === "marketer"
-          ? "أنا مساعد Dealix للشركاء والمسوّقين. اسألني عن العمولات، العروض، الواتساب، أو لوحة التحكم — أو اختر سؤالاً سريعاً أدناه."
-          : "أنا مساعد Dealix للشركات. اسألني عن القيمة، لوحة التحكم، القطاعات، الأمان، أو التجربة — أو اختر سؤالاً سريعاً.",
-    },
-  ]);
+  const [messages, setMessages] = useState<Msg[]>(() => [{ role: "assistant", text: welcomeMessage(variant) }]);
   const endRef = useRef<HTMLDivElement>(null);
 
   const scrollEnd = () => endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -76,14 +84,16 @@ export function DealixAssistantWidget({ variant }: { variant: AssistantVariant }
     [loading, pushAssistant, variant]
   );
 
-  const title = variant === "marketer" ? "مساعد الشركاء" : "مساعد الشركات";
-  const sub = variant === "marketer" ? "Dealix Partner" : "Dealix B2B";
+  const title =
+    variant === "marketer" ? "مساعد الشركاء" : variant === "preview" ? "دليل الجولة الذكي" : "مساعد الشركات";
+  const sub =
+    variant === "marketer" ? "Dealix Partner" : variant === "preview" ? "جولة + أسئلة سريعة" : "Dealix B2B";
 
   return (
     <div className="pointer-events-none fixed bottom-5 left-5 z-[60] flex flex-col items-start md:bottom-8 md:left-8">
       {open ? (
         <div
-          className="pointer-events-auto mb-3 flex w-[min(100vw-2rem,400px)] flex-col overflow-hidden rounded-2xl border border-teal-500/35 bg-slate-950/95 shadow-2xl shadow-teal-900/40 backdrop-blur-xl"
+          className="pointer-events-auto mb-3 flex w-[min(100vw-2rem,420px)] flex-col overflow-hidden rounded-2xl border border-teal-500/35 bg-slate-950/95 shadow-2xl shadow-teal-900/40 backdrop-blur-xl"
           role="dialog"
           aria-label={title}
         >
@@ -107,17 +117,17 @@ export function DealixAssistantWidget({ variant }: { variant: AssistantVariant }
             </button>
           </div>
 
-          <div className="max-h-[min(52vh,420px)] space-y-3 overflow-y-auto px-3 py-3 text-right">
+          <div className="max-h-[min(52vh,440px)] space-y-3 overflow-y-auto px-3 py-3 text-right">
             {messages.map((m, i) => (
               <div
                 key={i}
                 className={`flex flex-col gap-1 ${m.role === "user" ? "items-start" : "items-end"}`}
               >
                 <div
-                  className={`max-w-[95%] rounded-2xl px-3 py-2.5 text-sm leading-relaxed ${
+                  className={`max-w-[95%] rounded-2xl px-3 py-2.5 text-sm leading-relaxed transition-all ${
                     m.role === "user"
                       ? "bg-teal-600/30 text-teal-50"
-                      : "border border-white/10 bg-white/5 text-slate-200"
+                      : "border border-white/10 bg-white/5 text-slate-200 shadow-sm"
                   }`}
                 >
                   {m.text}
@@ -138,25 +148,33 @@ export function DealixAssistantWidget({ variant }: { variant: AssistantVariant }
               </div>
             ))}
             {loading ? (
-              <div className="flex justify-end text-teal-400/90">
-                <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+              <div className="flex items-center justify-end gap-2 text-teal-400/90" aria-live="polite">
+                <span className="text-[11px] text-slate-500">جارٍ التفكير</span>
+                <span className="inline-flex gap-1">
+                  <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-teal-400 [animation-delay:-0.2s]" />
+                  <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-teal-400 [animation-delay:-0.1s]" />
+                  <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-teal-400" />
+                </span>
+                <Loader2 className="h-4 w-4 animate-spin opacity-60" aria-hidden />
               </div>
             ) : null}
             <div ref={endRef} />
           </div>
 
-          <div className="flex flex-wrap justify-end gap-1.5 border-t border-white/5 px-2 py-2">
-            {PRESETS[variant].map((p) => (
-              <button
-                key={p}
-                type="button"
-                onClick={() => send(p)}
-                disabled={loading}
-                className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-slate-300 hover:border-teal-500/30 hover:text-white disabled:opacity-50"
-              >
-                {p}
-              </button>
-            ))}
+          <div className="max-h-[5.5rem] overflow-y-auto border-t border-white/5 px-2 py-2">
+            <div className="flex flex-wrap justify-end gap-1.5">
+              {PRESETS[variant].map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => send(p)}
+                  disabled={loading}
+                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-slate-300 hover:border-teal-500/30 hover:text-white disabled:opacity-50"
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex gap-2 border-t border-white/10 p-3">
@@ -165,7 +183,7 @@ export function DealixAssistantWidget({ variant }: { variant: AssistantVariant }
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send(input)}
-              placeholder="اكتب سؤالك…"
+              placeholder={variant === "preview" ? "اسأل عن تبويب أو قدرة…" : "اكتب سؤالك…"}
               className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-teal-500/40 focus:outline-none"
               dir="rtl"
             />

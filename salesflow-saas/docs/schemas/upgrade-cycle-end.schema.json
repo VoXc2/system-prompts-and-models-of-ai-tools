@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.internal/schemas/upgrade-cycle-end.json",
+  "title": "UpgradeCycleExecutivePayload",
+  "type": "object",
+  "required": ["machine_summary"],
+  "properties": {
+    "machine_summary": {
+      "type": "object",
+      "required": ["cycle_timestamp"],
+      "properties": {
+        "cycle_timestamp": { "type": "string", "format": "date-time" },
+        "top_opportunities": { "type": "array", "items": { "type": "object" } },
+        "adopted_today": { "type": "array", "items": { "type": "object" } },
+        "rejected_today": { "type": "array", "items": { "type": "object" } },
+        "watchlist": { "type": "array", "items": { "type": "object" } },
+        "system_memory_updates": { "type": "array" },
+        "next_cycle_focus": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "candidates": {
+      "type": "array",
+      "items": { "$ref": "upgrade-candidate.schema.json" }
+    },
+    "executive_summary": { "type": "string" },
+    "next_cycle_focus": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

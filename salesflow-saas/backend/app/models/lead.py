@@ -17,6 +17,8 @@ class Lead(BaseModel):
     status = Column(String(50), default="new")  # new, contacted, qualified, proposal, won, lost
     score = Column(Integer, default=0)
     notes = Column(Text)
+    # Derived Arabic text intelligence (summary, intent, signals) — not raw messages
+    text_intelligence = Column(JSONB, default=dict)
     extra_metadata = Column(JSONB, default=dict)  # industry-specific flexible data
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 

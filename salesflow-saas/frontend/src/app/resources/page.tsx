@@ -13,7 +13,6 @@ import {
   Clapperboard,
 } from "lucide-react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
 export const metadata = {
   title: "موارد Dealix — عروض وحالات استخدام",
@@ -78,11 +77,11 @@ export default function ResourcesPage() {
       icon: Presentation,
     },
     {
-      title: "JSON — مسارات الـ API (اختياري)",
-      href: `${API}/api/v1/marketing/hub`,
-      desc: "يعمل فقط عند تشغيل الـ backend على 8000؛ باقي الروابط أعلاه تعمل بدونه.",
+      title: "JSON — مسارات الـ API (عبر الواجهة)",
+      href: "/api/marketing-hub",
+      desc: "يستدعي FastAPI عبر نفس الموقع؛ يتطلب تشغيل الـ backend أو يعيد خطأ اتصال واضحاً.",
       icon: Server,
-      external: true,
+      external: false,
     },
   ];
 

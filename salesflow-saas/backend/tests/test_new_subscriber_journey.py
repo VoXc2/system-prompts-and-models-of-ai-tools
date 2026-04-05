@@ -85,6 +85,7 @@ async def test_new_subscriber_refresh_token_roundtrip():
                 "full_name": "User",
                 "email": email,
                 "password": password,
+                "phone": "0502223344",
             },
         )
         assert reg.status_code == 200

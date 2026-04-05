@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.internal/schemas/knowledge-fact.json",
+  "title": "KnowledgeFact",
+  "type": "object",
+  "required": ["memory_record_id", "summary", "category", "tags", "importance", "related_entities"],
+  "properties": {
+    "memory_record_id": { "type": "string", "format": "uuid" },
+    "summary": { "type": "string", "maxLength": 8000 },
+    "category": {
+      "type": "string",
+      "description": "Sales | Operations | Billing | Support | Product | Risk"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "importance": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "related_entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entity_type", "entity_id"],
+        "properties": {
+          "entity_type": { "type": "string" },
+          "entity_id": { "type": "string", "format": "uuid" },
+          "role": { "type": ["string", "null"] }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

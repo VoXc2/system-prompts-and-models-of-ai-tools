@@ -1,0 +1,39 @@
+# Optional: run backup steps from GitHub Actions (requires self-hosted runner near DB or use only for mirror).
+# Production: prefer cron on the DB host or a dedicated backup VM with network access to Postgres.
+
+name: Backup — daily (optional)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 2 * * *" # 02:20 UTC daily
+
+jobs:
+  mirror-git:
+    name: Mirror repository (code backup)
+    runs-on: ubuntu-latest
+    if: vars.ENABLE_GIT_MIRROR == 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure mirror remote
+        env:
+          MIRROR_URL: ${{ secrets.GIT_MIRROR_URL }}
+        run: |
+          if [ -z "${MIRROR_URL}" ]; then echo "GIT_MIRROR_URL not set; skipping"; exit 0; fi
+          git remote add mirror "${MIRROR_URL}" 2>/dev/null || git remote set-url mirror "${MIRROR_URL}"
+          git push --mirror mirror
+
+  backup-s3-placeholder:
+    name: Upload artifacts (requires secrets)
+    runs-on: ubuntu-latest
+    if: vars.ENABLE_CLOUD_BACKUP == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        run: |
+          if [ -z "${AWS_ACCESS_KEY_ID}" ]; then echo "Configure AWS secrets to enable"; exit 0; fi
+          echo "Define steps: aws s3 sync from self-hosted artifact or use OIDC to role."

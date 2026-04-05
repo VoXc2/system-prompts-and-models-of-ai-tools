@@ -37,6 +37,7 @@ class LeadResponse(BaseModel):
     status: str
     score: int
     notes: Optional[str]
+    text_intelligence: Optional[dict] = None
     metadata: Optional[dict] = Field(
         default=None,
         validation_alias="extra_metadata",

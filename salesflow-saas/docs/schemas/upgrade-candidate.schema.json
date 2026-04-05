@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.internal/schemas/upgrade-candidate.json",
+  "title": "UpgradeCandidate",
+  "type": "object",
+  "required": ["name", "category", "recommended_action", "decision_reason"],
+  "properties": {
+    "name": { "type": "string" },
+    "category": { "type": "string" },
+    "version": { "type": ["string", "null"] },
+    "release_date": { "type": ["string", "null"] },
+    "official_source": { "type": ["string", "null"] },
+    "summary": { "type": ["string", "null"] },
+    "project_fit": { "type": ["string", "null"] },
+    "affected_subsystems": { "type": "array", "items": { "type": "string" } },
+    "benefits": { "type": "array", "items": { "type": "string" } },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "alternatives_considered": { "type": "array", "items": { "type": "string" } },
+    "integration_complexity": { "enum": ["low", "medium", "high"] },
+    "production_readiness": { "type": "number", "minimum": 0, "maximum": 100 },
+    "strategic_value": { "type": "number", "minimum": 0, "maximum": 100 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 100 },
+    "weighted_total": { "type": "number" },
+    "recommended_action": {
+      "enum": ["ignore", "watchlist", "sandbox", "staging", "promote"]
+    },
+    "implementation_plan": { "type": "array", "items": { "type": "string" } },
+    "tests_required": { "type": "array", "items": { "type": "string" } },
+    "rollback_plan": { "type": "array", "items": { "type": "string" } },
+    "decision_reason": { "type": "string" }
+  },
+  "additionalProperties": true
+}

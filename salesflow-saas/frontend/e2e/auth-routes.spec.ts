@@ -14,6 +14,11 @@ test.describe("Auth & shell", () => {
     await expect(page.getByRole("heading", { name: /إنشاء حساب شركة/ })).toBeVisible();
   });
 
+  test("explore dashboard tour loads without login", async ({ page }) => {
+    await page.goto("/explore");
+    await expect(page.getByText(/جولة تعريفية —/)).toBeVisible();
+  });
+
   test("dashboard redirects unauthenticated user to login", async ({ page }) => {
     await page.goto("/dashboard");
     await page.waitForURL(/\/login/, { timeout: 15_000 });

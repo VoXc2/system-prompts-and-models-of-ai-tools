@@ -13,6 +13,12 @@ async def test_health_ready_strategy_value_prop():
         h = await ac.get("/api/v1/health")
         assert h.status_code == 200
 
+        af = await ac.get("/api/v1/agent-frameworks")
+        assert af.status_code == 200
+        afj = af.json()
+        assert "packages" in afj
+        assert "python" in afj
+
         r = await ac.get("/api/v1/ready")
         assert r.status_code == 200
         assert r.json().get("status") in ("ready", "not_ready")

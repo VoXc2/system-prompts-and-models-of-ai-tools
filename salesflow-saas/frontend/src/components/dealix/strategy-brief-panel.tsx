@@ -3,15 +3,11 @@
 import Link from "next/link";
 import { Sparkles, Loader2, ExternalLink, BarChart3, Radio } from "lucide-react";
 import { useStrategySummary } from "@/hooks/use-strategy-summary";
-import { getApiBaseUrl } from "@/lib/api-base";
-
 /**
- * Executive strip on the main dashboard — GET /api/v1/strategy/summary,
- * or embedded fallback when the API is offline (no amber warning box).
+ * Executive strip on the main dashboard — عبر /api/strategy-summary (BFF) أو نسخة مضمّنة.
  */
 export function StrategyBriefPanel() {
   const { data, loading, source } = useStrategySummary();
-  const api = getApiBaseUrl();
 
   if (loading) {
     return (
@@ -60,7 +56,7 @@ export function StrategyBriefPanel() {
           </div>
         </div>
         <a
-          href={`${api}/api/v1/strategy/summary`}
+          href="/api/strategy-summary"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/40 px-3 py-1.5 text-xs text-teal-200 hover:bg-teal-950/50 self-start"

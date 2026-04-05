@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BarChart3 } from "lucide-react";
 import { MarketersAssistantHost } from "@/components/marketers/marketers-assistant-host";
+import { PartnerAreaExit } from "@/components/marketers/partner-area-exit";
 
 export const metadata: Metadata = {
   title: "Dealix — بوابة المسوّقين",
@@ -41,6 +42,7 @@ export default function MarketersLayout({ children }: { children: React.ReactNod
             <Link href="/login?next=%2Fdashboard" className="text-slate-400 hover:text-white">
               دخول المنصة
             </Link>
+            <PartnerAreaExit />
           </nav>
         </div>
       </header>

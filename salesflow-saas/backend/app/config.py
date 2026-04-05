@@ -41,6 +41,8 @@ class Settings(BaseSettings):
     EXPOSE_OPENAPI: bool = True
     # If non-empty, require Authorization: Bearer <token> for /api/v1 (except health, webhooks, marketing, strategy, value-proposition)
     DEALIX_INTERNAL_API_TOKEN: str = ""
+    # When False, /api/v1/strategy/* and /api/v1/marketing/* are no longer exempt from DEALIX_INTERNAL_API_TOKEN (use Next.js BFF proxy + same token server-side).
+    DEALIX_PUBLIC_STRATEGY_MARKETING: bool = True
     # Serve sales_assets + sector presentations at /dealix-marketing, /dealix-presentations
     MARKETING_STATIC_ENABLED: bool = True
     # Empty = auto (repo/salesflow-saas). In Docker set to /salesflow (see docker-compose).
@@ -130,6 +132,32 @@ class Settings(BaseSettings):
 
     # ── Autonomous Loops ────────────────────────────────────
     SELF_IMPROVEMENT_INTERVAL_SECONDS: int = 900
+    # عند True: حلقة التحسين في lifespan تستخدم إشارات من إصدارات الوكلاء (LangGraph، AutoGen، …) وليس signals فارغة.
+    DEALIX_SELF_EVOLUTION_SIGNALS: bool = True
+
+    # ── Autonomous Upgrade Director (governance; no auto network scan) ──
+    # Hourly Celery: local requirements/package.json snapshot → DB + optional system memory
+    DEALIX_UPGRADE_DIRECTOR_HOURLY: bool = False
+    # When set, hourly + completed cycles mirror to system_memory_records for this tenant
+    DEALIX_PLATFORM_TENANT_ID: str = ""
+
+    # ── SEO Engine (internal intelligence; drafts only by default) ──
+    DEALIX_SEO_ENGINE_ENABLED: bool = True
+    # Comma-separated origins to audit (e.g. https://app.dealix.sa,https://dealix.sa)
+    DEALIX_SEO_PUBLIC_BASE_URLS: str = ""
+    # When True, Celery beat schedules recurring SEO tasks (see seo_tasks)
+    DEALIX_SEO_SCHEDULE_ENABLED: bool = False
+
+    # ── Revenue Lead Engine (ICP, scoring, routing, learning) ──
+    DEALIX_LEAD_ENGINE_ENABLED: bool = True
+    DEALIX_LEAD_ENGINE_SCHEDULE_ENABLED: bool = False
+
+    # ── Arabic text intelligence (Mukhtasar optional + extractive fallback) ──
+    DEALIX_TEXT_INTELLIGENCE_ENABLED: bool = True
+    # When True, lead creation/update with text queues Celery analysis
+    DEALIX_TEXT_INTEL_ASYNC_DEFAULT: bool = True
+    # After text intel is written, optionally recompute lead_engine score
+    DEALIX_TEXT_INTEL_LEAD_ENGINE_HOOK: bool = True
 
     # ── Scraping / Lead Gen ──────────────────────────────
     GOOGLE_MAPS_API_KEY: str = ""

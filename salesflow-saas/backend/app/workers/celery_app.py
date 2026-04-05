@@ -1,4 +1,5 @@
 from celery import Celery
+from celery.schedules import crontab
 from app.config import get_settings
 
 settings = get_settings()
@@ -12,6 +13,12 @@ celery_app = Celery(
         "app.workers.message_tasks",
         "app.workers.notification_tasks",
         "app.workers.affiliate_tasks",
+        "app.workers.agent_tasks",
+        "app.workers.brain_tasks",
+        "app.workers.upgrade_director_tasks",
+        "app.workers.seo_tasks",
+        "app.workers.lead_engine_tasks",
+        "app.workers.text_intel_tasks",
     ],
 )
 
@@ -61,5 +68,21 @@ celery_app.conf.beat_schedule = {
     "process-auto-bookings": {
         "task": "app.workers.affiliate_tasks.process_auto_bookings",
         "schedule": 900.0,  # every 15 minutes
+    },
+    "brain-daily-learning": {
+        "task": "app.workers.brain_tasks.brain_daily_learning",
+        "schedule": crontab(hour=5, minute=0),
+    },
+    "upgrade-director-hourly": {
+        "task": "app.workers.upgrade_director_tasks.upgrade_director_hourly_tick",
+        "schedule": crontab(minute=15),
+    },
+    "seo-daily-technical": {
+        "task": "app.workers.seo_tasks.seo_scheduled_technical_round",
+        "schedule": crontab(hour=7, minute=20),
+    },
+    "lead-engine-daily-rescore": {
+        "task": "app.workers.lead_engine_tasks.lead_engine_daily_rescore",
+        "schedule": crontab(hour=6, minute=40),
     },
 }

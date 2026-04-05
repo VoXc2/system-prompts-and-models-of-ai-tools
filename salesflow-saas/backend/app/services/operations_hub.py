@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.operations import ApprovalRequest, DomainEvent, IntegrationSyncState
+from app.services.system_memory_ingest import mirror_domain_event_to_memory
 
 
 async def emit_domain_event(
@@ -28,6 +29,7 @@ async def emit_domain_event(
     )
     db.add(row)
     await db.flush()
+    await mirror_domain_event_to_memory(db, row)
     return row
 
 

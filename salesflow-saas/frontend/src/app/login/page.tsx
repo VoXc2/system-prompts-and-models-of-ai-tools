@@ -163,6 +163,11 @@ export default function LoginPage() {
               إنشاء شركة جديدة
             </Link>
           </p>
+          <p className="text-center text-sm">
+            <Link href="/explore" className="font-medium text-teal-400 hover:text-teal-300 hover:underline">
+              استكشف شكل اللوحة أولاً — بدون تسجيل
+            </Link>
+          </p>
           <div className="flex items-start justify-center gap-2 rounded-xl border border-border/40 bg-secondary/20 px-3 py-2.5 text-center">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary/80" aria-hidden />
             <p className="text-[13px] leading-relaxed text-muted-foreground">

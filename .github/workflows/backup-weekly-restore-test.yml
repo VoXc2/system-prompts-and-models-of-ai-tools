@@ -1,0 +1,20 @@
+# Weekly restore verification — typically run on a self-hosted runner with access to a test Postgres instance
+# and a copy of the latest dump (pull from S3 in a prior step). Disabled by default.
+
+name: Backup — weekly restore test
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 0" # Sunday 06:00 UTC
+
+jobs:
+  restore-test:
+    runs-on: ubuntu-latest
+    if: vars.ENABLE_WEEKLY_RESTORE_TEST == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Placeholder
+        run: |
+          echo "Install postgresql-client, download latest .dump from S3, run infra/backup/scripts/weekly-restore-test.sh"
+          echo "Enable via repo variable ENABLE_WEEKLY_RESTORE_TEST=true and add DB secrets."

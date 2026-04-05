@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "Dealix",
+  "version": "1.0.0",
+  "source": {
+    "css": "src/app/globals.css",
+    "tailwind": "tailwind.config.js"
+  },
+  "color": {
+    "light": {
+      "background": "hsl(220 20% 97%)",
+      "foreground": "hsl(220 30% 15%)",
+      "card": "hsl(0 0% 100%)",
+      "cardForeground": "hsl(220 30% 15%)",
+      "popover": "hsl(0 0% 100%)",
+      "popoverForeground": "hsl(220 30% 15%)",
+      "primary": "hsl(153 60% 45%)",
+      "primaryForeground": "hsl(0 0% 100%)",
+      "secondary": "hsl(47 100% 65%)",
+      "secondaryForeground": "hsl(220 30% 15%)",
+      "muted": "hsl(220 15% 90%)",
+      "mutedForeground": "hsl(220 10% 45%)",
+      "accent": "hsl(47 100% 50%)",
+      "accentForeground": "hsl(0 0% 100%)",
+      "destructive": "hsl(0 85% 60%)",
+      "destructiveForeground": "hsl(0 0% 100%)",
+      "success": "hsl(140 70% 40%)",
+      "successForeground": "hsl(0 0% 100%)",
+      "border": "hsl(220 15% 85%)",
+      "input": "hsl(220 15% 85%)",
+      "ring": "hsl(153 60% 45%)"
+    },
+    "dark": {
+      "background": "hsl(230 40% 4%)",
+      "foreground": "hsl(210 20% 95%)",
+      "card": "hsl(230 35% 8%)",
+      "cardForeground": "hsl(210 20% 95%)",
+      "popover": "hsl(230 35% 8%)",
+      "popoverForeground": "hsl(210 20% 95%)",
+      "primary": "hsl(153 65% 55%)",
+      "primaryForeground": "hsl(230 40% 4%)",
+      "secondary": "hsl(47 100% 60%)",
+      "secondaryForeground": "hsl(230 40% 4%)",
+      "muted": "hsl(230 30% 12%)",
+      "mutedForeground": "hsl(215 15% 70%)",
+      "accent": "hsl(47 100% 55%)",
+      "accentForeground": "hsl(0 0% 0%)",
+      "destructive": "hsl(0 70% 55%)",
+      "destructiveForeground": "hsl(0 0% 100%)",
+      "success": "hsl(142 70% 50%)",
+      "successForeground": "hsl(0 0% 100%)",
+      "border": "hsl(230 30% 15%)",
+      "input": "hsl(230 30% 15%)",
+      "ring": "hsl(153 65% 55%)"
+    },
+    "palette": {
+      "primary": {
+        "50": "#E8F0F8",
+        "100": "#C5D9EE",
+        "200": "#8BB3DD",
+        "300": "#518DCC",
+        "400": "#2A6AA8",
+        "500": "#0F4C81",
+        "600": "#0D4173",
+        "700": "#0A3460",
+        "800": "#08274D",
+        "900": "#051A3A"
+      },
+      "secondary": {
+        "50": "#E0FFF9",
+        "100": "#B3FFE8",
+        "200": "#66FFD1",
+        "300": "#33EFBA",
+        "400": "#00D4B3",
+        "500": "#00BFA6",
+        "600": "#009C87",
+        "700": "#007A6A",
+        "800": "#00574C",
+        "900": "#00352E"
+      },
+      "accent": {
+        "50": "#FFF0EB",
+        "100": "#FFD9C8",
+        "200": "#FFB391",
+        "300": "#FF8D5A",
+        "400": "#FF7948",
+        "500": "#FF6B35",
+        "600": "#E55A28",
+        "700": "#CC4A1B",
+        "800": "#993813",
+        "900": "#66250D"
+      },
+      "dark": "#1A1A2E"
+    }
+  },
+  "radius": {
+    "base": "1rem",
+    "cssVar": "--radius"
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Inter", "IBM Plex Sans Arabic", "sans-serif"],
+      "arabic": ["IBM Plex Sans Arabic", "Tajawal", "sans-serif"]
+    },
+    "scale": {
+      "h1": { "class": "text-3xl md:text-4xl font-bold tracking-tight" },
+      "h2": { "class": "text-2xl md:text-3xl font-bold" },
+      "h3": { "class": "text-xl font-semibold" },
+      "h4": { "class": "text-lg font-semibold" },
+      "body": { "class": "text-sm md:text-base" },
+      "small": { "class": "text-sm text-muted-foreground" },
+      "caption": { "class": "text-xs text-muted-foreground" }
+    }
+  },
+  "spacing": {
+    "grid": 8,
+    "unit": "px",
+    "tailwindScale": [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 72, 80, 96]
+  },
+  "breakpoint": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+  "accessibility": {
+    "target": "WCAG 2.2 AA",
+    "focusRing": "ring-2 ring-ring ring-offset-2 ring-offset-background",
+    "minTouchTarget": "44px"
+  }
+}

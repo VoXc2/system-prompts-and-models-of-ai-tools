@@ -89,14 +89,6 @@ export function CeoDirectContactCard({ showHelpLink }: Props) {
           ) : null}
         </div>
       </div>
-
-      {!bookingConfigured ? (
-        <p className="mt-4 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-[11px] leading-relaxed text-slate-500">
-          لتفعيل زر «حجز موعد — Google Meet» مباشرة: أنشئ جدول مواعيد في Google Calendar ثم ضع رابط الحجز في
-          المتغير <code className="rounded bg-white/10 px-1 text-teal-200/90">NEXT_PUBLIC_CEO_BOOKING_URL</code>{" "}
-          في بيئة النشر.
-        </p>
-      ) : null}
     </div>
   );
 }

@@ -36,9 +36,13 @@ export type StrategySummary = {
 };
 
 export async function fetchStrategySummary(signal?: AbortSignal): Promise<StrategySummary | null> {
-  const base = getApiBaseUrl();
+  /** في المتصفح: نمر عبر مسار Next.js حتى يُرفق مفتاح الخادم عند إغلاق الوصول العام للـ API. */
+  const url =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/api/strategy-summary`
+      : `${getApiBaseUrl()}/api/v1/strategy/summary`;
   try {
-    const res = await fetch(`${base}/api/v1/strategy/summary`, {
+    const res = await fetch(url, {
       signal,
       headers: { Accept: "application/json" },
       cache: "no-store",

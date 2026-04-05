@@ -1,9 +1,12 @@
 /**
  * مساعد معرفة محلي (عربي) — يكمّل الردود عند عدم توفر الـ API.
  * يُفضّل مطابقة الكلمات المفتاحية بعد تطبيع بسيط للعربية.
+ *
+ * يُحدَّث مع إصدار الـ blueprint في الباكند (`strategy_summary._BLUEPRINT_VERSION`).
  */
+export const DEALIX_PRODUCT_BLUEPRINT_VERSION = "4.0.0-legendary";
 
-export type AssistantVariant = "marketer" | "company";
+export type AssistantVariant = "marketer" | "company" | "preview";
 
 export type KnowledgeEntry = {
   keywords: string[];
@@ -95,6 +98,24 @@ const MARKETER: KnowledgeEntry[] = [
 
 const COMPANY: KnowledgeEntry[] = [
   {
+    keywords: ["gong", "outreach", "سيلزفورس", "salesforce", "منافس", "مقارنه", "مقارنة"],
+    answer:
+      "أدوات مثل Gong وOutreach قوية في سوقها — لكن Dealix يُبنى لسياق B2B السعودي: ريال، PDPL، واتساب كقناة، وحوكمة إرسال. راجع قسم «التمييز أمام السوق» في الصفحة الرئيسية ثم صفحة الاستراتيجية للتفاصيل.",
+    links: [
+      { label: "الصفحة الرئيسية (قسم التمييز)", href: "/#market-moat" },
+      { label: "الاستراتيجية", href: "/strategy" },
+    ],
+  },
+  {
+    keywords: ["اصدار", "إصدار", "نسخه", "نسخة", "blueprint", "ميزات", "changelog", "تحديث", "roadmap", "خارطه", "خارطة"],
+    answer:
+      `إصدار المنتج الحالي (Blueprint) هو ${DEALIX_PRODUCT_BLUEPRINT_VERSION}. الميزات المعروضة في الواجهة والـ API تتبع نفس خطة التنفيذ الظاهرة في صفحة الاستراتيجية وليس نصوصاً عامة — للتفاصيل التقنية راجع ملخص الـ API أو لوحة التحكم بعد الدخول.`,
+    links: [
+      { label: "الاستراتيجية والمراحل", href: "/strategy" },
+      { label: "JSON الملخص (BFF)", href: "/api/strategy-summary" },
+    ],
+  },
+  {
     keywords: ["لماذا", "فرق", "ميزه", "ميزة", "قوي", "اقوى", "أقوى", "dealix"],
     answer:
       "Dealix يجمع اكتشافاً وتأهيلاً وقنوات متعددة وحوكمة قبل الإرسال الحساس وذاكرة صفقة — أي ليس «شات عام» بل نظام تشغيل إيرادات B2B مُهندَس للسياق السعودي (عربي، عملة محلية، قنوات واقعية).",
@@ -153,6 +174,42 @@ const COMPANY: KnowledgeEntry[] = [
   },
 ];
 
+const PREVIEW: KnowledgeEntry[] = [
+  {
+    keywords: ["جوله", "جولة", "تجربه", "تجربة", "معاينه", "معاينة", "استكشاف"],
+    answer:
+      "أنت في وضع جولة: انقر التبويبات في الشريط الجانبي لرؤية نماذج لوحة التحكم — القيادة، الوكلاء، المالية، العروض، والسكربتات. لا يُحفظ شيء هنا؛ للبيانات الحقيقية أنشئ حساباً.",
+    links: [
+      { label: "إنشاء حساب", href: "/register?next=%2Fdashboard" },
+      { label: "تسجيل الدخول", href: "/login?next=%2Fdashboard" },
+    ],
+  },
+  {
+    keywords: ["تبويب", "tab", "قائمه", "قائمة", "وش", "ايش", "ماذا", "اشوف", "أشوف"],
+    answer:
+      "كل تبويب يعرض طبقة من المنصة: نظرة عامة، قيمة للشركات، مسار العميل، ذكاء، توليد عملاء، عقار، مسوّقون، وكلاء، تحصيل، تحليلات، معرفة، عروض، سكربتات، اتفاقيات… جرّب التنقل لرؤية النطاق الكامل.",
+    links: [{ label: "الصفحة الرئيسية", href: "/" }],
+  },
+  {
+    keywords: ["دفع", "فلوس", "سعر", "اشتراك", "باقه", "باقة", "فاتوره", "فاتورة"],
+    answer:
+      "الجولة لا تتطلب دفعاً. التسعير والعقود تُناقش مع فريق Dealix حسب قطاعك؛ بعد التسجيل تربط بياناتك ولا تُفرض رسوم قبل اتفاق واضح.",
+    links: [
+      { label: "إنشاء حساب", href: "/register?next=%2Fdashboard" },
+      { label: "المساعدة", href: "/help" },
+    ],
+  },
+  {
+    keywords: ["فرق", "بعد", "تسجيل", "حساب", "حقيقي"],
+    answer:
+      "بعد التسجيل: نفس الشكل لكن مع JWT وبياناتك — ربط CRM، صفقات حقيقية، صلاحيات فريق، وتكاملات. الجولة تشرح الشكل فقط.",
+    links: [
+      { label: "تسجيل", href: "/register?next=%2Fdashboard" },
+      { label: "دليل القراءة", href: "/dealix-marketing/dashboard-guide" },
+    ],
+  },
+];
+
 export function matchLocalKnowledge(
   variant: AssistantVariant,
   rawMessage: string
@@ -163,11 +220,13 @@ export function matchLocalKnowledge(
       reply:
         variant === "marketer"
           ? "اكتب سؤالك باختصار: عمولات، عروض، واتساب، لوحة التحكم، أو إحالة مستثمر."
-          : "اكتب سؤالك: لوحة التحكم، الأسعار، القطاعات، الأمان، أو التجربة.",
+          : variant === "preview"
+            ? "اسأل عن: التبويبات، الفرق بعد التسجيل، الدفع، أو ما تراه في الجولة. أو اختر سؤالاً سريعاً."
+            : "اكتب سؤالك: لوحة التحكم، الأسعار، القطاعات، الأمان، أو التجربة.",
     };
   }
 
-  const pool = variant === "marketer" ? MARKETER : COMPANY;
+  const pool = variant === "marketer" ? MARKETER : variant === "preview" ? PREVIEW : COMPANY;
   let best: { score: number; entry: KnowledgeEntry } | null = null;
 
   for (const entry of pool) {
@@ -193,10 +252,18 @@ export function matchLocalKnowledge(
     reply:
       variant === "marketer"
         ? "لم أجد مطابقة دقيقة. جرّب: «عمولات»، «عروض القطاعات»، «واتساب»، أو «لوحة التحكم». يمكنك أيضاً زيارة مركز الموارد أو صفحة المساعدة للأسئلة المطوّلة."
-        : "لم أجد مطابقة دقيقة. جرّب: «لماذا Dealix»، «لوحة التحكم»، «الأسعار»، أو «العروض القطاعية». زر صفحة المساعدة للقائمة الكاملة.",
-    links: [
-      { label: "المساعدة", href: "/help" },
-      { label: "الموارد", href: "/resources" },
-    ],
+        : variant === "preview"
+          ? "لم أجد مطابقة دقيقة. جرّب: «التبويبات»، «الجولة»، «الدفع»، أو «بعد التسجيل». يمكنك فتح الصفحة الرئيسية أو إنشاء حساب عندما تكون جاهزاً."
+          : "لم أجد مطابقة دقيقة. جرّب: «لماذا Dealix»، «لوحة التحكم»، «الأسعار»، أو «العروض القطاعية». زر صفحة المساعدة للقائمة الكاملة.",
+    links:
+      variant === "preview"
+        ? [
+            { label: "الرئيسية", href: "/" },
+            { label: "إنشاء حساب", href: "/register?next=%2Fdashboard" },
+          ]
+        : [
+            { label: "المساعدة", href: "/help" },
+            { label: "الموارد", href: "/resources" },
+          ],
   };
 }

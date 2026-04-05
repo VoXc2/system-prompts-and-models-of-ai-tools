@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.internal/schemas/conversation-memory.json",
+  "title": "ConversationMemorySlice",
+  "description": "Normalized slice derived from ai_conversations.messages JSONB + metadata",
+  "type": "object",
+  "required": ["conversation_id", "tenant_id", "channel", "turns"],
+  "properties": {
+    "conversation_id": { "type": "string", "format": "uuid" },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "lead_id": { "type": ["string", "null"], "format": "uuid" },
+    "channel": { "type": "string" },
+    "status": { "type": "string" },
+    "turns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "content", "at"],
+        "properties": {
+          "role": { "enum": ["user", "assistant", "system", "tool"] },
+          "content": { "type": "string" },
+          "at": { "type": "string", "format": "date-time" },
+          "metadata": { "type": "object" }
+        }
+      }
+    },
+    "derived": {
+      "type": "object",
+      "properties": {
+        "sentiment_score": { "type": "integer" },
+        "qualified": { "type": "boolean" },
+        "last_intent": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -14,6 +14,7 @@ import pytest
 LAUNCH_GET_MATRIX = [
     "/api/v1/health",
     "/api/v1/ready",
+    "/api/v1/brain/health",
     "/api/v1/marketing/hub",
     "/api/v1/strategy/summary",
     "/api/v1/value-proposition/",

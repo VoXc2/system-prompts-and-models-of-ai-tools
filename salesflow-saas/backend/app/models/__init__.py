@@ -23,6 +23,39 @@ from app.models.guarantee import GuaranteeClaim
 from app.models.compliance import Consent, Complaint, Policy
 from app.models.knowledge import KnowledgeArticle, SectorAsset
 from app.models.advanced import TrustScore, Prospect, Scorecard, AIRehearsal
+from app.models.second_brain import (
+    SystemMemoryRecord,
+    KnowledgeFact,
+    MemoryGraphEdge,
+    ReasoningRule,
+    LearningMetricSnapshot,
+    AutomationRunRecord,
+    GeneratedInsight,
+    SelfImprovementSuggestion,
+    PendingAction,
+)
+from app.models.brain_runtime import BrainAgentSession, BrainSkillInvocation
+from app.models.upgrade_director import UpgradeCandidateRecord, UpgradeDirectorCycle
+from app.models.seo_intelligence import (
+    SeoCompetitor,
+    SeoContentDraft,
+    SeoContentGap,
+    SeoEngineRun,
+    SeoKeywordOpportunity,
+    SeoSchemaFinding,
+)
+from app.models.text_intelligence import TextIntelligenceMarketInsight
+from app.models.lead_engine import (
+    LeadEngineEnrichmentFact,
+    LeadEngineICPProfile,
+    LeadEngineLearningEvent,
+    LeadEnginePlaybookRun,
+    LeadEngineRoutingDecision,
+    LeadEngineScoreSnapshot,
+    LeadEngineSignal,
+    LeadEngineSourceEvent,
+    LeadEngineStakeholderRole,
+)
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
@@ -35,4 +68,33 @@ __all__ = [
     "Dispute", "GuaranteeClaim", "Consent", "Complaint", "Policy",
     "KnowledgeArticle", "SectorAsset",
     "TrustScore", "Prospect", "Scorecard", "AIRehearsal",
+    "SystemMemoryRecord",
+    "KnowledgeFact",
+    "MemoryGraphEdge",
+    "ReasoningRule",
+    "LearningMetricSnapshot",
+    "AutomationRunRecord",
+    "GeneratedInsight",
+    "SelfImprovementSuggestion",
+    "PendingAction",
+    "BrainAgentSession",
+    "BrainSkillInvocation",
+    "UpgradeDirectorCycle",
+    "UpgradeCandidateRecord",
+    "SeoEngineRun",
+    "SeoCompetitor",
+    "SeoKeywordOpportunity",
+    "SeoContentGap",
+    "SeoSchemaFinding",
+    "SeoContentDraft",
+    "LeadEngineICPProfile",
+    "LeadEngineSourceEvent",
+    "LeadEngineEnrichmentFact",
+    "LeadEngineSignal",
+    "LeadEngineStakeholderRole",
+    "LeadEngineScoreSnapshot",
+    "LeadEngineRoutingDecision",
+    "LeadEngineLearningEvent",
+    "LeadEnginePlaybookRun",
+    "TextIntelligenceMarketInsight",
 ]

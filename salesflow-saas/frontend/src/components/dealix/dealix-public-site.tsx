@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { DealixWhyVideo } from "@/components/dealix/dealix-why-video";
-import { DealixAssistantWidget } from "@/components/dealix/dealix-assistant-widget";
+import { DealixCustomerJourneyLoop } from "@/components/dealix/dealix-customer-journey-loop";
+import { DealixCompetitiveMoatStrip } from "@/components/dealix/dealix-competitive-moat-strip";
+import { DealixSystemOverview } from "@/components/dealix/dealix-system-overview";
+import { FeatureCardDiagram, HeroStatMiniDiagram } from "@/components/dealix/dealix-landing-diagrams";
 import { CeoDirectContactCard } from "@/components/dealix/ceo-direct-contact-card";
 import {
   ArrowLeft,
@@ -20,6 +24,9 @@ import {
   Coins,
   MousePointer2,
   Smartphone,
+  Menu,
+  X,
+  TrendingUp,
 } from "lucide-react";
 
 const heroStats = [
@@ -28,18 +35,28 @@ const heroStats = [
     title: "مسارات وكلاء",
     hint: "تغطية مسارات التشغيل والإشراف",
     icon: Workflow,
+    mini: "agents" as const,
   },
   {
     value: "24/7",
     title: "تشغيل مستمر",
     hint: "قنوات ومتابعة دون انقطاع",
     icon: Clock,
+    mini: "clock" as const,
   },
   {
     value: "SAR",
     title: "عملة محلية",
     hint: "تسعير وتقارير بالريال السعودي",
     icon: Coins,
+    mini: "sar" as const,
+  },
+  {
+    value: "360°",
+    title: "دورة إيرادات",
+    hint: "من التأهيل حتى التحصيل في طبقة واحدة",
+    icon: TrendingUp,
+    mini: "funnel" as const,
   },
 ] as const;
 
@@ -65,21 +82,25 @@ const features = [
     title: "وكلاء متعددون + إشراف",
     desc: "طبقات من الاكتشاف إلى الإغلاق مع حوكمة وموافقات قبل الإرسال الحساس.",
     icon: Layers,
+    diagram: "layers" as const,
   },
   {
     title: "قنوات حقيقية",
     desc: "واتساب، بريد، لينكد إن، صوت — مع تكامل CRM ومسارات دفع وعقود.",
     icon: Globe2,
+    diagram: "channels" as const,
   },
   {
     title: "ذاكرة وتطوير ذاتي",
     desc: "سياق لكل عميل وصفقة؛ حلقات تحسين مستمرة قابلة للقياس.",
     icon: Cpu,
+    diagram: "memory" as const,
   },
   {
     title: "جاهزية مؤسسية",
     desc: "عزل متعدد المستأجرين، تدقيق، وتقارير تنفيذية — وليس مجرد شات بوت.",
     icon: Shield,
+    diagram: "shield" as const,
   },
 ];
 
@@ -87,7 +108,36 @@ const features = [
  * صفحة هبوط عامة — مستوى أعلى من landing عادي: حركة، تباين، مسارات واضحة.
  * (Lovable.dev أداة خارجية؛ التصميم هنا منفّذ بالكامل في Next.js.)
  */
+const navLinkClass =
+  "rounded-lg px-3 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white xl:px-0 xl:py-0 xl:hover:bg-transparent";
+
 export function DealixPublicSite() {
+  const pathname = usePathname();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileNavOpen]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (typeof window !== "undefined" && window.innerWidth >= 1280) {
+        setMobileNavOpen(false);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 overflow-x-hidden">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(20,184,166,0.25),transparent)]" />
@@ -95,68 +145,139 @@ export function DealixPublicSite() {
       <div className="pointer-events-none fixed bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]" />
 
       <header className="relative z-50 border-b border-white/5 bg-black/20 backdrop-blur-xl pointer-events-auto">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex min-w-0 items-center gap-3 rounded-lg outline-none ring-offset-[#030712] focus-visible:ring-2 focus-visible:ring-teal-500/60">
-            <div
-              className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-950/90 shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_8px_28px_-10px_rgba(20,184,166,0.4)]"
-              aria-hidden
-            >
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-teal-500/25 via-transparent to-emerald-600/15" />
-              <BarChart3 className="relative h-[22px] w-[22px] text-teal-300" strokeWidth={1.85} aria-hidden />
-            </div>
-            <div className="min-w-0 max-w-[min(100%,14rem)] text-start sm:max-w-none">
-              <p className="whitespace-nowrap text-lg font-bold tracking-tight text-white">Dealix</p>
-              <p className="mt-0.5 text-[11px] font-semibold leading-snug text-teal-400/95 sm:text-xs">
-                منصة لتشغيل المبيعات والإيرادات
-              </p>
-              <p className="mt-0.5 hidden text-[10px] leading-tight text-slate-500 sm:block">
-                من التأهيل والمتابعة حتى العرض والتحصيل — للفرق B2B
-              </p>
-            </div>
-          </Link>
-          <nav className="hidden items-center gap-8 md:flex text-sm text-slate-400">
-            <a href="#product" className="hover:text-white transition-colors">
-              المنتج
-            </a>
-            <a href="#why" className="hover:text-white transition-colors">
-              لماذا Dealix
-            </a>
-            <Link href="/resources" className="hover:text-teal-300 transition-colors">
-              التحميلات
-            </Link>
-            <Link href="/dealix-marketing/dashboard-guide" className="hover:text-teal-300 transition-colors">
-              دليل لوحة التحكم
-            </Link>
-            <Link href="/marketers" className="hover:text-teal-300 transition-colors">
-              المسوّقون
-            </Link>
-            <Link href="/help" className="hover:text-teal-300 transition-colors">
-              الدعم
-            </Link>
-            <Link href="/strategy" className="hover:text-teal-300 transition-colors">
-              الاستراتيجية
-            </Link>
-            <a href="#ceo-contact" className="hover:text-amber-200/95 transition-colors">
-              تواصل مع المدير التنفيذي
-            </a>
-          </nav>
-          <div className="flex items-center gap-3">
+        <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 sm:py-4">
+          <div className="flex min-h-[3.25rem] items-center justify-between gap-3">
             <Link
-              href="/resources"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 hover:bg-white/5"
+              href="/"
+              className="flex min-w-0 flex-1 items-center gap-2.5 rounded-lg outline-none ring-offset-[#030712] focus-visible:ring-2 focus-visible:ring-teal-500/60 sm:gap-3 sm:flex-initial"
             >
-              <Download className="h-4 w-4" />
-              موارد
+              <div
+                className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-950/90 shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_8px_28px_-10px_rgba(20,184,166,0.4)] sm:h-10 sm:w-10"
+                aria-hidden
+              >
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-teal-500/25 via-transparent to-emerald-600/15" />
+                <BarChart3 className="relative h-[20px] w-[20px] text-teal-300 sm:h-[22px] sm:w-[22px]" strokeWidth={1.85} aria-hidden />
+              </div>
+              <div className="min-w-0 text-start">
+                <p className="truncate text-base font-bold tracking-tight text-white sm:text-lg">Dealix</p>
+                <p className="mt-0.5 line-clamp-2 text-[10px] font-semibold leading-snug text-teal-400/95 sm:text-xs sm:line-clamp-none">
+                  <span className="hidden min-[380px]:inline">منصة لتشغيل المبيعات والإيرادات</span>
+                  <span className="min-[380px]:hidden">منصة المبيعات</span>
+                </p>
+                <p className="mt-0.5 hidden text-[10px] leading-tight text-slate-500 min-[480px]:line-clamp-2 min-[480px]:block xl:line-clamp-none">
+                  من التأهيل والمتابعة حتى العرض والتحصيل — للفرق B2B
+                </p>
+              </div>
             </Link>
-            <Link
-              href="/login?next=/dashboard"
-              prefetch={false}
-              className="relative z-10 inline-flex items-center gap-2 rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-teal-500/30 transition hover:bg-teal-400"
+
+            <nav
+              className="hidden items-center gap-4 text-sm text-slate-400 xl:flex xl:gap-5 2xl:gap-7"
+              aria-label="التنقل الرئيسي"
             >
-              <LayoutDashboard className="h-4 w-4" />
-              دخول المنصة
-            </Link>
+              <a href="#product" className="shrink-0 whitespace-nowrap transition-colors hover:text-white">
+                المنتج
+              </a>
+              <a href="#why" className="shrink-0 whitespace-nowrap transition-colors hover:text-white">
+                لماذا Dealix
+              </a>
+              <Link href="/resources" className="shrink-0 whitespace-nowrap transition-colors hover:text-teal-300">
+                التحميلات
+              </Link>
+              <Link href="/dealix-marketing/dashboard-guide" className="shrink-0 whitespace-nowrap transition-colors hover:text-teal-300">
+                دليل لوحة التحكم
+              </Link>
+              <Link href="/marketers" className="shrink-0 whitespace-nowrap transition-colors hover:text-teal-300">
+                المسوّقون
+              </Link>
+              <Link href="/help" className="shrink-0 whitespace-nowrap transition-colors hover:text-teal-300">
+                الدعم
+              </Link>
+              <Link href="/strategy" className="shrink-0 whitespace-nowrap transition-colors hover:text-teal-300">
+                الاستراتيجية
+              </Link>
+              <Link href="/explore" className="shrink-0 whitespace-nowrap font-semibold text-teal-300 transition-colors hover:text-teal-200">
+                جولة اللوحة
+              </Link>
+              <a href="#ceo-contact" className="max-w-[10rem] shrink-0 text-end leading-snug transition-colors hover:text-amber-200/95 xl:max-w-none">
+                تواصل مع المدير التنفيذي
+              </a>
+            </nav>
+
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+              <Link
+                href="/explore"
+                className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-teal-500/35 bg-teal-950/40 px-3 py-2 text-xs font-semibold text-teal-200 hover:border-teal-400/50 hover:bg-teal-900/50 sm:px-4 sm:text-sm"
+              >
+                استكشف اللوحة
+              </Link>
+              <Link
+                href="/resources"
+                className="hidden sm:inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 sm:px-4"
+              >
+                <Download className="h-4 w-4 shrink-0" />
+                <span className="hidden md:inline">موارد</span>
+              </Link>
+              <Link
+                href="/login?next=/dashboard"
+                prefetch={false}
+                className="relative z-10 inline-flex items-center gap-1.5 rounded-full bg-teal-500 px-3 py-2 text-xs font-semibold text-slate-950 shadow-lg shadow-teal-500/30 transition hover:bg-teal-400 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+              >
+                <LayoutDashboard className="h-4 w-4 shrink-0" />
+                <span className="hidden min-[400px]:inline">دخول المنصة</span>
+                <span className="min-[400px]:hidden">دخول</span>
+              </Link>
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10 xl:hidden"
+                aria-expanded={mobileNavOpen}
+                aria-controls="dealix-public-mobile-nav"
+                aria-label={mobileNavOpen ? "إغلاق القائمة" : "فتح القائمة"}
+                onClick={() => setMobileNavOpen((o) => !o)}
+              >
+                {mobileNavOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
+              </button>
+            </div>
           </div>
+
+          <nav
+            id="dealix-public-mobile-nav"
+            className={
+              mobileNavOpen
+                ? "mt-4 max-h-[min(70vh,32rem)] overflow-y-auto border-t border-white/10 pt-4 xl:hidden"
+                : "hidden"
+            }
+            aria-label="التنقل — قائمة الجوال"
+          >
+            <div className="flex flex-col gap-0.5 pb-2">
+              <a href="#product" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                المنتج
+              </a>
+              <a href="#why" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                لماذا Dealix
+              </a>
+              <Link href="/resources" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                التحميلات
+              </Link>
+              <Link href="/dealix-marketing/dashboard-guide" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                دليل لوحة التحكم
+              </Link>
+              <Link href="/marketers" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                المسوّقون
+              </Link>
+              <Link href="/help" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                الدعم
+              </Link>
+              <Link href="/strategy" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                الاستراتيجية
+              </Link>
+              <Link href="/explore" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                جولة في اللوحة (بدون تسجيل)
+              </Link>
+              <a href="#ceo-contact" className={navLinkClass} onClick={() => setMobileNavOpen(false)}>
+                تواصل مع المدير التنفيذي
+              </a>
+            </div>
+          </nav>
         </div>
       </header>
 
@@ -221,14 +342,21 @@ export function DealixPublicSite() {
             </motion.div>
             <motion.div
               variants={heroItem}
-              className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+              className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap"
             >
+              <Link
+                href="/explore"
+                className="relative z-10 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border-2 border-teal-400/50 bg-teal-950/50 px-8 py-4 text-base font-bold text-teal-100 shadow-lg shadow-teal-900/30 transition hover:scale-[1.02] hover:border-teal-300 hover:bg-teal-900/60"
+              >
+                جولة في اللوحة — بدون تسجيل
+                <ArrowLeft className="h-5 w-5 rotate-180" />
+              </Link>
               <Link
                 href="/login?next=/dashboard"
                 prefetch={false}
                 className="relative z-10 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-teal-500 px-8 py-4 text-base font-bold text-slate-950 shadow-xl shadow-teal-500/25 transition hover:scale-[1.02] hover:bg-teal-400"
               >
-                ابدأ من لوحة التحكم
+                تسجيل الدخول للوحة الحقيقية
                 <ArrowLeft className="h-5 w-5 rotate-180" />
               </Link>
               <a
@@ -243,7 +371,7 @@ export function DealixPublicSite() {
               <p className="mb-4 text-center text-xs font-semibold uppercase tracking-[0.2em] text-teal-500/80">
                 لمحة سريعة
               </p>
-              <div className="mx-auto grid max-w-2xl grid-cols-1 gap-4 sm:max-w-none sm:grid-cols-3">
+              <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:max-w-none lg:grid-cols-4">
                 {heroStats.map((item, i) => {
                   const StatIcon = item.icon;
                   return (
@@ -252,27 +380,24 @@ export function DealixPublicSite() {
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.12 + i * 0.07, duration: 0.45 }}
-                      whileHover={{ y: -8, transition: { duration: 0.22 } }}
-                      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.09] via-white/[0.03] to-transparent p-6 text-center shadow-[0_24px_60px_-28px_rgba(0,0,0,0.9)] ring-1 ring-white/[0.06] transition-[box-shadow,border-color] duration-300 hover:border-teal-400/40 hover:shadow-[0_28px_70px_-24px_rgba(20,184,166,0.32)]"
+                      whileHover={{ y: -6, transition: { duration: 0.22 } }}
+                      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-transparent p-5 text-center shadow-lg shadow-black/40 ring-1 ring-white/[0.06] transition-[border-color] duration-300 hover:border-teal-500/35"
                     >
                       <div
-                        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/50 to-transparent opacity-60"
+                        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/40 to-transparent opacity-70"
                         aria-hidden
                       />
-                      <div
-                        className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-teal-400/15 blur-3xl transition-all duration-500 group-hover:bg-teal-400/25"
-                        aria-hidden
-                      />
-                      <div className="relative flex flex-col items-center gap-3.5">
-                        <div className="inline-flex rounded-2xl border border-teal-500/25 bg-gradient-to-br from-teal-500/20 to-teal-600/5 p-3 text-teal-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-                          <StatIcon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
+                      <div className="relative flex flex-col items-center gap-3">
+                        <HeroStatMiniDiagram variant={item.mini} />
+                        <div className="inline-flex rounded-xl border border-teal-500/20 bg-teal-950/30 p-2 text-teal-200">
+                          <StatIcon className="h-4 w-4" strokeWidth={1.75} aria-hidden />
                         </div>
-                        <p className="bg-gradient-to-b from-white to-slate-300 bg-clip-text text-3xl font-black tracking-tight text-transparent tabular-nums md:text-[2.1rem]">
+                        <p className="bg-gradient-to-b from-white to-slate-300 bg-clip-text text-2xl font-black tracking-tight text-transparent tabular-nums md:text-[1.75rem]">
                           {item.value}
                         </p>
-                        <div className="space-y-1.5">
+                        <div className="space-y-1">
                           <p className="text-sm font-bold text-slate-50">{item.title}</p>
-                          <p className="text-[13px] leading-relaxed text-slate-500">{item.hint}</p>
+                          <p className="text-[12px] leading-relaxed text-slate-500">{item.hint}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -409,19 +534,15 @@ export function DealixPublicSite() {
                       transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1] },
                     }}
                     style={{ transformStyle: "preserve-3d" }}
-                    className="group relative rounded-[1.4rem] border border-white/[0.12] bg-gradient-to-br from-white/[0.11] via-white/[0.04] to-transparent p-8 shadow-[0_36px_80px_-32px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_rgba(0,0,0,0.35)] ring-1 ring-white/[0.06] backdrop-blur-xl transition-shadow duration-500 hover:border-teal-400/35 hover:shadow-[0_48px_100px_-36px_rgba(20,184,166,0.28)]"
+                    className="group relative rounded-[1.4rem] border border-white/[0.12] bg-gradient-to-br from-slate-950/80 via-slate-900/50 to-transparent p-8 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.85)] ring-1 ring-white/[0.06] backdrop-blur-xl transition-shadow duration-500 hover:border-teal-400/30"
                   >
                     <div
-                      className="pointer-events-none absolute inset-0 rounded-[1.4rem] bg-gradient-to-br from-teal-400/15 via-transparent to-emerald-600/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                      aria-hidden
-                    />
-                    <div
-                      className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/50 to-transparent opacity-70"
+                      className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/40 to-transparent opacity-70"
                       aria-hidden
                     />
                     <div className="relative flex flex-col gap-5">
                       <div
-                        className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-teal-500/25 bg-gradient-to-br from-teal-500/25 to-teal-600/5 text-teal-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_12px_40px_-16px_rgba(20,184,166,0.45)] transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105"
+                        className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-teal-500/25 bg-slate-950/60 text-teal-200 transition-transform duration-300 group-hover:-translate-y-0.5"
                         style={{ transform: "translateZ(24px)" }}
                       >
                         <f.icon className="h-7 w-7" strokeWidth={1.65} aria-hidden />
@@ -434,10 +555,7 @@ export function DealixPublicSite() {
                           {f.desc}
                         </p>
                       </div>
-                      <div
-                        className="mt-1 h-px w-full bg-gradient-to-l from-transparent via-white/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                        aria-hidden
-                      />
+                      <FeatureCardDiagram variant={f.diagram} />
                     </div>
                   </motion.article>
                 ))}
@@ -453,7 +571,7 @@ export function DealixPublicSite() {
 
         <section id="why" className="py-20">
           <div className="mx-auto max-w-6xl px-6">
-            <DealixWhyVideo />
+            <DealixSystemOverview />
           </div>
         </section>
 
@@ -462,6 +580,10 @@ export function DealixPublicSite() {
             <CeoDirectContactCard />
           </div>
         </section>
+
+        <DealixCompetitiveMoatStrip />
+
+        <DealixCustomerJourneyLoop />
 
         <footer className="border-t border-white/5 py-12 text-center text-sm text-slate-500">
           <p>© Dealix — منصة تشغيل المبيعات والإيرادات للشركات</p>
@@ -484,13 +606,21 @@ export function DealixPublicSite() {
             <Link href="/help" className="hover:text-teal-400 transition-colors">
               المساعدة
             </Link>
+            <Link href="/explore" className="hover:text-teal-400 transition-colors">
+              جولة اللوحة (مجاناً)
+            </Link>
+            <a href="#market-moat" className="hover:text-teal-400 transition-colors">
+              التمييز أمام السوق
+            </a>
+            <a href="#customer-journey-loop" className="hover:text-teal-400 transition-colors">
+              مسار العميل الكامل
+            </a>
             <a href="#ceo-contact" className="hover:text-amber-300 transition-colors">
               المهندس سامي العسيري
             </a>
           </nav>
         </footer>
       </main>
-      <DealixAssistantWidget variant="company" />
     </div>
   );
 }

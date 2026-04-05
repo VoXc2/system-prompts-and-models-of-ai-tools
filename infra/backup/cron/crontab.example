@@ -1,0 +1,18 @@
+# Dealix backup / DR — install as root or dedicated ops user (paths may differ).
+# crontab -e
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+BACKUP_ENV_FILE=/etc/dealix/backup.env
+
+# Daily full backup at 02:15 UTC (adjust for Riyadh business window)
+15 2 * * * /opt/dealix/infra/backup/scripts/run-daily-backup.sh >> /var/log/dealix/backup-cron.log 2>&1
+
+# Backup verification after backup window
+45 3 * * * /opt/dealix/infra/backup/scripts/verify-backup.sh >> /var/log/dealix/backup-verify.log 2>&1
+
+# Weekly mirror of entire repo to backup remote (Sundays)
+30 4 * * 0 /opt/dealix/infra/backup/scripts/git-mirror-all-branches.sh /opt/dealix/repo >> /var/log/dealix/git-mirror.log 2>&1
+
+# Weekly restore test (Sundays — point to latest dump path or use wrapper that picks latest)
+# 0 5 * * 0 /opt/dealix/infra/backup/scripts/weekly-restore-test.sh /var/lib/dealix-backups/postgres/full/LATEST/dump.dump
