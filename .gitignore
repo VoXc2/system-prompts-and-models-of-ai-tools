@@ -1,0 +1,3 @@
+# Local full-repo backups (git bundle) — do not commit
+dealix-full-*.bundle
+*.bundle
