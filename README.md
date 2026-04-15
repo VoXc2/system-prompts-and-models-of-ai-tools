@@ -121,6 +121,14 @@
 | OpenHands | ✅ | `Open Source prompts/OpenHands/` |
 | RooCode | ✅ | `Open Source prompts/RooCode/` |
 
+### Community Prompt Chains
+
+User-facing prompt workflows contributed by the community. These are **not** leaked system prompts — they're chains you run *with* an AI tool to achieve a specific outcome end-to-end.
+
+| Chain | Author | Stack | Directory |
+|---|---|---|---|
+| Figma Make — 9-prompt website builder | [@_TALEBM_](https://x.com/_TALEBM_) | Claude Opus 4.6 + Figma Make | [`Figma Make/`](Figma%20Make/) |
+
 ---
 
 ## 🧰 Claude Code — Token Optimization & Ecosystem Tools
