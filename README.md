@@ -123,6 +123,28 @@
 
 ---
 
+## 🧰 Claude Code — Token Optimization & Ecosystem Tools
+
+Community repositories that reduce token consumption, optimize context, and improve efficiency when working with **Claude Code**. Full details, install commands, savings estimates, and a comparison table live in [`Anthropic/Claude Code/Token Optimization Tools.md`](Anthropic/Claude%20Code/Token%20Optimization%20Tools.md).
+
+| Tool | Type | Repo | Notes |
+|------|------|------|-------|
+| RTK (Rust Token Killer) | CLI proxy | https://github.com/rtk-ai/rtk | Filters/compresses shell tool-call output. **60–90%** savings. Installs via `brew install rtk-ai/tap/rtk`. |
+| token-optimizer | Plugin | https://github.com/alexgreensh/token-optimizer | Detects "ghost tokens", survives `/compact`, ships a local dashboard. |
+| claude-token-saver | Bundle | https://github.com/Supersynergy/claude-token-saver | Combines Vault + RTK + context-mode + shellfirm. Install via `/sm init`. |
+| claude-token-efficient | Drop-in `CLAUDE.md` | https://github.com/drona23/claude-token-efficient | Single file that forces terser responses. |
+| claude-token-optimizer | Prompt templates | https://github.com/nadimtuhin/claude-token-optimizer | Pre-built prompts — up to 90% savings in minutes. |
+| headroom | Context engine | https://github.com/chopratejas/headroom | Image compression, memory persistence, long-context optimization. |
+| claude-code-prompt-optimizer | Hook | https://github.com/johnpsasser/claude-code-prompt-optimizer | Auto-rewrites prompts before send. |
+| prompt-optimizer | Skill | https://github.com/Hashaam101/prompt-optimizer | Auto prompt optimization as a Claude Code skill. |
+| token-optimizer-mcp | MCP server | https://github.com/ooples/token-optimizer-mcp | MCP-based optimization with caching and compression. |
+
+**Quick tips:** start with **RTK** (biggest impact on tool-call tokens), add a `CLAUDE.md` at your repo root, use `/compact` and `/clear` regularly, and start fresh sessions every 15–20 messages when possible. Combining **RTK + token-optimizer** tends to give the best results.
+
+> Community-maintained. Savings figures are self-reported — see each repo's README for current install instructions, license, and compatibility.
+
+---
+
 ## ❤️ Support the Project
 
 If you find this collection valuable and appreciate the effort involved in obtaining and sharing these insights, please consider supporting the project.
