@@ -73,3 +73,21 @@
 2. **عملاء 6-20**: outreach مباشر + إحالات من البيتا
 3. **عملاء 21-50**: content marketing + LinkedIn ads
 4. **عملاء 51-100**: referral program + شراكات مع منصات عقارية
+
+
+## القسم 11 — حزمة التنفيذ الموحدة (Execution Pack)
+
+لضمان تنفيذ موحد وسريع، استخدم هذه القوالب كمرجع تشغيلي رسمي:
+
+1. `memory/growth/templates/14-day-client-acquisition-automation.md` — خطة اكتساب عملاء لمدة 14 يوم.
+2. `memory/growth/templates/sla-and-guarantee-ar.md` — SLA والضمان التجاري بالعربية.
+3. `memory/growth/templates/kpi-baseline-target-annex-ar.md` — ملحق KPI baseline/target اليومي.
+4. `memory/growth/templates/whatsapp-close-script-ar.md` — سكربت الإغلاق عبر واتساب.
+5. `memory/growth/templates/one-page-offer-starter-growth-scale-ar.md` — قالب عرض صفحة واحدة (Starter/Growth/Scale).
+
+### آلية الاستخدام اليومية
+- بداية اليوم: تحديث لوحة KPI من ملحق القياس.
+- منتصف اليوم: تنفيذ تسلسل الاكتساب (14 يوم) وفق المرحلة.
+- بعد كل مكالمة: إرسال One-Page Offer خلال 12 ساعة.
+- قبل نهاية اليوم: تنفيذ متابعة الإغلاق عبر سكربت واتساب.
+- نهاية الأسبوع: مراجعة الالتزام بـ SLA والضمان في العروض المرسلة.
