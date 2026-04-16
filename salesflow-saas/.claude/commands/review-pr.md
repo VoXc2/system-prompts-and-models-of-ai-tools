@@ -4,6 +4,13 @@ Review the current PR branch against main. Perform a thorough multi-dimensional 
 
 ## Steps
 
+### 0. Resolve Project Root
+Ensure working directory is the Dealix project root before running any commands:
+```bash
+PROJECT_ROOT="$(git rev-parse --show-toplevel)/salesflow-saas"
+cd "$PROJECT_ROOT"
+```
+
 ### 1. Identify Changes
 ```bash
 git diff main...HEAD --stat

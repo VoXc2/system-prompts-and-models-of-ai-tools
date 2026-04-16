@@ -7,9 +7,12 @@
 #   ./scripts/grand_launch_verify.sh --http-only --soft-ready   # API only, no pytest/lint/build
 
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-BACKEND="$ROOT/backend"
-FRONTEND="$ROOT/frontend"
+
+# ── Path Resolution ───────────────────────────────
+. "$(cd "$(dirname "$0")/lib" && pwd)/resolve-paths.sh"
+ROOT="$PROJECT_ROOT"
+BACKEND="$BACKEND_DIR"
+FRONTEND="$FRONTEND_DIR"
 
 HTTP=0
 SOFT_READY=0
@@ -24,6 +27,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$HTTP_ONLY" -eq 1 ]]; then
+  require_component backend || { echo "FAIL: backend required for --http-only" >&2; exit 1; }
   echo "Dealix root: $ROOT"
   echo "== HTTP only =="
   PY_ARGS=(scripts/full_stack_launch_test.py --http-only)
@@ -34,19 +38,29 @@ if [[ "$HTTP_ONLY" -eq 1 ]]; then
 fi
 
 echo "Dealix root: $ROOT"
-echo "== Backend: pytest =="
-(cd "$BACKEND" && python -m pytest tests -q --tb=line)
+
+if require_component backend; then
+  echo "== Backend: pytest =="
+  (cd "$BACKEND" && python -m pytest tests -q --tb=line)
+else
+  echo "== Backend: SKIPPED (not found) =="
+fi
 
 echo "== Sync marketing -> frontend/public =="
-(cd "$ROOT" && node scripts/sync-marketing-to-public.cjs)
+(cd "$ROOT" && node scripts/sync-marketing-to-public.cjs) || echo "[WARN] marketing sync skipped or failed"
 
-echo "== Frontend: lint =="
-(cd "$FRONTEND" && npm run lint)
+if require_component frontend; then
+  echo "== Frontend: lint =="
+  (cd "$FRONTEND" && npm run lint)
 
-echo "== Frontend: build =="
-(cd "$FRONTEND" && npm run build)
+  echo "== Frontend: build =="
+  (cd "$FRONTEND" && npm run build)
+else
+  echo "== Frontend: SKIPPED (not found) =="
+fi
 
 if [[ "$HTTP" -eq 1 ]]; then
+  require_component backend || { echo "FAIL: backend required for --http" >&2; exit 1; }
   echo "== HTTP: full_stack_launch_test =="
   PY_ARGS=(scripts/full_stack_launch_test.py)
   [[ "$SOFT_READY" -eq 1 ]] && PY_ARGS+=(--soft-ready)

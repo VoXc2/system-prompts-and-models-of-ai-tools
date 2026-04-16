@@ -4,34 +4,41 @@ Prepare a release candidate. Run all checks and generate release notes.
 
 ## Steps
 
+### 0. Resolve Project Root
+Ensure working directory is the Dealix project root before running any commands:
+```bash
+PROJECT_ROOT="$(git rev-parse --show-toplevel)/salesflow-saas"
+cd "$PROJECT_ROOT"
+```
+
 ### 1. Run Full Test Suite
 ```bash
-cd backend && pytest -v --tb=short 2>&1 | tail -30
+cd "$PROJECT_ROOT/backend" && pytest -v --tb=short 2>&1 | tail -30
 ```
 All tests must pass. If any fail, list them and stop.
 
 ### 2. Lint & Format Check
 ```bash
-cd backend && ruff check . --select E,W,F,I
-cd backend && ruff format --check .
+cd "$PROJECT_ROOT/backend" && ruff check . --select E,W,F,I
+cd "$PROJECT_ROOT/backend" && ruff format --check .
 ```
 Fix any issues found.
 
 ### 3. Security Scan
 - Grep for hardcoded secrets:
   ```bash
-  grep -rn "API_KEY\|SECRET_KEY\|PASSWORD\|PRIVATE_KEY" backend/app/ --include="*.py" | grep -v "settings\.\|config\.\|get_settings\|os\.environ\|\.env"
+  grep -rn "API_KEY\|SECRET_KEY\|PASSWORD\|PRIVATE_KEY" "$PROJECT_ROOT/backend/app/" --include="*.py" | grep -v "settings\.\|config\.\|get_settings\|os\.environ\|\.env"
   ```
 - Check for known vulnerable dependencies:
   ```bash
-  pip-audit -r backend/requirements.txt 2>/dev/null || echo "pip-audit not installed"
+  pip-audit -r "$PROJECT_ROOT/backend/requirements.txt" 2>/dev/null || echo "pip-audit not installed"
   ```
 
 ### 4. Database Migrations
 - Check for pending migrations:
   ```bash
-  cd backend && alembic heads
-  cd backend && alembic current
+  cd "$PROJECT_ROOT/backend" && alembic heads
+  cd "$PROJECT_ROOT/backend" && alembic current
   ```
 - Verify migration chain is linear (no branch conflicts)
 - Confirm all migrations have downgrade functions
@@ -39,14 +46,14 @@ Fix any issues found.
 ### 5. Arabic Translation Completeness
 - Scan frontend for untranslated strings:
   ```bash
-  grep -rn "TODO.*translat\|FIXME.*arabic\|FIXME.*rtl" frontend/src/ --include="*.tsx" --include="*.ts"
+  grep -rn "TODO.*translat\|FIXME.*arabic\|FIXME.*rtl" "$PROJECT_ROOT/frontend/src/" --include="*.tsx" --include="*.ts"
   ```
 - Check that all toast messages, error messages, and form labels have Arabic variants
 - Verify RTL layout in key pages: dashboard, leads, deals, settings
 
 ### 6. Build Frontend
 ```bash
-cd frontend && npm run build 2>&1 | tail -20
+cd "$PROJECT_ROOT/frontend" && npm run build 2>&1 | tail -20
 ```
 Build must complete without errors. Warnings are acceptable but should be noted.
 

@@ -3,15 +3,32 @@
 # Runs linting, secret detection, Arabic consistency, and affected tests.
 set -euo pipefail
 
-ROOT_DIR="$(git rev-parse --show-toplevel)"
-BACKEND_DIR="${ROOT_DIR}/backend"
+# ── Path Resolution ───────────────────────────────
+_SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+_LIB_DIR="$(cd "${_SCRIPT_DIR}/../../scripts/lib" 2>/dev/null && pwd || true)"
+if [[ -n "${_LIB_DIR}" && -f "${_LIB_DIR}/resolve-paths.sh" ]]; then
+  . "${_LIB_DIR}/resolve-paths.sh"
+else
+  # Inline fallback when lib is unreachable
+  REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+  if [[ -f "${REPO_ROOT}/salesflow-saas/CLAUDE.md" ]]; then
+    PROJECT_ROOT="${REPO_ROOT}/salesflow-saas"
+  else
+    PROJECT_ROOT="${REPO_ROOT}"
+  fi
+  BACKEND_DIR="${PROJECT_ROOT}/backend"
+  HAS_BACKEND=$([[ -d "$BACKEND_DIR" ]] && echo 1 || echo 0)
+  FRONTEND_DIR="${PROJECT_ROOT}/frontend"
+  HAS_FRONTEND=$([[ -d "$FRONTEND_DIR" ]] && echo 1 || echo 0)
+fi
+
 STAGED_PY_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$' || true)
 
 echo "============================================"
 echo "  Dealix Pre-Commit Checks"
 echo "============================================"
 
-# ── 1. Ruff Linter ───────────────���─────────────
+# ── 1. Ruff Linter ────────────────────────────────
 echo ""
 echo "[1/4] Running ruff linter..."
 
@@ -40,7 +57,9 @@ echo "[2/4] Checking for hardcoded secrets..."
 SECRETS_FOUND=0
 
 if [ -n "${STAGED_PY_FILES}" ]; then
-    MATCHES=$(echo "${STAGED_PY_FILES}" | xargs grep -n         -E "(API_KEY|SECRET_KEY|PASSWORD|PRIVATE_KEY|ACCESS_TOKEN)\s*=\s*['"][^'"]{8,}"         2>/dev/null | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example\|# test\|# noqa" || true)
+    MATCHES=$(echo "${STAGED_PY_FILES}" | xargs grep -n \
+        -E "(API_KEY|SECRET_KEY|PASSWORD|PRIVATE_KEY|ACCESS_TOKEN)\s*=\s*['"][^'"]{8,}" \
+        2>/dev/null | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example\|# test\|# noqa" || true)
 
     if [ -n "${MATCHES}" ]; then
         echo "CRITICAL: Possible hardcoded secrets found:"
@@ -48,7 +67,9 @@ if [ -n "${STAGED_PY_FILES}" ]; then
         SECRETS_FOUND=1
     fi
 
-    BEARER_MATCHES=$(echo "${STAGED_PY_FILES}" | xargs grep -n         -E "Bearer\s+[A-Za-z0-9_\-]{20,}"         2>/dev/null | grep -v "settings\.\|config\.\|Authorization.*Bearer.*{" || true)
+    BEARER_MATCHES=$(echo "${STAGED_PY_FILES}" | xargs grep -n \
+        -E "Bearer\s+[A-Za-z0-9_\-]{20,}" \
+        2>/dev/null | grep -v "settings\.\|config\.\|Authorization.*Bearer.*{" || true)
 
     if [ -n "${BEARER_MATCHES}" ]; then
         echo "CRITICAL: Possible hardcoded Bearer tokens:"
@@ -74,7 +95,9 @@ echo "[3/4] Checking Arabic string consistency..."
 STAGED_FRONTEND_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(tsx?|jsx?)$' || true)
 
 if [ -n "${STAGED_FRONTEND_FILES}" ]; then
-    UNTRANSLATED=$(echo "${STAGED_FRONTEND_FILES}" | xargs grep -n         -E "TODO.*translat|FIXME.*arabic|FIXME.*rtl"         2>/dev/null || true)
+    UNTRANSLATED=$(echo "${STAGED_FRONTEND_FILES}" | xargs grep -n \
+        -E "TODO.*translat|FIXME.*arabic|FIXME.*rtl" \
+        2>/dev/null || true)
 
     if [ -n "${UNTRANSLATED}" ]; then
         echo "WARN: Found untranslated string markers:"
@@ -88,7 +111,9 @@ else
 fi
 
 if [ -n "${STAGED_PY_FILES}" ]; then
-    MISSING_ARABIC=$(echo "${STAGED_PY_FILES}" | xargs grep -n         -E "detail=\"[A-Z][a-z]|message=\"[A-Z][a-z]"         2>/dev/null | grep -v "# en-only\|# internal\|HTTPException\|logger\." || true)
+    MISSING_ARABIC=$(echo "${STAGED_PY_FILES}" | xargs grep -n \
+        -E "detail=\"[A-Z][a-z]|message=\"[A-Z][a-z]" \
+        2>/dev/null | grep -v "# en-only\|# internal\|HTTPException\|logger\." || true)
 
     if [ -n "${MISSING_ARABIC}" ]; then
         echo "WARN: Possible English-only user-facing strings in Python:"
@@ -101,7 +126,7 @@ fi
 echo ""
 echo "[4/4] Running affected tests..."
 
-if [ -n "${STAGED_PY_FILES}" ]; then
+if [ -n "${STAGED_PY_FILES}" ] && [[ "${HAS_BACKEND}" -eq 1 ]] && [ -d "${BACKEND_DIR}/tests" ]; then
     TEST_FILES=""
     for PY_FILE in ${STAGED_PY_FILES}; do
         BASENAME=$(basename "${PY_FILE}" .py)
@@ -123,6 +148,8 @@ if [ -n "${STAGED_PY_FILES}" ]; then
     else
         echo "SKIP: No matching test files found for staged changes."
     fi
+elif [ -n "${STAGED_PY_FILES}" ] && [[ "${HAS_BACKEND}" -eq 0 ]]; then
+    echo "SKIP: Backend not found in this layout. Skipping test discovery."
 else
     echo "SKIP: No Python files staged."
 fi

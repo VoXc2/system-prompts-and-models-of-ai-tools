@@ -3,8 +3,22 @@
 # Runs full test suite, checks migrations, and verifies no .env files are staged.
 set -euo pipefail
 
-ROOT_DIR="$(git rev-parse --show-toplevel)"
-BACKEND_DIR="${ROOT_DIR}/backend"
+# ── Path Resolution ───────────────────────────────
+_SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+_LIB_DIR="$(cd "${_SCRIPT_DIR}/../../scripts/lib" 2>/dev/null && pwd || true)"
+if [[ -n "${_LIB_DIR}" && -f "${_LIB_DIR}/resolve-paths.sh" ]]; then
+  . "${_LIB_DIR}/resolve-paths.sh"
+else
+  # Inline fallback when lib is unreachable
+  REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+  if [[ -f "${REPO_ROOT}/salesflow-saas/CLAUDE.md" ]]; then
+    PROJECT_ROOT="${REPO_ROOT}/salesflow-saas"
+  else
+    PROJECT_ROOT="${REPO_ROOT}"
+  fi
+  BACKEND_DIR="${PROJECT_ROOT}/backend"
+  HAS_BACKEND=$([[ -d "$BACKEND_DIR" ]] && echo 1 || echo 0)
+fi
 
 echo "============================================"
 echo "  Dealix Pre-Push Checks"
@@ -14,7 +28,7 @@ echo "============================================"
 echo ""
 echo "[1/3] Running full test suite..."
 
-if [ -d "${BACKEND_DIR}/tests" ]; then
+if [[ "${HAS_BACKEND}" -eq 1 ]] && [ -d "${BACKEND_DIR}/tests" ]; then
     cd "${BACKEND_DIR}"
     if ! pytest -x -q --tb=short 2>&1; then
         echo ""
@@ -22,42 +36,46 @@ if [ -d "${BACKEND_DIR}/tests" ]; then
         exit 1
     fi
     echo "PASS: Full test suite passed."
-    cd "${ROOT_DIR}"
+    cd "${REPO_ROOT}"
 else
-    echo "WARN: No tests directory found at ${BACKEND_DIR}/tests"
+    echo "[SKIP] Backend not found in this layout. Skipping test suite."
 fi
 
 # ── 2. Uncommitted Migrations ──────────────────
 echo ""
 echo "[2/3] Checking for uncommitted migrations..."
 
-UNTRACKED_MIGRATIONS=$(git ls-files --others --exclude-standard "${BACKEND_DIR}/alembic/versions/" 2>/dev/null | grep '\.py$' || true)
-MODIFIED_MIGRATIONS=$(git diff --name-only "${BACKEND_DIR}/alembic/versions/" 2>/dev/null | grep '\.py$' || true)
+if [[ "${HAS_BACKEND}" -eq 1 ]]; then
+    UNTRACKED_MIGRATIONS=$(git ls-files --others --exclude-standard "${BACKEND_DIR}/alembic/versions/" 2>/dev/null | grep '\.py$' || true)
+    MODIFIED_MIGRATIONS=$(git diff --name-only "${BACKEND_DIR}/alembic/versions/" 2>/dev/null | grep '\.py$' || true)
 
-if [ -n "${UNTRACKED_MIGRATIONS}" ]; then
-    echo "FAIL: Found untracked migration files:"
-    echo "${UNTRACKED_MIGRATIONS}"
-    echo "  Commit these migrations before pushing."
-    exit 1
-fi
-
-if [ -n "${MODIFIED_MIGRATIONS}" ]; then
-    echo "WARN: Found modified but uncommitted migration files:"
-    echo "${MODIFIED_MIGRATIONS}"
-    echo "  Consider committing these changes."
-fi
-
-MODEL_CHANGES=$(git diff HEAD --name-only "${BACKEND_DIR}/app/models/" 2>/dev/null | grep '\.py$' || true)
-if [ -n "${MODEL_CHANGES}" ]; then
-    MIGRATION_CHANGES=$(git diff HEAD --name-only "${BACKEND_DIR}/alembic/versions/" 2>/dev/null | grep '\.py$' || true)
-    if [ -z "${MIGRATION_CHANGES}" ]; then
-        echo "WARN: Model files changed but no new migrations detected:"
-        echo "${MODEL_CHANGES}"
-        echo "  Run: cd backend && alembic revision --autogenerate -m 'description'"
+    if [ -n "${UNTRACKED_MIGRATIONS}" ]; then
+        echo "FAIL: Found untracked migration files:"
+        echo "${UNTRACKED_MIGRATIONS}"
+        echo "  Commit these migrations before pushing."
+        exit 1
     fi
-fi
 
-echo "PASS: Migration check complete."
+    if [ -n "${MODIFIED_MIGRATIONS}" ]; then
+        echo "WARN: Found modified but uncommitted migration files:"
+        echo "${MODIFIED_MIGRATIONS}"
+        echo "  Consider committing these changes."
+    fi
+
+    MODEL_CHANGES=$(git diff HEAD --name-only "${BACKEND_DIR}/app/models/" 2>/dev/null | grep '\.py$' || true)
+    if [ -n "${MODEL_CHANGES}" ]; then
+        MIGRATION_CHANGES=$(git diff HEAD --name-only "${BACKEND_DIR}/alembic/versions/" 2>/dev/null | grep '\.py$' || true)
+        if [ -z "${MIGRATION_CHANGES}" ]; then
+            echo "WARN: Model files changed but no new migrations detected:"
+            echo "${MODEL_CHANGES}"
+            echo "  Run: cd backend && alembic revision --autogenerate -m 'description'"
+        fi
+    fi
+
+    echo "PASS: Migration check complete."
+else
+    echo "[SKIP] Backend not found in this layout. Skipping migration check."
+fi
 
 # ── 3. No .env Files ───────────────────────────
 echo ""

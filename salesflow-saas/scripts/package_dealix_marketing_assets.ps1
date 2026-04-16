@@ -1,17 +1,23 @@
 # Builds dealix-marketing-bundle.zip: sales_assets + presentations/dealix-2026-sectors
-# Run from repo:  .\salesflow-saas\scripts\package_dealix_marketing_assets.ps1
+# Run from repo root or salesflow-saas:
+#   .\salesflow-saas\scripts\package_dealix_marketing_assets.ps1
+#   .\scripts\package_dealix_marketing_assets.ps1
 $ErrorActionPreference = "Stop"
-$Root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-if (-not (Test-Path "$Root\salesflow-saas\sales_assets")) {
-    Write-Error "Expected salesflow-saas\sales_assets under $Root"
+
+# ── Path Resolution ───────────────────────────────
+. "$PSScriptRoot\lib\Resolve-DealixPaths.ps1"
+
+if (-not $HasSalesAssets) {
+    Write-Error "sales_assets directory not found in this layout."
 }
-$OutZip = Join-Path $Root "salesflow-saas\sales_assets\dealix-marketing-bundle.zip"
+
+$OutZip = Join-Path $SalesAssetsDir "dealix-marketing-bundle.zip"
 $Staging = Join-Path $env:TEMP ("dealix-bundle-" + [Guid]::NewGuid().ToString())
 New-Item -ItemType Directory -Path $Staging -Force | Out-Null
 try {
-    Copy-Item -Path "$Root\salesflow-saas\sales_assets" -Destination (Join-Path $Staging "sales_assets") -Recurse -Force
+    Copy-Item -Path $SalesAssetsDir -Destination (Join-Path $Staging "sales_assets") -Recurse -Force
     Remove-Item (Join-Path $Staging "sales_assets\dealix-marketing-bundle.zip") -Force -ErrorAction SilentlyContinue
-    $PresSrc = "$Root\salesflow-saas\presentations\dealix-2026-sectors"
+    $PresSrc = Join-Path $ProjectRoot "presentations\dealix-2026-sectors"
     if (Test-Path $PresSrc) {
         Copy-Item -Path $PresSrc -Destination (Join-Path $Staging "presentations-dealix-2026-sectors") -Recurse -Force
     }

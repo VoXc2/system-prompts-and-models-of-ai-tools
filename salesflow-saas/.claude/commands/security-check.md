@@ -4,51 +4,58 @@ Run a comprehensive security audit before deployment or PR merge.
 
 ## Steps
 
+### 0. Resolve Project Root
+Ensure working directory is the Dealix project root before running any commands:
+```bash
+PROJECT_ROOT="$(git rev-parse --show-toplevel)/salesflow-saas"
+cd "$PROJECT_ROOT"
+```
+
 ### 1. Hardcoded Secrets Detection
 Scan all source files for embedded credentials:
 ```bash
-grep -rn "API_KEY\s*=\s*['\"]" backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example\|# test"
-grep -rn "SECRET\s*=\s*['\"]" backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example"
-grep -rn "PASSWORD\s*=\s*['\"]" backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example\|hash_password"
-grep -rn "PRIVATE_KEY\s*=\s*['\"]" backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings"
-grep -rn "Bearer\s\+[A-Za-z0-9_-]\{20,\}" backend/app/ --include="*.py"
+grep -rn "API_KEY\s*=\s*['\"]" $PROJECT_ROOT/backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example\|# test"
+grep -rn "SECRET\s*=\s*['\"]" $PROJECT_ROOT/backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example"
+grep -rn "PASSWORD\s*=\s*['\"]" $PROJECT_ROOT/backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings\|config\.\|settings\.\|# example\|hash_password"
+grep -rn "PRIVATE_KEY\s*=\s*['\"]" $PROJECT_ROOT/backend/app/ --include="*.py" | grep -v "os\.environ\|get_settings"
+grep -rn "Bearer\s\+[A-Za-z0-9_-]\{20,\}" $PROJECT_ROOT/backend/app/ --include="*.py"
 ```
 Any match is a **CRITICAL** finding.
 
 ### 2. SQL Injection Vectors
 Check for unsafe SQL construction:
 ```bash
-grep -rn "f\".*SELECT\|f\".*INSERT\|f\".*UPDATE\|f\".*DELETE\|f'.*SELECT\|f'.*INSERT\|f'.*UPDATE\|f'.*DELETE" backend/app/ --include="*.py"
-grep -rn "\.execute(f\"\|\.execute(f'" backend/app/ --include="*.py"
-grep -rn "text(f\"\|text(f'" backend/app/ --include="*.py"
+grep -rn "f\".*SELECT\|f\".*INSERT\|f\".*UPDATE\|f\".*DELETE\|f'.*SELECT\|f'.*INSERT\|f'.*UPDATE\|f'.*DELETE" $PROJECT_ROOT/backend/app/ --include="*.py"
+grep -rn "\.execute(f\"\|\.execute(f'" $PROJECT_ROOT/backend/app/ --include="*.py"
+grep -rn "text(f\"\|text(f'" $PROJECT_ROOT/backend/app/ --include="*.py"
 ```
 All SQL must use SQLAlchemy ORM or parameterized `text()` binds.
 
 ### 3. XSS Prevention
 Check frontend for unsafe rendering:
 ```bash
-grep -rn "dangerouslySetInnerHTML" frontend/src/ --include="*.tsx" --include="*.ts"
-grep -rn "v-html" frontend/src/ --include="*.vue" 2>/dev/null
+grep -rn "dangerouslySetInnerHTML" $PROJECT_ROOT/frontend/src/ --include="*.tsx" --include="*.ts"
+grep -rn "v-html" $PROJECT_ROOT/frontend/src/ --include="*.vue" 2>/dev/null
 ```
 Flag each occurrence and verify input is sanitized.
 
 ### 4. PDPL Consent Verification
 Check all message-sending endpoints enforce consent:
 ```bash
-grep -rn "send_whatsapp\|send_sms\|send_email\|send_message" backend/app/api/ --include="*.py" -l
+grep -rn "send_whatsapp\|send_sms\|send_email\|send_message" $PROJECT_ROOT/$PROJECT_ROOT/backend/app/api/ --include="*.py" -l
 ```
 For each file found, verify it calls `ConsentManager.check_consent()` or `consent_manager.verify_consent()` before sending.
 
 Check that personal data endpoints log access:
 ```bash
-grep -rn "def get_lead\|def get_contact\|def export" backend/app/api/ --include="*.py" -l
+grep -rn "def get_lead\|def get_contact\|def export" $PROJECT_ROOT/$PROJECT_ROOT/backend/app/api/ --include="*.py" -l
 ```
 Each must call `audit_service.log_access()` or equivalent.
 
 ### 5. JWT Validation
 Verify JWT security configuration:
 ```bash
-grep -rn "JWT_ALGORITHM\|jwt\.decode\|jwt\.encode" backend/app/ --include="*.py"
+grep -rn "JWT_ALGORITHM\|jwt\.decode\|jwt\.encode" $PROJECT_ROOT/backend/app/ --include="*.py"
 ```
 - Algorithm must be HS256 or RS256 (not `none`)
 - Token expiry must be set (not unlimited)
@@ -58,7 +65,7 @@ grep -rn "JWT_ALGORITHM\|jwt\.decode\|jwt\.encode" backend/app/ --include="*.py"
 ### 6. Tenant Isolation Audit
 Check that all database queries enforce tenant boundaries:
 ```bash
-grep -rn "def get\|def list\|def update\|def delete" backend/app/services/ --include="*.py" -l
+grep -rn "def get\|def list\|def update\|def delete" $PROJECT_ROOT/$PROJECT_ROOT/backend/app/services/ --include="*.py" -l
 ```
 For each service file, verify queries include `tenant_id` filter. Flag any query that accesses data without tenant scoping.
 
@@ -68,13 +75,13 @@ Check for cross-tenant data leakage in API responses:
 
 ### 7. Dependency Vulnerabilities
 ```bash
-pip-audit -r backend/requirements.txt 2>/dev/null || echo "Run: pip install pip-audit"
-cd frontend && npm audit --production 2>/dev/null || echo "Run npm audit manually"
+pip-audit -r "$PROJECT_ROOT/backend/requirements.txt" 2>/dev/null || echo "Run: pip install pip-audit"
+cd "$PROJECT_ROOT/frontend" && npm audit --production 2>/dev/null || echo "Run npm audit manually"
 ```
 
 ### 8. File Upload Security
 ```bash
-grep -rn "UploadFile\|file.*upload\|multipart" backend/app/ --include="*.py"
+grep -rn "UploadFile\|file.*upload\|multipart" $PROJECT_ROOT/backend/app/ --include="*.py"
 ```
 For each upload endpoint verify:
 - Content-type validation (whitelist, not blacklist)
@@ -84,7 +91,7 @@ For each upload endpoint verify:
 
 ### 9. Rate Limiting & Abuse Prevention
 ```bash
-grep -rn "rate_limit\|throttle\|RateLimiter" backend/app/ --include="*.py"
+grep -rn "rate_limit\|throttle\|RateLimiter" $PROJECT_ROOT/backend/app/ --include="*.py"
 ```
 Verify rate limiting on:
 - Login / OTP endpoints

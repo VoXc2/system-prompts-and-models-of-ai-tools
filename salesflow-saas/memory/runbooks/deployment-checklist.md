@@ -1,5 +1,7 @@
 # Deployment Checklist — Dealix
 
+> **Working Directory:** All commands below assume `cwd` is `salesflow-saas/`. From the repo root: `cd salesflow-saas` first.
+
 **Last Updated**: 2026-04-11
 **Stack**: FastAPI + Next.js + PostgreSQL 16 + Redis + Celery
 

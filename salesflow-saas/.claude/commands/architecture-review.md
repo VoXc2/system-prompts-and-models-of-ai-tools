@@ -4,10 +4,17 @@ Review the codebase architecture for consistency, correctness, and maintainabili
 
 ## Steps
 
-### 1. Service Boundary Analysis
-Scan all services in `backend/app/services/`:
+### 0. Resolve Project Root
+Ensure working directory is the Dealix project root before running any commands:
 ```bash
-ls backend/app/services/*.py backend/app/services/*/*.py
+PROJECT_ROOT="$(git rev-parse --show-toplevel)/salesflow-saas"
+cd "$PROJECT_ROOT"
+```
+
+### 1. Service Boundary Analysis
+Scan all services in `$PROJECT_ROOT/backend/app/services/`:
+```bash
+ls $PROJECT_ROOT/backend/app/services/*.py $PROJECT_ROOT/backend/app/services/*/*.py
 ```
 
 For each service, check:
@@ -19,8 +26,8 @@ For each service, check:
 ### 2. Import Cycle Detection
 Check for circular imports between service modules:
 ```bash
-grep -rn "^from app.services" backend/app/services/ --include="*.py"
-grep -rn "^import app.services" backend/app/services/ --include="*.py"
+grep -rn "^from app.services" $PROJECT_ROOT/backend/app/services/ --include="*.py"
+grep -rn "^import app.services" $PROJECT_ROOT/backend/app/services/ --include="*.py"
 ```
 
 Build a dependency graph and flag any cycles. Common problematic patterns:
@@ -28,9 +35,9 @@ Build a dependency graph and flag any cycles. Common problematic patterns:
 - Circular through models: Service -> Model -> Service
 
 ### 3. Model Relationship Audit
-Scan all SQLAlchemy models in `backend/app/models/`:
+Scan all SQLAlchemy models in `$PROJECT_ROOT/backend/app/models/`:
 ```bash
-ls backend/app/models/*.py
+ls $PROJECT_ROOT/backend/app/models/*.py
 ```
 
 For each model verify:
@@ -43,9 +50,9 @@ For each model verify:
 - Indexes on `tenant_id` and frequently-queried columns
 
 ### 4. API Consistency Check
-Scan all API routes in `backend/app/api/v1/`:
+Scan all API routes in `$PROJECT_ROOT/backend/app/api/v1/`:
 ```bash
-ls backend/app/api/v1/*.py
+ls $PROJECT_ROOT/backend/app/api/v1/*.py
 ```
 
 Verify consistency:
@@ -58,7 +65,7 @@ Verify consistency:
 - **Tenant scoping**: tenant_id extracted from token, not URL
 
 ### 5. Configuration & Environment
-Review `backend/app/config.py` or equivalent:
+Review `$PROJECT_ROOT/backend/app/config.py` or equivalent:
 - All secrets from environment variables
 - Sensible defaults for development
 - No production values hardcoded
@@ -66,9 +73,9 @@ Review `backend/app/config.py` or equivalent:
 - Separate configs for test/dev/staging/prod
 
 ### 6. Worker & Task Architecture
-Review Celery workers in `backend/app/workers/`:
+Review Celery workers in `$PROJECT_ROOT/backend/app/workers/`:
 ```bash
-ls backend/app/workers/*.py 2>/dev/null
+ls $PROJECT_ROOT/backend/app/workers/*.py 2>/dev/null
 ```
 
 Check:
@@ -81,7 +88,7 @@ Check:
 ### 7. Frontend-Backend Contract
 Compare API routes with frontend API calls:
 ```bash
-grep -rn "fetch\|axios\|api\." frontend/src/ --include="*.ts" --include="*.tsx" | grep -v node_modules | grep -v ".next"
+grep -rn "fetch\|axios\|api\." $PROJECT_ROOT/frontend/src/ --include="*.ts" --include="*.tsx" | grep -v node_modules | grep -v ".next"
 ```
 
 Flag mismatches:
@@ -90,7 +97,7 @@ Flag mismatches:
 - Missing error handling on frontend for known error responses
 
 ### 8. Integration Points
-Review external integrations in `backend/app/integrations/`:
+Review external integrations in `$PROJECT_ROOT/backend/app/integrations/`:
 - WhatsApp adapter: retry logic, rate limiting, error handling
 - Email service: template rendering, bounce handling
 - Stripe: webhook verification, idempotency keys

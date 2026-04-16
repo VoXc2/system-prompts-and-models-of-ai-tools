@@ -1,5 +1,7 @@
 # AGENTS.md — Dealix AI Revenue OS
 
+> **Working Directory:** All commands below assume `cwd` is `salesflow-saas/` unless otherwise noted. From the repo root: `cd salesflow-saas` first.
+
 ## Project Identity
 - **Name**: Dealix (ديلكس)
 - **Type**: AI-Powered CRM SaaS for Saudi Arabia

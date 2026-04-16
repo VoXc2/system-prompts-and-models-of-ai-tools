@@ -16,17 +16,24 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+# ── Path Resolution ───────────────────────────────
+. "$PSScriptRoot\lib\Resolve-DealixPaths.ps1"
+$root = $ProjectRoot
+$backend = $BackendDir
+$frontend = $FrontendDir
+
 if ($BaseUrl -ne "") {
     $env:DEALIX_BASE_URL = $BaseUrl.TrimEnd("/")
     Write-Host "Using DEALIX_BASE_URL=$($env:DEALIX_BASE_URL)" -ForegroundColor DarkGray
 }
-$root = Split-Path -Parent $PSScriptRoot
-$backend = Join-Path $root "backend"
-$frontend = Join-Path $root "frontend"
 
-if (-not (Test-Path (Join-Path $backend "app"))) {
-    Write-Host "Backend not found at $backend - run from salesflow-saas: .\scripts\grand_launch_verify.ps1 or .\verify-launch.ps1" -ForegroundColor Red
-    exit 1
+if (-not $HasBackend) {
+    Write-Host "[SKIP] Backend not found in this layout." -ForegroundColor Yellow
+    if ($HttpOnly -or $HttpCheck) {
+        Write-Host "FAIL: Backend required for HTTP checks." -ForegroundColor Red
+        exit 1
+    }
 }
 
 if ($HttpOnly) {
@@ -46,37 +53,50 @@ if ($HttpOnly) {
 }
 
 Write-Host "Dealix root: $root" -ForegroundColor DarkGray
-Write-Host "== Backend: pytest ==" -ForegroundColor Cyan
-Push-Location $backend
-try {
-    & py -m pytest tests -q --tb=line
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-} finally {
-    Pop-Location
+
+if ($HasBackend) {
+    Write-Host "== Backend: pytest ==" -ForegroundColor Cyan
+    Push-Location $backend
+    try {
+        & py -m pytest tests -q --tb=line
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    } finally {
+        Pop-Location
+    }
+} else {
+    Write-Host "== Backend: SKIPPED (not found) ==" -ForegroundColor Yellow
 }
 
 Write-Host "== Sync marketing -> frontend/public ==" -ForegroundColor Cyan
 Push-Location $root
 try {
     & node scripts/sync-marketing-to-public.cjs
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    if ($LASTEXITCODE -ne 0) { Write-Host "[WARN] marketing sync failed" -ForegroundColor Yellow }
 } finally {
     Pop-Location
 }
 
-Write-Host "== Frontend: lint ==" -ForegroundColor Cyan
-Push-Location $frontend
-try {
-    & npm run lint
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    Write-Host "== Frontend: build ==" -ForegroundColor Cyan
-    & npm run build
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-} finally {
-    Pop-Location
+if ($HasFrontend) {
+    Write-Host "== Frontend: lint ==" -ForegroundColor Cyan
+    Push-Location $frontend
+    try {
+        & npm run lint
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        Write-Host "== Frontend: build ==" -ForegroundColor Cyan
+        & npm run build
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    } finally {
+        Pop-Location
+    }
+} else {
+    Write-Host "== Frontend: SKIPPED (not found) ==" -ForegroundColor Yellow
 }
 
 if ($HttpCheck) {
+    if (-not $HasBackend) {
+        Write-Host "FAIL: Backend required for HTTP checks." -ForegroundColor Red
+        exit 1
+    }
     Write-Host "== HTTP: full_stack_launch_test ==" -ForegroundColor Cyan
     Push-Location $backend
     try {

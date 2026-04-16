@@ -68,6 +68,11 @@ if (fs.existsSync(SRC_INTEGRATION)) {
 }
 
 const readme = path.join(DEST_MARKETING, "LOCAL-ONLY-NEXT.txt");
+if (!fs.existsSync(path.dirname(readme))) {
+  console.warn("SKIP readme (frontend/public not found):", path.dirname(readme));
+  console.log("\nDone.");
+  process.exit(0);
+}
 fs.writeFileSync(
   readme,
   [

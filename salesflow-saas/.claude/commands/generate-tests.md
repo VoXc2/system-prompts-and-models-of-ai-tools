@@ -7,6 +7,13 @@ Provide the path to a service file, e.g.: `/generate-tests backend/app/services/
 
 ## Steps
 
+### 0. Resolve Project Root
+Ensure working directory is the Dealix project root before running any commands:
+```bash
+PROJECT_ROOT="$(git rev-parse --show-toplevel)/salesflow-saas"
+cd "$PROJECT_ROOT"
+```
+
 ### 1. Analyze the Target Service
 Read the specified service file and extract:
 - Class name and constructor dependencies (db session, other services)

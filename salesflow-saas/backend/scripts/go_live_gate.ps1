@@ -1,8 +1,8 @@
-<# 
+<#
   Go-Live Gate — يستدعي الـ API بشكل صحيح من PowerShell.
   لا تلصق الرابط وحده في الطرفية؛ PowerShell لا يعامله كأمر HTTP.
 
-  الاستخدام:
+  الاستخدام (من salesflow-saas\backend أو أي مكان مع -BaseUrl):
     cd salesflow-saas\backend
     .\scripts\go_live_gate.ps1
     .\scripts\go_live_gate.ps1 -BaseUrl "http://127.0.0.1:8000"

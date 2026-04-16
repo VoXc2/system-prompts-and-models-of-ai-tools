@@ -1,5 +1,7 @@
 # Dealix - Saudi AI Revenue Operating System
 
+> **Working Directory:** All commands below assume `cwd` is `salesflow-saas/` unless otherwise noted. From the repo root: `cd salesflow-saas` first.
+
 AI-powered revenue operations platform built for the Saudi market. Dealix combines lead management, affiliate recruitment, sales automation, meeting scheduling, deal tracking, and commission processing into a single operating system driven by specialized AI agents.
 
 ## Tech Stack
