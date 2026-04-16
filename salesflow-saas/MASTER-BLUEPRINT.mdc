@@ -1,14 +1,16 @@
 ---
 title: Dealix MASTER-BLUEPRINT
-version: Legendary Complete Edition v4.0
+version: Sovereign Enterprise Edition v5.0
 status: canonical
 ---
 
 # Vision
 
-Autonomous Revenue & Operations OS: a **Digital Full-Company Team** for B2B enterprises — Prospecting → Qualification → Proposal → Negotiation → Closing → Post-Sale/Upsell → Support → Marketing → Billing/Finance → Analytics/Forecasting.
+**Dealix Sovereign Enterprise Growth OS** — not just an AI CRM, but a sovereign platform managing Sales, Partnerships, Corporate Development / M&A, Expansion, PMI/PMO, and Executive Governance on a unified foundation where AI explores/analyzes/recommends, systems execute, and humans approve critical decisions.
 
-> *North star:* not a single chat widget — a **measurable revenue machine** that runs 24/7, self-improves where enabled, and grounds actions in CRM + tenant-safe knowledge.
+> *North star:* a **sovereign enterprise growth machine** running 24/7/365, operating across 5 architecture planes (Decision, Execution, Trust, Data, Operating), 6 business tracks, and 18 mandatory surfaces — grounded in Saudi-first compliance, Arabic-native intelligence, and board-grade evidence operations.
+
+Canonical sovereign architecture reference: `docs/SOVEREIGN_ARCHITECTURE.md`.
 
 ## Auditable target metrics (directional)
 
@@ -60,7 +62,34 @@ Arabic narrative + detail: `docs/ULTIMATE_EXECUTION_MASTER_AR.md`.
 
 *Onyx and similar external RAG/chat stacks are **out of scope** — not used and must not be added. Product RAG is **in-app** only: PostgreSQL + pgvector, `KnowledgeService`, sector assets, and orchestrator-grounded context.*
 
-# Five Architecture Layers
+# Five Sovereign Planes (supersedes legacy layers)
+
+| Plane | Arabic | Responsibility | Key Stack |
+|-------|--------|---------------|-----------|
+| 1. Decision | طبقة القرار | Signal detection, triage, scenario analysis, memo generation, forecasting, next-best-action, evidence pack assembly | Responses API, Structured Outputs, LangGraph |
+| 2. Execution | طبقة التنفيذ | Durable workflows, multi-system orchestration, retry/timeout/compensation, HITL approvals | LangGraph (cognition), Temporal (durable commitments) |
+| 3. Trust | طبقة الثقة | Policy engine, fine-grained authZ, secrets governance, tool verification ledger, contradiction detection, AI governance | OPA, OpenFGA, Vault, Keycloak |
+| 4. Data | طبقة البيانات | Operational truth, semantic memory, ingestion, document extraction, data quality, event contracts, observability | Postgres, pgvector, Airbyte, Great Expectations, CloudEvents, OTel |
+| 5. Operating | طبقة التشغيل | Rulesets, protected branches, deployment protection, OIDC, artifact attestations, audit streaming | GitHub rulesets, Sigstore, OIDC federation |
+
+## Six Business Tracks
+
+| Track | Arabic | Key Surfaces |
+|-------|--------|-------------|
+| Revenue OS | نظام الإيرادات | Revenue Funnel Control Center |
+| Partnership OS | نظام الشراكات | Partner Room, Partnership Scorecards |
+| M&A / CorpDev OS | نظام الاستحواذ | DD Room, M&A Pipeline Board |
+| Expansion OS | نظام التوسع | Expansion Launch Console |
+| PMI / PMO OS | نظام التكامل | PMI 30/60/90 Engine |
+| Executive / Board OS | نظام القيادة | Executive Room, Approval Center, Evidence Packs, Risk Board, Policy Violations, Actual vs Forecast |
+
+## 18 Mandatory Surfaces
+
+Executive Room · Approval Center · Evidence Pack Viewer · Partner Room · DD Room · Risk Board · Policy Violations Board · Actual vs Forecast · Revenue Funnel Control Center · Partnership Scorecards · M&A Pipeline Board · Expansion Launch Console · PMI 30/60/90 Engine · Tool Verification Ledger · Connector Health Board · Release Gate Dashboard · Saudi Compliance Matrix · Model Routing Dashboard
+
+Implementation: `backend/app/api/v1/sovereign_*.py` + `frontend/src/app/dashboard/sovereign/`
+
+## Legacy Layers (retained for backward compatibility)
 
 1. **Experience** — Dealix web app, dashboards, mobile field API  
 2. **Orchestration** — LangGraph supervisors, OpenClaw durable flows  
@@ -80,6 +109,15 @@ Feeds: app analytics, LangSmith traces (when enabled), OpenClaw outcomes — imp
 
 # Repository mapping
 
+## Sovereign Enterprise Growth OS
+- `docs/SOVEREIGN_ARCHITECTURE.md` — canonical sovereign architecture reference
+- `backend/app/models/sovereign_*.py` — 15 SQLAlchemy models across 5 planes + 6 tracks
+- `backend/app/schemas/sovereign.py` — 30+ Pydantic schemas for sovereign entities
+- `backend/app/services/sovereign/` — service layer (11 modules: decision, execution, trust, partnership, ma, expansion, pmi, connector, evidence, executive)
+- `backend/app/api/v1/sovereign_*.py` — 10 API route modules (60+ routes)
+- `frontend/src/app/dashboard/sovereign/` — 18 surface pages + sovereign layout
+
+## Core Platform
 - `openclaw/openclaw-config.yaml` — durable flows + hooks + plugins  
 - `backend/app/openclaw/` — runtime helpers, hooks, plugins  
 - `backend/app/api/v1/autonomous_foundation.py` — autonomous flows, go-live gate, connectivity tests  
@@ -92,5 +130,17 @@ Feeds: app analytics, LangSmith traces (when enabled), OpenClaw outcomes — imp
 # Agent / crew map (conceptual — implementation in `backend/app/agents`, flows, services)
 
 Prospecting → Qualification → Proposal → Negotiation → Closing → Post-sale/Support. Each stage may map to supervisors + tool plugins (Salesforce, WhatsApp, Stripe, voice, contracts) within OpenClaw boundaries — **no external RAG SaaS as the system of record**; use native knowledge + CRM grounding.
+
+## Sovereign Program Locks
+
+- **3 Action Classes:** Auto-execute, Execute with mandatory approval, Human-only
+- **3 Approval Classes:** L1 (manager), L2 (VP + compliance), L3 (C-suite / board)
+- **4 Reversibility Classes:** R1 (fully reversible), R2 (reversible with cost), R3 (partially reversible), R4 (irreversible, pre-approval required)
+- **5 Sensitivity Levels:** Public, Internal, Confidential, Restricted, Board-Only
+- **Provenance Trio:** Every AI recommendation carries data sources, freshness timestamp, confidence score
+
+## Connector Facade Pattern
+
+Every external connector implements: contract, version, retry policy, timeout, idempotency key, action class, audit mapping, telemetry mapping, compensation notes. See `docs/SOVEREIGN_ARCHITECTURE.md` for full specification.
 
 *This file is the single source of truth for architecture intent; implementation evolves in code beside it.*
