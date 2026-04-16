@@ -3,7 +3,7 @@
 **Type**: operations
 **Summary**: Central index linking to all wiki pages, memory sections, and knowledge resources.
 **Summary_AR**: الفهرس المركزي الذي يربط جميع صفحات الويكي وأقسام الذاكرة وموارد المعرفة.
-**Last Updated**: 2026-04-11
+**Last Updated**: 2026-04-16
 
 ---
 
@@ -49,6 +49,7 @@
 | Deployment Checklist | [runbooks/deployment-checklist.md](../runbooks/deployment-checklist.md) | Active |
 | Launch Checklist | [runbooks/launch-checklist.md](../runbooks/launch-checklist.md) | Active |
 | SaaS Readiness Audit | [runbooks/saas-readiness-audit.md](../runbooks/saas-readiness-audit.md) | Active |
+| Completion Program Matrix | [runbooks/completion-program-execution-matrix.md](../runbooks/completion-program-execution-matrix.md) | Active |
 | Release Notes | [releases/](../releases/) | Directory |
 
 ## Security (الأمان والامتثال)
@@ -80,8 +81,8 @@
 
 ## Index Health
 
-- **Total pages**: 23
-- **Active**: 23
+- **Total pages**: 24
+- **Active**: 24
 - **Stale**: 0
 - **Orphan (no inbound links)**: 0
 - **Last full audit**: 2026-04-11
