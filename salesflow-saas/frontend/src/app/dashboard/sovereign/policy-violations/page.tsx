@@ -49,13 +49,17 @@ export default function PolicyViolationsPage() {
       </header>
 
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {(["critical", "high", "medium", "low"] as const).map((sev) => {
-          const count = items.filter((i) => i.severity === sev).length;
-          const badge = SEVERITY_BADGE[sev];
+        {([
+          { key: "critical", bg: "bg-red-500/10", text: "text-red-500", border: "border-red-500/20", label: "حرج" },
+          { key: "high", bg: "bg-orange-500/10", text: "text-orange-500", border: "border-orange-500/20", label: "مرتفع" },
+          { key: "medium", bg: "bg-amber-500/10", text: "text-amber-500", border: "border-amber-500/20", label: "متوسط" },
+          { key: "low", bg: "bg-emerald-500/10", text: "text-emerald-500", border: "border-emerald-500/20", label: "منخفض" },
+        ] as const).map((sev) => {
+          const count = items.filter((i) => i.severity === sev.key).length;
           return (
-            <div key={sev} className={`rounded-2xl border p-4 text-center ${badge.class.replace("text-", "").split(" ")[0]} border-${sev === "critical" ? "red" : sev === "high" ? "orange" : sev === "medium" ? "amber" : "emerald"}-500/20`}>
-              <p className={`text-2xl font-bold ${badge.class.split(" ")[1]}`}>{count}</p>
-              <p className="text-xs text-muted-foreground">{badge.label}</p>
+            <div key={sev.key} className={`rounded-2xl border p-4 text-center ${sev.bg} ${sev.border}`}>
+              <p className={`text-2xl font-bold ${sev.text}`}>{count}</p>
+              <p className="text-xs text-muted-foreground">{sev.label}</p>
             </div>
           );
         })}

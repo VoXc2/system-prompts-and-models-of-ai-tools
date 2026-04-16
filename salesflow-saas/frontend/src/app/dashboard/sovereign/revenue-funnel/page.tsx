@@ -7,7 +7,7 @@ import {
   Target,
   TrendingUp,
   ArrowLeft,
-  Funnel,
+  Filter,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -98,7 +98,7 @@ export default function RevenueFunnelPage() {
           </Link>
         </div>
         <div className="flex items-center gap-3 text-muted-foreground">
-          <Funnel className="w-10 h-10 opacity-20" />
+          <Filter className="w-10 h-10 opacity-20" />
           <p className="text-sm">يمكنك إدارة تفاصيل كل صفقة من خلال مسار الصفقات في اللوحة الرئيسية.</p>
         </div>
       </section>

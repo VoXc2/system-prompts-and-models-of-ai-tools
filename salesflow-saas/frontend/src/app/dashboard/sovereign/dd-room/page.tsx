@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, Loader2, Lock, FileSearch, Shield } from "lucide-react";
+import { Loader2, Lock, FileSearch, Shield } from "lucide-react";
 
 interface DDTarget {
   id: string;
