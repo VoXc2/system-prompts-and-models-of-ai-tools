@@ -25,6 +25,12 @@ from app.api.v1 import customer_onboarding as customer_onboarding_router
 from app.api.v1 import sales_os as sales_os_router
 from app.api.v1 import operations as operations_router
 from app.api.v1 import proposals as proposals_router
+from app.api.v1 import sovereign_os as sovereign_os_router
+from app.api.v1 import partnership_os as partnership_os_router
+from app.api.v1 import ma_os as ma_os_router
+from app.api.v1 import expansion_os as expansion_os_router
+from app.api.v1 import pmi_os as pmi_os_router
+from app.api.v1 import executive_os as executive_os_router
 
 api_router = APIRouter()
 
@@ -102,3 +108,21 @@ api_router.include_router(whatsapp_webhook_router.router)
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)
+
+# ── Sovereign OS — Governance, Decisions, Workflows ───────────
+api_router.include_router(sovereign_os_router.router)
+
+# ── Partnership OS — Partner Lifecycle ────────────────────────
+api_router.include_router(partnership_os_router.router)
+
+# ── M&A OS — Corporate Development ───────────────────────────
+api_router.include_router(ma_os_router.router)
+
+# ── Expansion OS — Market Expansion ──────────────────────────
+api_router.include_router(expansion_os_router.router)
+
+# ── PMI OS — Post-Merger Integration ─────────────────────────
+api_router.include_router(pmi_os_router.router)
+
+# ── Executive OS — Board & Executive Surfaces ────────────────
+api_router.include_router(executive_os_router.router)
