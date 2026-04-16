@@ -102,3 +102,47 @@ api_router.include_router(whatsapp_webhook_router.router)
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)
+
+# ══════════════════════════════════════════════════════════════
+# SOVEREIGN ENTERPRISE GROWTH OS — 5 Planes
+# ══════════════════════════════════════════════════════════════
+
+# ── Decision Plane ─────────────────────────────────────────────
+from app.api.v1 import decision_plane_api as decision_plane_router
+api_router.include_router(decision_plane_router.router)
+
+# ── Executive / Board OS ───────────────────────────────────────
+from app.api.v1 import executive_room as executive_room_router
+api_router.include_router(executive_room_router.router)
+
+# ── Partnership OS ─────────────────────────────────────────────
+from app.api.v1 import partnership_os as partnership_os_router
+api_router.include_router(partnership_os_router.router)
+
+# ── Corporate Development / M&A OS ────────────────────────────
+from app.api.v1 import corporate_dev as corporate_dev_router
+api_router.include_router(corporate_dev_router.router)
+
+# ── Expansion OS ───────────────────────────────────────────────
+from app.api.v1 import expansion_os as expansion_os_router
+api_router.include_router(expansion_os_router.router)
+
+# ── PMI/PMO OS ─────────────────────────────────────────────────
+from app.api.v1 import pmi_os as pmi_os_router
+api_router.include_router(pmi_os_router.router)
+
+# ── Trust Plane (Policy Violations, Tool Ledger, Contradictions)
+from app.api.v1 import trust_plane_api as trust_plane_router
+api_router.include_router(trust_plane_router.router)
+
+# ── Connector Health (Governed Facade Registry) ────────────────
+from app.api.v1 import connector_health as connector_health_router
+api_router.include_router(connector_health_router.router)
+
+# ── Sovereign Model Routing Dashboard ─────────────────────────
+from app.api.v1 import model_routing_api as model_routing_router
+api_router.include_router(model_routing_router.router)
+
+# ── Saudi Compliance Matrix ────────────────────────────────────
+from app.api.v1 import saudi_compliance_api as saudi_compliance_router
+api_router.include_router(saudi_compliance_router.router)
