@@ -1,7 +1,14 @@
-# CLAUDE.md — Dealix Project Context for AI Agents
+# CLAUDE.md — Dealix Sovereign Growth OS
 
 ## Quick Context
-Dealix is an AI-powered CRM built for the Saudi market. It combines Salesforce-grade AI with WhatsApp-first communication, PDPL compliance, and Arabic-first UX.
+Dealix is a **Sovereign Enterprise Growth OS** for GCC companies. Not just a CRM — a multi-layer system managing revenue, partnerships, M&A, market expansion, strategic execution, and governance.
+
+**Three governing layers:**
+1. **Decision Plane** — AI explores, analyzes, recommends (structured outputs, not free text)
+2. **Execution Plane** — Durable workflows commit actions (retries, compensation, HITL)
+3. **Trust Plane** — Policy-as-code, approval routing, audit trail, tool verification
+
+**Primary rule:** AI may recommend. Systems commit. Humans approve critical decisions.
 
 ## Key Directories
 - `backend/app/api/v1/` — API routes (FastAPI)
@@ -67,6 +74,17 @@ Before writing code, classify your task:
 | **PLAN** | Research/architecture only | Plan only, save to `memory/`, no implementation |
 
 **RULE**: Append to this file, never replace existing instructions.
+
+## Strategic Growth Layer (Layer 8)
+- `backend/app/agents/strategic/` — 10 strategic agents (partnerships, M&A, expansion, PMO, governance)
+- `backend/app/agents/strategic/events.py` — Event taxonomy (32 typed events across 5 domains)
+- `backend/app/services/governance_engine.py` — Policy-as-code engine with approval matrix
+- `backend/app/api/v1/strategic_dashboard.py` — 7 dashboard API endpoints
+- `docs/EXECUTION-MATRIX.md` — Full agent→KPI mapping
+- `docs/governance/` — Executive charter + approval policy
+- `docs/MASTER_OPERATING_PROMPT.md` — Operating constitution
+- `docs/ai-operating-model.md` — Provider routing + verification + release gates + memory governance
+- `docs/DEALIX_SOVEREIGN_GROWTH_OS_FOUNDING_AR.md` — Founding document (Arabic)
 
 ## Hermes Profiles
 

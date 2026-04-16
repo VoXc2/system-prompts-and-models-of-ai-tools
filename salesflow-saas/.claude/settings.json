@@ -6,18 +6,67 @@
       "Grep",
       "Bash(git status)",
       "Bash(git diff)",
-      "Bash(pytest)",
-      "Bash(npm test)"
+      "Bash(git log*)",
+      "Bash(pytest*)",
+      "Bash(npm test*)",
+      "Bash(npm run lint*)",
+      "Bash(python -m mypy*)",
+      "Bash(ruff check*)",
+      "Bash(alembic history*)",
+      "Bash(alembic heads*)"
     ],
     "deny": [
-      "Bash(rm -rf)",
-      "Bash(git push --force)",
-      "Bash(DROP TABLE)"
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(DROP TABLE*)",
+      "Bash(DELETE FROM*)",
+      "Bash(TRUNCATE*)",
+      "Bash(git checkout -- .)",
+      "Bash(*--no-verify*)"
     ]
   },
   "preferences": {
     "language": "ar",
     "timezone": "Asia/Riyadh",
-    "autocommit": false
+    "currency": "SAR",
+    "autocommit": false,
+    "direction": "rtl"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git push*)",
+        "description": "Require branch check before push — never push to main directly"
+      },
+      {
+        "matcher": "Edit(*models/*)",
+        "description": "Model changes require migration awareness — remind about alembic"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit(*.py)",
+        "description": "Run ruff check on edited Python files"
+      }
+    ]
+  },
+  "project": {
+    "name": "Dealix Sovereign Growth OS",
+    "type": "enterprise-saas",
+    "stack": "FastAPI + Next.js 15 + PostgreSQL + Redis + Celery",
+    "market": "GCC / Saudi Arabia",
+    "governance_level": "enterprise",
+    "operating_docs": [
+      "AGENTS.md",
+      "CLAUDE.md",
+      "docs/MASTER_OPERATING_PROMPT.md",
+      "docs/ai-operating-model.md",
+      "docs/governance/approval-policy.md",
+      "docs/governance/executive-ai-charter.md",
+      "docs/EXECUTION-MATRIX.md",
+      "docs/ADR-001-sovereign-growth-os.md",
+      "docs/DEALIX_SOVEREIGN_GROWTH_OS_FOUNDING_AR.md"
+    ]
   }
 }
