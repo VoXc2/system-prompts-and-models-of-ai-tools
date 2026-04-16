@@ -23,6 +23,7 @@ import {
   ClipboardList,
   Receipt,
   Layers,
+  Landmark,
   LogOut,
   MousePointerClick,
   UserCheck,
@@ -48,6 +49,7 @@ import { IntelligenceDashboard } from "../../components/dealix/intelligence-dash
 import { LeadGeneratorView } from "../../components/dealix/lead-generator-view";
 import { SalesOsView } from "../../components/dealix/sales-os-view";
 import { FullOpsView } from "../../components/dealix/full-ops-view";
+import { SovereignOsView } from "../../components/dealix/sovereign-os-view";
 import { PipelineKanban } from "../../components/dealix/pipeline-kanban";
 import { UnifiedInbox } from "../../components/dealix/unified-inbox";
 import { LeadScoreCard } from "../../components/dealix/lead-score-card";
@@ -90,6 +92,7 @@ export default function DashboardPage() {
     { id: "revenue", label: "المالية والتحصيل", icon: DollarSign },
     { id: "sales-os", label: "دفتر العمولة (Sales OS)", icon: Receipt },
     { id: "full-ops", label: "التشغيل الشامل (Full Ops)", icon: Layers },
+    { id: "sovereign-os", label: "Sovereign OS التنفيذي", icon: Landmark },
     { id: "analytics", label: "التحليلات ونبض السوق", icon: BarChart3 },
     { id: "knowledge", label: "الذكاء والمعرفة", icon: Brain },
     { id: "presentations", label: "البرزنتيشنات القطاعية", icon: MonitorPlay },
@@ -126,6 +129,8 @@ export default function DashboardPage() {
         return <SalesOsView />;
       case "full-ops":
         return <FullOpsView />;
+      case "sovereign-os":
+        return <SovereignOsView />;
       case "analytics":
         return <AnalyticsView />;
       case "knowledge":
