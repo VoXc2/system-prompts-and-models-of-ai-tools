@@ -113,3 +113,13 @@
 - Playbook التنفيذي الأسبوعي: `frontend/public/strategy/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md`
 - قالب المتابعة الجاهز (CSV): `frontend/public/strategy/execution_matrix_tracker_template.csv`
 - قاعدة التنفيذ: لا يُعتمد أي تقدم بدون Evidence Gate موثق، وSLA محسوب، وRisk owner واضح.
+
+---
+
+## 10) الحزمة الكاملة للتنفيذ الشامل (Full Completion Kit)
+
+- Governance + RACI: `frontend/public/strategy/COMPLETION_PROGRAM_GOVERNANCE_RACI_AR.md`
+- Evidence Gate Catalog: `frontend/public/strategy/COMPLETION_PROGRAM_EVIDENCE_GATE_CATALOG_AR.md`
+- Risk Register: `frontend/public/strategy/COMPLETION_PROGRAM_RISK_REGISTER_AR.md`
+- SLA & Escalation Policy: `frontend/public/strategy/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md`
+- Execution Pack Template: `frontend/public/strategy/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md`

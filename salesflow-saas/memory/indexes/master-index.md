@@ -52,6 +52,11 @@
 | Completion Program Execution Matrix | [docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md](../../docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md) | Active |
 | Weekly Execution OS Playbook | [docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md](../../docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md) | Active |
 | Execution Matrix Tracker Template | [docs/execution_matrix_tracker_template.csv](../../docs/execution_matrix_tracker_template.csv) | Active |
+| Completion Program Governance & RACI | [docs/COMPLETION_PROGRAM_GOVERNANCE_RACI_AR.md](../../docs/COMPLETION_PROGRAM_GOVERNANCE_RACI_AR.md) | Active |
+| Completion Program Evidence Gate Catalog | [docs/COMPLETION_PROGRAM_EVIDENCE_GATE_CATALOG_AR.md](../../docs/COMPLETION_PROGRAM_EVIDENCE_GATE_CATALOG_AR.md) | Active |
+| Completion Program Risk Register | [docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md](../../docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md) | Active |
+| Completion Program SLA & Escalation Policy | [docs/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md](../../docs/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md) | Active |
+| Completion Program Execution Pack Template | [docs/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md](../../docs/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md) | Active |
 | Release Notes | [releases/](../releases/) | Directory |
 
 ## Security (الأمان والامتثال)

@@ -112,3 +112,13 @@
 
 - Weekly Operating Playbook: `docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md`
 - Weekly Tracker Template (CSV): `docs/execution_matrix_tracker_template.csv`
+
+---
+
+## 10) حزمة التشغيل الشاملة (Full Completion Operating Kit)
+
+- Governance & RACI: `docs/COMPLETION_PROGRAM_GOVERNANCE_RACI_AR.md`
+- Evidence Gate Catalog: `docs/COMPLETION_PROGRAM_EVIDENCE_GATE_CATALOG_AR.md`
+- Risk Register: `docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md`
+- SLA & Escalation Policy: `docs/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md`
+- Execution Pack Template: `docs/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md`
