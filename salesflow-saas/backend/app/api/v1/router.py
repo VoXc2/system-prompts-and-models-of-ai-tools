@@ -102,3 +102,7 @@ api_router.include_router(whatsapp_webhook_router.router)
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)
+
+# ── Sovereign Growth OS — Strategic Dashboard ─────────────────
+from app.api.v1 import strategic_dashboard as strategic_dashboard_router
+api_router.include_router(strategic_dashboard_router.router, prefix="/strategic", tags=["Strategic Growth OS"])

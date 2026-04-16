@@ -1,8 +1,11 @@
-# AGENTS.md — Dealix AI Revenue OS
+# AGENTS.md — Dealix Sovereign Growth OS
+
+> Standard: [AGENTS.md](https://github.com/anthropics/agents-md) (Linux Foundation / AAIF)
 
 ## Project Identity
 - **Name**: Dealix (ديلكس)
-- **Type**: AI-Powered CRM SaaS for Saudi Arabia
+- **Type**: AI-Powered Sovereign Growth Operating System for Saudi Arabia
+- **Evolution**: CRM → Revenue OS → Company Growth Engine
 - **Stack**: FastAPI + Next.js 15 + PostgreSQL + Redis + Celery
 - **Market**: Saudi SMBs (real estate, healthcare, retail, contracting, education)
 - **Language**: Arabic-first, bilingual (AR/EN)
@@ -120,3 +123,50 @@ cd frontend && npm run dev
 5. Deploy to production with canary (10%)
 6. Monitor 30 min → full rollout
 7. Rollback plan documented per release
+
+## Strategic Growth Layer (Layer 8)
+
+### 10 Strategic Agents
+| Agent | Purpose | Events |
+|---|---|---|
+| `partnership_scout` | Discover & score partners | `partnership.opportunity_detected` |
+| `alliance_structuring` | Design partnership structures (referral/rev-share/JV) | `partnership.model_recommended` |
+| `ma_screener` | Screen M&A targets | `ma.target_detected` |
+| `dd_analyst` | Financial/operational/legal due diligence | `ma.dd_started`, `ma.dd_risk_flagged` |
+| `valuation_synergy` | DCF + multiples + synergy analysis | `ma.valuation_ready` |
+| `strategic_pmo` | Convert decisions → initiatives with SLAs | `execution.initiative_created` |
+| `expansion_playbook` | GTM + pricing + compliance for new markets | `growth.playbook_generated` |
+| `executive_negotiator` | BATNA, ZOPA, negotiation scenarios | `ma.offer_strategy_ready` |
+| `post_merger_integration` | 30/60/90 day PMI plan | `ma.integration_kickoff` |
+| `sovereign_growth` | Board-level strategic brief (read-only) | None |
+
+### Governance Engine
+- Policy-as-code: `backend/app/services/governance_engine.py`
+- Approval matrix: Manager → Director → CXO → Board
+- 5 mandatory policy gates (risk memo, compliance, financial freshness, PDPL, DD)
+- Full audit trail for every strategic action
+
+### Event Domains
+| Domain | Event Types | State Machine |
+|---|---|---|
+| `partnership` | 7 | detected → scored → structured → approved → signed → reviewed |
+| `ma` | 10 | detected → screened → DD → valued → negotiated → signed → integrated |
+| `growth` | 6 | candidate → scored → modeled → cleared → launched → scaled |
+| `governance` | 5 | check → approve/deny → override → audit |
+| `execution` | 4 | created → assigned → due → breached |
+
+### Dashboard API Endpoints
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/api/v1/strategic/brief` | GET | Executive brief (board-level) |
+| `/api/v1/strategic/events` | GET | Strategic event history |
+| `/api/v1/strategic/pending-approvals` | GET | HITL approval queue |
+| `/api/v1/strategic/approve/{id}` | POST | Approve/deny strategic event |
+| `/api/v1/strategic/audit-log` | GET | Governance audit trail |
+| `/api/v1/strategic/pipeline` | GET | Growth pipeline (partnerships + M&A + expansion) |
+| `/api/v1/strategic/kpis` | GET | Strategic KPIs |
+
+### Key Documents
+- `docs/EXECUTION-MATRIX.md` — Full agent-to-KPI mapping
+- `docs/ADR-001-sovereign-growth-os.md` — Architecture decision record
+- `backend/app/agents/strategic/events.py` — Event taxonomy (32 event types)
