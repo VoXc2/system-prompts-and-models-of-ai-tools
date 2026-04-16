@@ -1,0 +1,9 @@
+week,workstream,owner,status,evidence_gate_status,evidence_links,exit_criteria_status,dependencies_status,risk_level,risk_note,sla_target,sla_actual,breach_flag,corrective_action,next_week_commitment,last_updated
+W1,WS1,Chief Architect + Platform PMO,Current,Pending,,,Pending,Blocked,Medium,,5 business days,,No,,,
+W1,WS2,AI Platform Lead + Applied AI Team,Current,Pending,,,Pending,Blocked,High,,24 hours,,No,,,
+W1,WS3,Workflow Engineering Lead + Backend Core,Current,Pending,,,Pending,Blocked,High,,15 minutes critical recovery,,No,,,
+W1,WS4,Security Architecture Lead + IAM Team,Current,Pending,,,Pending,Blocked,High,,100% enforcement,,No,,,
+W1,WS5,Data Platform Lead + Integrations Lead,Current,Pending,,,Pending,Blocked,Medium,,72 hours connector drift,,No,,,
+W1,WS6,DevSecOps Lead + Release Manager,Current,Pending,,,Pending,Blocked,Medium,,99.9% gate reliability,,No,,,
+W1,WS7,Compliance Lead (KSA) + Security Governance,Current,Pending,,,Pending,Blocked,High,,10 business days high-risk gap closure,,No,,,
+W1,WS8,Product Director + RevOps + BI Lead,Current,Pending,,,Pending,Blocked,Medium,,15 minutes dashboard freshness,,No,,,

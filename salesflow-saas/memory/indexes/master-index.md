@@ -50,6 +50,8 @@
 | Launch Checklist | [runbooks/launch-checklist.md](../runbooks/launch-checklist.md) | Active |
 | SaaS Readiness Audit | [runbooks/saas-readiness-audit.md](../runbooks/saas-readiness-audit.md) | Active |
 | Completion Program Execution Matrix | [docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md](../../docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md) | Active |
+| Weekly Execution OS Playbook | [docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md](../../docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md) | Active |
+| Execution Matrix Tracker Template | [docs/execution_matrix_tracker_template.csv](../../docs/execution_matrix_tracker_template.csv) | Active |
 | Release Notes | [releases/](../releases/) | Directory |
 
 ## Security (الأمان والامتثال)

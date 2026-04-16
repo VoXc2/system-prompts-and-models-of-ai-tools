@@ -105,3 +105,11 @@
 5. Next-week commitments with named owners.
 
 > هذه الوثيقة هي خط الأساس التنفيذي الرسمي لبرنامج الإغلاق (Completion Program) وتُحدَّث أسبوعياً بآلية evidence-first.
+
+---
+
+## 9) التشغيل الأسبوعي الجاهز (Operating System)
+
+- Playbook التنفيذي الأسبوعي: `frontend/public/strategy/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md`
+- قالب المتابعة الجاهز (CSV): `frontend/public/strategy/execution_matrix_tracker_template.csv`
+- قاعدة التنفيذ: لا يُعتمد أي تقدم بدون Evidence Gate موثق، وSLA محسوب، وRisk owner واضح.

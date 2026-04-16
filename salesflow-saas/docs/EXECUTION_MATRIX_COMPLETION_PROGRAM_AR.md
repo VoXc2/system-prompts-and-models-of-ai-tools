@@ -105,3 +105,10 @@
 5. Next-week commitments with named owners.
 
 > هذه الوثيقة هي خط الأساس التنفيذي الرسمي لبرنامج الإغلاق (Completion Program) وتُحدَّث أسبوعياً بآلية evidence-first.
+
+---
+
+## 9) أدوات التشغيل العملي (Ready-to-Run)
+
+- Weekly Operating Playbook: `docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md`
+- Weekly Tracker Template (CSV): `docs/execution_matrix_tracker_template.csv`
