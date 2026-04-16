@@ -1,8 +1,13 @@
-"""Contradiction Engine API — detect and manage system contradictions."""
+"""Contradiction Engine API — detect and manage system contradictions with real DB."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel as PydanticBase
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database import get_db
+from app.services.contradiction_engine import contradiction_engine
 
 router = APIRouter(prefix="/contradictions", tags=["Contradictions"])
 
@@ -20,42 +25,103 @@ class ContradictionCreate(PydanticBase):
 
 class ContradictionResolve(PydanticBase):
     resolution: str
+    resolved_by_id: str = "00000000-0000-0000-0000-000000000000"
     status: str = "resolved"
 
 
 @router.post("/")
-async def register_contradiction(body: ContradictionCreate) -> Dict[str, Any]:
-    """Register a new contradiction."""
-    return {
-        "status": "registered",
-        "source_a": body.source_a,
-        "source_b": body.source_b,
-        "contradiction_type": body.contradiction_type,
-        "severity": body.severity,
-    }
+async def register_contradiction(
+    body: ContradictionCreate,
+    tenant_id: str = "00000000-0000-0000-0000-000000000000",
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Any]:
+    """Register a new contradiction in the real database."""
+    c = await contradiction_engine.register(
+        db,
+        tenant_id=tenant_id,
+        source_a=body.source_a,
+        source_b=body.source_b,
+        claim_a=body.claim_a,
+        claim_b=body.claim_b,
+        contradiction_type=body.contradiction_type,
+        severity=body.severity,
+        detected_by=body.detected_by,
+        evidence=body.evidence,
+    )
+    return {"id": str(c.id), "status": "registered", "severity": body.severity}
 
 
 @router.get("/")
-async def list_contradictions() -> Dict[str, Any]:
-    """List active contradictions."""
-    return {"contradictions": [], "total": 0}
+async def list_contradictions(
+    tenant_id: str = "00000000-0000-0000-0000-000000000000",
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Any]:
+    """List active contradictions from real database."""
+    active = await contradiction_engine.get_active(db, tenant_id=tenant_id)
+    items = [
+        {
+            "id": str(c.id),
+            "source_a": c.source_a,
+            "source_b": c.source_b,
+            "claim_a": c.claim_a,
+            "claim_b": c.claim_b,
+            "contradiction_type": c.contradiction_type.value if c.contradiction_type else None,
+            "severity": c.severity.value if c.severity else None,
+            "status": c.status.value if c.status else None,
+            "detected_by": c.detected_by,
+            "created_at": c.created_at.isoformat() if c.created_at else None,
+        }
+        for c in active
+    ]
+    return {"contradictions": items, "total": len(items)}
 
 
 @router.get("/stats")
-async def contradiction_stats() -> Dict[str, Any]:
-    """Get contradiction statistics."""
-    return {"total": 0, "active": 0, "resolved": 0, "critical_active": 0}
+async def contradiction_stats(
+    tenant_id: str = "00000000-0000-0000-0000-000000000000",
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Any]:
+    """Get contradiction statistics from real database."""
+    return await contradiction_engine.get_stats(db, tenant_id=tenant_id)
 
 
 @router.get("/{contradiction_id}")
-async def get_contradiction(contradiction_id: str) -> Dict[str, Any]:
-    """Get a specific contradiction."""
-    return {"id": contradiction_id, "status": "not_found"}
+async def get_contradiction(
+    contradiction_id: str,
+    tenant_id: str = "00000000-0000-0000-0000-000000000000",
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Any]:
+    """Get a specific contradiction from real database."""
+    c = await contradiction_engine.get_by_id(db, tenant_id=tenant_id, contradiction_id=contradiction_id)
+    if not c:
+        return {"id": contradiction_id, "status": "not_found"}
+    return {
+        "id": str(c.id),
+        "source_a": c.source_a,
+        "source_b": c.source_b,
+        "claim_a": c.claim_a,
+        "claim_b": c.claim_b,
+        "status": c.status.value if c.status else None,
+        "resolution": c.resolution,
+    }
 
 
 @router.put("/{contradiction_id}/resolve")
 async def resolve_contradiction(
-    contradiction_id: str, body: ContradictionResolve
+    contradiction_id: str,
+    body: ContradictionResolve,
+    tenant_id: str = "00000000-0000-0000-0000-000000000000",
+    db: AsyncSession = Depends(get_db),
 ) -> Dict[str, Any]:
-    """Resolve a contradiction."""
-    return {"id": contradiction_id, "status": body.status, "resolution": body.resolution}
+    """Resolve a contradiction in real database."""
+    c = await contradiction_engine.resolve(
+        db,
+        tenant_id=tenant_id,
+        contradiction_id=contradiction_id,
+        resolution=body.resolution,
+        resolved_by_id=body.resolved_by_id,
+        status=body.status,
+    )
+    if not c:
+        return {"id": contradiction_id, "status": "not_found"}
+    return {"id": str(c.id), "status": c.status.value, "resolution": c.resolution}

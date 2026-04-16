@@ -81,7 +81,24 @@ Organize into:
 - **Infrastructure** — deployment, CI/CD, config changes
 - **Breaking Changes** — anything requiring migration or config updates
 
-### 10. Pre-release Summary
+### 10. OWASP LLM Top 10 Review
+Verify controls for each OWASP LLM risk:
+- **LLM01 Prompt Injection**: Input sanitization active? System prompts isolated?
+- **LLM02 Insecure Output**: All critical outputs validated via Pydantic schemas?
+- **LLM04 Model DoS**: Rate limiting (slowapi) + timeout configured?
+- **LLM05 Supply Chain**: Only approved LLM providers in model_router?
+- **LLM06 Sensitive Info**: No PII in prompts? Audit trail for AI conversations?
+- **LLM07 Insecure Plugins**: All plugins go through OpenClaw policy gate?
+- **LLM08 Excessive Agency**: Class B/C enforcement active for sensitive actions?
+- **LLM09 Overreliance**: HITL required for all external commitments?
+
+### 11. Architecture Brief Validation
+```bash
+cd .. && python scripts/architecture_brief.py
+```
+Must pass 40/40 checks. If any fail, block the release.
+
+### 12. Pre-release Summary
 Output a go/no-go decision with:
 - Test results (pass/fail count)
 - Security findings
