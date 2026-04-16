@@ -28,6 +28,7 @@ import {
   UserCheck,
   TrendingUp,
   Crosshair,
+  Crown,
 } from "lucide-react";
 
 import { DashboardView } from "../../components/dealix/dashboard-view";
@@ -51,6 +52,7 @@ import { FullOpsView } from "../../components/dealix/full-ops-view";
 import { PipelineKanban } from "../../components/dealix/pipeline-kanban";
 import { UnifiedInbox } from "../../components/dealix/unified-inbox";
 import { LeadScoreCard } from "../../components/dealix/lead-score-card";
+import { SovereignOsView } from "../../components/dealix/sovereign-os-view";
 
 const dashboardLeadScoreDemo = {
   score: 82,
@@ -65,7 +67,7 @@ const dashboardLeadScoreDemo = {
 
 export default function DashboardPage() {
   const auth = useRequireAuth();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("sovereign-os");
 
   if (auth.loading) {
     return (
@@ -79,6 +81,7 @@ export default function DashboardPage() {
   }
 
   const NAV_ITEMS = [
+    { id: "sovereign-os", label: "القيادة السيادية (Sovereign OS)", icon: Crown },
     { id: "overview", label: "لوحة القيادة والمراقبة", icon: BarChart3 },
     { id: "business-impact", label: "القيمة للشركات", icon: LineChart },
     { id: "customer-journey", label: "مسار التشغيل مع العميل", icon: ClipboardList },
@@ -104,6 +107,8 @@ export default function DashboardPage() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case "sovereign-os":
+        return <SovereignOsView />;
       case "overview":
         return <DashboardView />;
       case "business-impact":

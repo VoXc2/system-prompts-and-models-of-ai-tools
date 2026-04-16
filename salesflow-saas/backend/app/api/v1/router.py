@@ -25,6 +25,7 @@ from app.api.v1 import customer_onboarding as customer_onboarding_router
 from app.api.v1 import sales_os as sales_os_router
 from app.api.v1 import operations as operations_router
 from app.api.v1 import proposals as proposals_router
+from app.api.v1 import sovereign_os as sovereign_os_router
 
 api_router = APIRouter()
 
@@ -67,6 +68,7 @@ api_router.include_router(compliance_router.router)
 
 # ── CPQ — Proposals & Quotes ────────────────────────────────
 api_router.include_router(proposals_router.router)
+api_router.include_router(sovereign_os_router.router)
 
 # ── Manus Multi-Agent + Autonomous Intelligence ─────────────
 api_router.include_router(agents_router.router)
