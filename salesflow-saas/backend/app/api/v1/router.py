@@ -25,6 +25,7 @@ from app.api.v1 import customer_onboarding as customer_onboarding_router
 from app.api.v1 import sales_os as sales_os_router
 from app.api.v1 import operations as operations_router
 from app.api.v1 import proposals as proposals_router
+from app.api.v1 import sovereign as sovereign_router
 
 api_router = APIRouter()
 
@@ -91,6 +92,9 @@ api_router.include_router(autonomous_foundation_router.router)
 
 # ── Hermes Fusion — Orchestration Layer ──────────────────────
 api_router.include_router(hermes_router.router)
+
+# ── Sovereign OS — Approval/Execution/Trust control plane ────
+api_router.include_router(sovereign_router.router)
 
 # ── Strategic Deals — B2B Deal Discovery & Negotiation ───────
 api_router.include_router(strategic_deals_router.router)
