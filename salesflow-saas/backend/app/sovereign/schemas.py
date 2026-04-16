@@ -151,6 +151,17 @@ class ConnectorContract(BaseModel):
     rollback_notes_ar: str = ""
 
 
+class ConnectorHealthStatus(BaseModel):
+    """Synthetic health snapshot for a registered connector (facade-level)."""
+
+    connector_id: str
+    healthy: bool
+    last_checked_at: datetime = Field(default_factory=_utc_now)
+    latency_ms: float | None = None
+    detail_en: str = ""
+    detail_ar: str = ""
+
+
 class ContradictionRecord(BaseModel):
     record_id: UUID = Field(default_factory=uuid4)
     timestamp: datetime = Field(default_factory=_utc_now)
@@ -184,3 +195,122 @@ class ProgramLock(BaseModel):
     sensitivity_model: dict[str, Any]
     locked_at: datetime = Field(default_factory=_utc_now)
     locked_by: str
+
+
+# --- Data plane (governance / quality / contracts) ---
+
+
+class DataQualityResult(BaseModel):
+    """Dataset quality validation summary."""
+
+    dataset_name: str
+    score: float = Field(ge=0.0, le=100.0)
+    issues_en: list[str] = Field(default_factory=list)
+    issues_ar: list[str] = Field(default_factory=list)
+    passed: bool = True
+
+
+class EventValidationResult(BaseModel):
+    """Validation of an event against a registered contract."""
+
+    valid: bool
+    errors_en: list[str] = Field(default_factory=list)
+    errors_ar: list[str] = Field(default_factory=list)
+
+
+class ExtractionResult(BaseModel):
+    """Document ingestion / extraction outcome."""
+
+    document_path: str
+    chunks: int = 0
+    summary_en: str
+    summary_ar: str
+
+
+class SemanticHit(BaseModel):
+    """One semantic search hit."""
+
+    id: str
+    score: float
+    text_en: str
+    text_ar: str
+
+
+class SemanticQueryResult(BaseModel):
+    """Semantic retrieval over a governed collection."""
+
+    collection: str
+    hits: list[SemanticHit] = Field(default_factory=list)
+
+
+class ConnectorHealthStatus(BaseModel):
+    """Health of an external or internal data connector."""
+
+    connector_id: str
+    healthy: bool
+    latency_ms: float | None = None
+    detail_en: str
+    detail_ar: str
+
+
+# --- Operating plane (SDLC / releases / evidence) ---
+
+
+class ReleaseGateResult(BaseModel):
+    """Outcome of a release gate check."""
+
+    release_id: str
+    passed: bool
+    blockers_en: list[str] = Field(default_factory=list)
+    blockers_ar: list[str] = Field(default_factory=list)
+
+
+class ProvenanceResult(BaseModel):
+    """Artifact provenance verification."""
+
+    artifact_id: str
+    verified: bool
+    provenance_chain_en: str
+    provenance_chain_ar: str
+
+
+class DeploymentStatus(BaseModel):
+    """Deployment status for an environment."""
+
+    environment: str
+    version: str | None = None
+    healthy: bool = True
+    detail_en: str
+    detail_ar: str
+    updated_at: datetime = Field(default_factory=_utc_now)
+
+
+class RulesetEnforcementResult(BaseModel):
+    """Branch ruleset enforcement outcome."""
+
+    branch: str
+    compliant: bool
+    violations_en: list[str] = Field(default_factory=list)
+    violations_ar: list[str] = Field(default_factory=list)
+
+
+class CodeOwnerResult(BaseModel):
+    """CODEOWNERS resolution for a path."""
+
+    file_path: str
+    owners: list[str] = Field(default_factory=list)
+    matched_rule_en: str
+    matched_rule_ar: str
+
+
+class AuditLogEntry(BaseModel):
+    """Single audit log row for operating-plane streams."""
+
+    entry_id: str
+    tenant_id: str
+    timestamp: datetime
+    actor: str
+    action: str
+    resource: str | None = None
+    message_en: str
+    message_ar: str
