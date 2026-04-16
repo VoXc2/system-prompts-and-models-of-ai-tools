@@ -25,6 +25,7 @@ from app.api.v1 import customer_onboarding as customer_onboarding_router
 from app.api.v1 import sales_os as sales_os_router
 from app.api.v1 import operations as operations_router
 from app.api.v1 import proposals as proposals_router
+from app.api.v1.sovereign.router import sovereign_router
 
 api_router = APIRouter()
 
@@ -94,6 +95,9 @@ api_router.include_router(hermes_router.router)
 
 # ── Strategic Deals — B2B Deal Discovery & Negotiation ───────
 api_router.include_router(strategic_deals_router.router)
+
+# ── Sovereign Enterprise Growth OS ───────────────────────────
+api_router.include_router(sovereign_router)
 
 # ── WhatsApp Webhook — Incoming messages & status ────────────
 from app.api.v1 import whatsapp_webhook as whatsapp_webhook_router
