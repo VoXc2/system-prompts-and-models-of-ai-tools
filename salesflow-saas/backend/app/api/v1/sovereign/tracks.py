@@ -72,7 +72,7 @@ class LeadCaptureBody(BaseModel):
 @revenue_router.post(
     "/lead/capture",
     response_model=LeadCaptureResult,
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     summary="Capture lead",
 )
 async def revenue_lead_capture(

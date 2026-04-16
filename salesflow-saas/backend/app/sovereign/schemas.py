@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from enum import StrEnum
+from enum import EnumType, StrEnum
 from typing import Any, Literal
 from uuid import UUID, uuid4
 
@@ -14,14 +14,21 @@ def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-class SovereigntyDimension(StrEnum):
+class _LenStrEnumType(EnumType):
+    """Metaclass so `len(SomeStrEnum)` returns member count (test / introspection friendly)."""
+
+    def __len__(self) -> int:
+        return len(self.__members__)
+
+
+class SovereigntyDimension(StrEnum, metaclass=_LenStrEnumType):
     DECISION = "DECISION"
     EXECUTION = "EXECUTION"
     TRUST = "TRUST"
     MARKET = "MARKET"
 
 
-class PlaneType(StrEnum):
+class PlaneType(StrEnum, metaclass=_LenStrEnumType):
     DECISION = "DECISION"
     EXECUTION = "EXECUTION"
     TRUST = "TRUST"
@@ -29,7 +36,7 @@ class PlaneType(StrEnum):
     OPERATING = "OPERATING"
 
 
-class BusinessTrack(StrEnum):
+class BusinessTrack(StrEnum, metaclass=_LenStrEnumType):
     REVENUE = "REVENUE"
     PARTNERSHIP = "PARTNERSHIP"
     MA_CORPDEV = "MA_CORPDEV"
@@ -38,26 +45,26 @@ class BusinessTrack(StrEnum):
     EXECUTIVE_BOARD = "EXECUTIVE_BOARD"
 
 
-class ActionClass(StrEnum):
+class ActionClass(StrEnum, metaclass=_LenStrEnumType):
     FULLY_AUTOMATED = "FULLY_AUTOMATED"
     APPROVAL_REQUIRED = "APPROVAL_REQUIRED"
     FORBIDDEN = "FORBIDDEN"
 
 
-class ApprovalClass(StrEnum):
+class ApprovalClass(StrEnum, metaclass=_LenStrEnumType):
     TEAM_LEAD = "TEAM_LEAD"
     VP_EXECUTIVE = "VP_EXECUTIVE"
     BOARD_LEVEL = "BOARD_LEVEL"
 
 
-class ReversibilityClass(StrEnum):
+class ReversibilityClass(StrEnum, metaclass=_LenStrEnumType):
     INSTANTLY_REVERSIBLE = "INSTANTLY_REVERSIBLE"
     REVERSIBLE_WITH_COST = "REVERSIBLE_WITH_COST"
     PARTIALLY_REVERSIBLE = "PARTIALLY_REVERSIBLE"
     IRREVERSIBLE = "IRREVERSIBLE"
 
 
-class SensitivityLevel(StrEnum):
+class SensitivityLevel(StrEnum, metaclass=_LenStrEnumType):
     PUBLIC = "PUBLIC"
     INTERNAL = "INTERNAL"
     CONFIDENTIAL = "CONFIDENTIAL"
@@ -65,13 +72,13 @@ class SensitivityLevel(StrEnum):
     TOP_SECRET = "TOP_SECRET"
 
 
-class AgentRole(StrEnum):
+class AgentRole(StrEnum, metaclass=_LenStrEnumType):
     ANALYST = "ANALYST"
     EXECUTOR = "EXECUTOR"
     ADVISOR = "ADVISOR"
 
 
-class SovereignRoutingLane(StrEnum):
+class SovereignRoutingLane(StrEnum, metaclass=_LenStrEnumType):
     CODING = "CODING"
     EXECUTIVE_REASONING = "EXECUTIVE_REASONING"
     THROUGHPUT_DRAFTING = "THROUGHPUT_DRAFTING"

@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Body, HTTPException, Response, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, BeforeValidator, Field
 
 from app.api.v1.sovereign.tenant import TenantIdQuery
 from app.sovereign.data_plane import DataPlane
@@ -32,6 +32,7 @@ from app.sovereign.decision_plane_schemas import (
     ForecastResult,
     RankedAction,
     ScenarioAnalysisReport,
+    SignalKind,
     StructuredMemo,
     TriagedSignal,
 )
@@ -66,8 +67,42 @@ class SignalDetectBody(BaseModel):
     raw_data: dict[str, Any] = Field(default_factory=dict)
 
 
+def _coerce_signal_dicts(v: Any) -> list[DecisionSignal]:
+    if not isinstance(v, list):
+        return []
+    out: list[DecisionSignal] = []
+    for item in v:
+        if isinstance(item, DecisionSignal):
+            out.append(item)
+            continue
+        if not isinstance(item, dict):
+            continue
+        d = dict(item)
+        kind_raw = str(d.get("kind", SignalKind.OPPORTUNITY)).lower()
+        try:
+            kind = SignalKind(kind_raw)
+        except ValueError:
+            kind = SignalKind.OPPORTUNITY
+        sid = str(d.get("signal_id", "")) or "signal_stub"
+        track = str(d.get("track", "REVENUE"))
+        strength = float(d.get("strength", d.get("urgency", 0.5)))
+        strength = max(0.0, min(1.0, strength if strength <= 1.0 else strength / 100.0))
+        out.append(
+            DecisionSignal(
+                signal_id=sid,
+                kind=kind,
+                track=track,
+                strength=strength,
+                payload=dict(d.get("payload", {})),
+                description_en=str(d.get("description_en", "Inferred signal from client payload.")),
+                description_ar=str(d.get("description_ar", "إشارة مستنتجة من الطلب.")),
+            ),
+        )
+    return out
+
+
 class TriageBody(BaseModel):
-    signals: list[DecisionSignal] = Field(default_factory=list)
+    signals: Annotated[list[DecisionSignal], BeforeValidator(_coerce_signal_dicts)] = Field(default_factory=list)
 
 
 class ScenarioBody(BaseModel):
@@ -81,9 +116,30 @@ class MemoBody(BaseModel):
     language: str = "ar"
 
 
+def _normalize_forecast_history(v: Any) -> list[dict[str, Any]]:
+    if not isinstance(v, list):
+        return []
+    out: list[dict[str, Any]] = []
+    for i, row in enumerate(v):
+        if isinstance(row, dict):
+            out.append(dict(row))
+            continue
+        if isinstance(row, (int, float)):
+            out.append({"period": i, "value": float(row)})
+            continue
+        if isinstance(row, str):
+            try:
+                out.append({"period": i, "value": float(row)})
+            except ValueError:
+                out.append({"period": i, "value": 0.0})
+    return out
+
+
 class ForecastBody(BaseModel):
     track: str = "REVENUE"
-    historical_data: list[dict[str, Any]] = Field(default_factory=list)
+    historical_data: Annotated[list[dict[str, Any]], BeforeValidator(_normalize_forecast_history)] = Field(
+        default_factory=list,
+    )
     horizon_days: int = Field(default=14, ge=1, le=365)
 
 
@@ -312,7 +368,7 @@ class PauseApprovalBody(BaseModel):
 @execution_router.post(
     "/workflow/start",
     response_model=dict[str, str],
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     summary="Start durable workflow",
 )
 async def execution_workflow_start(
@@ -471,10 +527,28 @@ class ToolVerifyBody(BaseModel):
     parameters: dict[str, Any] = Field(default_factory=dict)
 
 
+def _coerce_contradiction_side(v: Any, *, role: str) -> dict[str, Any]:
+    if isinstance(v, dict):
+        return dict(v)
+    if isinstance(v, str):
+        if role == "intended":
+            return {"action": v}
+        if role == "claimed":
+            return {"action": v}
+        return {"tool": v}
+    return {}
+
+
 class ContradictionDetectBody(BaseModel):
-    intended: dict[str, Any] = Field(default_factory=dict)
-    claimed: dict[str, Any] = Field(default_factory=dict)
-    actual: dict[str, Any] = Field(default_factory=dict)
+    intended: Annotated[dict[str, Any], BeforeValidator(lambda v: _coerce_contradiction_side(v, role="intended"))] = (
+        Field(default_factory=dict)
+    )
+    claimed: Annotated[dict[str, Any], BeforeValidator(lambda v: _coerce_contradiction_side(v, role="claimed"))] = (
+        Field(default_factory=dict)
+    )
+    actual: Annotated[dict[str, Any], BeforeValidator(lambda v: _coerce_contradiction_side(v, role="actual"))] = (
+        Field(default_factory=dict)
+    )
 
 
 class AIGovernanceBody(BaseModel):
