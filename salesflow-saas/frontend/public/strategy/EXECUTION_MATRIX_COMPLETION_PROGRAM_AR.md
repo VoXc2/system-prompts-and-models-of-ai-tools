@@ -123,3 +123,10 @@
 - Risk Register: `frontend/public/strategy/COMPLETION_PROGRAM_RISK_REGISTER_AR.md`
 - SLA & Escalation Policy: `frontend/public/strategy/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md`
 - Execution Pack Template: `frontend/public/strategy/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md`
+
+---
+
+## 11) المصفوفة السيادية العميقة (6 أشهر)
+
+- Sovereign 6-Month Execution Matrix:
+  `frontend/public/strategy/EXECUTION_MATRIX_SOVEREIGN_6_MONTH_AR.md`

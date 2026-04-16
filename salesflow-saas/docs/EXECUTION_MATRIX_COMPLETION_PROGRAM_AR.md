@@ -122,3 +122,9 @@
 - Risk Register: `docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md`
 - SLA & Escalation Policy: `docs/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md`
 - Execution Pack Template: `docs/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md`
+
+---
+
+## 11) مصفوفة السيادة التنفيذية (6 أشهر)
+
+- Sovereign 6-Month Execution Matrix: `docs/EXECUTION_MATRIX_SOVEREIGN_6_MONTH_AR.md`

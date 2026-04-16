@@ -57,6 +57,7 @@
 | Completion Program Risk Register | [docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md](../../docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md) | Active |
 | Completion Program SLA & Escalation Policy | [docs/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md](../../docs/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md) | Active |
 | Completion Program Execution Pack Template | [docs/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md](../../docs/COMPLETION_PROGRAM_EXECUTION_PACK_TEMPLATE_AR.md) | Active |
+| Sovereign 6-Month Execution Matrix | [docs/EXECUTION_MATRIX_SOVEREIGN_6_MONTH_AR.md](../../docs/EXECUTION_MATRIX_SOVEREIGN_6_MONTH_AR.md) | Active |
 | Release Notes | [releases/](../releases/) | Directory |
 
 ## Security (الأمان والامتثال)
