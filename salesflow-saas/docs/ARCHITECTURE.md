@@ -75,7 +75,7 @@ Incoming Event (lead, message, call, meeting request)
 +------------------+
 ```
 
-- 18 specialized agents (see `docs/AGENT-MAP.md`)
+- 19 specialized agents (see `docs/AGENT-MAP.md`)
 - Each agent has a defined role, input schema, output schema, and escalation rules
 - Agents execute as Celery tasks for async processing
 - Outputs are logged to `ai_conversations` for audit
@@ -113,7 +113,7 @@ Incoming Event (lead, message, call, meeting request)
 | Lead Management | `backend/leads/` | Capture, scoring, qualification, assignment |
 | Deal Pipeline | `backend/deals/` | Stage tracking, revenue forecasting |
 | Affiliate System | `affiliate-system/` | Recruitment, onboarding, performance, commissions |
-| AI Agents | `ai-agents/` | 18 specialized agents with prompt definitions |
+| AI Agents | `ai-agents/` | 19 specialized agents with prompt definitions |
 | Knowledge Base | `knowledge-base/` | RAG articles, sector data, FAQ |
 | Guarantee | `guarantee/` | Gold guarantee claims, disputes, refunds |
 | Presentations | `presentations/` | Proposal and pitch deck generation |
