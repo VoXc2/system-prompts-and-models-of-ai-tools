@@ -28,6 +28,16 @@ from app.models.sequence import Sequence, SequenceStep, SequenceEnrollment, Sequ
 from app.models.strategic_deal import CompanyProfile, StrategicDeal, DealMatch
 from app.models.api_key import APIKey, AppSetting
 
+# ── Sovereign Growth OS modules ──────────────────────────────────
+from app.models.partnership import Partner, PartnerScorecard, PartnerTermSheet
+from app.models.acquisition import AcquisitionTarget, DDStream, ValuationModel, InvestmentCommitteePack
+from app.models.expansion import ExpansionMarket
+from app.models.pmi import PMIProgram, PMIWorkstream, PMITask, PMIMilestone, PMIRisk
+from app.models.executive import (
+    ExecutiveApproval, BoardMemo, PolicyViolation, RiskHeatmapEntry,
+    ForecastEntry, ComplianceMatrix, ModelRoutingLog, ToolVerificationEntry,
+)
+
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
     "Deal", "Activity", "Message", "Proposal", "Notification",
@@ -42,4 +52,11 @@ __all__ = [
     "PDPLConsent", "PDPLConsentAudit", "DataRequest",
     "Sequence", "SequenceStep", "SequenceEnrollment", "SequenceEvent",
     "CompanyProfile", "StrategicDeal", "DealMatch",
+    # Sovereign Growth OS
+    "Partner", "PartnerScorecard", "PartnerTermSheet",
+    "AcquisitionTarget", "DDStream", "ValuationModel", "InvestmentCommitteePack",
+    "ExpansionMarket",
+    "PMIProgram", "PMIWorkstream", "PMITask", "PMIMilestone", "PMIRisk",
+    "ExecutiveApproval", "BoardMemo", "PolicyViolation", "RiskHeatmapEntry",
+    "ForecastEntry", "ComplianceMatrix", "ModelRoutingLog", "ToolVerificationEntry",
 ]

@@ -98,5 +98,90 @@ services:
       - backend
       - frontend
 
+  # ── Sovereign OS Infrastructure (activate per-plane as needed) ──
+
+  temporal:
+    image: temporalio/auto-setup:1.25
+    restart: unless-stopped
+    ports:
+      - "7233:7233"
+    environment:
+      DB: postgresql
+      DB_PORT: 5432
+      POSTGRES_USER: ${DB_USER:-salesflow}
+      POSTGRES_PWD: ${DB_PASSWORD:-salesflow_secret_2024}
+      POSTGRES_SEEDS: db
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - execution-plane
+
+  temporal-ui:
+    image: temporalio/ui:2.31.2
+    restart: unless-stopped
+    ports:
+      - "8088:8080"
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+    depends_on:
+      - temporal
+    profiles:
+      - execution-plane
+
+  opa:
+    image: openpolicyagent/opa:0.70.0
+    restart: unless-stopped
+    ports:
+      - "8181:8181"
+    command: run --server --log-level info
+    profiles:
+      - trust-plane
+
+  openfga:
+    image: openfga/openfga:v1.8
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "3001:3000"
+    environment:
+      OPENFGA_DATASTORE_ENGINE: postgres
+      OPENFGA_DATASTORE_URI: postgres://${DB_USER:-salesflow}:${DB_PASSWORD:-salesflow_secret_2024}@db:5432/openfga?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - trust-plane
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+      - "9090:8080"
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+      KC_DB_USERNAME: ${DB_USER:-salesflow}
+      KC_DB_PASSWORD: ${DB_PASSWORD:-salesflow_secret_2024}
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+    command: start-dev
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - trust-plane
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.112.0
+    restart: unless-stopped
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8889:8889"
+    profiles:
+      - data-plane
+
 volumes:
   postgres_data:

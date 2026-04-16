@@ -16,7 +16,22 @@
     "watchDemo": "Watch Demo",
     "dashboard": "Dashboard",
     "settings": "Settings",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "executiveRoom": "Executive Room",
+    "partnershipRoom": "Partnership Room",
+    "maPipeline": "M&A Pipeline",
+    "expansionConsole": "Expansion Console",
+    "pmiEngine": "PMI 30/60/90 Engine",
+    "complianceMatrix": "Saudi Compliance Matrix",
+    "approvalCenter": "Approval Center",
+    "evidencePacks": "Evidence Packs",
+    "riskHeatmap": "Risk Heatmap",
+    "policyViolations": "Policy Violations Board",
+    "forecastDashboard": "Actual vs Forecast",
+    "modelRouting": "Model Routing Dashboard",
+    "toolLedger": "Tool Verification Ledger",
+    "connectorHealth": "Connector Health Board",
+    "releaseGates": "Release Gate Dashboard"
   },
   "hero": {
     "title": "The Smart Sales System for Saudi Arabia",

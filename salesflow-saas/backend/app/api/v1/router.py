@@ -102,3 +102,18 @@ api_router.include_router(whatsapp_webhook_router.router)
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)
+
+# ── Sovereign Growth, Execution & Governance OS ──────────────
+from app.api.v1 import sovereign_os as sovereign_os_router
+from app.api.v1 import partnership_os as partnership_os_router
+from app.api.v1 import ma_os as ma_os_router
+from app.api.v1 import expansion_os as expansion_os_router
+from app.api.v1 import pmi_os as pmi_os_router
+from app.api.v1 import executive_os as executive_os_router
+
+api_router.include_router(sovereign_os_router.router)
+api_router.include_router(partnership_os_router.router)
+api_router.include_router(ma_os_router.router)
+api_router.include_router(expansion_os_router.router)
+api_router.include_router(pmi_os_router.router)
+api_router.include_router(executive_os_router.router)

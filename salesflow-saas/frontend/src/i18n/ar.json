@@ -16,7 +16,22 @@
     "watchDemo": "شاهد العرض",
     "dashboard": "لوحة التحكم",
     "settings": "الإعدادات",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "executiveRoom": "غرفة القيادة التنفيذية",
+    "partnershipRoom": "غرفة الشراكات",
+    "maPipeline": "مسار الاستحواذ",
+    "expansionConsole": "وحدة تحكم التوسع",
+    "pmiEngine": "محرك التكامل 30/60/90",
+    "complianceMatrix": "مصفوفة الامتثال السعودية",
+    "approvalCenter": "مركز الاعتماد",
+    "evidencePacks": "حزم الأدلة",
+    "riskHeatmap": "خريطة المخاطر الحرارية",
+    "policyViolations": "لوحة مخالفات السياسات",
+    "forecastDashboard": "الفعلي مقابل المتوقع",
+    "modelRouting": "لوحة توجيه النماذج",
+    "toolLedger": "سجل التحقق من الأدوات",
+    "connectorHealth": "صحة الموصلات",
+    "releaseGates": "بوابات الإصدار"
   },
   "hero": {
     "title": "نظام المبيعات الذكي للسعودية",

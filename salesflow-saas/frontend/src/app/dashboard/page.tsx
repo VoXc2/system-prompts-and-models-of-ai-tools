@@ -51,6 +51,12 @@ import { FullOpsView } from "../../components/dealix/full-ops-view";
 import { PipelineKanban } from "../../components/dealix/pipeline-kanban";
 import { UnifiedInbox } from "../../components/dealix/unified-inbox";
 import { LeadScoreCard } from "../../components/dealix/lead-score-card";
+import { ExecutiveRoomView } from "../../components/dealix/executive-room-view";
+import { PartnershipRoomView } from "../../components/dealix/partnership-room-view";
+import { MAPipelineView } from "../../components/dealix/ma-pipeline-view";
+import { ExpansionConsoleView } from "../../components/dealix/expansion-console-view";
+import { PMIEngineView } from "../../components/dealix/pmi-engine-view";
+import { ComplianceMatrixView } from "../../components/dealix/compliance-matrix-view";
 
 const dashboardLeadScoreDemo = {
   score: 82,
@@ -80,10 +86,16 @@ export default function DashboardPage() {
 
   const NAV_ITEMS = [
     { id: "overview", label: "لوحة القيادة والمراقبة", icon: BarChart3 },
+    { id: "executive-room", label: "غرفة القيادة التنفيذية", icon: ShieldCheck },
     { id: "business-impact", label: "القيمة للشركات", icon: LineChart },
     { id: "customer-journey", label: "مسار التشغيل مع العميل", icon: ClipboardList },
     { id: "intelligence", label: "الذكاء المستقل — Manus", icon: BrainCircuit },
     { id: "leads", label: "توليد العملاء — AI", icon: Target },
+    { id: "partnership-room", label: "غرفة الشراكات", icon: Users },
+    { id: "ma-pipeline", label: "مسار الاستحواذ", icon: Building2 },
+    { id: "expansion", label: "وحدة تحكم التوسع", icon: Target },
+    { id: "pmi-engine", label: "محرك التكامل 30/60/90", icon: Layers },
+    { id: "compliance-matrix", label: "الامتثال السعودي", icon: ShieldCheck },
     { id: "properties", label: "إدارة المخزون العقاري", icon: Building2 },
     { id: "affiliates", label: "المسوقين والموظفين", icon: Users },
     { id: "agents", label: "الوكلاء الأذكياء", icon: BrainCircuit },
@@ -106,6 +118,8 @@ export default function DashboardPage() {
     switch (activeTab) {
       case "overview":
         return <DashboardView />;
+      case "executive-room":
+        return <ExecutiveRoomView />;
       case "business-impact":
         return <BusinessImpactView />;
       case "customer-journey":
@@ -114,6 +128,16 @@ export default function DashboardPage() {
         return <IntelligenceDashboard />;
       case "leads":
         return <LeadGeneratorView />;
+      case "partnership-room":
+        return <PartnershipRoomView />;
+      case "ma-pipeline":
+        return <MAPipelineView />;
+      case "expansion":
+        return <ExpansionConsoleView />;
+      case "pmi-engine":
+        return <PMIEngineView />;
+      case "compliance-matrix":
+        return <ComplianceMatrixView />;
       case "properties":
         return <PropertiesView />;
       case "affiliates":
