@@ -48,6 +48,7 @@ import { IntelligenceDashboard } from "../../components/dealix/intelligence-dash
 import { LeadGeneratorView } from "../../components/dealix/lead-generator-view";
 import { SalesOsView } from "../../components/dealix/sales-os-view";
 import { FullOpsView } from "../../components/dealix/full-ops-view";
+import { SovereignCommandCenterView } from "../../components/dealix/sovereign-command-center-view";
 import { PipelineKanban } from "../../components/dealix/pipeline-kanban";
 import { UnifiedInbox } from "../../components/dealix/unified-inbox";
 import { LeadScoreCard } from "../../components/dealix/lead-score-card";
@@ -79,6 +80,7 @@ export default function DashboardPage() {
   }
 
   const NAV_ITEMS = [
+    { id: "command-center", label: "السطح السيادي المؤسسي", icon: ShieldCheck },
     { id: "overview", label: "لوحة القيادة والمراقبة", icon: BarChart3 },
     { id: "business-impact", label: "القيمة للشركات", icon: LineChart },
     { id: "customer-journey", label: "مسار التشغيل مع العميل", icon: ClipboardList },
@@ -104,6 +106,8 @@ export default function DashboardPage() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case "command-center":
+        return <SovereignCommandCenterView />;
       case "overview":
         return <DashboardView />;
       case "business-impact":
@@ -238,10 +242,11 @@ export default function DashboardPage() {
 
         <nav className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-card/80 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl flex items-center justify-around py-4 px-4 z-50">
           {[
+            { id: "command-center", icon: ShieldCheck },
             { id: "overview", icon: BarChart3 },
             { id: "agents", icon: BrainCircuit },
             { id: "presentations", icon: MonitorPlay },
-            { id: "scripts", icon: Phone },
+            { id: "full-ops", icon: Layers },
           ].map((item) => (
             <button
               key={item.id}

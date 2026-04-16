@@ -28,6 +28,10 @@ from app.openclaw.canary_context import get_canary_dashboard_context
 from app.openclaw.observability_bridge import observability_bridge
 from app.openclaw.memory_bridge import memory_bridge
 from app.openclaw.media_bridge import media_bridge
+from app.services.enterprise_command_center import (
+    EnterpriseCommandCenterResponse,
+    build_enterprise_command_center,
+)
 from app.services.sla_escalation_alerts import (
     maybe_dispatch_sla_breach_alerts,
     refresh_pending_escalations,
@@ -184,6 +188,15 @@ async def operations_snapshot(
         },
         "note_ar": "حلقة التشغيل: أحداث مسجّلة + تدقيق + موصلات — تُوسَّع مع المزامنة الفعلية.",
     }
+
+
+@router.get("/command-center", response_model=EnterpriseCommandCenterResponse)
+async def command_center(
+    db: AsyncSession = Depends(get_db),
+    user: Optional[User] = Depends(get_optional_user),
+):
+    """واجهة تشغيل مؤسسية: planes + governance + live surfaces + readiness gaps."""
+    return await build_enterprise_command_center(db, user)
 
 
 @router.get("/audit-logs")
