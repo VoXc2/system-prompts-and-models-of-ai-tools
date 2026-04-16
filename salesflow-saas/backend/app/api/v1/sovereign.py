@@ -13,9 +13,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_optional_user, require_role
+from app.config import get_settings
 from app.database import get_db
 from app.models.operations import ApprovalRequest, DomainEvent
 from app.models.user import User
+from app.services.execution_router import execution_router
+from app.services.go_live_matrix import build_matrix_report
 from app.services.operations_hub import emit_domain_event
 from app.services.tool_receipts import (
     PolicyDecisionType,
@@ -222,6 +225,38 @@ def _receipt_verdict(
     if policy_decision == LedgerPolicyDecision.NEEDS_APPROVAL:
         return VerificationVerdict.PARTIALLY_VERIFIED
     return VerificationVerdict.VERIFIED
+
+
+async def _list_tool_receipts_for_tenant(
+    db: AsyncSession,
+    tenant_id: UUID,
+    limit: int = 500,
+) -> List[Dict[str, Any]]:
+    result = await db.execute(
+        select(DomainEvent)
+        .where(
+            DomainEvent.tenant_id == tenant_id,
+            DomainEvent.event_type == "sovereign.tool_receipt.recorded",
+        )
+        .order_by(DomainEvent.created_at.desc())
+        .limit(limit)
+    )
+    items: List[Dict[str, Any]] = []
+    for row in result.scalars().all():
+        payload = row.payload if isinstance(row.payload, dict) else {}
+        if payload:
+            items.append(payload)
+    return items
+
+
+def _connector_status(pass_count: int, required_total: int) -> str:
+    if required_total <= 0:
+        return "healthy"
+    if pass_count == required_total:
+        return "healthy"
+    if pass_count == 0:
+        return "disconnected"
+    return "degraded"
 
 
 @router.get("/snapshot")
@@ -549,4 +584,315 @@ async def tool_verification_summary(
             "Summary currently reflects in-process receipts for this agent session. "
             "Use /receipts endpoint for tenant-level persisted ledger entries."
         ),
+    }
+
+
+@router.get("/model-routing-dashboard")
+async def model_routing_dashboard(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "admin", "manager")),
+):
+    receipts = await _list_tool_receipts_for_tenant(db, user.tenant_id, limit=400)
+    stats = await execution_router.get_routing_stats()
+    backend_health = await execution_router.get_backend_health()
+    backend_info = execution_router.get_backend_info()
+
+    sample_size = len(receipts)
+    success_count = sum(1 for r in receipts if r.get("execution_status") == ExecutionStatus.SUCCESS.value)
+    failure_count = sum(1 for r in receipts if r.get("execution_status") == ExecutionStatus.FAILED.value)
+    blocked_count = sum(1 for r in receipts if r.get("execution_status") == ExecutionStatus.BLOCKED.value)
+    contradicted_count = sum(
+        1 for r in receipts if r.get("verification_verdict") == VerificationVerdict.CONTRADICTED.value
+    )
+    structured_count = sum(1 for r in receipts if r.get("input_hash") and r.get("output_hash"))
+    total_cost = sum(float(r.get("cost_estimate") or 0.0) for r in receipts)
+
+    success_rate = round((success_count / sample_size) * 100, 2) if sample_size else 0.0
+    schema_adherence = round((structured_count / sample_size) * 100, 2) if sample_size else 0.0
+    contradiction_rate = round((contradicted_count / sample_size) * 100, 2) if sample_size else 0.0
+    tool_call_reliability = round(
+        ((success_count + blocked_count) / sample_size) * 100, 2
+    ) if sample_size else 0.0
+    avg_cost_per_success = round(total_cost / success_count, 5) if success_count else 0.0
+
+    return {
+        "tenant_id": str(user.tenant_id),
+        "benchmark_pool": {
+            "sample_size": sample_size,
+            "latency": {
+                "by_backend_ms": {
+                    key: value.avg_latency_ms for key, value in backend_health.items()
+                },
+                "routing_runtime_cost_usd": stats.get("total_cost_usd", 0.0),
+            },
+            "quality": {
+                "success_rate_percent": success_rate,
+                "schema_adherence_percent": schema_adherence,
+                "contradiction_rate_percent": contradiction_rate,
+                "tool_call_reliability_percent": tool_call_reliability,
+            },
+            "economics": {
+                "cost_per_success_usd": avg_cost_per_success,
+                "observed_total_cost_usd": round(total_cost, 5),
+                "failures": failure_count,
+                "blocked": blocked_count,
+            },
+        },
+        "routing_overview": {
+            "routing_matrix": stats.get("routing_matrix", {}),
+            "by_task_class": stats.get("by_task_class", {}),
+            "available_backends": backend_info,
+        },
+    }
+
+
+@router.get("/connector-health-board")
+async def connector_health_board(
+    user: User = Depends(require_role("owner", "admin", "manager")),
+):
+    settings = get_settings()
+    matrix = build_matrix_report(settings)
+    checks = matrix.get("checks", {})
+
+    connectors = [
+        {
+            "connector": "salesforce",
+            "required_checks": [
+                "salesforce_client_id",
+                "salesforce_client_secret",
+                "salesforce_refresh_token",
+                "salesforce_domain",
+            ],
+            "optional_checks": [],
+        },
+        {
+            "connector": "whatsapp",
+            "required_checks": [
+                "whatsapp_api_token",
+                "whatsapp_phone_number_id",
+                "whatsapp_verify_token",
+                "whatsapp_not_mock",
+            ],
+            "optional_checks": [],
+        },
+        {
+            "connector": "email_outbound",
+            "required_checks": ["email_outbound"],
+            "optional_checks": [],
+        },
+        {
+            "connector": "payments_stripe",
+            "required_checks": ["stripe_secret_key", "stripe_webhook_secret"],
+            "optional_checks": [],
+        },
+        {
+            "connector": "esign",
+            "required_checks": ["esign_provider"],
+            "optional_checks": [],
+        },
+        {
+            "connector": "hubspot",
+            "required_checks": [],
+            "optional_checks": ["hubspot_optional"],
+        },
+        {
+            "connector": "unifonic_sms",
+            "required_checks": [],
+            "optional_checks": ["unifonic_optional"],
+        },
+        {
+            "connector": "enrichment_rapidapi",
+            "required_checks": [],
+            "optional_checks": ["linkedin_enrichment_optional"],
+        },
+    ]
+
+    rendered: List[Dict[str, Any]] = []
+    healthy = 0
+    for connector in connectors:
+        required = connector["required_checks"]
+        optional = connector["optional_checks"]
+        required_passed = sum(1 for check in required if checks.get(check) == "PASS")
+        optional_passed = sum(1 for check in optional if checks.get(check) == "PASS")
+        status = _connector_status(required_passed, len(required))
+        if status == "healthy":
+            healthy += 1
+        rendered.append(
+            {
+                "connector": connector["connector"],
+                "status": status,
+                "required_passed": required_passed,
+                "required_total": len(required),
+                "optional_passed": optional_passed,
+                "optional_total": len(optional),
+                "required_checks": [
+                    {"check_id": check, "status": checks.get(check, "FAIL")} for check in required
+                ],
+                "optional_checks": [
+                    {"check_id": check, "status": checks.get(check, "FAIL")} for check in optional
+                ],
+            }
+        )
+
+    return {
+        "tenant_id": str(user.tenant_id),
+        "connectors": rendered,
+        "healthy_connectors": healthy,
+        "total_connectors": len(rendered),
+        "readiness_percent": round((healthy / len(rendered)) * 100, 2) if rendered else 0.0,
+    }
+
+
+@router.get("/saudi-compliance-matrix")
+async def saudi_compliance_matrix(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "admin", "manager")),
+):
+    approvals_result = await db.execute(
+        select(ApprovalRequest).where(ApprovalRequest.tenant_id == user.tenant_id).limit(500)
+    )
+    approvals = approvals_result.scalars().all()
+    commitments = await _list_workflow_commitments(db, user.tenant_id, limit=500)
+    receipts = await _list_tool_receipts_for_tenant(db, user.tenant_id, limit=500)
+
+    pending_critical_approvals = sum(
+        1
+        for row in approvals
+        if row.status == "pending"
+        and isinstance(row.payload, dict)
+        and row.payload.get("approval_class") in {ApprovalClass.A2.value, ApprovalClass.A3.value}
+    )
+    high_sensitivity_approvals = sum(
+        1
+        for row in approvals
+        if isinstance(row.payload, dict)
+        and row.payload.get("sensitivity_class") == SensitivityClass.S3.value
+    )
+    pdpl_tagged_approvals = sum(
+        1
+        for row in approvals
+        if isinstance(row.payload, dict)
+        and any("pdpl" in ref.lower() for ref in (row.payload.get("policy_refs") or []))
+    )
+    blocked_receipts = sum(1 for item in receipts if item.get("execution_status") == ExecutionStatus.BLOCKED.value)
+    contradicted_receipts = sum(
+        1 for item in receipts if item.get("verification_verdict") == VerificationVerdict.CONTRADICTED.value
+    )
+    durable_commitments = sum(1 for item in commitments if bool(item.get("requires_durable_runtime")))
+    blocked_commitments = sum(
+        1 for item in commitments if item.get("state") in {WorkflowState.BLOCKED.value, WorkflowState.FAILED.value}
+    )
+
+    controls = [
+        {
+            "control_id": "PDPL-CONSENT-GATE",
+            "framework": "PDPL",
+            "status": "green" if pdpl_tagged_approvals > 0 else "amber",
+            "evidence": {"pdpl_tagged_approvals": pdpl_tagged_approvals},
+        },
+        {
+            "control_id": "NCA-CRITICAL-APPROVALS",
+            "framework": "NCA ECC",
+            "status": "green" if pending_critical_approvals == 0 else "red",
+            "evidence": {"pending_critical_approvals": pending_critical_approvals},
+        },
+        {
+            "control_id": "NCA-DURABLE-EXECUTION",
+            "framework": "NCA ECC",
+            "status": "green" if durable_commitments > 0 and blocked_commitments == 0 else "amber",
+            "evidence": {
+                "durable_commitments": durable_commitments,
+                "blocked_or_failed_commitments": blocked_commitments,
+            },
+        },
+        {
+            "control_id": "AI-GOV-TOOL-VERIFICATION",
+            "framework": "NIST AI RMF / OWASP LLM",
+            "status": "green" if contradicted_receipts == 0 else "red",
+            "evidence": {
+                "blocked_receipts": blocked_receipts,
+                "contradicted_receipts": contradicted_receipts,
+            },
+        },
+        {
+            "control_id": "DATA-SHARING-SENSITIVITY",
+            "framework": "PDPL",
+            "status": "green" if high_sensitivity_approvals == 0 else "amber",
+            "evidence": {"high_sensitivity_approvals": high_sensitivity_approvals},
+        },
+    ]
+
+    return {
+        "tenant_id": str(user.tenant_id),
+        "controls": controls,
+        "evidence": {
+            "approvals_total": len(approvals),
+            "workflow_commitments_total": len(commitments),
+            "tool_receipts_total": len(receipts),
+            "pending_critical_approvals": pending_critical_approvals,
+        },
+    }
+
+
+@router.get("/release-gate-dashboard")
+async def release_gate_dashboard(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "admin", "manager")),
+):
+    settings = get_settings()
+    matrix = build_matrix_report(settings)
+
+    approvals_result = await db.execute(
+        select(ApprovalRequest).where(ApprovalRequest.tenant_id == user.tenant_id).limit(500)
+    )
+    approvals = approvals_result.scalars().all()
+    commitments = await _list_workflow_commitments(db, user.tenant_id, limit=500)
+    receipts = await _list_tool_receipts_for_tenant(db, user.tenant_id, limit=500)
+
+    pending_a3 = sum(
+        1
+        for row in approvals
+        if row.status == "pending"
+        and isinstance(row.payload, dict)
+        and row.payload.get("approval_class") == ApprovalClass.A3.value
+    )
+    blocked_commitments = sum(
+        1 for item in commitments if item.get("state") in {WorkflowState.BLOCKED.value, WorkflowState.FAILED.value}
+    )
+    blocked_receipts = sum(1 for item in receipts if item.get("execution_status") == ExecutionStatus.BLOCKED.value)
+
+    blockers: List[str] = []
+    if not matrix.get("launch_allowed", False):
+        blockers.append("environment_go_live_checks_failed")
+    if pending_a3 > 0:
+        blockers.append("pending_A3_approvals")
+    if blocked_commitments > 0:
+        blockers.append("blocked_or_failed_commitments")
+    if blocked_receipts > 0:
+        blockers.append("blocked_tool_receipts_detected")
+
+    return {
+        "tenant_id": str(user.tenant_id),
+        "overall_gate": "pass" if not blockers else "hold",
+        "gates": {
+            "environment_readiness": {
+                "status": "pass" if matrix.get("launch_allowed", False) else "hold",
+                "score": matrix.get("score"),
+                "readiness_percent": matrix.get("readiness_percent"),
+                "missing_count": matrix.get("missing_count"),
+            },
+            "critical_approvals": {
+                "status": "pass" if pending_a3 == 0 else "hold",
+                "pending_a3": pending_a3,
+            },
+            "workflow_health": {
+                "status": "pass" if blocked_commitments == 0 else "hold",
+                "blocked_or_failed": blocked_commitments,
+            },
+            "policy_enforcement": {
+                "status": "pass" if blocked_receipts == 0 else "hold",
+                "blocked_receipts": blocked_receipts,
+            },
+        },
+        "blockers": blockers,
     }

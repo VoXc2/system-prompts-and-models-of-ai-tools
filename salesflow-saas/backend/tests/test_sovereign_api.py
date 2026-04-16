@@ -117,3 +117,28 @@ async def test_sovereign_approval_commitment_and_ledger_flow(client):
     assert ledger.status_code == 200
     assert ledger.json()["count"] >= 1
     assert any(item["receipt_id"] == receipt_id for item in ledger.json()["items"])
+
+    model_routing = await client.get("/api/v1/sovereign/model-routing-dashboard", headers=headers)
+    assert model_routing.status_code == 200
+    model_data = model_routing.json()
+    assert "benchmark_pool" in model_data
+    assert model_data["benchmark_pool"]["sample_size"] >= 1
+    assert "routing_overview" in model_data
+
+    connector_health = await client.get("/api/v1/sovereign/connector-health-board", headers=headers)
+    assert connector_health.status_code == 200
+    connector_data = connector_health.json()
+    assert connector_data["total_connectors"] >= 1
+    assert "readiness_percent" in connector_data
+
+    compliance_matrix = await client.get("/api/v1/sovereign/saudi-compliance-matrix", headers=headers)
+    assert compliance_matrix.status_code == 200
+    compliance_data = compliance_matrix.json()
+    assert len(compliance_data["controls"]) >= 1
+    assert "evidence" in compliance_data
+
+    release_gate = await client.get("/api/v1/sovereign/release-gate-dashboard", headers=headers)
+    assert release_gate.status_code == 200
+    release_data = release_gate.json()
+    assert release_data["overall_gate"] in {"pass", "hold"}
+    assert "gates" in release_data
