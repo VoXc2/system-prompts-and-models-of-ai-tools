@@ -28,6 +28,7 @@ import {
   UserCheck,
   TrendingUp,
   Crosshair,
+  Crown,
 } from "lucide-react";
 
 import { DashboardView } from "../../components/dealix/dashboard-view";
@@ -51,6 +52,7 @@ import { FullOpsView } from "../../components/dealix/full-ops-view";
 import { PipelineKanban } from "../../components/dealix/pipeline-kanban";
 import { UnifiedInbox } from "../../components/dealix/unified-inbox";
 import { LeadScoreCard } from "../../components/dealix/lead-score-card";
+import { SovereignOSView } from "../../components/dealix/sovereign-os/sovereign-os-view";
 
 const dashboardLeadScoreDemo = {
   score: 82,
@@ -100,6 +102,7 @@ export default function DashboardPage() {
     { id: "inbox", label: "صندوق الوارد الموحد", icon: Bell },
     { id: "scoring", label: "تقييم العملاء AI", icon: Zap },
     { id: "onboarding", label: "تأهيل المسوق", icon: BookOpen },
+    { id: "sovereign-os", label: "Sovereign OS — نظام التشغيل المؤسسي", icon: Crown },
   ];
 
   const renderContent = () => {
@@ -146,6 +149,8 @@ export default function DashboardPage() {
         return <LeadScoreCard data={dashboardLeadScoreDemo} />;
       case "onboarding":
         return <OnboardingView />;
+      case "sovereign-os":
+        return <SovereignOSView />;
       default:
         return <DashboardView />;
     }

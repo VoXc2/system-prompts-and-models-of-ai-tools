@@ -11,6 +11,11 @@ class User(TenantModel):
     email = Column(String(255), nullable=False)
     password_hash = Column(String(255), nullable=False)
     full_name = Column(String(255))
+    
+    # Alias for auth_service compatibility
+    @property
+    def hashed_password(self):
+        return self.password_hash
     full_name_ar = Column(String(255))
     role = Column(String(50), nullable=False, default="agent")  # owner, manager, agent, admin
     phone = Column(String(20))

@@ -27,6 +27,23 @@ from app.models.consent import PDPLConsent, PDPLConsentAudit, DataRequest
 from app.models.sequence import Sequence, SequenceStep, SequenceEnrollment, SequenceEvent
 from app.models.strategic_deal import CompanyProfile, StrategicDeal, DealMatch
 from app.models.api_key import APIKey, AppSetting
+from app.models.sovereign_os import (
+    # Decision Plane
+    DecisionTrace, ModelBenchmarkRun,
+    # Execution Plane
+    DurableWorkflowRun, WorkflowCheckpoint, HITLInterrupt,
+    # Trust Plane
+    PolicyRule, GovernedApproval, ToolVerificationEntry, EvidencePack,
+    # Data Plane
+    CloudEventLog, DataQualityCheckpoint, ConnectorHealthEntry,
+    # Operating Plane
+    ReleaseGate,
+    # OS Modules
+    SalesOpportunity, PartnerRecord, MATarget, ExpansionPlan, PMIProject,
+    ExecutiveKPI, SaudiComplianceCheck,
+    # Enums
+    ApprovalClass, ReversibilityClass, SensitivityClass, WorkflowStatus,
+)
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
@@ -42,4 +59,13 @@ __all__ = [
     "PDPLConsent", "PDPLConsentAudit", "DataRequest",
     "Sequence", "SequenceStep", "SequenceEnrollment", "SequenceEvent",
     "CompanyProfile", "StrategicDeal", "DealMatch",
+    # Sovereign OS
+    "DecisionTrace", "ModelBenchmarkRun",
+    "DurableWorkflowRun", "WorkflowCheckpoint", "HITLInterrupt",
+    "PolicyRule", "GovernedApproval", "ToolVerificationEntry", "EvidencePack",
+    "CloudEventLog", "DataQualityCheckpoint", "ConnectorHealthEntry",
+    "ReleaseGate",
+    "SalesOpportunity", "PartnerRecord", "MATarget", "ExpansionPlan", "PMIProject",
+    "ExecutiveKPI", "SaudiComplianceCheck",
+    "ApprovalClass", "ReversibilityClass", "SensitivityClass", "WorkflowStatus",
 ]

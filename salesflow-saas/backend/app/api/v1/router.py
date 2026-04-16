@@ -25,6 +25,7 @@ from app.api.v1 import customer_onboarding as customer_onboarding_router
 from app.api.v1 import sales_os as sales_os_router
 from app.api.v1 import operations as operations_router
 from app.api.v1 import proposals as proposals_router
+from app.api.v1 import sovereign_os as sovereign_os_router
 
 api_router = APIRouter()
 
@@ -102,3 +103,6 @@ api_router.include_router(whatsapp_webhook_router.router)
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)
+
+# ── Sovereign OS — Decision/Execution/Trust/Data/Operating + 6 OS Modules ──
+api_router.include_router(sovereign_os_router.router)
