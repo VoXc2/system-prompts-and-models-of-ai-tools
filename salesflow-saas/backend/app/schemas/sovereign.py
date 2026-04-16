@@ -119,6 +119,17 @@ class DurableWorkflowResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+class DurableWorkflowUpdate(BaseModel):
+    status: Optional[str] = None
+    current_step: Optional[str] = None
+    error_message: Optional[str] = None
+
+class WorkflowStepCreate(BaseModel):
+    step_name: str = Field(..., max_length=120)
+    step_type: str = Field(..., max_length=50)
+    input_data: Optional[Dict[str, Any]] = None
+    assigned_to_id: Optional[UUID] = None
+
 class WorkflowStepResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: UUID
@@ -134,6 +145,10 @@ class WorkflowStepResponse(BaseModel):
     approval_status: Optional[str] = None
     approval_note: Optional[str] = None
     created_at: datetime
+
+class WorkflowStepUpdate(BaseModel):
+    status: Optional[str] = None
+    error_message: Optional[str] = None
 
 
 # ── Trust Plane ────────────────────────────────────────────────
@@ -199,6 +214,25 @@ class ToolVerificationResponse(BaseModel):
     error_message: Optional[str] = None
     side_effects: Optional[Dict[str, Any]] = None
     created_at: datetime
+
+class PolicyEvaluateRequest(BaseModel):
+    rule_id: UUID
+    action_type: str
+    target_entity_type: Optional[str] = None
+    target_entity_id: Optional[UUID] = None
+    input_context: Optional[Dict[str, Any]] = None
+
+class ToolVerificationCreate(BaseModel):
+    tool_name: str = Field(..., max_length=120)
+    tool_version: Optional[str] = None
+    invocation_id: str = Field(..., max_length=120)
+    invoked_by: str = Field(..., max_length=80)
+    input_hash: Optional[str] = None
+    output_hash: Optional[str] = None
+    execution_time_ms: Optional[int] = None
+    success: bool = True
+    error_message: Optional[str] = None
+    side_effects: Optional[Dict[str, Any]] = None
 
 class ComplianceMappingCreate(BaseModel):
     framework: str = Field(..., max_length=80)
@@ -361,6 +395,15 @@ class ExpansionMarketResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+class ExpansionMarketUpdate(BaseModel):
+    status: Optional[str] = None
+    priority_score: Optional[float] = None
+    compliance_readiness: Optional[Dict[str, Any]] = None
+    localization_status: Optional[Dict[str, Any]] = None
+    pricing_plan: Optional[Dict[str, Any]] = None
+    channel_plan: Optional[Dict[str, Any]] = None
+    notes: Optional[str] = None
+
 
 # ── PMI / PMO OS ───────────────────────────────────────────────
 
@@ -458,6 +501,11 @@ class ConnectorDefinitionResponse(BaseModel):
     updated_at: datetime
 
 
+class ConnectorHealthUpdate(BaseModel):
+    is_active: Optional[bool] = None
+    last_verified_at: Optional[datetime] = None
+
+
 # ── Evidence Packs ─────────────────────────────────────────────
 
 class EvidencePackCreate(BaseModel):
@@ -500,6 +548,11 @@ class EvidencePackResponse(BaseModel):
     approved_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
+
+
+class EvidencePackUpdate(BaseModel):
+    status: Optional[str] = None
+    policy_notes: Optional[str] = None
 
 
 # ── Sovereign Dashboard Summary ────────────────────────────────

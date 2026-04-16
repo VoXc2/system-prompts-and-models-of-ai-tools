@@ -102,3 +102,26 @@ api_router.include_router(whatsapp_webhook_router.router)
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)
+
+# ── Sovereign Enterprise Growth OS ─────────────────────────────
+from app.api.v1 import sovereign_decision as sovereign_decision_router
+from app.api.v1 import sovereign_execution as sovereign_execution_router
+from app.api.v1 import sovereign_trust as sovereign_trust_router
+from app.api.v1 import sovereign_partnership as sovereign_partnership_router
+from app.api.v1 import sovereign_ma as sovereign_ma_router
+from app.api.v1 import sovereign_expansion as sovereign_expansion_router
+from app.api.v1 import sovereign_pmi as sovereign_pmi_router
+from app.api.v1 import sovereign_executive as sovereign_executive_router
+from app.api.v1 import sovereign_connector as sovereign_connector_router
+from app.api.v1 import sovereign_operating as sovereign_operating_router
+
+api_router.include_router(sovereign_decision_router.router)
+api_router.include_router(sovereign_execution_router.router)
+api_router.include_router(sovereign_trust_router.router)
+api_router.include_router(sovereign_partnership_router.router)
+api_router.include_router(sovereign_ma_router.router)
+api_router.include_router(sovereign_expansion_router.router)
+api_router.include_router(sovereign_pmi_router.router)
+api_router.include_router(sovereign_executive_router.router)
+api_router.include_router(sovereign_connector_router.router)
+api_router.include_router(sovereign_operating_router.router)
