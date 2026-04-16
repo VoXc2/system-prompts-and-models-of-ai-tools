@@ -129,6 +129,27 @@ User-facing prompt workflows contributed by the community. These are **not** lea
 |---|---|---|---|
 | Figma Make — 9-prompt website builder | [@_TALEBM_](https://x.com/_TALEBM_) | Claude Opus 4.6 + Figma Make | [`Figma Make/`](Figma%20Make/) |
 
+### AI Agent Prompts
+
+Reusable agent personas for sales, support, research, and onboarding workflows.
+
+| Agent | Language | Directory |
+|---|---|---|
+| The Closer (Sales) | AR | `ai-agents/prompts/closer-agent.md` |
+| Customer Support | AR/EN | `ai-agents/prompts/support-agent.md` |
+| Research Analyst | AR/EN | `ai-agents/prompts/research-agent.md` |
+| Onboarding Guide | AR | `ai-agents/prompts/onboarding-agent.md` |
+| Lead Qualifier | AR | `ai-agents/prompts/qualifier-agent.md` |
+
+### Projects
+
+Full-stack applications developed alongside the prompts collection.
+
+| Project | Stack | Description | Directory |
+|---|---|---|---|
+| Dealix (SalesFlow SaaS) | Next.js + FastAPI + PostgreSQL | AI-powered CRM for the Saudi market — WhatsApp-first, PDPL-compliant, Arabic-first | `salesflow-saas/` |
+| Personal Brand Engine | Python + LangChain | Multi-agent system for personal branding — content generation, CV builder, scheduling | `personal-brand-engine/` |
+
 ---
 
 ## 🧰 Claude Code — Token Optimization & Ecosystem Tools

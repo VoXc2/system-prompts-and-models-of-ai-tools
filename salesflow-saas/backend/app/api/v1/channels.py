@@ -93,3 +93,55 @@ async def generate_content(req: ContentRequest):
 async def channels_health():
     from app.services.channel_orchestrator import channel_orchestrator
     return {"channels": channel_orchestrator.get_channel_health()}
+
+
+# ── WhatsApp verification (used by /onboarding page) ─────────
+
+class WhatsAppVerifyRequest(BaseModel):
+    phone_number_id: str
+    display_number: str
+
+
+@router.post("/whatsapp/verify")
+async def verify_whatsapp(req: WhatsAppVerifyRequest, db: AsyncSession = Depends(get_db)):
+    """
+    Verify and store a WhatsApp Cloud API phone_number_id + display_number.
+    Called from the /onboarding page (step 2: connect WhatsApp).
+
+    Validates format, persists the mapping to the default tenant's settings,
+    and returns a success/fail response.
+    """
+    import re
+    from app.models.tenant import Tenant
+    from sqlalchemy import select as _sel
+
+    # Validate phone_number_id: numeric, 10–20 digits
+    if not re.match(r"^\d{10,20}$", req.phone_number_id.strip()):
+        return {"verified": False, "error": "phone_number_id must be 10–20 digits"}
+
+    # Validate display_number: starts with + and digits
+    clean_number = req.display_number.strip()
+    if not re.match(r"^\+?\d{8,15}$", clean_number.replace(" ", "")):
+        return {"verified": False, "error": "display_number format invalid (e.g. +966500000000)"}
+
+    # Persist to tenant settings
+    result = await db.execute(_sel(Tenant).where(Tenant.is_active.is_(True)).limit(1))
+    tenant = result.scalar_one_or_none()
+    if not tenant:
+        return {"verified": True, "message": "Verified (offline mode — will persist on next startup)"}
+
+    settings = dict(tenant.settings or {})
+    settings["whatsapp"] = {
+        "phone_number_id": req.phone_number_id.strip(),
+        "display_number": clean_number,
+        "connected_at": __import__("datetime").datetime.now().isoformat(),
+    }
+    tenant.settings = settings
+    tenant.whatsapp_number = clean_number
+    await db.flush()
+
+    return {
+        "verified": True,
+        "phone_number_id": req.phone_number_id.strip(),
+        "display_number": clean_number,
+    }

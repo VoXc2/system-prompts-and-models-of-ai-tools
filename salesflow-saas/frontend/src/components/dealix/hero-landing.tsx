@@ -68,6 +68,9 @@ export default function HeroLanding() {
             <button onClick={() => setLang(lang === "ar" ? "en" : "ar")} style={styles.langToggle}>
               {lang === "ar" ? "EN" : "عربي"}
             </button>
+            <a href="/offer" style={{...styles.navCTA, background: 'linear-gradient(90deg, #00D4AA, #5EEAD4)', color: '#041318'}}>
+              {lang === "ar" ? "عرض ١٤ يوم" : "14-Day Offer"}
+            </a>
             <a href="#demo" style={styles.navCTA}>{t.nav.demo}</a>
           </div>
         </div>
@@ -87,9 +90,11 @@ export default function HeroLanding() {
           </h1>
           <p style={styles.heroSub}>{t.hero.subtitle}</p>
           <div style={styles.heroCTAs}>
-            <a href="#demo" style={styles.btnPrimary}>{t.hero.cta1} →</a>
-            <a href="#features" style={styles.btnSecondary}>
-              ▶ {t.hero.cta2}
+            <a href="/offer" style={styles.btnPrimary}>
+              {isRTL ? "جرّب ١٤ يوم مجاناً ←" : "Try 14 Days Free →"}
+            </a>
+            <a href="/onboarding" style={styles.btnSecondary}>
+              ▶ {isRTL ? "ابدأ الآن" : "Get Started"}
             </a>
           </div>
           {/* Stats Row */}

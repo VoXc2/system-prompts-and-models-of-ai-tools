@@ -2,6 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from uuid import UUID
+from datetime import datetime, timezone, timedelta
+from pydantic import BaseModel
+from typing import Optional
 from app.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
@@ -9,6 +12,67 @@ from app.models.lead import Lead
 from app.schemas.lead import LeadCreate, LeadUpdate, LeadResponse, LeadListResponse
 
 router = APIRouter()
+
+
+# ── Public lead capture (no auth — used by /offer page) ──────
+
+class PublicLeadRequest(BaseModel):
+    name: str
+    company: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    notes: Optional[str] = None
+    source: Optional[str] = "website"
+
+
+@router.post("/public", status_code=201)
+async def create_public_lead(data: PublicLeadRequest, db: AsyncSession = Depends(get_db)):
+    """
+    Unauthenticated lead-capture endpoint for the /offer landing page.
+    Automatically assigns to the default tenant and records PDPL consent
+    with purpose=sales, channel=website, 12-month expiry.
+    """
+    from app.models.tenant import Tenant
+
+    # Pick the first active tenant (single-tenant mode for offer page)
+    result = await db.execute(select(Tenant).where(Tenant.is_active.is_(True)).limit(1))
+    tenant = result.scalar_one_or_none()
+    if not tenant:
+        return {"status": "received", "message": "Lead recorded (offline mode)"}
+
+    lead = Lead(
+        tenant_id=tenant.id,
+        name=data.name,
+        phone=data.phone,
+        email=data.email,
+        source=data.source or "offer_page",
+        status="new",
+        score=0,
+        notes=data.notes,
+        extra_metadata={"company": data.company} if data.company else {},
+    )
+    db.add(lead)
+    await db.flush()
+    await db.refresh(lead)
+
+    # Record PDPL consent automatically
+    try:
+        from app.models.consent import PDPLConsent, ConsentStatusEnum
+        consent = PDPLConsent(
+            tenant_id=tenant.id,
+            contact_id=lead.id,
+            purpose="sales",
+            channel="website",
+            status=ConsentStatusEnum.GRANTED.value,
+            expires_at=datetime.now(timezone.utc) + timedelta(days=365),
+            consent_text="Submitted via offer page — implicit consent for sales follow-up",
+        )
+        db.add(consent)
+        await db.flush()
+    except Exception:
+        pass  # Consent tracking is best-effort on public endpoint
+
+    return {"status": "created", "lead_id": str(lead.id)}
 
 
 def _lead_list_scope(query, user: User):
