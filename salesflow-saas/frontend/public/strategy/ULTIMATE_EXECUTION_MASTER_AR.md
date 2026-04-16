@@ -75,6 +75,7 @@
 | `backend/app/services/knowledge_service.py` | RAG داخل التطبيق |
 | `backend/app/ai/orchestrator.py` | تنسيق وكلاء + سياق معرفة |
 | `frontend/src/app/strategy/page.tsx` | صفحة استراتيجية عامة |
+| `frontend/public/strategy/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md` | مصفوفة الإغلاق التنفيذية (Workstream/Evidence/SLA) |
 
 ---
 
