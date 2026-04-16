@@ -27,6 +27,17 @@ from app.models.consent import PDPLConsent, PDPLConsentAudit, DataRequest
 from app.models.sequence import Sequence, SequenceStep, SequenceEnrollment, SequenceEvent
 from app.models.strategic_deal import CompanyProfile, StrategicDeal, DealMatch
 from app.models.api_key import APIKey, AppSetting
+from app.models.sovereign import (
+    SovereignComplianceCheck,
+    SovereignConnectorState,
+    SovereignContradiction,
+    SovereignEvidenceItem,
+    SovereignEvidencePack,
+    SovereignPolicyEvaluation,
+    SovereignProgramLock,
+    SovereignToolVerification,
+    SovereignWorkflow,
+)
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
@@ -42,4 +53,13 @@ __all__ = [
     "PDPLConsent", "PDPLConsentAudit", "DataRequest",
     "Sequence", "SequenceStep", "SequenceEnrollment", "SequenceEvent",
     "CompanyProfile", "StrategicDeal", "DealMatch",
+    "SovereignComplianceCheck",
+    "SovereignConnectorState",
+    "SovereignContradiction",
+    "SovereignEvidenceItem",
+    "SovereignEvidencePack",
+    "SovereignPolicyEvaluation",
+    "SovereignProgramLock",
+    "SovereignToolVerification",
+    "SovereignWorkflow",
 ]
