@@ -1,67 +1,166 @@
-# وثيقة التنفيذ الشاملة — نظام تشغيل الإيرادات والعمليات الذاتي 2026
+# وثيقة التنفيذ السيادي الشاملة — Dealix Sovereign Enterprise Growth OS 2026
 
-**الإصدار:** Legendary Complete Edition v4.0 (متوافق مع المستودع)  
-**الحالة:** مرجع استراتيجي وتنفيذي — يُحدَّث مع `MASTER-BLUEPRINT.mdc` والكود.
-
----
-
-## الرؤية
-
-> ليس مجرد أداة، بل **شركة مبيعات رقمية مؤتمتة بالذكاء الاصطناعي** تعمل على مدار الساعة، تتطور ذاتياً، وتولد قيمة وإيرادات قابلة للقياس من اليوم الأول.
-
-**Dealix** = Revenue & Operations OS: من الاكتشاف والتأهيل إلى العرض والتفاوض والإغلاق وما بعد البيع والدعم والفوترة والتحليلات — مع **حوكمة** و**عزل متعدد المستأجرين** و**قنوات محلية** (واتساب أولاً، عربي، SAR، سياق امتثال سعودي).
+**الإصدار:** Sovereign Edition v5.0  
+**الحالة:** مرجع تنفيذي حي مرتبط بـ `MASTER-BLUEPRINT.mdc` و`/api/v1/strategy/summary`.
 
 ---
 
-## مقاييس مستهدفة (قابلة للتدقيق)
+## الرؤية النهائية
 
-| المحور | هدف توجيهي | ملاحظة |
-|--------|-------------|--------|
-| النمو | +3–5× إيرادات سنوية | يُقاس لكل عميل وخط أساس |
-| الكفاءة | −70–80% عمل يدوي في مسار المبيعات | عبر أتمتة وسير عمل |
-| التنبؤ | دقة أعلى في أفق 30 يوماً | نماذج + بيانات نظيفة |
-| دورة الصفقة | −40% زمن إغلاق نسبي للخط الأساسي | قياس قبل/بعد |
-| الاكتساب | −31% تكلفة اكتساب عبر أتمتة | عند توفر القنوات |
-| الامتثال | PDPL + ممارسات SOC2-ready | سياسات، سجلات، موافقات |
-| التوسع | تعدد مناطق/قطاعات على مدى 18–36 شهراً | خارطة طريق مرحلية |
+ليس الهدف أن يصبح Dealix "CRM أذكى"، بل أن يصبح:
 
----
+**Dealix Sovereign Enterprise Growth OS**
 
-## مبادئ التصميم (ستة)
+منصة سيادية موحّدة تدير:
+- Revenue OS
+- Partnership OS
+- M&A / CorpDev OS
+- Expansion OS
+- PMI / PMO OS
+- Executive / Board OS
 
-1. **القيمة أولاً** — كل ميزة تُربط بمؤشر عميل أو تشغيلي.
-2. **الامتثال بالتصميم** — موافقات، تسجيل قرارات، حدود بيانات.
-3. **تطور ذاتي** — حلقة تحسين ذاتي (مراحل واضحة في OpenClaw + تدفقات الخلفية).
-4. **تعقيد مخفي وبساطة ظاهرة** — واجهة بسيطة، منطق معقد منظم في طبقات.
-5. **قابلية القياس** — لوحات، ROI تنفيذي، تكاليف نماذج لكل مستأجر حيث ينطبق.
-6. **أمان بلا ثقة مطلقة** — عزل مستأجرين، حدود وكلاء، مراجعة قبل الإرسال الحساس.
+القاعدة التشغيلية:
+**AI يستكشف ويحلل ويقترح، الأنظمة تنفذ، والبشر يعتمدون القرارات الحرجة.**
 
 ---
 
-## المعرفة والـ RAG (سياسة المنتج)
+## البنية السيادية (5 Planes)
 
-- **المصدر المعتمد:** PostgreSQL + **pgvector**، `KnowledgeService`، أصول القطاعات، وسياق الـ orchestrator.
-- **غير معتمد:** Onyx وأي RAG خارجي كبديل أساسي — لتقليل الاعتماديات والتكلفة غير المنضبطة وضمان البيانات داخل نطاقك.
-
----
-
-## التمييز التنافسي (ملخص)
-
-- **OpenClaw 2026.4.2:** تدفقات مهام دائمة + تتبع مراجع (حسب التكوين في `openclaw/openclaw-config.yaml`).
-- **حلقة تحسين ذاتي:** مراحل جمع إشارات → تشخيص → تجارب → حوكمة → ترقية/تراجع.
-- **سعودي أولاً:** قنوات، لغة، فوترة/سياق زاتكا ضمن المسار حسب المنتج.
-- **تكاملات:** Salesforce path، واتساب، Stripe، صوت، عقود/توقيع — عبر خدمات الـ backend والـ plugins المسموحة.
+| Plane | الهدف التشغيلي | النواة التقنية |
+|-------|-----------------|----------------|
+| Decision Plane | signal detection, triage, scenario analysis, memos, recommendations | Responses API + Structured Outputs + Function Calling/MCP + LangGraph interrupts |
+| Execution Plane | الالتزامات طويلة الأمد متعددة الأنظمة | LangGraph للـ cognition + Temporal للـ durable commitments |
+| Trust Plane | policy, authorization, approval routing, auditability | OPA + OpenFGA + Vault + Keycloak + Tool Verification Ledger |
+| Data Plane | مصدر حقيقة + عقود بيانات + جودة + تتبّع | Postgres + pgvector + Airbyte + Great Expectations + CloudEvents/AsyncAPI + OTel |
+| Operating Plane | SDLC, release governance, provenance | GitHub rulesets/environments/OIDC/attestations + external audit streaming |
 
 ---
 
-## خارطة طريق مرحلية (0–36 شهراً)
+## Program Locks (إقفال البرنامج)
 
-| المرحلة | الأفق | التركيز |
-|---------|--------|---------|
-| 0 — الأساس | 0–90 يوماً | إنتاجية، صحة API، pilot، تسويق موحّد |
-| 1 — MVP مدفوع | شهر 2–3 | تأهيل أعمق، عروض، ROI أساسي، امتثال تشغيلي |
-| 2 — التوسع | شهر 4–9 | multi-tenant أعمق، صوت، تنبؤ إيرادات، بوابة API |
-| 3 — القيادة | شهر 10–36 | مناطق، شراكات، قطاعات عمودية |
+يجب تثبيت هذه العناصر داخل النظام كقيود تشغيل رسمية:
+- 5 planes
+- 6 business tracks
+- 3 agent roles
+- 3 action classes
+- 3 approval classes كحد أدنى
+- 4 reversibility classes
+- sensitivity model إلزامي
+- provenance/freshness/confidence trio إلزامي
+
+---
+
+## الأسطح الإلزامية داخل المنتج (Mandatory Live Surfaces)
+
+- Executive Room
+- Approval Center
+- Evidence Pack Viewer
+- Partner Room
+- DD Room
+- Risk Board
+- Policy Violations Board
+- Actual vs Forecast Dashboard
+- Revenue Funnel Control Center
+- Partnership Scorecards
+- M&A Pipeline Board
+- Expansion Launch Console
+- PMI 30/60/90 Engine
+- Tool Verification Ledger
+- Connector Health Board
+- Release Gate Dashboard
+- Saudi Compliance Matrix
+- Model Routing Dashboard
+
+أي سطح مفقود = فجوة مباشرة في النسخة المؤسسية الكاملة.
+
+---
+
+## حدود الأتمتة (Automation Boundaries)
+
+### يُؤتمت بالكامل
+- intake, enrichment, scoring
+- memo drafting, evidence aggregation
+- workflow kickoff, reminders, task assignment, SLA tracking
+- variance/anomaly detection
+- connector syncs, quality checks, telemetry collection
+
+### يُؤتمت مع اعتماد إلزامي
+- term sheet sending
+- signature request
+- strategic partner activation
+- market launch
+- M&A offer
+- discount خارج السياسة
+- data sharing عالي الحساسية
+- production promotion
+- capital commitments
+
+---
+
+## Sovereign Routing Fabric
+
+Policy-based routing lanes:
+- coding lane
+- executive reasoning lane
+- throughput drafting lane
+- fallback lane
+
+المقاييس الإلزامية لكل lane:
+- latency
+- schema adherence
+- contradiction rate
+- Arabic quality
+- cost per successful task
+
+---
+
+## Connector Facade Contract (إلزامي)
+
+كل تكامل خارجي يجب أن يمر عبر facade versioned يحتوي على:
+- contract
+- version
+- retry policy
+- timeout policy
+- idempotency key
+- approval policy
+- audit mapping
+- telemetry mapping
+- rollback/compensation notes
+
+---
+
+## جاهزية السعودية والحوكمة
+
+Matrix إلزامي لكل workflow حساس:
+- PDPL controls mapping
+- ECC/NCA cyber controls checkpoints
+- NIST AI RMF lifecycle coverage
+- OWASP LLM Top 10 mitigations
+
+---
+
+## تعريف الجاهزية النهائية (Final Readiness Definition)
+
+لا يُعتبر Dealix جاهزاً مؤسسياً إلا إذا تحقق ما يلي:
+- كل قرار business-critical structured + evidence-backed + schema-bound
+- كل long-running commitment durable + resumable + crash-tolerant
+- كل action حساس يحمل approval/reversibility/sensitivity metadata
+- كل connector versioned مع retry/idempotency/audit mapping
+- كل release يمر عبر rulesets + environments + OIDC + provenance
+- كل surface traceable عبر OTel + correlation IDs
+- كل deployment مؤسسي يمر security review وLLM/tool red-team
+- كل workflow حساس في السعودية يملك mapping واضح على PDPL/NCA/AI governance
+
+---
+
+## خارطة التنفيذ المرحلية
+
+| المرحلة | الأفق | المخرجات |
+|---------|-------|----------|
+| Sovereign Foundation | 0–90 يوم | Program Locks + 5 planes bootstrap + Approval/Evidence core |
+| Execution Closure | شهر 2–3 | Temporal commitments + connector contracts + contradiction alpha |
+| Enterprise Hardening | شهر 4–9 | OpenFGA/OPA rollout + Vault/Keycloak + compliance operationalization |
+| Category Dominance | شهر 10–36 | Board OS maturity + M&A/expansion playbooks + regional policy routing |
 
 ---
 
@@ -69,13 +168,13 @@
 
 | المسار | الغرض |
 |--------|--------|
-| `MASTER-BLUEPRINT.mdc` | مصدر حقيقة معماري إنجليزي مختصر |
-| `openclaw/openclaw-config.yaml` | تكوين OpenClaw + تدفقات + حدود |
-| `backend/app/api/v1/autonomous_foundation.py` | تدفقات ذاتية، بوابة go-live |
-| `backend/app/services/knowledge_service.py` | RAG داخل التطبيق |
-| `backend/app/ai/orchestrator.py` | تنسيق وكلاء + سياق معرفة |
-| `frontend/src/app/strategy/page.tsx` | صفحة استراتيجية عامة |
+| `MASTER-BLUEPRINT.mdc` | المرجع المعماري الأعلى |
+| `backend/app/api/v1/strategy_summary.py` | العقدة الحية للاستراتيجية السيادية |
+| `frontend/src/app/strategy/strategy-page-client.tsx` | الواجهة التنفيذية للـ planes والـ locks |
+| `backend/app/services/knowledge_service.py` | Dealix-native retrieval |
+| `backend/app/ai/orchestrator.py` | orchestration + knowledge hooks |
+| `docs/INTEGRATION_MASTER_AR.md` | مرجع التكاملات والإطلاق التشغيلي |
 
 ---
 
-*هذه الوثيقة تلخّص النص الاستراتيجي الكامل وتُحاذي تنفيذ Dealix دون الاعتماد على منصات RAG خارجية كطبقة أساسية.*
+*هذه الوثيقة تحوّل الرؤية من خطاب استراتيجي إلى spec تشغيل سيادي قابل للتطبيق والتدقيق.*

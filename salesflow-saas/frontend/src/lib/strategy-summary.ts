@@ -13,6 +13,35 @@ export type DesignPrinciple = {
   summary: string;
 };
 
+export type StrategyPlane = {
+  id: string;
+  name_ar: string;
+  mission: string;
+  stack: string[];
+};
+
+export type StrategyTrack = {
+  id: string;
+  name_ar: string;
+  scope: string[];
+};
+
+export type StrategyProgramLocks = {
+  planes: number;
+  business_tracks: number;
+  agent_roles: number;
+  action_classes: number;
+  approval_classes_min: number;
+  reversibility_classes: number;
+  sensitivity_model: string;
+  provenance_freshness_confidence: string;
+};
+
+export type StrategyRoutingLane = {
+  id: string;
+  purpose: string;
+};
+
 export type StrategySummary = {
   product: string;
   blueprint_version: string;
@@ -33,6 +62,21 @@ export type StrategySummary = {
   doc_paths: Record<string, string>;
   repo_paths: Record<string, string>;
   market_frame?: string;
+  planes?: StrategyPlane[];
+  program_locks?: StrategyProgramLocks;
+  business_tracks?: StrategyTrack[];
+  mandatory_surfaces?: string[];
+  automation_policy?: {
+    full_auto: string[];
+    human_approval_required: string[];
+  };
+  routing_fabric?: {
+    lanes: StrategyRoutingLane[];
+    measured_metrics: string[];
+  };
+  connector_contract_requirements?: string[];
+  readiness_definition?: string[];
+  saudi_compliance_matrix?: string[];
 };
 
 export async function fetchStrategySummary(signal?: AbortSignal): Promise<StrategySummary | null> {

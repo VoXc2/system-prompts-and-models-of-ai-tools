@@ -16,6 +16,12 @@ import {
   Sparkles,
   Loader2,
   BookOpen,
+  Lock,
+  Workflow,
+  Building2,
+  CheckCircle2,
+  GitBranch,
+  ListChecks,
 } from "lucide-react";
 import { useStrategySummary } from "@/hooks/use-strategy-summary";
 import { getApiBaseUrl } from "@/lib/api-base";
@@ -76,6 +82,137 @@ const FALLBACK_TARGETS = [
   { k: "الامتثال", v: "PDPL + ممارسات جاهزة لـ SOC2 للضوابط والسجلات" },
 ];
 
+const FALLBACK_PLANES = [
+  {
+    id: "decision",
+    name_ar: "Decision Plane",
+    mission: "كشف الإشارات والتحليل والتوصية وتجهيز evidence packs مع HITL.",
+    stack: ["Responses API", "Structured Outputs", "Function Calling / MCP", "LangGraph interrupts"],
+  },
+  {
+    id: "execution",
+    name_ar: "Execution Plane",
+    mission: "تنفيذ الالتزامات الطويلة متعددة الأنظمة بشكل resilient وقابل للاستئناف.",
+    stack: ["LangGraph loops", "Temporal workflows", "Idempotency + compensation"],
+  },
+  {
+    id: "trust",
+    name_ar: "Trust Plane",
+    mission: "سياسات وتفويض وتدقيق والتحقق من الأفعال الفعلية.",
+    stack: ["OPA", "OpenFGA", "Vault", "Keycloak"],
+  },
+  {
+    id: "data",
+    name_ar: "Data Plane",
+    mission: "مصدر حقيقة موحّد بعقود بيانات وجودة وتتبّع.",
+    stack: ["Postgres + pgvector", "Airbyte", "Great Expectations", "OpenTelemetry"],
+  },
+  {
+    id: "operating",
+    name_ar: "Operating Plane",
+    mission: "قفل SDLC والإصدارات مع provenance قابل للتدقيق.",
+    stack: ["GitHub rulesets", "Environments", "OIDC", "Artifact attestations"],
+  },
+];
+
+const FALLBACK_PROGRAM_LOCKS = [
+  "5 planes",
+  "6 business tracks",
+  "3 agent roles",
+  "3 action classes",
+  ">=3 approval classes",
+  "4 reversibility classes",
+  "sensitivity model required",
+  "provenance/freshness/confidence trio",
+];
+
+const FALLBACK_BUSINESS_TRACKS = [
+  { id: "revenue_os", name_ar: "Revenue OS", scope: ["capture→qualification", "outreach→proposal", "renewal/upsell motions"] },
+  { id: "partnership_os", name_ar: "Partnership OS", scope: ["scouting", "fit scoring", "activation + scorecards"] },
+  { id: "corpdev_os", name_ar: "M&A / CorpDev OS", scope: ["target sourcing", "DD orchestration", "investment memo/board pack"] },
+  { id: "expansion_os", name_ar: "Expansion OS", scope: ["market scanning", "launch readiness", "actual vs forecast"] },
+  { id: "pmi_pmo_os", name_ar: "PMI / PMO OS", scope: ["Day-1", "30/60/90", "synergy/risk tracking"] },
+  { id: "executive_board_os", name_ar: "Executive / Board OS", scope: ["approval center", "risk heatmap", "portfolio governance"] },
+];
+
+const FALLBACK_MANDATORY_SURFACES = [
+  "Executive Room",
+  "Approval Center",
+  "Evidence Pack Viewer",
+  "Partner Room",
+  "DD Room",
+  "Risk Board",
+  "Policy Violations Board",
+  "Actual vs Forecast Dashboard",
+  "Revenue Funnel Control Center",
+  "Partnership Scorecards",
+  "M&A Pipeline Board",
+  "Expansion Launch Console",
+  "PMI 30/60/90 Engine",
+  "Tool Verification Ledger",
+  "Connector Health Board",
+  "Release Gate Dashboard",
+  "Saudi Compliance Matrix",
+  "Model Routing Dashboard",
+];
+
+const FALLBACK_AUTOMATION_POLICY = {
+  full_auto: [
+    "intake/enrichment/scoring",
+    "memo drafting + evidence aggregation",
+    "workflow kickoff + reminders + SLA tracking",
+    "variance/anomaly detection",
+    "connector sync + quality checks + telemetry",
+  ],
+  human_approval_required: [
+    "term sheet sending",
+    "signature request",
+    "strategic partner activation",
+    "market launch",
+    "M&A offer",
+    "policy-exception discount",
+    "high-sensitivity data sharing",
+    "production promotion",
+    "capital commitments",
+  ],
+};
+
+const FALLBACK_ROUTING = {
+  lanes: [
+    { id: "coding_lane", purpose: "coding and deterministic transformations" },
+    { id: "executive_reasoning_lane", purpose: "board-grade reasoning and scenario analysis" },
+    { id: "throughput_drafting_lane", purpose: "high-volume drafting and summarization" },
+    { id: "fallback_lane", purpose: "resilience on provider degradation" },
+  ],
+  measured_metrics: ["latency", "schema adherence", "contradiction rate", "Arabic quality", "cost per successful task"],
+};
+
+const FALLBACK_CONNECTOR_CONTRACT = [
+  "contract + version",
+  "retry + timeout policy",
+  "idempotency key",
+  "approval policy",
+  "audit mapping",
+  "telemetry mapping",
+  "rollback/compensation notes",
+];
+
+const FALLBACK_READINESS = [
+  "business-critical decisions structured + evidence-backed + schema-bound",
+  "long-running commitments durable + resumable + crash-tolerant",
+  "sensitive actions tagged with approval/reversibility/sensitivity metadata",
+  "connectors versioned with retry/idempotency/audit mapping",
+  "releases gated via rulesets + environments + OIDC + provenance",
+  "surfaces traceable with OTel + correlation IDs",
+];
+
+const FALLBACK_SAUDI_COMPLIANCE = [
+  "PDPL controls mapping",
+  "ECC/NCA cyber checkpoints",
+  "NIST AI RMF lifecycle",
+  "OWASP LLM Top 10 mitigations",
+];
+
 export function StrategyPageClient() {
   const { data, loading } = useStrategySummary();
   const api = getApiBaseUrl();
@@ -103,6 +240,29 @@ export function StrategyPageClient() {
         items: p.deliverables,
       }))
     : STATIC_PHASES;
+
+  const planes = data?.planes?.length ? data.planes : FALLBACK_PLANES;
+  const programLockItems =
+    data?.program_locks ?
+      [
+        `${data.program_locks.planes} planes`,
+        `${data.program_locks.business_tracks} business tracks`,
+        `${data.program_locks.agent_roles} agent roles`,
+        `${data.program_locks.action_classes} action classes`,
+        `>= ${data.program_locks.approval_classes_min} approval classes`,
+        `${data.program_locks.reversibility_classes} reversibility classes`,
+        `sensitivity model: ${data.program_locks.sensitivity_model}`,
+        `trio: ${data.program_locks.provenance_freshness_confidence}`,
+      ]
+    : FALLBACK_PROGRAM_LOCKS;
+  const businessTracks = data?.business_tracks?.length ? data.business_tracks : FALLBACK_BUSINESS_TRACKS;
+  const mandatorySurfaces = data?.mandatory_surfaces?.length ? data.mandatory_surfaces : FALLBACK_MANDATORY_SURFACES;
+  const automationPolicy = data?.automation_policy ?? FALLBACK_AUTOMATION_POLICY;
+  const routingFabric = data?.routing_fabric ?? FALLBACK_ROUTING;
+  const connectorContract =
+    data?.connector_contract_requirements?.length ? data.connector_contract_requirements : FALLBACK_CONNECTOR_CONTRACT;
+  const readinessDefinition = data?.readiness_definition?.length ? data.readiness_definition : FALLBACK_READINESS;
+  const saudiCompliance = data?.saudi_compliance_matrix?.length ? data.saudi_compliance_matrix : FALLBACK_SAUDI_COMPLIANCE;
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100">
@@ -312,6 +472,139 @@ export function StrategyPageClient() {
           </div>
         </section>
 
+        <section>
+          <h2 className="mb-5 flex items-center gap-2 text-lg font-bold text-white">
+            <Workflow className="h-5 w-5 text-teal-400" />
+            الـ 5 Planes السيادية
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {planes.map((plane) => (
+              <div key={plane.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-sm font-bold text-teal-200">{plane.name_ar}</p>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">{plane.mission}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {plane.stack.map((item) => (
+                    <span key={item} className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[10px] text-slate-300">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-white">
+              <Lock className="h-5 w-5 text-teal-400" />
+              Program Locks
+            </h2>
+            <ul className="space-y-2 text-sm text-slate-300">
+              {programLockItems.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="text-teal-400">▸</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-white">
+              <Building2 className="h-5 w-5 text-teal-400" />
+              المسارات التشغيلية الستة
+            </h2>
+            <div className="space-y-3">
+              {businessTracks.map((track) => (
+                <div key={track.id} className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">
+                  <p className="text-sm font-bold text-white">{track.name_ar}</p>
+                  <p className="mt-1 text-xs text-slate-400">{track.scope.join(" • ")}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
+            <ListChecks className="h-5 w-5 text-teal-400" />
+            الأسطح الإلزامية داخل المنتج
+          </h2>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {mandatorySurfaces.map((surface) => (
+              <div
+                key={surface}
+                className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-slate-300"
+              >
+                {surface}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-emerald-500/25 bg-emerald-950/20 p-5">
+            <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-emerald-100">
+              <CheckCircle2 className="h-5 w-5" />
+              حدود الأتمتة (ما يُؤتمت وما يعتمد)
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-emerald-300">يُؤتمت بالكامل</p>
+                <ul className="space-y-1 text-sm text-slate-200">
+                  {automationPolicy.full_auto.map((item) => (
+                    <li key={item}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-300">اعتماد إلزامي</p>
+                <ul className="space-y-1 text-sm text-amber-100/90">
+                  {automationPolicy.human_approval_required.map((item) => (
+                    <li key={item}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-cyan-500/25 bg-cyan-950/20 p-5">
+            <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-cyan-100">
+              <GitBranch className="h-5 w-5" />
+              Sovereign Routing + Connector Contracts
+            </h2>
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-cyan-300">Routing lanes</p>
+            <ul className="space-y-1 text-sm text-slate-200">
+              {routingFabric.lanes.map((lane) => (
+                <li key={lane.id}>
+                  • <span className="font-semibold">{lane.id}:</span> {lane.purpose}
+                </li>
+              ))}
+            </ul>
+            <p className="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-cyan-300">Measured metrics</p>
+            <p className="text-sm text-slate-200">{routingFabric.measured_metrics.join(" • ")}</p>
+            <p className="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-cyan-300">Connector contract</p>
+            <p className="text-sm text-slate-200">{connectorContract.join(" • ")}</p>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-teal-500/20 bg-teal-950/20 p-6">
+          <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-teal-100">
+            <Shield className="h-5 w-5" />
+            تعريف الجاهزية النهائية + مصفوفة السعودية
+          </h2>
+          <ul className="space-y-2 text-sm text-slate-200">
+            {readinessDefinition.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="text-teal-300">▸</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-xs font-bold uppercase tracking-wide text-teal-300">Saudi compliance matrix</p>
+          <p className="mt-1 text-sm text-slate-300">{saudiCompliance.join(" • ")}</p>
+        </section>
+
         <section className="rounded-2xl border border-amber-500/25 bg-amber-950/20 p-6">
           <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-amber-100">
             <AlertTriangle className="h-5 w-5" />
@@ -346,7 +639,7 @@ export function StrategyPageClient() {
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-teal-500/50 bg-teal-950/40 px-6 py-3 text-sm font-bold text-teal-100 hover:bg-teal-900/50"
             >
               <FileDown className="h-4 w-4" />
-              وثيقة التنفيذ الشاملة v4 (.md)
+              وثيقة التنفيذ السيادي v5 (.md)
             </a>
             <a
               href="/strategy/INTEGRATION_MASTER_AR.md"
