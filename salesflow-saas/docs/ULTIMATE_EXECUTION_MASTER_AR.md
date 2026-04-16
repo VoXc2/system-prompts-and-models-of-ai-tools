@@ -1,7 +1,7 @@
 # وثيقة التنفيذ الشاملة — نظام تشغيل الإيرادات والعمليات الذاتي 2026
 
 **الإصدار:** Legendary Complete Edition v4.0 (متوافق مع المستودع)  
-**الحالة:** مرجع استراتيجي وتنفيذي — يُحدَّث مع `MASTER-BLUEPRINT.mdc` والكود.
+**الحالة:** مرجع استراتيجي وتنفيذي — يُحدَّث مع `MASTER-BLUEPRINT.mdc` والكود و`docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md`.
 
 ---
 
@@ -10,6 +10,8 @@
 > ليس مجرد أداة، بل **شركة مبيعات رقمية مؤتمتة بالذكاء الاصطناعي** تعمل على مدار الساعة، تتطور ذاتياً، وتولد قيمة وإيرادات قابلة للقياس من اليوم الأول.
 
 **Dealix** = Revenue & Operations OS: من الاكتشاف والتأهيل إلى العرض والتفاوض والإغلاق وما بعد البيع والدعم والفوترة والتحليلات — مع **حوكمة** و**عزل متعدد المستأجرين** و**قنوات محلية** (واتساب أولاً، عربي، SAR، سياق امتثال سعودي).
+
+للتوسعة المؤسسية السيادية عبر القرار والتنفيذ والثقة والبيانات والتشغيل، راجع `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md`.
 
 ---
 
@@ -70,6 +72,7 @@
 | المسار | الغرض |
 |--------|--------|
 | `MASTER-BLUEPRINT.mdc` | مصدر حقيقة معماري إنجليزي مختصر |
+| `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md` | عقد التشغيل السيادي المؤسسي والـ planes والـ business tracks |
 | `openclaw/openclaw-config.yaml` | تكوين OpenClaw + تدفقات + حدود |
 | `backend/app/api/v1/autonomous_foundation.py` | تدفقات ذاتية، بوابة go-live |
 | `backend/app/services/knowledge_service.py` | RAG داخل التطبيق |

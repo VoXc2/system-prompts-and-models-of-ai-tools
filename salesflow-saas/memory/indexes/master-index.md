@@ -25,6 +25,7 @@
 | Wiki Guide | [wiki/README.md](../wiki/README.md) | Active |
 | Dealix Vision | [DEALIX_VISION.md](../../DEALIX_VISION.md) | Active |
 | Master Blueprint | [MASTER-BLUEPRINT.mdc](../../MASTER-BLUEPRINT.mdc) | Active |
+| Sovereign Enterprise Growth OS | [docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md](../../docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md) | Active |
 
 ## GTM / Growth (النمو والتسويق)
 
@@ -80,8 +81,8 @@
 
 ## Index Health
 
-- **Total pages**: 23
-- **Active**: 23
+- **Total pages**: 24
+- **Active**: 24
 - **Stale**: 0
 - **Orphan (no inbound links)**: 0
 - **Last full audit**: 2026-04-11

@@ -55,10 +55,17 @@ salesflow-saas/
   presentations/       # Proposal and pitch generation
   nginx/               # Reverse proxy configuration
   seeds/               # Database seed data
-  docs/                # Architecture, API map, data model, deployment notes
+  docs/                # Architecture, sovereign strategy, API map, data model, deployment notes
   docker-compose.yml   # Full-stack orchestration
   Makefile             # Developer shortcuts
 ```
+
+## Core Docs
+
+- `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md` — المرجع السيادي الأعلى للقرار والتنفيذ والثقة والامتثال.
+- `MASTER-BLUEPRINT.mdc` — المخطط المرجعي المختصر للمعمارية والاتجاه.
+- `docs/ARCHITECTURE.md` — صورة التنفيذ الحالية للمنصة ومساراتها التقنية.
+- `docs/DEALIX_NEXT_LEVEL_MASTER_PLAN_AR.md` — التموضع السوقي والفجوات وخارطة الطريق التجارية.
 
 ## Key Features
 

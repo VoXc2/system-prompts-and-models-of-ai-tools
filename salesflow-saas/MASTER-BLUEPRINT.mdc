@@ -42,7 +42,8 @@ Autonomous Revenue & Operations OS: a **Digital Full-Company Team** for B2B ente
 | 2 — Scale | Mo 4–9 | Enterprise patterns, voice GA path, predictive layer, API surface |
 | 3 — Dominate | Mo 10–36 | Regions, partnerships, vertical OS variants |
 
-Arabic narrative + detail: `docs/ULTIMATE_EXECUTION_MASTER_AR.md`.
+Arabic narrative + detail: `docs/ULTIMATE_EXECUTION_MASTER_AR.md`.  
+Sovereign enterprise operating model: `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md`.
 
 # Core Stack (non-negotiable)
 
@@ -68,6 +69,18 @@ Arabic narrative + detail: `docs/ULTIMATE_EXECUTION_MASTER_AR.md`.
 4. **Data & Memory** — CRM grounding, Mem0/Letta, audit store  
 5. **Integration** — OpenClaw plugins (Salesforce, WhatsApp, Stripe, Voice, Contracts)
 
+## Sovereign operating model
+
+The five layers are operationalized through five product/governance planes:
+
+1. **Decision Plane** — schema-bound analysis, recommendation, evidence packs
+2. **Execution Plane** — durable workflows, approvals, retries, compensation
+3. **Trust Plane** — policy, authorization, secrets, audit, verification
+4. **Data Plane** — source-of-truth, semantic memory, event/data contracts, telemetry
+5. **Operating Plane** — release gates, provenance, environments, compliance evidence
+
+This model expands the platform beyond revenue operations into six business tracks: Revenue, Partnerships, M&A / CorpDev, Expansion, PMI / PMO, and Executive / Board operations. The detailed Arabic operating contract lives in `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md`.
+
 # Self-Improvement Loop v2.0 (6 phases)
 
 Observation → Analysis → Hypothesis → Shadow experiments → Canary + revision tracking → Meta-learning.  
@@ -87,6 +100,7 @@ Feeds: app analytics, LangSmith traces (when enabled), OpenClaw outcomes — imp
 - `backend/app/ai/orchestrator.py` — lead/message routing + knowledge context  
 - `backend/app/agents/` — LangGraph / master agent wiring (evolves per release)  
 - `docs/ULTIMATE_EXECUTION_MASTER_AR.md` — full Arabic execution narrative aligned to this blueprint  
+- `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md` — sovereign enterprise operating model, planes, business tracks, approval boundaries  
 - `frontend/` — Dealix UI (Next.js)
 
 # Agent / crew map (conceptual — implementation in `backend/app/agents`, flows, services)
