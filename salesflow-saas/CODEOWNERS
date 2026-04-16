@@ -1,0 +1,70 @@
+# Dealix CODEOWNERS — Enterprise Delivery Fabric (WS-6.1)
+# See: docs/completion-program/EXECUTION_MATRIX.md
+#
+# Each line: pattern → required reviewer(s)
+# PRs touching matched paths require approval from listed owners.
+# Order matters: later rules override earlier ones.
+
+# ── Default ──────────────────────────────────────────────
+*                                   @dealix/engineering
+
+# ── Backend Core ─────────────────────────────────────────
+backend/app/api/                    @dealix/backend
+backend/app/models/                 @dealix/backend
+backend/app/services/               @dealix/backend
+
+# ── AI & Agents (require AI Lead + Backend) ──────────────
+backend/app/services/ai/            @dealix/ai-team @dealix/backend
+backend/app/services/agents/        @dealix/ai-team @dealix/backend
+backend/app/ai/                     @dealix/ai-team
+backend/app/agents/                 @dealix/ai-team
+ai-agents/                          @dealix/ai-team
+
+# ── Security-Critical (require Security Lead) ────────────
+backend/app/services/pdpl/          @dealix/security @dealix/backend
+backend/app/services/security_gate.py   @dealix/security
+backend/app/services/shannon_security.py @dealix/security
+backend/app/services/tool_verification.py @dealix/security @dealix/ai-team
+backend/app/services/tool_receipts.py    @dealix/security @dealix/ai-team
+backend/app/services/audit_service.py    @dealix/security
+backend/app/services/outbound_governance.py @dealix/security
+
+# ── Integrations (require Backend + Security) ────────────
+backend/app/integrations/           @dealix/backend @dealix/security
+backend/app/services/whatsapp_service.py @dealix/backend @dealix/security
+backend/app/services/email_service.py    @dealix/backend
+backend/app/services/stripe_service.py   @dealix/backend @dealix/security
+backend/app/services/salesforce_agentforce.py @dealix/backend
+
+# ── Strategic Deals ──────────────────────────────────────
+backend/app/services/strategic_deals/ @dealix/backend @dealix/ai-team
+
+# ── Frontend ─────────────────────────────────────────────
+frontend/                           @dealix/frontend
+
+# ── Infrastructure & CI/CD ───────────────────────────────
+docker-compose.yml                  @dealix/devops
+Dockerfile                          @dealix/devops
+nginx/                              @dealix/devops
+.github/                            @dealix/devops @dealix/engineering
+Makefile                            @dealix/devops
+
+# ── Compliance & Legal ───────────────────────────────────
+docs/legal/                         @dealix/compliance
+memory/security/                    @dealix/security @dealix/compliance
+
+# ── Architecture & Governance Docs ───────────────────────
+MASTER-BLUEPRINT.mdc                @dealix/architecture
+docs/ARCHITECTURE.md                @dealix/architecture
+docs/completion-program/            @dealix/architecture @dealix/engineering
+AGENTS.md                           @dealix/architecture
+CLAUDE.md                           @dealix/architecture
+
+# ── Knowledge Base & Memory ──────────────────────────────
+knowledge-base/                     @dealix/knowledge
+memory/                             @dealix/knowledge
+backend/knowledge_base/             @dealix/knowledge @dealix/ai-team
+
+# ── Database Migrations (require Backend + DevOps) ───────
+backend/alembic/                    @dealix/backend @dealix/devops
+backend/alembic.ini                 @dealix/backend @dealix/devops
