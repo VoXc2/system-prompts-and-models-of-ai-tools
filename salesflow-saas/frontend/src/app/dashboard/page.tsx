@@ -51,6 +51,7 @@ import { FullOpsView } from "../../components/dealix/full-ops-view";
 import { PipelineKanban } from "../../components/dealix/pipeline-kanban";
 import { UnifiedInbox } from "../../components/dealix/unified-inbox";
 import { LeadScoreCard } from "../../components/dealix/lead-score-card";
+import { SovereignGrowthOsView } from "../../components/dealix/sovereign-growth-os-view";
 
 const dashboardLeadScoreDemo = {
   score: 82,
@@ -65,7 +66,7 @@ const dashboardLeadScoreDemo = {
 
 export default function DashboardPage() {
   const auth = useRequireAuth();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("sovereign-os");
 
   if (auth.loading) {
     return (
@@ -79,6 +80,7 @@ export default function DashboardPage() {
   }
 
   const NAV_ITEMS = [
+    { id: "sovereign-os", label: "Sovereign Growth OS", icon: ShieldCheck },
     { id: "overview", label: "لوحة القيادة والمراقبة", icon: BarChart3 },
     { id: "business-impact", label: "القيمة للشركات", icon: LineChart },
     { id: "customer-journey", label: "مسار التشغيل مع العميل", icon: ClipboardList },
@@ -104,6 +106,8 @@ export default function DashboardPage() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case "sovereign-os":
+        return <SovereignGrowthOsView />;
       case "overview":
         return <DashboardView />;
       case "business-impact":
@@ -160,7 +164,7 @@ export default function DashboardPage() {
               <Zap className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
-              Dealix OS
+              Dealix Sovereign OS
             </span>
           </div>
         </div>
@@ -238,10 +242,11 @@ export default function DashboardPage() {
 
         <nav className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-card/80 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl flex items-center justify-around py-4 px-4 z-50">
           {[
+            { id: "sovereign-os", icon: ShieldCheck },
             { id: "overview", icon: BarChart3 },
             { id: "agents", icon: BrainCircuit },
             { id: "presentations", icon: MonitorPlay },
-            { id: "scripts", icon: Phone },
+            { id: "pipeline", icon: Target },
           ].map((item) => (
             <button
               key={item.id}
