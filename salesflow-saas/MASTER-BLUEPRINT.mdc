@@ -42,7 +42,7 @@ Autonomous Revenue & Operations OS: a **Digital Full-Company Team** for B2B ente
 | 2 — Scale | Mo 4–9 | Enterprise patterns, voice GA path, predictive layer, API surface |
 | 3 — Dominate | Mo 10–36 | Regions, partnerships, vertical OS variants |
 
-Arabic narrative + detail: `docs/ULTIMATE_EXECUTION_MASTER_AR.md`.  
+Arabic narrative + detail: `docs/ULTIMATE_EXECUTION_MASTER_AR.md`.
 Sovereign enterprise operating model: `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md`.
 
 # Core Stack (non-negotiable)
@@ -100,7 +100,7 @@ Feeds: app analytics, LangSmith traces (when enabled), OpenClaw outcomes — imp
 - `backend/app/ai/orchestrator.py` — lead/message routing + knowledge context  
 - `backend/app/agents/` — LangGraph / master agent wiring (evolves per release)  
 - `docs/ULTIMATE_EXECUTION_MASTER_AR.md` — full Arabic execution narrative aligned to this blueprint  
-- `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md` — sovereign enterprise operating model, planes, business tracks, approval boundaries  
+- `docs/DEALIX_SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md` — sovereign enterprise operating model, planes, business tracks, approval boundaries
 - `frontend/` — Dealix UI (Next.js)
 
 # Agent / crew map (conceptual — implementation in `backend/app/agents`, flows, services)
