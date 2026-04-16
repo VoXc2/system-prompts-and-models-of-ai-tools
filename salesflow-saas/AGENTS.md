@@ -120,3 +120,30 @@ cd frontend && npm run dev
 5. Deploy to production with canary (10%)
 6. Monitor 30 min → full rollout
 7. Rollback plan documented per release
+
+## Cursor Cloud specific instructions
+
+### Without Docker (default Cloud Agent mode)
+
+The backend supports SQLite via `aiosqlite` for local dev without PostgreSQL/Redis. Set `DATABASE_URL=sqlite+aiosqlite:///./dealix.db` in `salesflow-saas/.env` to use this mode. The `sqlite_patch.py` module automatically replaces PostgreSQL-specific types (UUID, JSONB, INET, ARRAY, Vector) with SQLite-compatible equivalents, and `init_db()` runs `create_all` on startup.
+
+### Running services
+
+- **Backend:** `cd salesflow-saas/backend && DATABASE_URL="sqlite+aiosqlite:///./dealix.db" uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+- **Frontend:** `cd salesflow-saas/frontend && npm run dev` (port 3000)
+- Ensure `$HOME/.local/bin` is on PATH for pip-installed CLI tools (uvicorn, pytest, celery).
+- Copy `salesflow-saas/.env.example` to `.env` and `frontend/.env.example` to `frontend/.env.local` before starting.
+
+### Testing
+
+- Backend: `cd salesflow-saas/backend && DATABASE_URL="sqlite+aiosqlite:///./test_dealix.db" python3 -m pytest tests/ -v` (60 tests, ~6s)
+- Frontend lint: `cd salesflow-saas/frontend && npm run lint`
+- Frontend build: `cd salesflow-saas/frontend && npm run build`
+- Do **not** use `--timeout` flag with pytest (not installed).
+
+### Gotchas
+
+- `python` is not on PATH; always use `python3`.
+- The backend's `self_improvement_flow` worker runs on startup in the lifespan; it is safe to ignore its log output during dev.
+- `EXPOSE_OPENAPI` defaults to `true`, so Swagger docs are at `/api/docs`.
+- When using SQLite mode, Celery/Redis features are unavailable; only the API server and frontend are testable.
