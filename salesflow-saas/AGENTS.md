@@ -120,3 +120,26 @@ cd frontend && npm run dev
 5. Deploy to production with canary (10%)
 6. Monitor 30 min → full rollout
 7. Rollback plan documented per release
+
+## Cursor Cloud specific instructions
+
+### Services overview
+
+| Service | How to start | Port | Notes |
+|---------|-------------|------|-------|
+| **Backend** | `cd salesflow-saas/backend && PYTHONPATH=$PWD DATABASE_URL="sqlite+aiosqlite:///./dealix.db" uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` | 8000 | SQLite mode — no Postgres/Redis needed |
+| **Frontend** | `cd salesflow-saas/frontend && npx next dev --port 3000` | 3000 | Needs `npm ci` first; `.env.local` from `.env.example` |
+
+### Running without Docker (Cloud Agent default)
+
+The backend has a built-in SQLite fallback (`sqlite_patch.py`) that replaces PostgreSQL types with SQLite-compatible equivalents. Set `DATABASE_URL=sqlite+aiosqlite:///./dealix.db` (env var or in `salesflow-saas/.env`). The backend calls `init_db()` on startup to auto-create all tables — no Alembic migrations needed in SQLite mode.
+
+### Key gotchas
+
+- **PYTHONPATH**: Backend tests and `uvicorn` require `PYTHONPATH` set to the `salesflow-saas/backend` directory. Without it, `from app.main import app` fails with `ModuleNotFoundError`.
+- **pytest**: Do not pass `--timeout` — it is not installed. The `pytest.ini` in `backend/` handles asyncio mode.
+- **Frontend `predev` script**: `npm run dev` triggers a `predev` hook that runs `node ../scripts/sync-marketing-to-public.cjs`. This script is non-critical; if it fails the dev server still starts.
+- **OpenAPI docs**: Available at `/api/docs` and `/api/redoc` when `EXPOSE_OPENAPI=true` (default in dev).
+- **Lint**: Backend has no dedicated linter config; frontend uses `next lint` (ESLint 8).
+- **Build**: `cd salesflow-saas/frontend && npx next build` produces a static export with 12 routes.
+- **Tests**: `cd salesflow-saas/backend && PYTHONPATH=$PWD DATABASE_URL="sqlite+aiosqlite:///./test_dealix.db" pytest -v` — 61 tests, all passing.
