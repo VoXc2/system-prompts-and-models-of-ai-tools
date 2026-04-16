@@ -23,6 +23,8 @@ settings = get_settings()
 def _cors_origins() -> list[str]:
     base = [
         settings.FRONTEND_URL,
+        "http://127.0.0.1:3000",
+        "http://0.0.0.0:3000",
         "http://localhost:3000",
         "http://localhost:5173",
         "https://dealix.sa",

@@ -6,6 +6,7 @@ from uuid import UUID
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 
 from app.models.operations import ApprovalRequest, DomainEvent, IntegrationSyncState
 
@@ -69,9 +70,10 @@ async def ensure_default_connectors(db: AsyncSession, tenant_id: UUID) -> None:
         await db.execute(select(IntegrationSyncState.connector_key).where(IntegrationSyncState.tenant_id == tenant_id))
     ).scalars().all()
     have = set(existing)
+    pending_rows = []
     for row in _DEFAULT_CONNECTORS:
         if row["connector_key"] not in have:
-            db.add(
+            pending_rows.append(
                 IntegrationSyncState(
                     tenant_id=tenant_id,
                     connector_key=row["connector_key"],
@@ -79,7 +81,18 @@ async def ensure_default_connectors(db: AsyncSession, tenant_id: UUID) -> None:
                     status=row["status"],
                 )
             )
-    await db.flush()
+    if not pending_rows:
+        return
+
+    for row in pending_rows:
+        db.add(row)
+
+    try:
+        await db.flush()
+    except IntegrityError:
+        # Another concurrent request may have seeded the same default connectors.
+        # Roll back this transaction fragment and continue with the persisted rows.
+        await db.rollback()
 
 
 async def list_integration_connectors(db: AsyncSession, tenant_id: UUID) -> List[Dict[str, Any]]:
