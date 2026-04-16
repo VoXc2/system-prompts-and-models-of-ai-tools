@@ -21,7 +21,7 @@ class EvidenceItem(BaseModel):
     type: str
     source: str
     content: dict
-    collected_at: datetime
+    collected_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     verified: bool = False
 
 

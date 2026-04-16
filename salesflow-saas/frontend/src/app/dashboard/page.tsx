@@ -28,6 +28,22 @@ import {
   UserCheck,
   TrendingUp,
   Crosshair,
+  Crown,
+  CheckCircle2,
+  FileStack,
+  Handshake,
+  FolderSearch,
+  AlertTriangle,
+  ShieldAlert,
+  TrendingDown,
+  Landmark,
+  Globe,
+  GitMerge,
+  Wrench,
+  Plug,
+  Rocket,
+  Scale,
+  Cpu,
 } from "lucide-react";
 
 import { DashboardView } from "../../components/dealix/dashboard-view";
@@ -51,6 +67,26 @@ import { FullOpsView } from "../../components/dealix/full-ops-view";
 import { PipelineKanban } from "../../components/dealix/pipeline-kanban";
 import { UnifiedInbox } from "../../components/dealix/unified-inbox";
 import { LeadScoreCard } from "../../components/dealix/lead-score-card";
+import {
+  ExecutiveRoomView,
+  ApprovalCenterView,
+  EvidencePackView,
+  PartnerRoomView,
+  DDRoomView,
+  RiskBoardView,
+  PolicyViolationsBoardView,
+  ActualVsForecastView,
+  RevenueFunnelView,
+  PartnerScorecardsView,
+  MAPipelineView,
+  ExpansionLaunchView,
+  PMIEngineView,
+  ToolVerificationView,
+  ConnectorHealthView,
+  ReleaseGateView,
+  SaudiComplianceView,
+  ModelRoutingView,
+} from "../../components/dealix/sovereign-os-views";
 
 const dashboardLeadScoreDemo = {
   score: 82,
@@ -100,6 +136,25 @@ export default function DashboardPage() {
     { id: "inbox", label: "صندوق الوارد الموحد", icon: Bell },
     { id: "scoring", label: "تقييم العملاء AI", icon: Zap },
     { id: "onboarding", label: "تأهيل المسوق", icon: BookOpen },
+    { id: "_divider_sovereign", label: "── نظام التشغيل السيادي ──", icon: Crown },
+    { id: "executive-room", label: "غرفة القيادة التنفيذية", icon: Crown },
+    { id: "approval-center", label: "مركز الاعتمادات", icon: CheckCircle2 },
+    { id: "evidence-packs", label: "حزم الأدلة", icon: FileStack },
+    { id: "partner-room", label: "غرفة الشراكات", icon: Handshake },
+    { id: "dd-room", label: "غرفة العناية الواجبة", icon: FolderSearch },
+    { id: "risk-board", label: "لوحة المخاطر", icon: AlertTriangle },
+    { id: "policy-violations", label: "انتهاكات السياسات", icon: ShieldAlert },
+    { id: "actual-vs-forecast", label: "الفعلي مقابل المتوقع", icon: TrendingDown },
+    { id: "revenue-funnel", label: "قمع الإيرادات", icon: Landmark },
+    { id: "partner-scorecards", label: "بطاقات أداء الشركاء", icon: Handshake },
+    { id: "ma-pipeline", label: "مسار الاستحواذ", icon: GitMerge },
+    { id: "expansion-launch", label: "وحدة التوسع", icon: Globe },
+    { id: "pmi-engine", label: "محرك التكامل 30/60/90", icon: Rocket },
+    { id: "tool-verification", label: "سجل التحقق من الأدوات", icon: Wrench },
+    { id: "connector-health", label: "صحة الموصلات", icon: Plug },
+    { id: "release-gates", label: "بوابات الإصدار", icon: Scale },
+    { id: "saudi-compliance", label: "مصفوفة الامتثال السعودي", icon: ShieldCheck },
+    { id: "model-routing", label: "توجيه النماذج", icon: Cpu },
   ];
 
   const renderContent = () => {
@@ -146,6 +201,42 @@ export default function DashboardPage() {
         return <LeadScoreCard data={dashboardLeadScoreDemo} />;
       case "onboarding":
         return <OnboardingView />;
+      case "executive-room":
+        return <ExecutiveRoomView />;
+      case "approval-center":
+        return <ApprovalCenterView />;
+      case "evidence-packs":
+        return <EvidencePackView />;
+      case "partner-room":
+        return <PartnerRoomView />;
+      case "dd-room":
+        return <DDRoomView />;
+      case "risk-board":
+        return <RiskBoardView />;
+      case "policy-violations":
+        return <PolicyViolationsBoardView />;
+      case "actual-vs-forecast":
+        return <ActualVsForecastView />;
+      case "revenue-funnel":
+        return <RevenueFunnelView />;
+      case "partner-scorecards":
+        return <PartnerScorecardsView />;
+      case "ma-pipeline":
+        return <MAPipelineView />;
+      case "expansion-launch":
+        return <ExpansionLaunchView />;
+      case "pmi-engine":
+        return <PMIEngineView />;
+      case "tool-verification":
+        return <ToolVerificationView />;
+      case "connector-health":
+        return <ConnectorHealthView />;
+      case "release-gates":
+        return <ReleaseGateView />;
+      case "saudi-compliance":
+        return <SaudiComplianceView />;
+      case "model-routing":
+        return <ModelRoutingView />;
       default:
         return <DashboardView />;
     }
@@ -166,21 +257,30 @@ export default function DashboardPage() {
         </div>
 
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                activeTab === item.id
-                  ? "bg-primary/10 text-primary font-bold border border-primary/20 shadow-sm"
-                  : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium"
-              }`}
-            >
-              <item.icon className={`w-5 h-5 ${activeTab === item.id ? "text-primary" : "opacity-70"}`} />
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            if (item.id.startsWith("_divider_")) {
+              return (
+                <div key={item.id} className="pt-4 pb-2 px-4">
+                  <p className="text-xs font-bold text-primary/70 tracking-wide">{item.label}</p>
+                </div>
+              );
+            }
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveTab(item.id)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                  activeTab === item.id
+                    ? "bg-primary/10 text-primary font-bold border border-primary/20 shadow-sm"
+                    : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium"
+                }`}
+              >
+                <item.icon className={`w-5 h-5 ${activeTab === item.id ? "text-primary" : "opacity-70"}`} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
         </nav>
 
         <div className="p-4 mt-auto border-t border-border/50 bg-secondary/10">
