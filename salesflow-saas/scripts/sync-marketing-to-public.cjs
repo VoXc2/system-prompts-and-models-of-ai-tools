@@ -67,6 +67,15 @@ if (fs.existsSync(SRC_INTEGRATION)) {
   console.warn("SKIP INTEGRATION_MASTER doc (missing):", SRC_INTEGRATION);
 }
 
+const SRC_SOVEREIGN = path.join(ROOT, "docs", "SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md");
+if (fs.existsSync(SRC_SOVEREIGN)) {
+  fs.mkdirSync(DEST_STRATEGY_DIR, { recursive: true });
+  fs.copyFileSync(SRC_SOVEREIGN, path.join(DEST_STRATEGY_DIR, "SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md"));
+  console.log("OK:", path.join(DEST_STRATEGY_DIR, "SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md"));
+} else {
+  console.warn("SKIP sovereign operating model doc (missing):", SRC_SOVEREIGN);
+}
+
 const readme = path.join(DEST_MARKETING, "LOCAL-ONLY-NEXT.txt");
 fs.writeFileSync(
   readme,

@@ -13,6 +13,7 @@
 |------|----------|--------|
 | System Architecture | [wiki/architecture.md](../wiki/architecture.md) | Active |
 | System Overview (Diagram) | [architecture/system-overview.md](../architecture/system-overview.md) | Active |
+| Sovereign Operating Model | [../../docs/SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md](../../docs/SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md) | Active |
 | ADR-001: Multi-Tenant | [adr/001-multi-tenant.md](../adr/001-multi-tenant.md) | Active |
 | ADR-002: WhatsApp-First | [adr/002-whatsapp-first.md](../adr/002-whatsapp-first.md) | Active |
 | Library Decisions | [patterns/library-decisions.md](../patterns/library-decisions.md) | Active |

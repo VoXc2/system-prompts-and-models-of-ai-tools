@@ -54,6 +54,11 @@
 
 ## Layer 3 — Strategic Growth OS (Planned)
 
+This layer now rolls up into the sovereign operating model documented in
+`docs/SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md`, where Strategic Growth becomes one
+of 6 business tracks inside a 5-plane control model rather than a standalone
+future layer.
+
 | Module | File | Status |
 |--------|------|--------|
 | Acquisition Scouting | `strategic_deals/acquisition_scouting.py` | 📋 Planned |
@@ -91,7 +96,17 @@
 | UI Library | `ui/` (7 components) | ✅ |
 | Dashboard Views | 25+ views | ✅ |
 
+## Sovereign Mapping
+
+| Sovereign Plane | Current Anchors |
+|-----------------|-----------------|
+| Decision Plane | `hermes_orchestrator.py`, `execution_router.py`, `model_router.py`, `strategic_deals/*` |
+| Execution Plane | `go_live_matrix.py`, Celery workers, approval/escalation paths |
+| Trust Plane | `security_gate.py`, `tool_verification.py`, `tool_receipts.py`, `channel_compliance.py` |
+| Data Plane | `knowledge_service.py`, PostgreSQL/pgvector patterns, observability hooks |
+| Operating Plane | `gstack_discipline.py`, `skill_governance.py`, release/runbook docs |
+
 ## Summary
 - **Built**: ~50 backend services, 52 API routes, 30 models, 37 frontend components
 - **Planned**: 5 Strategic Growth modules (Layer 3)
-- **Completion**: ~90% of full vision
+- **Completion**: ~90% of prior layered vision; sovereign closure now depends on operating surfaces and trust/execution hardening
