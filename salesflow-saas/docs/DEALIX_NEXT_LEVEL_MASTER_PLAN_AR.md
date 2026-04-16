@@ -1,130 +1,347 @@
-# Dealix — خطة التطوير الاستراتيجية الشاملة (الانتقال للمستوى التالي)
+# Dealix — المخطط السيادي المؤسسي الكامل (Sovereign Enterprise Growth OS)
 
-> وثيقة مرجعية داخلية: مقارنة سوقية، فجوات، وخطة تنفيذ على محاور تقنية وغير تقنية.  
-> مصادر اتجاه السوق: تصنيفات محللة (مثل اتجاه Gartner نحو **Revenue Action Orchestration**)، مواقف اللاعبين الكبار (Salesforce Agentforce، Gong، إلخ)، وسياق **السعودية** (زاتكا، أتمتة المبيعات، حلول قطاعية).  
-> يجب مراجعة الأرقام والأسعار مع المصادر الرسمية عند العروض الخارجية.
+> وثيقة تشغيل سيادي: تحويل Dealix من منصة CRM ذكية إلى نظام سيادة نمو مؤسسي يدير القرار والتنفيذ والحوكمة عبر المبيعات والشراكات والتوسع وCorpDev وPMI.
 
 ---
 
-## 1) ملخص تنفيذي
+## 1) الرؤية النهائية
 
-**Dealix** يتموضع كـ **Revenue & Operations OS** محلي الطابع (عربي أولاً، SAR، حوكمة) بين:
-- أنظمة **سجل وتشغيل** عالمية (Salesforce ونظيراتها)؛
-- منصات **ذكاء إيرادات وتنفيذ إجراءات** (اتجاه فئة *Revenue Action Orchestration* عند المحللين؛ Gong وغيرها كمراجع للفئة)؛
-- ووكلاء **AI SDR** مستقلين (11x، Tario، إلخ) يعتمدون غالباً على قواعد بيانات وقنوات خارجية.
+الهدف ليس "أفضل CRM ذكي"، بل:
 
-**الفرق الاستراتيجي المقترح لـ Dealix:** ليس «نسخة عربية من Gong» فقط، بل **طبقة تشغيل إيرادات متعددة المستأجرين** مع **قنوات سعودية واقعية** (واتساب، امتثال، هوية محلية) + **تكامل CRM** + **حوكمة إرسال** — مع بناء **أدلة تشغيل ومراجع عملاء** على مدى 12–24 شهراً.
+**Dealix Sovereign Enterprise Growth OS**
 
----
+نظام موحد يدير:
+- المبيعات (Revenue OS)
+- الشراكات (Partnership OS)
+- التطوير المؤسسي والاستحواذات (M&A / CorpDev OS)
+- التوسع الجغرافي والقطاعي (Expansion OS)
+- ما بعد الاندماج وإدارة البرامج (PMI / PMO OS)
+- القيادة التنفيذية ومجلس الإدارة (Executive / Board OS)
 
-## 2) إطار السوق (لماذا «المستوى التالي» مختلف اليوم)
-
-| اتجاه عالمي | ماذا يعني لـ Dealix |
-|-------------|---------------------|
-| الانتقال من «أنظمة سجل» إلى **أنظمة إجراء** مدمجة بالذكاء الاصطناعي | المنتج يجب أن يُظهر **إجراءات قابلة للقياس** (موافقة، إرسال، اجتماع، دفع) وليس تقارير فقط |
-| دمج **مبيعات + ذكاء إيرادات + تدريب/تنبؤ** في منصات أوركسترالية | خارطة منتج واضحة: pipeline، تنبؤ، تدريب البائع (حتى لو تدريجياً) |
-| تكاليف ترخيص عالية لمنصات كبرى (مثال: إضافات وكلاء على Salesforce تُسعَّر كاشتراكات باهظة في السوق) | فرصة **تسعير ووضوح TCO** للشركات المتوسطة في السعودية |
-| تعب من **قفل المورد** وتراكم الأدوات | تكاملات مفتوحة، تصدير بيانات، وAPI واضحة |
-
-**سياق السعودية:**
-- طلب قوي على **زاتكا، الفوترة، الموافقات متعددة المستويات** في عمليات B2B.
-- حلول **SFA/ERP** قطاعية (مثل ما يُعرَّف لـ FMCG/مسارات ميدانية) قوية في فئتها — Dealix لا يتنافس معها مباشرة إن وُضع كـ **محرك إيرادات رقمي عام B2B**؛ التداخل يحدد بالـ ICP.
+قاعدة التشغيل:
+**الذكاء الاصطناعي يستكشف ويحلل ويقترح، الأنظمة تنفذ، والبشر يعتمدون القرارات الحرجة.**
 
 ---
 
-## 3) مقارنة مع أقوى المراجع في السوق (ملخص معياري)
+## 2) الفجوة الحقيقية الآن
 
-> الأسماء للمقارنة المعيارية وليست تطابقاً لمنتج Dealix الحالي.
+أنتم تجاوزتم مرحلة الفكرة: توجد طبقة مرجعية قوية (prompt دستوري، governance library، execution matrices، architecture pack، cadence تشغيلي أسبوعي).
 
-| الفئة | أمثلة مرجعية | نقاط قوتهم النموذجية | ما غالباً ينقص أو يُضعف عندهم |
-|-------|----------------|----------------------|--------------------------------|
-| CRM + وكلاء أصليون | Salesforce (Agentforce ومسار المبيعات) | عمق CRM، بيئة مؤسسات، Trailhead، نظام شركاء | تكلفة، تعقيد، اعتماد بيانات داخل CRM |
-| ذكاء مكالمات وإيرادات | Gong ونظيرات فئة الذكاء | تحليل مكالمات، تدريب، توقعات — نضج عالي | غالباً ليس محرك قنوات كاملاً لكل سيناريو محلي |
-| تفاعل مبيعات / تسلسلات | Outreach ونظيرات الأتمتة | تسلسلات قوية، قياسات | يحتاج تكويناً ثقيلاً وتركيزاً غربياً أحياناً |
-| وكلاء SDR مستقلون | 11x، Tario، إلخ | أتمتة صيد، قنوات، بحث | حوكمة متعددة المستأجرين وامتثال محلي ليست دائماً جوهر المنتج |
-| أتمتة ميدان / FMCG في السعودية | حلول SFA محلية/إقليمية | زاتكا، مسارات، كفاءة ميدان | ليست نفس ICP لـ «مبيعات B2B معقدة طويلة الأمد» إن لم تُحدَّد الفئة |
-
-**الاستنتاج:** Dealix يمكن أن **لا يفوز بكل شيء**؛ يفوز بـ **شريحة واضحة** (B2B معقد، قنوات متعددة، حاجة لواتساب + CRM + حوكمة) مع **إثبات نتائج**.
+**الفجوة الحالية ليست نقص الأفكار؛ بل إغلاق تشغيلي كامل داخل المنتج نفسه** بحيث تصبح الحوكمة والاعتماد والتنفيذ جزءًا أصيلًا من كل مسار عمل.
 
 ---
 
-## 4) فجوات واقعية — ماذا ينقص Dealix مقارنة بمرجع «المستوى العالمي»
+## 3) معمارية السيادة: 5 Planes
 
-### أ) تقني / منتج
-- **مراقبة وSLO:** APM، تتبع أخطاء، مؤشرات زمن استجابة API، تكلفة طلبات LLM لكل مستأجر.
-- **اختبارات:** تغطية أوسع (تكامل، حمل، انحدار)، CI يمنع كسر المسارات الحرجة.
-- **أمان مؤسسي:** SOC2/ISO مسار طويل — على الأقل سياسات، تقييم مخاطر، سجلات تدقيق موحّدة للإرسال الحساس.
-- **زاتكا/فوترة:** تكامل أعمق من «إشارة»؛ ربط عمليات معتمدة حسب عميل.
-- **تكامل ERP/مالية:** للشركات التي تربط العرض بمخزون/اعتماد مالي — غالباً مطلوب للصفقات الكبيرة.
-- **تجربة مستخدم موحّدة:** لوحة التحكم vs العروض الثابتة — مسار واحد بصري للعلامة.
-- **بيانات وإثراء:** جودة بيانات العملاء المحتملين ومكافحة الازدواجية — نقطة قوة عند منافسي «الصيد».
+## 3.1 Decision Plane (طبقة القرار)
+المهام:
+- signal detection
+- triage
+- scenario analysis
+- memo generation
+- forecasting
+- recommendation
+- next best action
+- evidence pack assembly
 
-### ب) غير تقني (تسويق ومبيعات وشراكات)
-- **حالات استخدام موثقة بالأرقام:** 2–3 مراجع عملاء (حتى لو pilot) مع ROI محافظ.
-- **تموضع واضح:** جملة واحدة تفصل Dealix عن CRM وعن «شات بوت».
-- **قناة شركاء:** برنامج شركاء بعقود، تدريب، وحدات تسويق جاهزة (جزء منه بدأتم به).
-- **محتوى ثقة:** أوراق بيضاء، مقارنات صادقة، امتثال (خصوصية، تخزين داخل المملكة إن طُلب).
-- **فرق مبيعات:** قصة قصيرة + تجربة منتج موجّهة — لا تعتمد فقط على الموقع.
+المتطلبات التقنية:
+- Responses API (stateful interactions)
+- Structured Outputs (schema-bound decisions)
+- function calling / MCP
+- agents tracing + guardrails
+- LangGraph للحلقات المعتمدة على الحالة وinterrupts للـ HITL
 
----
+المعيار:
+كل recommendation يجب أن يكون typed + evidence-backed + policy-aware + freshness-aware.
 
-## 5) خارطة طريق مقترحة (مراحل)
+## 3.2 Execution Plane (طبقة التنفيذ)
+أي مسار يمتد، يعبر عدة أنظمة، أو يخلق التزامًا خارجيًا يجب أن يكون durable.
 
-### المرحلة 0 — أساس التشغيل (0–90 يوماً)
-- تثبيت **CI**، اختبارات حرجة، مراقبة أساسية، نسخ احتياطي قاعدة بيانات.
-- **لوحة صحة المنتج** داخلية: معدل فشل API، زمن استجابة، استخدام قنوات.
-- **مرجع عميل واحد** (حتى pilot) مع بيانات قبل/بعد محافظة.
-- توحيد **روابط التسويق** واختبارها في كل إصدار (ما بنيتموه لـ `/resources` و`/marketers`).
+القاعدة:
+- **LangGraph**: cognition + HITL + short/medium orchestration
+- **Temporal**: durable business commitments (approvals, DD rooms, signatures, launches, PMI)
 
-### المرحلة 1 — تمييز تنفيذي (3–9 أشهر)
-- تعميق **الحوكمة**: سجل موافقات، أدوار، حدود مبالغ.
-- **تكامل Salesforce/CRM** كمسار أولوية حسب ICP السعودي.
-- **تحسين واتساب:** قوالب معتمدة، معدلات إرسال، معالجة أخطاء واضحة للمستخدم.
-- **محتوى GTM:** 3 عروض قطاعية «خارجية» بأرقام منسوبة لمصادر.
+المعيار:
+كل business commitment يجب أن يكون durable + resumable + idempotent + compensatable + observable.
 
-### المرحلة 2 — توسع مؤسسي (9–18 شهراً)
-- **امتثال وتخزين:** خيارات استضافة/بيانات حسب طلب المؤسسة.
-- **ذكاء إيرادات:** تنبؤ أنظف، تقارير تنفيذية موحّدة (حتى لو أبسط من Gong في البداية).
-- **شراكات نظامية:** مع شركات تكامل أو استشارات محلية.
+## 3.3 Trust Plane (طبقة الثقة)
+المكونات الإلزامية:
+- policy engine
+- approval routing
+- fine-grained authorization
+- secrets governance
+- tool verification ledger
+- evidence packs
+- contradiction detection
+- auditability
+- AI governance controls
 
-### المرحلة 3 — توسع جغرافي أو فئات جديدة (18–36 شهراً)
-- توسيع القطاعات أو دول الخليج مع تعريب وامتثال لكل سوق.
-- تقييم **استحواذ أو تكامل** مع أدوات垂直 صغيرة ذات قاعدة عملاء.
+التوصية المرجعية:
+- OPA للسياسات
+- OpenFGA للتفويض الدقيق
+- Vault للأسرار والدوران والاعتمادات القصيرة العمر
+- Keycloak للهوية وSSO والـ brokering
 
----
+## 3.4 Data Plane (طبقة البيانات)
+تصميم منضبط:
+- Postgres كمصدر تشغيلي للحقيقة
+- pgvector للذاكرة الدلالية قرب بيانات العمليات
+- Airbyte للربط ingestion/connectors
+- Unstructured لاستخراج المستندات
+- Great Expectations لجودة البيانات
+- CloudEvents + JSON Schema + AsyncAPI لعقود البيانات والأحداث
+- OpenTelemetry للإشارات الثلاث traces/metrics/logs
 
-## 6) مؤشرات نجاح (KPIs) مقترحة
-
-| المحور | مؤشر | ملاحظة |
-|--------|------|--------|
-| منتج | زمن p95 للـ API، معدل خطأ 5xx | يُرفع في لوحة داخلية |
-| تبني | تفعيل قنوات لكل عميل، رسائل آمنة/موافقات | يدل على «حوكمة حقيقية» |
-| إيراد | NRR، CAC payback، معدل تحويل pilot→مدفوع | للإدارة والمستثمر |
-| ثقة | دراسات حالة، NPS بعد التنفيذ | يقلل اعتراضات المنافسة |
-
----
-
-## 7) مخاطر استراتيجية (صراحة)
-
-- **تكلفة LLM + قنوات** قد تأكل الهامش إن لم تُحسب لكل مستأجر.
-- **منافسة من CRM الكبير** عندما يدمجون وكلاء بشكل أعمق — التمييز بالسرعة المحلية والتجربة العربية والامتثال.
-- **مخاطر امتثال:** أي إرسال تسويقي يجب أن يمر بسياسة واضحة (واتساب، بريد، خصوصية).
-
----
-
-## 8) ربط بوثيقة المنتج الحالية
-
-الأقسام 1–10 التي وثّقتَها (الهدف، الطبقات، التوسع، الأمان، الحزم التسويقية، المستثمرون، المسوّقون، الروابط، CDN، حدود الكود) تبقى **أساساً صحيحاً** — هذه الخطة تضيف **مقارنة سوق** و**أولويات تنفيذ** و**مؤشرات** للانتقال من «منصة قوية في المستودع» إلى «منتج يُباع ويُثبت ويتوسع».
-
----
-
-## 9) خطوات فورية (أسبوع واحد)
-
-1. تعيين **ICP واحد** مكتوب (حجم شركة، قطاع، ميزانية).
-2. إغلاق **قائمة روابط** تسويقية تعمل على `localhost:3000` ونسخة staging.
-3. صفحة **`/investors`** (إعادة توجيه للعرض الاستثماري) للمشاركة السريعة.
-4. جدول اجتماع أسبوعي: منتج + مبيعات + ما يقوله العميل.
+## 3.5 Operating Plane (طبقة التشغيل المؤسسي)
+متطلبات SDLC/GitHub:
+- rulesets + protected branches
+- CODEOWNERS
+- required status checks
+- environments + deployment protection rules
+- OIDC federation بدل long-lived secrets
+- artifact attestations / provenance
+- external audit log streaming
 
 ---
 
-*آخر تحديث: وثيقة حية — راجع ربع سنوياً مع بيانات السوق والمنتج.*
+## 4) الشكل الكامل للمنتج (Surfaces إلزامية)
+
+هذه ليست إضافات اختيارية؛ بل واجهات تشغيل سيادي يجب أن تكون حية:
+
+- Executive Room
+- Approval Center
+- Evidence Pack Viewer
+- Partner Room
+- DD Room
+- Risk Board
+- Policy Violations Board
+- Actual vs Forecast Dashboard
+- Revenue Funnel Control Center
+- Partnership Scorecards
+- M&A Pipeline Board
+- Expansion Launch Console
+- PMI 30/60/90 Engine
+- Tool Verification Ledger
+- Connector Health Board
+- Release Gate Dashboard
+- Saudi Compliance Matrix
+- Model Routing Dashboard
+
+---
+
+## 5) Business Tracks (6 Tracks إلزامية)
+
+## 5.1 Revenue OS
+capture, enrichment, qualification, scoring, routing, outreach, meeting orchestration, proposal generation, pricing/discount governance, contract handoff, onboarding handoff, renewal/upsell/cross-sell.
+
+## 5.2 Partnership OS
+partner scouting, strategic fit scoring, channel economics, alliance structure recommendation, term sheet drafts, approval/legal routing, partner activation, partner scorecards, contribution margin tracking.
+
+## 5.3 M&A / CorpDev OS
+target sourcing/screening, DD orchestration, DD room controls, valuation ranges, synergy modeling, investment committee memos, board packs, offer strategy, sign/close readiness.
+
+## 5.4 Expansion OS
+market scanning, prioritization, compliance readiness, localization, pricing/channel planning, launch readiness, stop-loss logic, post-launch actual vs forecast.
+
+## 5.5 PMI / PMO OS
+Day-1 readiness, 30/60/90 plans, dependency tracking, owner assignment, escalation engine, synergy realization, risk registers, weekly executive review.
+
+## 5.6 Executive / Board OS
+board-ready memos, evidence packs, approval center, risk heatmaps, actual vs forecast, next best action, policy violations, integrated portfolio view.
+
+---
+
+## 6) نموذج الأتمتة: ماذا يُؤتمت وما الذي يحتاج اعتمادًا
+
+## 6.1 يُؤتمت بالكامل
+intake, enrichment, scoring, memo drafting, evidence aggregation, workflow kickoff, reminders, task assignment, SLA tracking, dashboard refresh, variance detection, anomaly alerts, extraction, connector syncs, quality checks, telemetry collection.
+
+## 6.2 يُؤتمت مع اعتماد إلزامي
+term sheet sending, signature requests, strategic partner activation, market launch, M&A offers, off-policy discounts, high-sensitivity data sharing, production promotion, capital commitments.
+
+قاعدة الحوكمة:
+كل إجراء غير قابل للعكس أو عالي الحساسية يمر عبر HITL interrupts.
+
+---
+
+## 7) السيادة على السوق السعودي (Arabic-first + Saudi-ready)
+
+العربية ليست طبقة تجميل؛ هي طبقة تفوق سوقي وتشغيلي.
+
+العربية يجب أن تكون أصلية في:
+- classification
+- memo generation
+- board packs
+- approval reasons
+- notifications
+- partner summaries
+- retrieval/search
+- executive UI
+- terminology normalization
+
+الالتزام المحلي:
+- PDPL mapping واضح لكل مسار حساس
+- مواءمة ضوابط الأمن السيبراني الوطنية
+- إطار عملي لإدارة مخاطر AI (NIST AI RMF)
+- معالجة مخاطر LLM التنفيذية (مثل prompt injection وoutput handling)
+
+---
+
+## 8) Connector Strategy: لا ربط مباشر للوكلاء مع كل Vendor
+
+ابنوا **Connector Facade** لكل تكامل، ويحتوي كل connector على:
+- contract
+- version
+- retry policy
+- timeout policy
+- idempotency key
+- approval policy
+- audit mapping
+- telemetry mapping
+- rollback/compensation notes
+
+الهدف:
+منع هشاشة التكاملات عند تغييرات API وتخفيف N×M بين الوكلاء والخدمات.
+
+---
+
+## 9) Program Locks (إقفال البرنامج رسميًا داخل النظام)
+
+تثبيت بنية إلزامية داخل المنتج:
+- 5 planes
+- 6 business tracks
+- 3 agent roles
+- 3 action classes
+- 3 approval classes (حد أدنى)
+- 4 reversibility classes
+- sensitivity model
+- provenance/freshness/confidence trio
+
+### تعريفات تشغيلية موصى بها
+- Action classes: `observe` / `recommend` / `commit`
+- Approval classes: `A0 auto` / `A1 manager` / `A2 executive-board`
+- Reversibility classes: `R0 reversible` / `R1 bounded` / `R2 costly` / `R3 irreversible`
+
+---
+
+## 10) Sovereign Routing Fabric (سياسة توجيه النماذج)
+
+تحويل model pool الحالي إلى policy-based routing:
+- coding lane
+- executive reasoning lane
+- throughput drafting lane
+- fallback lane
+
+مقاييس إلزامية لكل lane:
+- latency
+- schema adherence
+- contradiction rate
+- Arabic quality
+- cost per successful task
+
+---
+
+## 11) Evidence-Native Operations
+
+لا يكفي إخراج memo فقط؛ كل قرار كبير يجب أن يتضمن:
+- sources
+- assumptions
+- freshness stamp
+- financial model version
+- policy notes
+- alternatives
+- rollback / compensation
+- approval class
+- reversibility class
+
+المعيار:
+أي قرار بلا evidence pack مكتمل لا يُعد قرارًا قابلًا للتنفيذ.
+
+---
+
+## 12) Contradiction Engine (أولوية سيادية)
+
+بناء dashboard يلتقط:
+- intended action
+- claimed action
+- actual tool call
+- observed side effects
+- contradiction status
+
+الغاية:
+إغلاق فجوة "الوكيل قال إنه نفّذ" عبر التحقق من التنفيذ الفعلي.
+
+---
+
+## 13) Definition of Done (جاهزية سيادية نهائية)
+
+لا يعتبر Dealix جاهزًا مؤسسيًا حتى تتحقق الشروط التالية:
+
+- كل قرار business-critical هو structured + evidence-backed + schema-bound.
+- كل long-running commitment هو durable + resumable + crash-tolerant.
+- كل action حساس يحمل metadata: approval + reversibility + sensitivity.
+- كل connector versioned ويملك retry/idempotency/audit mapping.
+- كل release يطبق rulesets + environments + OIDC + provenance.
+- كل surface يدعم OTel + correlation IDs.
+- كل deployment مؤسسي يمر security review وred-team لسطوح LLM/tool execution.
+- كل workflow حساس في السعودية لديه mapping واضح على PDPL وضوابط الحوكمة.
+
+---
+
+## 14) خارطة إغلاق تشغيلي (90 يومًا)
+
+## المرحلة A (0–30 يوم)
+- إطلاق Approval Center + Evidence Pack Viewer + Release Gate Dashboard
+- تفعيل Program Locks وحقول metadata الإلزامية على الإجراءات الحساسة
+- ربط OTel correlation IDs عبر Decision/Execution/Trust planes
+
+## المرحلة B (31–60 يوم)
+- إدخال Connector Facade للإضافات الحرجة وربط health board
+- إطلاق Contradiction Engine v1
+- تفعيل policy-based model routing مع قياسات lane الأساسية
+
+## المرحلة C (61–90 يوم)
+- DD Room + Partner Room + Policy Violations Board
+- ربط workflow durability لمسارات الالتزامات طويلة المدى
+- إصدار Saudi Compliance Matrix وربطه بالموافقات والتدقيق
+
+---
+
+## 15) مؤشرات السيادة (KPIs)
+
+| المحور | KPI أساسي | الهدف |
+|--------|-----------|-------|
+| القرار | نسبة القرارات schema-bound | >= 95% |
+| التنفيذ | نسبة commitments القابلة للاستئناف | >= 99% |
+| الثقة | نسبة الإجراءات الحساسة المعتمدة قبل التنفيذ | 100% |
+| التناقض | contradiction rate | انخفاض ربع سنوي مستمر |
+| البيانات | data quality pass rate | >= 98% |
+| السوق | جودة العربية في المخرجات التنفيذية | قياس دوري + تحسن مستمر |
+
+---
+
+## 16) التمركز الاستراتيجي النهائي
+
+النسخة المهيمنة من Dealix ليست "AI CRM مطوّر"، بل منصة:
+- decision-native
+- execution-durable
+- trust-enforced
+- data-governed
+- Arabic-first
+- Saudi-ready
+- board-usable
+- enterprise-saleable
+
+---
+
+## 17) خطوات فورية هذا الأسبوع
+
+1. اعتماد وثيقة Program Locks رسميًا وإضافتها لمعيار القبول في المسارات الحساسة.
+2. تعريف action/approval/reversibility classes داخل نماذج القرار والتنفيذ.
+3. إطلاق backlog إجباري للـ 18 surfaces (مع ترتيب P0/P1/P2).
+4. إنشاء scoreboard موحد: schema adherence + contradiction rate + Arabic quality + cost/task.
+5. تثبيت Definition of Done السيادي كـ release gate على مستوى المنتج.
+
+---
+
+*آخر تحديث: وثيقة حية — تراجع أسبوعيًا تشغيليًا وربع سنويًا استراتيجيًا.*
