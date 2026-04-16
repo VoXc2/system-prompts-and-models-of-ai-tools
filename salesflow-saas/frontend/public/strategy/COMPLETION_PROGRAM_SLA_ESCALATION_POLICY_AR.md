@@ -81,4 +81,3 @@
 - المصفوفة: `frontend/public/strategy/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 - المخاطر: `frontend/public/strategy/COMPLETION_PROGRAM_RISK_REGISTER_AR.md`
 - الأدلة: `frontend/public/strategy/COMPLETION_PROGRAM_EVIDENCE_GATE_CATALOG_AR.md`
-

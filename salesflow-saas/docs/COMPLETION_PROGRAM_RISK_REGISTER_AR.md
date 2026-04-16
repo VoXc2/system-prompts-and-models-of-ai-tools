@@ -1,8 +1,8 @@
 #!/usr/bin/env markdown
 # سجل المخاطر — Completion Program (Dealix Enterprise Readiness)
 
-**الإصدار:** v1.0  
-**الحالة:** Active Program Risk Register  
+**الإصدار:** v1.0
+**الحالة:** Active Program Risk Register
 **المرجع:** `docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 
 ---
@@ -50,4 +50,3 @@
 - المصفوفة الرئيسية: `docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 - كتالوج البوابات: `docs/COMPLETION_PROGRAM_EVIDENCE_GATE_CATALOG_AR.md`
 - سياسة SLA: `docs/COMPLETION_PROGRAM_SLA_ESCALATION_POLICY_AR.md`
-

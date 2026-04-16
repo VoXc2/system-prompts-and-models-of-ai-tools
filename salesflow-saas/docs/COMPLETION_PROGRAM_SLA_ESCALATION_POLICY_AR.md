@@ -99,4 +99,3 @@
 - التشغيل الأسبوعي: `docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md`
 - سجل المخاطر: `docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md`
 - بوابات الأدلة: `docs/COMPLETION_PROGRAM_EVIDENCE_GATE_CATALOG_AR.md`
-

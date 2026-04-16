@@ -84,4 +84,3 @@
 - Execution Matrix: `docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 - Weekly Operating System: `docs/EXECUTION_MATRIX_WEEKLY_OPERATING_SYSTEM_AR.md`
 - Risk Register: `docs/COMPLETION_PROGRAM_RISK_REGISTER_AR.md`
-

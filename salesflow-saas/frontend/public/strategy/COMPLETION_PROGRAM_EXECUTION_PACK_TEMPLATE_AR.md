@@ -1,7 +1,7 @@
 # قالب التقرير التنفيذي الأسبوعي — Completion Program
 
-**الإصدار:** v1.0  
-**الحالة:** Ready-to-Use  
+**الإصدار:** v1.0
+**الحالة:** Ready-to-Use
 **المرجع:** `frontend/public/strategy/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 
 ---
@@ -78,4 +78,3 @@
 - Evidence Controller: ________
 - Risk & Compliance Officer: ________
 - Release Steward: ________
-

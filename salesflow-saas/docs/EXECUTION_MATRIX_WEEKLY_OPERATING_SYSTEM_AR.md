@@ -1,7 +1,7 @@
 # نظام التشغيل الأسبوعي — Completion Program (Dealix)
 
-**الإصدار:** v1.0  
-**الحالة:** Operating Playbook  
+**الإصدار:** v1.0
+**الحالة:** Operating Playbook
 **المرجع الأساسي:** `docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 
 ---
@@ -122,4 +122,3 @@
 - المصفوفة الرئيسية: `docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 - قالب التتبع التنفيذي: `docs/execution_matrix_tracker_template.csv`
 - الفهرس الرئيسي: `memory/indexes/master-index.md`
-

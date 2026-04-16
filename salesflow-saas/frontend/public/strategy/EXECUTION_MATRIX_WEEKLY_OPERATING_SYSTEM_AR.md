@@ -1,7 +1,7 @@
 # نظام التشغيل الأسبوعي — Execution Matrix Completion Program
 
-**الإصدار:** v1.0  
-**الحالة:** Operating Playbook (Weekly Cadence)  
+**الإصدار:** v1.0
+**الحالة:** Operating Playbook (Weekly Cadence)
 **المرجع:** `frontend/public/strategy/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 
 ---
@@ -54,16 +54,16 @@
 
 ## 4) قواعد القرار (Decision Rules)
 
-1. **No Evidence = No Progress**  
+1. **No Evidence = No Progress**
    أي بند بلا دليل لا يُحسب إنجازاً.
 
-2. **Two-SLA-Breaches Escalation**  
+2. **Two-SLA-Breaches Escalation**
    إذا تكرر خرق SLA مرتين متتاليتين، يدخل المسار مراجعة تصعيد خلال 48 ساعة.
 
-3. **No New Autonomy Under Trust/Compliance Risk**  
+3. **No New Autonomy Under Trust/Compliance Risk**
    عند وجود فجوة عالية في Trust أو Compliance، يُمنع توسيع الأتمتة حتى الإغلاق.
 
-4. **Critical Connector Break = Emergency Mode**  
+4. **Critical Connector Break = Emergency Mode**
    أي كسر API في موصل حرج يفعّل خطة طوارئ 72 ساعة.
 
 ---
@@ -110,4 +110,3 @@
 - `frontend/public/strategy/execution_matrix_tracker_template.csv`
 
 وتمت مزامنته مع نسخة docs الداخلية لضمان نفس الأعمدة ونفس منطق التتبع.
-

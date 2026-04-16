@@ -1,6 +1,6 @@
 # دليل بوابات الدليل — Completion Program (Dealix)
 
-**الإصدار:** v1.0  
+**الإصدار:** v1.0
 **المرجع:** `docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 
 ---
@@ -55,4 +55,3 @@
   - Owner
   - Exit decision
   - corrective action (إن وجد)
-

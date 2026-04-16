@@ -1,7 +1,7 @@
 # Completion Program — سجل المخاطر التنفيذي (Risk Register)
 
-**الإصدار:** v1.0  
-**النطاق:** WS1..WS8  
+**الإصدار:** v1.0
+**النطاق:** WS1..WS8
 **المرجع:** `docs/EXECUTION_MATRIX_COMPLETION_PROGRAM_AR.md`
 
 ---
@@ -22,8 +22,8 @@
 
 ## 2) مصفوفة التقييم (Probability × Impact)
 
-- **Probability:** Low=1, Medium=2, High=3  
-- **Impact:** Medium=3, High=4, Critical=5  
+- **Probability:** Low=1, Medium=2, High=3
+- **Impact:** Medium=3, High=4, Critical=5
 - **Risk Score = Probability × Impact**
 
 ### قواعد القرار
@@ -50,4 +50,3 @@
 - نسبة المخاطر المتكررة (recurring risks).
 - نسبة المخاطر ذات خطط mitigation غير مكتملة.
 - نسبة المخاطر التي أثرت فعلياً على SLA.
-
