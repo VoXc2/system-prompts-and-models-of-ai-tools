@@ -3,7 +3,7 @@
 **Type**: operations
 **Summary**: Central index linking to all wiki pages, memory sections, and knowledge resources.
 **Summary_AR**: الفهرس المركزي الذي يربط جميع صفحات الويكي وأقسام الذاكرة وموارد المعرفة.
-**Last Updated**: 2026-04-11
+**Last Updated**: 2026-04-16
 
 ---
 
@@ -15,6 +15,8 @@
 | System Overview (Diagram) | [architecture/system-overview.md](../architecture/system-overview.md) | Active |
 | ADR-001: Multi-Tenant | [adr/001-multi-tenant.md](../adr/001-multi-tenant.md) | Active |
 | ADR-002: WhatsApp-First | [adr/002-whatsapp-first.md](../adr/002-whatsapp-first.md) | Active |
+| ADR-003: Five Operational Planes | [adr/003-five-operational-planes.md](../adr/003-five-operational-planes.md) | Active |
+| ADR-004: Temporal Migration | [adr/004-temporal-migration.md](../adr/004-temporal-migration.md) | Active |
 | Library Decisions | [patterns/library-decisions.md](../patterns/library-decisions.md) | Active |
 
 ## Product (المنتج)
@@ -25,6 +27,16 @@
 | Wiki Guide | [wiki/README.md](../wiki/README.md) | Active |
 | Dealix Vision | [DEALIX_VISION.md](../../DEALIX_VISION.md) | Active |
 | Master Blueprint | [MASTER-BLUEPRINT.mdc](../../MASTER-BLUEPRINT.mdc) | Active |
+
+## Completion Program (برنامج الإغلاق التشغيلي)
+
+| Page | Location | Status |
+|------|----------|--------|
+| Completion Program (Master) | [docs/completion-program/COMPLETION_PROGRAM.md](../../docs/completion-program/COMPLETION_PROGRAM.md) | Active |
+| Execution Matrix | [docs/completion-program/EXECUTION_MATRIX.md](../../docs/completion-program/EXECUTION_MATRIX.md) | Active |
+| Current-vs-Target Register | [docs/completion-program/CURRENT_VS_TARGET_REGISTER.md](../../docs/completion-program/CURRENT_VS_TARGET_REGISTER.md) | Active |
+| Definition of Done | [docs/completion-program/DEFINITION_OF_DONE.md](../../docs/completion-program/DEFINITION_OF_DONE.md) | Active |
+| Saudi Enterprise Readiness | [docs/completion-program/SAUDI_ENTERPRISE_READINESS.md](../../docs/completion-program/SAUDI_ENTERPRISE_READINESS.md) | Active |
 
 ## GTM / Growth (النمو والتسويق)
 
@@ -80,10 +92,10 @@
 
 ## Index Health
 
-- **Total pages**: 23
-- **Active**: 23
+- **Total pages**: 30
+- **Active**: 30
 - **Stale**: 0
 - **Orphan (no inbound links)**: 0
-- **Last full audit**: 2026-04-11
+- **Last full audit**: 2026-04-16
 
 > Run `KnowledgeBrain.lint()` weekly to verify index health. See [wiki/README.md](../wiki/README.md) for review schedule.
