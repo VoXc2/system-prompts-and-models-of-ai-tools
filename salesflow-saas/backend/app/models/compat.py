@@ -9,7 +9,7 @@ from app.config import get_settings
 _settings = get_settings()
 IS_SQLITE = "sqlite" in _settings.DATABASE_URL
 
-from sqlalchemy import Column, String, Text, TypeDecorator
+from sqlalchemy import Column, Numeric, String, Text, TypeDecorator
 
 if IS_SQLITE:
     # ── SQLite-compatible replacements ─────────────────────────
