@@ -327,7 +327,7 @@ The architecture is incomplete if these surfaces do not exist in live form:
 
 ## 13) Summary
 
-The current stack is a strong operating base.  
+The current stack is a strong operating base.
 The sovereign target state adds the missing enterprise-grade boundaries:
 - typed decisions,
 - durable execution,

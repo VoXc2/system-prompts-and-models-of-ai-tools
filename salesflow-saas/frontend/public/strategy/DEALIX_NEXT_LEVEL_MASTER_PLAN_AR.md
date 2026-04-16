@@ -1,7 +1,7 @@
 # Dealix — المخطط السيادي الشامل للتحول إلى Sovereign Enterprise Growth OS
 
-> وثيقة مرجعية داخلية: تنقل Dealix من مستوى **Revenue & Operations OS** إلى مستوى **Sovereign Enterprise Growth OS**.  
-> الهدف ليس زيادة عدد الوكلاء فقط، بل إغلاق القرار والتنفيذ والحوكمة والثقة داخل المنتج نفسه.  
+> وثيقة مرجعية داخلية: تنقل Dealix من مستوى **Revenue & Operations OS** إلى مستوى **Sovereign Enterprise Growth OS**.
+> الهدف ليس زيادة عدد الوكلاء فقط، بل إغلاق القرار والتنفيذ والحوكمة والثقة داخل المنتج نفسه.
 > هذه الوثيقة تربط بين ما هو موجود اليوم في المستودع وبين البنية المستهدفة التي تجعل Dealix منصة مؤسسية صعبة الاستبدال.
 
 ---
@@ -59,7 +59,7 @@
 | Execution Plane | الالتزامات والتنفيذ | approvals, launches, DD, signatures, PMI, orchestration | كل التزام طويل durable + resumable + compensatable |
 | Trust Plane | الثقة والضبط | policy, authz, identity, secrets, audit, contradiction detection | لا يوجد فعل حساس بلا authorization + audit + verification |
 | Data Plane | مصدر الحقيقة والذاكرة | ops data, semantic memory, contracts, data quality, telemetry | البيانات موحدة، قابلة للتتبع، ومحمية بعقود |
-| Operating Plane | SDLC والإصدار | rulesets, release gates, attestations, environments | كل release مؤسسي يحمل provenance + protections + externalized audit |
+| Operating Plane | SDLC والإصدار | rulesets, release gates, attestations, evidence, environments | كل release مؤسسي يحمل provenance + protections + externalized audit |
 
 ---
 
