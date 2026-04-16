@@ -51,6 +51,19 @@
 | SaaS Readiness Audit | [runbooks/saas-readiness-audit.md](../runbooks/saas-readiness-audit.md) | Active |
 | Release Notes | [releases/](../releases/) | Directory |
 
+## Sovereign Operating System (نظام التشغيل السيادي)
+
+| Page | Location | Status |
+|------|----------|--------|
+| Master Operating Prompt | [operating-system/MASTER_OPERATING_PROMPT.md](../operating-system/MASTER_OPERATING_PROMPT.md) | Active |
+| Architecture Pack | [operating-system/ARCHITECTURE_PACK.md](../operating-system/ARCHITECTURE_PACK.md) | Active |
+| Execution Matrix | [operating-system/EXECUTION_MATRIX.md](../operating-system/EXECUTION_MATRIX.md) | Active |
+| Weekly Operating System | [operating-system/WEEKLY_OPERATING_SYSTEM.md](../operating-system/WEEKLY_OPERATING_SYSTEM.md) | Active |
+| Live Surfaces Tracker | [operating-system/LIVE_SURFACES_TRACKER.md](../operating-system/LIVE_SURFACES_TRACKER.md) | Active |
+| Approval Request Schema | [contracts/approval_request.schema.json](../contracts/approval_request.schema.json) | Active |
+| Workflow Commitment Schema | [contracts/workflow_commitment.schema.json](../contracts/workflow_commitment.schema.json) | Active |
+| Tool Verification Receipt Schema | [contracts/tool_verification_receipt.schema.json](../contracts/tool_verification_receipt.schema.json) | Active |
+
 ## Security (الأمان والامتثال)
 
 | Page | Location | Status |
@@ -80,10 +93,10 @@
 
 ## Index Health
 
-- **Total pages**: 23
-- **Active**: 23
+- **Total pages**: 31
+- **Active**: 31
 - **Stale**: 0
 - **Orphan (no inbound links)**: 0
-- **Last full audit**: 2026-04-11
+- **Last full audit**: 2026-04-16
 
 > Run `KnowledgeBrain.lint()` weekly to verify index health. See [wiki/README.md](../wiki/README.md) for review schedule.

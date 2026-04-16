@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.sa/schemas/workflow_commitment.schema.json",
+  "title": "WorkflowCommitment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "workflow_commitment_id",
+    "tenant_id",
+    "domain",
+    "workflow_type",
+    "state",
+    "owner",
+    "sla_hours",
+    "created_at",
+    "trace_id",
+    "correlation_id",
+    "requires_durable_runtime"
+  ],
+  "properties": {
+    "workflow_commitment_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "sales",
+        "partnership",
+        "mna",
+        "expansion",
+        "pmi",
+        "executive"
+      ]
+    },
+    "workflow_type": {
+      "type": "string",
+      "minLength": 3
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "waiting_approval",
+        "blocked",
+        "retrying",
+        "completed",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 3
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "sla_hours": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "escalation_after_hours": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "requires_durable_runtime": {
+      "type": "boolean"
+    },
+    "approval_request_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "policy_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "evidence_pack_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 8
+    }
+  }
+}

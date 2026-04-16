@@ -66,3 +66,11 @@ Revenue + Partnership + Strategic Deal Operating System.
 - Survives realistic launch simulation
 - UI feels premium and operational
 - Architecture is coherent and maintainable
+
+## Sovereign OS Implementation Assets
+
+- [Master Operating Prompt](../operating-system/MASTER_OPERATING_PROMPT.md)
+- [Architecture Pack](../operating-system/ARCHITECTURE_PACK.md)
+- [Execution Matrix](../operating-system/EXECUTION_MATRIX.md)
+- [Weekly Operating System](../operating-system/WEEKLY_OPERATING_SYSTEM.md)
+- [Live Surfaces Tracker](../operating-system/LIVE_SURFACES_TRACKER.md)

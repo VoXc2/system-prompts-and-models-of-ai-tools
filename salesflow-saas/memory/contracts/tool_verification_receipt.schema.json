@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.sa/schemas/tool_verification_receipt.schema.json",
+  "title": "ToolVerificationReceipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "receipt_id",
+    "tenant_id",
+    "tool_name",
+    "tool_operation",
+    "execution_status",
+    "policy_decision",
+    "verified_at",
+    "trace_id",
+    "correlation_id"
+  ],
+  "properties": {
+    "receipt_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "tool_name": {
+      "type": "string",
+      "minLength": 2
+    },
+    "tool_operation": {
+      "type": "string",
+      "minLength": 2
+    },
+    "execution_status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failed",
+        "blocked"
+      ]
+    },
+    "policy_decision": {
+      "type": "string",
+      "enum": [
+        "allow",
+        "deny",
+        "needs_approval"
+      ]
+    },
+    "policy_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "approval_request_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "input_hash": {
+      "type": "string",
+      "minLength": 16
+    },
+    "output_hash": {
+      "type": "string",
+      "minLength": 16
+    },
+    "evidence_pack_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "error_message": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 8
+    }
+  }
+}

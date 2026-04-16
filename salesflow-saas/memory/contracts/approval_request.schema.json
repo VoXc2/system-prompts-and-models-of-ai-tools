@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.sa/schemas/approval_request.schema.json",
+  "title": "ApprovalRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "approval_request_id",
+    "tenant_id",
+    "domain",
+    "decision_type",
+    "approval_class",
+    "reversibility_class",
+    "sensitivity_class",
+    "policy_refs",
+    "evidence_pack_id",
+    "requested_by",
+    "requested_at",
+    "trace_id",
+    "correlation_id"
+  ],
+  "properties": {
+    "approval_request_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 2
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "sales",
+        "partnership",
+        "mna",
+        "expansion",
+        "pmi",
+        "executive"
+      ]
+    },
+    "decision_type": {
+      "type": "string",
+      "minLength": 3
+    },
+    "approval_class": {
+      "type": "string",
+      "enum": [
+        "A0",
+        "A1",
+        "A2",
+        "A3"
+      ]
+    },
+    "reversibility_class": {
+      "type": "string",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ]
+    },
+    "sensitivity_class": {
+      "type": "string",
+      "enum": [
+        "S0",
+        "S1",
+        "S2",
+        "S3"
+      ]
+    },
+    "policy_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "evidence_pack_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "requested_by": {
+      "type": "string",
+      "minLength": 3
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 5000
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 8
+    }
+  }
+}

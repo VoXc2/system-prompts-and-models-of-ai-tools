@@ -2,6 +2,9 @@
 
 **Date**: 2026-04-11 | **Status**: active
 
+> Governance extension: for sovereign enterprise cadence and approval/risk governance,
+> see `memory/operating-system/WEEKLY_OPERATING_SYSTEM.md`.
+
 ## Daily Operations (يومي)
 
 | الوقت | المهمة | المسؤول |
