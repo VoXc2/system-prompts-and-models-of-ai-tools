@@ -10,10 +10,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.deal import Deal
 from app.models.operations import ApprovalRequest, IntegrationSyncState
-from app.models.strategic_deal import StrategicDeal
-from app.models.evidence_pack import EvidencePack, EvidencePackStatus
-from app.services.saudi_compliance_matrix import saudi_compliance_matrix
-from app.services.contradiction_engine import contradiction_engine
 
 
 class ExecutiveRoomService:
@@ -104,6 +100,7 @@ class ExecutiveRoomService:
     # ── Compliance ───────────────────────────────────────────
 
     async def _compliance(self, db: AsyncSession, tenant_id: str) -> Dict[str, Any]:
+        from app.services.saudi_compliance_matrix import saudi_compliance_matrix
         p = await saudi_compliance_matrix.get_posture(db, tenant_id=tenant_id)
         return {
             "compliant": p.get("compliant", 0),
@@ -115,22 +112,24 @@ class ExecutiveRoomService:
     # ── Contradictions ───────────────────────────────────────
 
     async def _contradictions(self, db: AsyncSession, tenant_id: str) -> Dict[str, Any]:
+        from app.services.contradiction_engine import contradiction_engine
         s = await contradiction_engine.get_stats(db, tenant_id=tenant_id)
         return {"active": s.get("active", 0), "critical": s.get("critical_active", 0)}
 
     # ── Strategic Deals ──────────────────────────────────────
 
     async def _strategic_deals(self, db: AsyncSession, tid: UUID) -> Dict[str, Any]:
+        from app.models.strategic_deal import StrategicDeal
         active = int(
             (await db.execute(
                 select(func.count()).select_from(StrategicDeal)
-                .where(StrategicDeal.tenant_id == tid, StrategicDeal.status == "active")
+                .where(StrategicDeal.tenant_id == tid, StrategicDeal.status.notin_(["closed_won", "closed_lost"]))
             )).scalar() or 0
         )
         value = float(
             (await db.execute(
                 select(func.coalesce(func.sum(StrategicDeal.estimated_value_sar), 0))
-                .where(StrategicDeal.tenant_id == tid, StrategicDeal.status == "active")
+                .where(StrategicDeal.tenant_id == tid, StrategicDeal.status.notin_(["closed_won", "closed_lost"]))
             )).scalar() or 0
         )
         return {"active": active, "pipeline_value": value}
@@ -138,6 +137,7 @@ class ExecutiveRoomService:
     # ── Evidence Packs ───────────────────────────────────────
 
     async def _evidence_packs(self, db: AsyncSession, tid: UUID) -> Dict[str, Any]:
+        from app.models.evidence_pack import EvidencePack, EvidencePackStatus
         ready = int(
             (await db.execute(
                 select(func.count()).select_from(EvidencePack)

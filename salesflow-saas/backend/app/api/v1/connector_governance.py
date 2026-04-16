@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.services.connector_governance import connector_governance
-from app.services.operations_hub import list_integration_connectors
 
 router = APIRouter(prefix="/connectors", tags=["Connector Governance"])
 
