@@ -75,6 +75,25 @@
 | `backend/app/services/knowledge_service.py` | RAG داخل التطبيق |
 | `backend/app/ai/orchestrator.py` | تنسيق وكلاء + سياق معرفة |
 | `frontend/src/app/strategy/page.tsx` | صفحة استراتيجية عامة |
+| `docs/ENTERPRISE_COMPLETION_EXECUTION_MATRIX_AR.md` | مصفوفة الإكمال المؤسسي: المسارات، المخرجات، بوابات الإثبات، ومعايير الخروج |
+
+---
+
+## وثيقة التنفيذ التالية الملزمة
+
+إذا كان هذا الملف يصف **الرؤية التنفيذية العامة**، فإن الوثيقة التالية تصف **برنامج الإغلاق التشغيلي** المطلوب حتى يصبح Dealix جاهزًا للمؤسسات:
+
+- `docs/ENTERPRISE_COMPLETION_EXECUTION_MATRIX_AR.md`
+
+استخدمها كمرجع التشغيل الأساسي عند تحويل الخطط إلى:
+
+- workstreams
+- owners
+- evidence gates
+- exit criteria
+- dependencies
+- risks
+- SLAs
 
 ---
 

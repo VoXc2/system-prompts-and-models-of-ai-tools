@@ -34,6 +34,8 @@ Frontend: `http://localhost:3000`
 
 **Staging env templates:** `.env.staging.example` (repo root) and `frontend/.env.staging.example` — copy to `.env` / `frontend/.env.local` on the host; see `docs/STAGING_ENV_CHECKLIST.md`.
 
+**Enterprise completion planning:** use `docs/ENTERPRISE_COMPLETION_EXECUTION_MATRIX_AR.md` with `docs/ULTIMATE_EXECUTION_MASTER_AR.md` to track workstreams, evidence gates, and enterprise-readiness exit criteria.
+
 **Customer onboarding (B2B):** `GET /api/v1/customer-onboarding/journey` and `docs/CUSTOMER_OS_ONBOARDING_AR.md`. Dashboard tab: **مسار التشغيل مع العميل**.
 
 **Launch verification:** see `docs/LAUNCH_CHECKLIST.md`. From `salesflow-saas`: copy `frontend/.env.example` to `frontend/.env.local` and set `NEXT_PUBLIC_API_URL`. Run `.\verify-launch.ps1 -HttpCheck -SoftReady` (use `-BaseUrl` if the API is not on port 8000).
