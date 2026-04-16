@@ -75,6 +75,7 @@
 | `backend/app/services/knowledge_service.py` | RAG داخل التطبيق |
 | `backend/app/ai/orchestrator.py` | تنسيق وكلاء + سياق معرفة |
 | `frontend/src/app/strategy/page.tsx` | صفحة استراتيجية عامة |
+| `docs/MARKET_DOMINANCE_BLUEPRINT_AR.md` | مخطط هيمنة السوق: تموضع، خندق، GTM، تسعير، تغليف، ثقة، سلم قدرات |
 
 ---
 

@@ -23,3 +23,7 @@
 ## مواءمة النسخ مع المنتج الحي
 
 قبل الحملات: راجع المسارات العامة (`/`، `/marketers`، `/strategy`) و`GET /api/v1/value-proposition/` و`GET /api/v1/customer-onboarding/journey` وتأكد أن الوعود في التسويق تطابق ما هو مُفعّل في الإنتاج.
+
+## مخطط هيمنة السوق (Blueprint تنفيذي)
+
+للتموضع الأوسع (خندق، GTM، تسعير، تغليف مؤسسي، ثقة، سلم قدرات، توسع داخل الحساب، نجاح عميل): راجع `docs/MARKET_DOMINANCE_BLUEPRINT_AR.md` إلى جانب `docs/DEALIX_NEXT_LEVEL_MASTER_PLAN_AR.md` و`docs/ULTIMATE_EXECUTION_MASTER_AR.md`.
