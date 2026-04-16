@@ -1,7 +1,7 @@
 # مصفوفة التنفيذ النهائية — Completion Program لإغلاق الجاهزية المؤسسية
 
-**الحالة:** Operating execution matrix  
-**الهدف:** تحويل Dealix من مرجعية وثائقية قوية إلى طبقات قرار وتنفيذ وثقة وبيانات وتشغيل تعمل فعليًا، وتنتج evidence قابلًا للتدقيق، وتصلح للإطلاق المؤسسي في السعودية والخليج.  
+**الحالة:** Operating execution matrix
+**الهدف:** تحويل Dealix من مرجعية وثائقية قوية إلى طبقات قرار وتنفيذ وثقة وبيانات وتشغيل تعمل فعليًا، وتنتج evidence قابلًا للتدقيق، وتصلح للإطلاق المؤسسي في السعودية والخليج.
 **مرجع الربط:** `MASTER-BLUEPRINT.mdc`، `docs/ULTIMATE_EXECUTION_MASTER_AR.md`، `AGENTS.md`، `docs/AGENT-MAP.md`، `memory/runbooks/saas-readiness-audit.md`.
 
 ---
@@ -215,7 +215,7 @@
 
 ## 8) قرار البرنامج
 
-**Decision:** Dealix يدخل الآن مرحلة **Completion Program**.  
+**Decision:** Dealix يدخل الآن مرحلة **Completion Program**.
 أي عمل جديد خارج هذه المصفوفة يجب أن يثبت أولًا أنه:
 
 1. لا يفتح فجوة ثقة أو تنفيذ أو امتثال جديدة،
