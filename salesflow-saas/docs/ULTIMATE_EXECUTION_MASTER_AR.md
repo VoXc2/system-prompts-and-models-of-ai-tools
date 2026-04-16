@@ -70,6 +70,7 @@
 | المسار | الغرض |
 |--------|--------|
 | `MASTER-BLUEPRINT.mdc` | مصدر حقيقة معماري إنجليزي مختصر |
+| `docs/COMPLETION_PROGRAM_EXECUTION_MATRIX_AR.md` | مصفوفة إغلاق الجاهزية المؤسسية والبوابات التنفيذية |
 | `openclaw/openclaw-config.yaml` | تكوين OpenClaw + تدفقات + حدود |
 | `backend/app/api/v1/autonomous_foundation.py` | تدفقات ذاتية، بوابة go-live |
 | `backend/app/services/knowledge_service.py` | RAG داخل التطبيق |

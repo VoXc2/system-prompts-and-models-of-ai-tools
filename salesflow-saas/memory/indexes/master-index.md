@@ -49,6 +49,7 @@
 | Deployment Checklist | [runbooks/deployment-checklist.md](../runbooks/deployment-checklist.md) | Active |
 | Launch Checklist | [runbooks/launch-checklist.md](../runbooks/launch-checklist.md) | Active |
 | SaaS Readiness Audit | [runbooks/saas-readiness-audit.md](../runbooks/saas-readiness-audit.md) | Active |
+| Completion Program Execution Matrix | [docs/COMPLETION_PROGRAM_EXECUTION_MATRIX_AR.md](../../docs/COMPLETION_PROGRAM_EXECUTION_MATRIX_AR.md) | Active |
 | Release Notes | [releases/](../releases/) | Directory |
 
 ## Security (الأمان والامتثال)
