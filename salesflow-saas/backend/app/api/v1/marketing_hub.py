@@ -31,6 +31,7 @@ async def marketing_hub() -> dict:
             "access_urls_txt": "/dealix-marketing/ACCESS-URLS.txt",
             "strategy_page": "/strategy",
             "strategy_doc_md": "/strategy/DEALIX_NEXT_LEVEL_MASTER_PLAN_AR.md",
+            "sovereign_operating_model_ar_md": "/strategy/SOVEREIGN_ENTERPRISE_GROWTH_OS_AR.md",
             "ultimate_execution_doc_md": "/strategy/ULTIMATE_EXECUTION_MASTER_AR.md",
             "integration_master_ar_md": "/strategy/INTEGRATION_MASTER_AR.md",
             "go_live_gate_api": "/api/v1/autonomous-foundation/integrations/go-live-gate",

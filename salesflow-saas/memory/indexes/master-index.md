@@ -3,7 +3,7 @@
 **Type**: operations
 **Summary**: Central index linking to all wiki pages, memory sections, and knowledge resources.
 **Summary_AR**: الفهرس المركزي الذي يربط جميع صفحات الويكي وأقسام الذاكرة وموارد المعرفة.
-**Last Updated**: 2026-04-11
+**Last Updated**: 2026-04-16
 
 ---
 
@@ -81,10 +81,10 @@
 
 ## Index Health
 
-- **Total pages**: 23
-- **Active**: 23
+- **Total pages**: 24
+- **Active**: 24
 - **Stale**: 0
 - **Orphan (no inbound links)**: 0
-- **Last full audit**: 2026-04-11
+- **Last full audit**: 2026-04-16
 
 > Run `KnowledgeBrain.lint()` weekly to verify index health. See [wiki/README.md](../wiki/README.md) for review schedule.

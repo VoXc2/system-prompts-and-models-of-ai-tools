@@ -28,6 +28,7 @@ async def test_health_ready_strategy_value_prop():
 
         m = await ac.get("/api/v1/marketing/hub")
         assert m.status_code == 200
+        assert m.json().get("paths", {}).get("sovereign_operating_model_ar_md")
 
         j = await ac.get("/api/v1/customer-onboarding/journey")
         assert j.status_code == 200

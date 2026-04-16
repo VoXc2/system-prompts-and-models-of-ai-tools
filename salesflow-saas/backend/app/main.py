@@ -4,6 +4,7 @@ apply_patch()
 # ──────────────────────────────────────────────────────────────
 
 from pathlib import Path
+from urllib.parse import urlparse, urlunparse
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,10 +25,16 @@ def _cors_origins() -> list[str]:
     base = [
         settings.FRONTEND_URL,
         "http://localhost:3000",
+        "http://127.0.0.1:3000",
         "http://localhost:5173",
         "https://dealix.sa",
         "https://app.dealix.sa",
     ]
+    parsed_frontend = urlparse(settings.FRONTEND_URL)
+    if parsed_frontend.scheme and parsed_frontend.port and parsed_frontend.hostname in {"localhost", "127.0.0.1"}:
+        alias_host = "127.0.0.1" if parsed_frontend.hostname == "localhost" else "localhost"
+        alias_netloc = f"{alias_host}:{parsed_frontend.port}"
+        base.append(urlunparse((parsed_frontend.scheme, alias_netloc, "", "", "", "")))
     extra = [x.strip() for x in (settings.CORS_EXTRA_ORIGINS or "").split(",") if x.strip()]
     seen: set[str] = set()
     out: list[str] = []
