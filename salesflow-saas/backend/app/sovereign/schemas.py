@@ -151,17 +151,6 @@ class ConnectorContract(BaseModel):
     rollback_notes_ar: str = ""
 
 
-class ConnectorHealthStatus(BaseModel):
-    """Synthetic health snapshot for a registered connector (facade-level)."""
-
-    connector_id: str
-    healthy: bool
-    last_checked_at: datetime = Field(default_factory=_utc_now)
-    latency_ms: float | None = None
-    detail_en: str = ""
-    detail_ar: str = ""
-
-
 class ContradictionRecord(BaseModel):
     record_id: UUID = Field(default_factory=uuid4)
     timestamp: datetime = Field(default_factory=_utc_now)
