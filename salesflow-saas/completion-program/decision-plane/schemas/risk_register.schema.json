@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.ai/schemas/decision/risk_register/v1",
+  "title": "RiskRegister",
+  "description": "Risk register attached to every decision memo for Executor-class agents.",
+  "type": "object",
+  "required": ["register_id", "memo_id", "tenant_id", "risks", "created_at"],
+  "properties": {
+    "register_id": { "type": "string", "format": "uuid" },
+    "memo_id": { "type": "string", "format": "uuid" },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["risk_id", "description", "likelihood", "impact", "severity", "mitigation", "owner"],
+        "properties": {
+          "risk_id": { "type": "string" },
+          "description": { "type": "string", "minLength": 10 },
+          "likelihood": { "type": "string", "enum": ["low", "medium", "high"] },
+          "impact": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "severity": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+          "mitigation": { "type": "string" },
+          "owner": { "type": "string" },
+          "pdpl_relevant": { "type": "boolean", "default": false },
+          "nca_ecc_relevant": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "overall_risk_level": {
+      "type": "string",
+      "enum": ["GREEN", "AMBER", "RED"]
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "schema_version": { "type": "string", "const": "v1" }
+  }
+}

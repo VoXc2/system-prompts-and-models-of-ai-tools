@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.ai/schemas/decision/memo/v1",
+  "title": "DecisionMemo",
+  "description": "Structured decision memo produced by Recommender/Executor agents. Never free-text for critical flows.",
+  "type": "object",
+  "required": [
+    "memo_id",
+    "tenant_id",
+    "track",
+    "agent_role",
+    "action_metadata",
+    "summary_ar",
+    "summary_en",
+    "recommendation",
+    "confidence_score",
+    "provenance_score",
+    "freshness_score",
+    "evidence_pack_ref",
+    "risk_register_ref",
+    "created_at"
+  ],
+  "properties": {
+    "memo_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this memo"
+    },
+    "tenant_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "track": {
+      "type": "string",
+      "enum": ["prospecting", "qualification", "proposal", "negotiation", "closing", "post_sale"]
+    },
+    "agent_role": {
+      "type": "string",
+      "enum": ["Observer", "Recommender", "Executor"]
+    },
+    "action_metadata": {
+      "$ref": "#/$defs/ActionMetadata"
+    },
+    "summary_ar": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Arabic summary of the decision rationale"
+    },
+    "summary_en": {
+      "type": "string",
+      "minLength": 10,
+      "description": "English summary of the decision rationale"
+    },
+    "recommendation": {
+      "type": "object",
+      "required": ["action", "rationale", "next_steps"],
+      "properties": {
+        "action": { "type": "string" },
+        "rationale": { "type": "string" },
+        "next_steps": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Model confidence in the recommendation (0–1)"
+    },
+    "provenance_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Fraction of claims backed by traceable sources (0–1)"
+    },
+    "freshness_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Recency of the underlying data (0 = stale, 1 = real-time)"
+    },
+    "evidence_pack_ref": {
+      "type": "string",
+      "description": "ID or URI of the associated evidence_pack document"
+    },
+    "risk_register_ref": {
+      "type": "string",
+      "description": "ID or URI of the associated risk_register document"
+    },
+    "approval_packet_ref": {
+      "type": "string",
+      "description": "ID or URI of the associated approval_packet (required if agent_role=Executor)"
+    },
+    "execution_intent_ref": {
+      "type": "string",
+      "description": "ID or URI of the associated execution_intent (required if agent_role=Executor)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "v1"
+    }
+  },
+  "$defs": {
+    "ActionMetadata": {
+      "type": "object",
+      "required": [
+        "action_id",
+        "approval_required",
+        "reversibility",
+        "sensitivity",
+        "data_residency"
+      ],
+      "properties": {
+        "action_id": { "type": "string", "format": "uuid" },
+        "approval_required": { "type": "boolean" },
+        "reversibility": {
+          "type": "string",
+          "enum": ["irreversible", "reversible", "compensatable"]
+        },
+        "sensitivity": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "data_residency": {
+          "type": "string",
+          "enum": ["KSA", "EU", "US", "GLOBAL"]
+        }
+      }
+    }
+  }
+}

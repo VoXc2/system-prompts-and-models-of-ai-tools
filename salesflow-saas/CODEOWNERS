@@ -1,0 +1,46 @@
+# CODEOWNERS — Dealix Platform
+# Enforced via GitHub branch rulesets (see completion-program/operating-plane/enterprise-delivery.md).
+# Format: <pattern> <owner1> <owner2>
+# Patterns are matched in order; last match wins.
+
+# Global fallback
+*                                                   @dealix-platform-lead
+
+# Backend — general
+/salesflow-saas/backend/                            @dealix-backend-lead @dealix-platform-lead
+
+# AI and agent code — AI Lead must review
+/salesflow-saas/backend/app/ai/                     @dealix-ai-lead @dealix-backend-lead
+/salesflow-saas/backend/app/agents/                 @dealix-ai-lead @dealix-backend-lead
+
+# Connectors — Backend Lead + Security Lead
+/salesflow-saas/backend/app/connectors/             @dealix-backend-lead @dealix-security-lead
+
+# Security-critical core
+/salesflow-saas/backend/app/core/security.py        @dealix-security-lead @dealix-backend-lead
+/salesflow-saas/backend/app/core/telemetry.py       @dealix-platform-lead
+
+# Temporal workflows
+/salesflow-saas/backend/app/temporal/               @dealix-backend-lead @dealix-platform-lead
+
+# Frontend
+/salesflow-saas/frontend/                           @dealix-frontend-lead @dealix-platform-lead
+
+# Completion program — all plane docs
+/salesflow-saas/completion-program/                 @dealix-platform-lead
+/salesflow-saas/completion-program/trust-plane/     @dealix-security-lead @dealix-ai-lead
+/salesflow-saas/completion-program/decision-plane/schemas/  @dealix-ai-lead @dealix-backend-lead
+/salesflow-saas/completion-program/saudi-governance/        @dealix-security-lead @dealix-compliance-lead
+/salesflow-saas/completion-program/operating-plane/         @dealix-platform-lead
+
+# Legal and compliance docs
+/salesflow-saas/docs/legal/                         @dealix-compliance-lead
+/salesflow-saas/memory/security/                    @dealix-security-lead @dealix-compliance-lead
+
+# CI/CD and infrastructure
+/.github/                                           @dealix-platform-lead
+/salesflow-saas/.github/                            @dealix-platform-lead
+
+# Architecture and blueprints
+/salesflow-saas/MASTER-BLUEPRINT.mdc                @dealix-platform-lead @dealix-ai-lead
+/salesflow-saas/AGENTS.md                           @dealix-platform-lead @dealix-ai-lead

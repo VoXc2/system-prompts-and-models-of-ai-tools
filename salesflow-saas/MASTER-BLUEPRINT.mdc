@@ -44,6 +44,22 @@ Autonomous Revenue & Operations OS: a **Digital Full-Company Team** for B2B ente
 
 Arabic narrative + detail: `docs/ULTIMATE_EXECUTION_MASTER_AR.md`.
 
+## Completion Program
+
+> Active since 2026-04-16. Bridges docs to operational capability.
+
+Full 8-workstream execution plan: [`completion-program/EXECUTION_MATRIX_FINAL.md`](./completion-program/EXECUTION_MATRIX_FINAL.md)
+Current vs target architecture: [`completion-program/ARCHITECTURE_REGISTER.md`](./completion-program/ARCHITECTURE_REGISTER.md)
+
+**5 operational planes being hardened:**
+1. Decision Plane — structured outputs, evidence packs, HITL → `completion-program/decision-plane/`
+2. Execution Plane — Temporal durable workflows → `completion-program/execution-plane/`
+3. Trust Plane — OPA + OpenFGA + Vault + Keycloak → `completion-program/trust-plane/`
+4. Data Plane — connector facades + semantic metrics → `completion-program/data-plane/`
+5. Operating Plane — rulesets + OIDC + attestations + canary → `completion-program/operating-plane/`
+
+**Saudi governance:** PDPL + NCA ECC + NIST AI RMF + OWASP LLM → `completion-program/saudi-governance/`
+
 # Core Stack (non-negotiable)
 
 | Layer | Technology |

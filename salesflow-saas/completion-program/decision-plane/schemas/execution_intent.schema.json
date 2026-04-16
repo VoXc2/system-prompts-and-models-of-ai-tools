@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.ai/schemas/decision/execution_intent/v1",
+  "title": "ExecutionIntent",
+  "description": "Typed execution intent emitted by Executor-class agents after approval. Consumed by Temporal/Celery workers.",
+  "type": "object",
+  "required": [
+    "intent_id",
+    "approval_packet_id",
+    "tenant_id",
+    "track",
+    "action_type",
+    "target_system",
+    "payload",
+    "idempotency_key",
+    "data_residency",
+    "created_at"
+  ],
+  "properties": {
+    "intent_id": { "type": "string", "format": "uuid" },
+    "approval_packet_id": { "type": "string", "format": "uuid" },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "track": {
+      "type": "string",
+      "enum": ["prospecting", "qualification", "proposal", "negotiation", "closing", "post_sale"]
+    },
+    "action_type": {
+      "type": "string",
+      "description": "e.g. send_docusign, update_crm, send_whatsapp, trigger_billing"
+    },
+    "target_system": {
+      "type": "string",
+      "enum": ["hubspot", "docusign", "whatsapp", "email", "calendar", "billing", "postgres", "temporal"]
+    },
+    "payload": {
+      "type": "object",
+      "description": "System-specific payload — must match the target connector's input schema"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Stable, deterministic key to prevent duplicate execution. Format: {tenant_id}:{track}:{action_type}:{entity_id}:{date}"
+    },
+    "retry_policy": {
+      "type": "object",
+      "properties": {
+        "max_attempts": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "backoff_seconds": { "type": "integer", "minimum": 1 },
+        "non_retryable_errors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "compensation": {
+      "type": "object",
+      "description": "Compensation action to execute if this intent fails after partial execution",
+      "properties": {
+        "action_type": { "type": "string" },
+        "payload": { "type": "object" }
+      }
+    },
+    "data_residency": {
+      "type": "string",
+      "enum": ["KSA", "EU", "US", "GLOBAL"]
+    },
+    "workflow_id": {
+      "type": "string",
+      "description": "Temporal workflow ID if this intent is part of a durable workflow"
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "schema_version": { "type": "string", "const": "v1" }
+  }
+}

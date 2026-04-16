@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.ai/schemas/decision/evidence_pack/v1",
+  "title": "EvidencePack",
+  "description": "Structured evidence pack: every claim in a decision memo must trace to an evidence item here.",
+  "type": "object",
+  "required": ["pack_id", "memo_id", "tenant_id", "sources", "created_at"],
+  "properties": {
+    "pack_id": { "type": "string", "format": "uuid" },
+    "memo_id": { "type": "string", "format": "uuid" },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source_id", "source_type", "content_summary", "freshness_timestamp", "provenance_uri"],
+        "properties": {
+          "source_id": { "type": "string", "format": "uuid" },
+          "source_type": {
+            "type": "string",
+            "enum": ["crm_record", "kb_chunk", "web_search", "tool_result", "human_input", "document"]
+          },
+          "content_summary": { "type": "string", "minLength": 5 },
+          "freshness_timestamp": { "type": "string", "format": "date-time" },
+          "provenance_uri": {
+            "type": "string",
+            "description": "URI or ID pointing to the raw source (CRM record ID, KB chunk ID, URL, etc.)"
+          },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "aggregate_provenance_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "aggregate_freshness_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "aggregate_confidence_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "tool_calls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["tool_name", "intended_action", "claimed_action", "actual_execution", "side_effects", "contradiction_status"],
+            "properties": {
+              "tool_name": { "type": "string" },
+              "intended_action": { "type": "string" },
+              "claimed_action": { "type": "string" },
+              "actual_execution": { "type": "string" },
+              "side_effects": { "type": "array", "items": { "type": "string" } },
+              "contradiction_status": {
+                "type": "string",
+                "enum": ["none", "minor", "major", "critical"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "schema_version": { "type": "string", "const": "v1" }
+  }
+}

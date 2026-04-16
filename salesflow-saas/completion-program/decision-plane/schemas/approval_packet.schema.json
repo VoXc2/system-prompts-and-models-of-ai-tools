@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.ai/schemas/decision/approval_packet/v1",
+  "title": "ApprovalPacket",
+  "description": "Approval packet for HITL interrupts. Required for all Executor-class actions with approval_required=true.",
+  "type": "object",
+  "required": ["packet_id", "memo_id", "tenant_id", "requested_action", "requester", "approvers_required", "status", "created_at"],
+  "properties": {
+    "packet_id": { "type": "string", "format": "uuid" },
+    "memo_id": { "type": "string", "format": "uuid" },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "requested_action": {
+      "type": "object",
+      "required": ["action_type", "description", "reversibility", "sensitivity"],
+      "properties": {
+        "action_type": { "type": "string" },
+        "description": { "type": "string" },
+        "reversibility": { "type": "string", "enum": ["irreversible", "reversible", "compensatable"] },
+        "sensitivity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "affected_systems": { "type": "array", "items": { "type": "string" } },
+        "estimated_financial_impact_sar": { "type": "number" }
+      }
+    },
+    "requester": {
+      "type": "object",
+      "required": ["agent_id", "agent_role"],
+      "properties": {
+        "agent_id": { "type": "string" },
+        "agent_role": { "type": "string", "enum": ["Executor"] },
+        "workflow_id": { "type": "string", "description": "Temporal workflow ID if applicable" }
+      }
+    },
+    "approvers_required": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Minimum number of human approvals required"
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["approver_id", "decision", "timestamp"],
+        "properties": {
+          "approver_id": { "type": "string" },
+          "decision": { "type": "string", "enum": ["approved", "rejected", "deferred"] },
+          "comment": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected", "expired", "compensated"]
+    },
+    "expiry_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "If not approved by this time, status transitions to expired"
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "resolved_at": { "type": "string", "format": "date-time" },
+    "schema_version": { "type": "string", "const": "v1" }
+  }
+}
