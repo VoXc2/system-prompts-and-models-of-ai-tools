@@ -45,7 +45,7 @@ class EvidencePackService:
             assembled_by_id=assembled_by_id,
             status=EvidencePackStatus.READY,
             contents=pack_contents,
-            metadata_=metadata or {},
+            pack_metadata=metadata or {},
             hash_signature=hash_sig,
         )
         db.add(pack)

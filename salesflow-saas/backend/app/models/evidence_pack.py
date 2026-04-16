@@ -37,7 +37,7 @@ class EvidencePack(TenantModel):
     assembled_by_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     status = Column(Enum(EvidencePackStatus), nullable=False, default=EvidencePackStatus.ASSEMBLING)
     contents = Column(JSONB, default=list)  # list of evidence items
-    metadata_ = Column("metadata", JSONB, default=dict)
+    pack_metadata = Column(JSONB, default=dict)
     reviewed_by_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     reviewed_at = Column(DateTime(timezone=True), nullable=True)
     hash_signature = Column(String(64), nullable=True)  # SHA256 of contents
