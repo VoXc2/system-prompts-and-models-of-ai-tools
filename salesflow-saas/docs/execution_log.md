@@ -1,33 +1,74 @@
 # Execution Log — Dealix Tier-1 Blueprint
 
+## Phase 1 (complete)
+
 | Task | Date | Result |
 |------|------|--------|
-| TASK-999 | 2026-04-17 | State Audit written — `docs/internal/STATE_AUDIT.md` |
-| TASK-010 | 2026-04-17 | TRUTH.yaml (15 capabilities) + claims_registry.yaml (18 claims) |
-| TASK-001 (prep) | 2026-04-17 | Extraction script ready — `scripts/extract_dealix_repo.sh` |
-| TASK-003 (pyproject) | 2026-04-17 | `backend/pyproject.toml` with pinned deps for uv |
-| TASK-004 (pin) | 2026-04-17 | `frontend/package.json` pinned to pnpm@9.12.0 + Node >=20.10 |
-| TASK-005 (pre-commit) | 2026-04-17 | `.pre-commit-config.yaml` with gitleaks + detect-private-key + ruff |
-| TASK-005 (log) | 2026-04-17 | `docs/internal/rotation_log.md` created |
-| TASK-006 | 2026-04-17 | `docs/internal/legal_status.md` tracker |
-| TASK-010 (validator) | 2026-04-17 | `scripts/validate_truth_registry.py` + CI workflow |
-| TASK-101 (gate) | 2026-04-17 | `scripts/release_readiness_gate.py` — blueprint-spec |
-| Blueprint itself | 2026-04-17 | `DEALIX_EXECUTION_BLUEPRINT.md` saved |
+| TASK-999 | 2026-04-17 | State Audit — `docs/internal/STATE_AUDIT.md` |
+| TASK-010 | 2026-04-17 | TRUTH.yaml (19 capabilities) + claims_registry.yaml (18 claims) |
+| TASK-001 (prep) | 2026-04-17 | Extraction script — `scripts/extract_dealix_repo.sh` |
+| TASK-003 (pyproject) | 2026-04-17 | `backend/pyproject.toml` pinned for uv |
+| TASK-004 (pin) | 2026-04-17 | `frontend/package.json` pinned to pnpm@9.12.0 |
+| TASK-005 (pre-commit) | 2026-04-17 | `.pre-commit-config.yaml` + gitleaks scan (1 FP) |
+| TASK-005 (scan) | 2026-04-17 | Ran gitleaks on 146 commits — 1 false positive (model name) |
+| TASK-005 (ignore) | 2026-04-17 | `.gitleaksignore` created for false positive |
+| TASK-005 (rotation) | 2026-04-17 | `docs/internal/rotation_log.md` with scan results |
+| TASK-006 (tracker) | 2026-04-17 | `docs/internal/legal_status.md` |
+| TASK-006 (IP template) | 2026-04-17 | `docs/legal/templates/IP_ASSIGNMENT_AGREEMENT.md` |
+| TASK-006 (Privacy EN) | 2026-04-17 | `docs/legal/templates/PRIVACY_POLICY_EN.md` |
+| TASK-006 (Privacy AR) | 2026-04-17 | `docs/legal/templates/PRIVACY_POLICY_AR.md` |
+| TASK-006 (ToS EN) | 2026-04-17 | `docs/legal/templates/TERMS_OF_SERVICE_EN.md` |
+| TASK-006 (DPA EN) | 2026-04-17 | `docs/legal/templates/DPA_EN.md` |
+| TASK-006 (Trademark) | 2026-04-17 | `docs/legal/templates/TRADEMARK_FILING_KIT.md` |
+| TASK-010 (validator) | 2026-04-17 | `scripts/validate_truth_registry.py` + CI |
+| TASK-101 (gate) | 2026-04-17 | `scripts/release_readiness_gate.py` |
+| Blueprint v1 | 2026-04-17 | `DEALIX_EXECUTION_BLUEPRINT.md` |
+| Founder Package | 2026-04-17 | `FOUNDER_DECISION_PACKAGE.md` (4 decisions for founder) |
 
-## Gate Status (2026-04-17)
+## Phase 2 (foundation scaffolded)
+
+| Task | Date | Result |
+|------|------|--------|
+| Blueprint v2 | 2026-04-17 | `DEALIX_PHASE2_BLUEPRINT.md` |
+| TASK-F201 | 2026-04-17 | Design system tokens (primitive.json + semantic.json + README) |
+| TASK-CAT1340 (prep) | 2026-04-17 | `@dealix/arabic-ui` package (normalize, numerals, direction) |
+| TASK-CAT1310 | 2026-04-17 | Manifesto bilingual draft — `marketing/manifesto.md` |
+| TASK-CAT1320 | 2026-04-17 | Dealix Labs scaffolded — `docs/labs/README.md` |
+
+## Gate Status (2026-04-17 after Phase 2 foundation)
 
 | Gate | Score | Status |
 |------|-------|--------|
 | Architecture Brief | 40/40 | PASS |
-| Release Readiness Matrix | 53/53 | PASS |
+| Release Readiness Matrix | **71/71** | PASS (up from 53/53) |
 | Release Readiness Gate (blueprint) | 11/11 artifacts + 4/4 truth fields | PASS |
 | Truth Registry Validator | valid | PASS |
 | Frontend CI | 10 Playwright tests | PASS |
 | Backend CI | exit 4 (pre-existing dep drift) | KNOWN ISSUE |
 
-## Open Founder Decisions
+## Open Founder Decisions (unblocks full Phase 1 close)
 
-- TASK-001: GitHub org name + run extraction script
-- TASK-006: Entity structure (MISA vs DIFC vs ADGM)
-- TASK-006: Saudi counsel engagement for legal review
-- TASK-006: Trademark filing in KSA
+See `FOUNDER_DECISION_PACKAGE.md`:
+1. GitHub org name (5 min)
+2. Entity structure — MISA vs DIFC vs ADGM (2-4 weeks)
+3. Saudi legal counsel engagement (1 month, 15-30K SAR)
+4. Trademark filing in KSA + UAE + Egypt (1 week, 30-50K SAR)
+
+## Phase 2 External Dependencies (not yet started)
+
+These require external services/accounts:
+- TASK-E510 (SSO): WorkOS account
+- TASK-T1010 (ISO 27001): accredited cert body
+- TASK-T1020 (bug bounty): HackerOne/Intigriti
+- TASK-CP910 (docs): Mintlify account
+- TASK-CP930 (community): Discourse/Discord
+- TASK-CP950 (conference): venue booking
+- TASK-S710 (multi-region): AWS production account
+
+## Phase 2 Wait-For-PMF (start after paying customers)
+
+- P320: Workflow Builder
+- C840/C850: Partner / Referral programs  
+- AI410 (full scale): Multi-agent orchestrator
+- AI450: Voice interface
+- R1110: Country-by-country localization

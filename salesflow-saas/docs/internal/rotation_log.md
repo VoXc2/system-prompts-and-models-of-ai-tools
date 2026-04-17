@@ -18,9 +18,24 @@
 
 ## Active Rotations
 
+### 2026-04-17 — Initial full-history scan
+
+**Tool**: gitleaks v8.20.1
+**Scope**: 146 commits scanned
+**Findings**: 1
+
+| File | Line | Rule | Verdict | Action |
+|------|------|------|---------|--------|
+| `personal-brand-engine/tests/test_llm_client.py` | 14 | generic-api-key | **FALSE POSITIVE** — model name `llama-3.1-70b-versatile` | Added to `.gitleaksignore` |
+
+### Conclusion
+**No real secrets detected in git history.** Repository is clean for extraction to new org.
+
+## Future Rotations
+
 | Date | Secret Type | Location Found | Rotated By | Verified |
 |------|-------------|----------------|-----------|----------|
-| TBD  | (Run `gitleaks detect --source . --log-opts="--all"` to populate) | | | |
+| TBD  | — | — | — | — |
 
 ---
 

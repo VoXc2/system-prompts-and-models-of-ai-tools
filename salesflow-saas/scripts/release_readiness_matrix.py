@@ -79,6 +79,26 @@ CHECKS = {
     "extraction_script": ROOT / "scripts" / "extract_dealix_repo.sh",
     "pre_commit_config": ROOT / ".pre-commit-config.yaml",
     "backend_pyproject": ROOT / "backend" / "pyproject.toml",
+    # Phase 1 completion (legal templates, trademark kit, founder decision)
+    "ip_assignment_template": ROOT / "docs" / "legal" / "templates" / "IP_ASSIGNMENT_AGREEMENT.md",
+    "privacy_template_en": ROOT / "docs" / "legal" / "templates" / "PRIVACY_POLICY_EN.md",
+    "privacy_template_ar": ROOT / "docs" / "legal" / "templates" / "PRIVACY_POLICY_AR.md",
+    "tos_template_en": ROOT / "docs" / "legal" / "templates" / "TERMS_OF_SERVICE_EN.md",
+    "dpa_template_en": ROOT / "docs" / "legal" / "templates" / "DPA_EN.md",
+    "trademark_kit": ROOT / "docs" / "legal" / "templates" / "TRADEMARK_FILING_KIT.md",
+    "founder_decision_package": ROOT / "FOUNDER_DECISION_PACKAGE.md",
+    "gitleaks_ignore": ROOT / ".gitleaksignore",
+    # Phase 2 foundation
+    "phase2_blueprint": ROOT / "DEALIX_PHASE2_BLUEPRINT.md",
+    "design_system_readme": ROOT / "packages" / "design-system" / "README.md",
+    "design_system_primitive_tokens": ROOT / "packages" / "design-system" / "tokens" / "primitive.json",
+    "design_system_semantic_tokens": ROOT / "packages" / "design-system" / "tokens" / "semantic.json",
+    "arabic_ui_package": ROOT / "packages" / "arabic-ui" / "package.json",
+    "arabic_ui_normalize": ROOT / "packages" / "arabic-ui" / "src" / "normalize.ts",
+    "arabic_ui_numerals": ROOT / "packages" / "arabic-ui" / "src" / "numerals.ts",
+    "arabic_ui_direction": ROOT / "packages" / "arabic-ui" / "src" / "direction.ts",
+    "manifesto": ROOT / "marketing" / "manifesto.md",
+    "dealix_labs": ROOT / "docs" / "labs" / "README.md",
 }
 
 CONTENT_CHECKS = {

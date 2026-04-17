@@ -135,3 +135,29 @@ security_claims:
   soc2_type_ii: false
   pdpl_compliant: "in-progress"
   annual_pentest: false
+  iso_27001: false
+  iso_27017: false
+  iso_27018: false
+  bug_bounty_program: false
+
+phase_2_capabilities:
+  - id: design_system
+    name: "Dealix Design System"
+    status: partial
+    evidence_path: "packages/design-system/tokens/"
+    public_claim_allowed: false
+  - id: arabic_ui_package
+    name: "@dealix/arabic-ui utilities"
+    status: partial
+    evidence_path: "packages/arabic-ui/src/"
+    public_claim_allowed: false
+  - id: manifesto
+    name: "Dealix Manifesto (bilingual)"
+    status: partial
+    evidence_path: "marketing/manifesto.md"
+    public_claim_allowed: false
+  - id: dealix_labs
+    name: "Dealix Labs (research program)"
+    status: roadmap
+    evidence_path: "docs/labs/README.md"
+    public_claim_allowed: false

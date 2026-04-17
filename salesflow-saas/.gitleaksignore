@@ -1,0 +1,7 @@
+# Gitleaks ignore file — false positives only
+# Format: fingerprint or path:line
+# Last verified: 2026-04-17
+
+# False positive: model name "llama-3.1-70b-versatile" matches generic-api-key regex
+# This is a Groq model identifier, not an API key
+personal-brand-engine/tests/test_llm_client.py

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "light": {
+    "surface": {
+      "default":  { "$value": "{color.neutral.50}",  "$type": "color" },
+      "elevated": { "$value": "#ffffff",              "$type": "color" },
+      "sunken":   { "$value": "{color.neutral.100}", "$type": "color" }
+    },
+    "fg": {
+      "primary":   { "$value": "{color.neutral.900}", "$type": "color" },
+      "secondary": { "$value": "{color.neutral.600}", "$type": "color" },
+      "muted":     { "$value": "{color.neutral.500}", "$type": "color" },
+      "inverse":   { "$value": "#ffffff",              "$type": "color" }
+    },
+    "border": {
+      "default": { "$value": "{color.neutral.200}", "$type": "color" },
+      "subtle":  { "$value": "{color.neutral.100}", "$type": "color" },
+      "strong":  { "$value": "{color.neutral.300}", "$type": "color" }
+    },
+    "interactive": {
+      "primary":        { "$value": "{color.brand.600}", "$type": "color" },
+      "primary-hover":  { "$value": "{color.brand.700}", "$type": "color" },
+      "primary-active": { "$value": "{color.brand.800}", "$type": "color" }
+    },
+    "status": {
+      "critical": { "$value": "{color.critical.500}", "$type": "color" },
+      "warning":  { "$value": "{color.warning.500}",  "$type": "color" },
+      "success":  { "$value": "{color.success.500}",  "$type": "color" },
+      "info":     { "$value": "{color.info.500}",     "$type": "color" }
+    }
+  },
+  "dark": {
+    "surface": {
+      "default":  { "$value": "{color.neutral.950}", "$type": "color" },
+      "elevated": { "$value": "{color.neutral.900}", "$type": "color" },
+      "sunken":   { "$value": "#000000",              "$type": "color" }
+    },
+    "fg": {
+      "primary":   { "$value": "{color.neutral.50}",  "$type": "color" },
+      "secondary": { "$value": "{color.neutral.400}", "$type": "color" },
+      "muted":     { "$value": "{color.neutral.500}", "$type": "color" },
+      "inverse":   { "$value": "{color.neutral.900}", "$type": "color" }
+    },
+    "border": {
+      "default": { "$value": "{color.neutral.800}", "$type": "color" },
+      "subtle":  { "$value": "{color.neutral.900}", "$type": "color" },
+      "strong":  { "$value": "{color.neutral.700}", "$type": "color" }
+    }
+  }
+}
