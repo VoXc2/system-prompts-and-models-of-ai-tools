@@ -1,110 +1,110 @@
 <p align="center">
-  Support my work here: 
-  <a href="https://bags.fm/DEffWzJyaFRNyA4ogUox631hfHuv3KLeCcpBh2ipBAGS">Bags.fm</a> •
-  <a href="https://jup.ag/tokens/DEffWzJyaFRNyA4ogUox631hfHuv3KLeCcpBh2ipBAGS">Jupiter</a> •
-  <a href="https://photon-sol.tinyastro.io/en/lp/Qa5ZCCwrWoPYckNXXMCAhCsw8gafgYFAu1Qes3Grgv5?handle=">Photon</a> •
-  <a href="https://dexscreener.com/solana/qa5zccwrwopycknxxmcahcsw8gafgyfau1qes3grgv5">DEXScreener</a>
+  <img src="assets/leakslab-banner.png" alt="LeaksLab" width="100%" style="max-width:900px"/>
 </p>
 
-<p align="center">Official CA: DEffWzJyaFRNyA4ogUox631hfHuv3KLeCcpBh2ipBAGS (on Solana)</p>
+<h1 align="center">⟨LeaksLab⟩ — AI System Prompt Library</h1>
 
----
 <p align="center">
-  <sub>Special thanks to</sub>  
+  <strong>The most complete collection of AI tool system prompts, internal tool schemas, and model architectures.</strong><br/>
+  Reverse-engineered. Documented. Open.
 </p>
 
-<table width="100%">
-  <tr>
-    <td align="center" valign="top">
-      <a href="https://www.tembo.io/?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship#gh-light-mode-only" target="_blank">
-        <img src="assets/tembo-dark.png#gh-light-mode-only" alt="Tembo Logo" width="750" height="210"/>
-      </a>
-      <a href="https://www.tembo.io/?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship#gh-dark-mode-only" target="_blank">
-        <img src="assets/tembo-light.png#gh-dark-mode-only" alt="Tembo Logo" width="750" height="210"/>
-      </a>
-      <br><br>
-      <strong><a href="https://www.tembo.io/?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship" target="_blank">Put any coding agent to work while you sleep</a></strong>
-      <br>
-      <a href="https://www.tembo.io/?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship" target="_blank">Tembo – The Background Coding Agents Company</a>
-      <br><br>
-      <a href="https://www.tembo.io/?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship" target="_blank">[Get started for free]</a>
-    </td>
-    <td align="center" valign="top">
-      <a href="https://latitude.so/developers?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship" target="_blank">
-        <img src="assets/Latitude_logo.png" alt="Latitude Logo" width="750" height="210"/>
-      </a>
-      <br><br>
-      <strong><a href="https://latitude.so/developers?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship" target="_blank">Make your LLM predictable in production</a></strong>
-      <br>
-      <a href="https://latitude.so/developers?utm_source=github&utm_medium=readme&utm_campaign=prompt_repo_sponsorship" target="_blank">Open Source AI Engineering Platform</a>
-      <br><br>
-      &nbsp;
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <a href="https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/stargazers">
+    <img src="https://img.shields.io/github/stars/VoXc2/system-prompts-and-models-of-ai-tools?style=for-the-badge&color=00d4ff" alt="Stars"/>
+  </a>
+  <a href="https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/blob/main/CONTRIBUTING.md">
+    <img src="https://img.shields.io/badge/contributions-welcome-00d4ff?style=for-the-badge" alt="Contributions Welcome"/>
+  </a>
+  <a href="https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/blob/main/LICENSE.md">
+    <img src="https://img.shields.io/badge/license-MIT-00d4ff?style=for-the-badge" alt="License"/>
+  </a>
+  <img src="https://img.shields.io/badge/tools-40%2B-00d4ff?style=for-the-badge" alt="40+ Tools"/>
+  <img src="https://img.shields.io/badge/lines-35%2C000%2B-00d4ff?style=for-the-badge" alt="35,000+ Lines"/>
+</p>
+
+<p align="center">
+  <a href="#tools-index">Browse Library</a> ·
+  <a href="CONTRIBUTING.md">Contribute</a> ·
+  <a href="https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/discussions">Discussions</a> ·
+  <a href="https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/issues">Report Issue</a>
+</p>
 
 ---
 
-<a href="https://discord.gg/NwzrWErdMU" target="_blank">
-  <img src="https://img.shields.io/discord/1402660735833604126?label=LeaksLab%20Discord&logo=discord&style=for-the-badge" alt="LeaksLab Discord" />
-</a>
+## What is This?
 
+LeaksLab is a curated, growing library of **system prompts, internal tool schemas, and model configurations** from the most popular AI coding assistants and agents.
 
-<a href="https://trendshift.io/repositories/14084" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14084" alt="x1xhlol%2Fsystem-prompts-and-models-of-ai-tools | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+Every file in this repo is either:
+- **Leaked/extracted** from production AI tools (Cursor, Windsurf, Devin, etc.)
+- **Reverse-engineered** through careful analysis of tool behavior
+- **Open source** prompts from public repositories, organized for easy reference
 
-📜 Over **35,000+ lines** of insights into their structure and functionality.
-
-
-[![Build Status](https://app.cloudback.it/badge/x1xhlol/system-prompts-and-models-of-ai-tools)](https://cloudback.it)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/x1xhlol/system-prompts-and-models-of-ai-tools)
+**Why does this matter?** Because understanding how the best AI tools are built helps you:
+- Build better prompts for your own agents
+- Extract reusable architectural patterns
+- Stay ahead of how AI tooling is evolving
 
 ---
 
-## 📋 Tools Index
+## Stats at a Glance
+
+| Metric | Count |
+|--------|-------|
+| AI Tools Covered | 40+ |
+| Total Lines | 35,000+ |
+| Tools with Full Schemas | 15+ |
+| Open Source Prompts | 10+ |
+| Last Updated | April 2026 |
+
+---
+
+## Tools Index
 
 ### Closed Source / Leaked Prompts
 
-| Tool | Prompt | Tools | Directory |
-|------|--------|-------|-----------|
-| Amazon Q Developer | ✅ | — | `Amazon Q Developer/` |
-| Amp | ✅ | — | `Amp/` |
-| Augment Code | ✅ | ✅ | `Augment Code/` |
-| Claude Code | ✅ | ✅ | `Anthropic/Claude Code/` |
-| Claude for Chrome | ✅ | ✅ | `Anthropic/Claude for Chrome/` |
-| ChatGPT (GPT-4o) | ✅ | ✅ | `OpenAI/ChatGPT/` |
-| Cluely | ✅ | — | `Cluely/` |
-| CodeBuddy | ✅ | — | `CodeBuddy Prompts/` |
-| Comet Assistant | ✅ | ✅ | `Comet Assistant/` |
-| Cursor | ✅ | ✅ | `Cursor Prompts/` |
-| Devin AI | ✅ | — | `Devin AI/` |
-| Dia | ✅ | — | `dia/` |
-| Emergent | ✅ | ✅ | `Emergent/` |
-| GitHub Copilot | ✅ | — | `GitHub Copilot/` |
-| Google Antigravity | ✅ | — | `Google/Antigravity/` |
-| Google Gemini (AI Studio) | ✅ | — | `Google/Gemini/` |
-| Grok | ✅ | — | `xAI/Grok/` |
-| JetBrains AI Assistant | ✅ | — | `JetBrains AI/` |
-| Junie | ✅ | — | `Junie/` |
-| Kiro | ✅ | — | `Kiro/` |
-| Leap.new | ✅ | ✅ | `Leap.new/` |
-| Lovable | ✅ | ✅ | `Lovable/` |
-| Manus Agent | ✅ | ✅ | `Manus Agent Tools & Prompt/` |
-| Mistral Le Chat | ✅ | — | `Mistral/Le Chat/` |
-| NotionAI | ✅ | ✅ | `NotionAi/` |
-| Orchids.app | ✅ | — | `Orchids.app/` |
-| Perplexity | ✅ | — | `Perplexity/` |
-| Poke | ✅ | — | `Poke/` |
-| Qoder | ✅ | — | `Qoder/` |
-| Replit | ✅ | ✅ | `Replit/` |
-| Same.dev | ✅ | ✅ | `Same.dev/` |
-| Trae | ✅ | ✅ | `Trae/` |
-| Traycer AI | ✅ | ✅ | `Traycer AI/` |
-| v0 | ✅ | ✅ | `v0 Prompts and Tools/` |
-| VSCode Agent | ✅ | — | `VSCode Agent/` |
-| Warp.dev | ✅ | — | `Warp.dev/` |
-| Windsurf | ✅ | ✅ | `Windsurf/` |
-| Xcode | ✅ | — | `Xcode/` |
-| Z.ai Code | ✅ | — | `Z.ai Code/` |
+| Tool | Prompt | Tool Schema | Category | Directory |
+|------|--------|-------------|----------|-----------|
+| Amazon Q Developer | ✅ | — | Coding Agent | `Amazon Q Developer/` |
+| Amp | ✅ | — | Coding Agent | `Amp/` |
+| Augment Code | ✅ | ✅ | Coding Agent | `Augment Code/` |
+| Claude Code | ✅ | ✅ | Coding Agent | `Anthropic/Claude Code/` |
+| Claude for Chrome | ✅ | ✅ | Browser AI | `Anthropic/Claude for Chrome/` |
+| ChatGPT (GPT-4o) | ✅ | ✅ | General AI | `OpenAI/ChatGPT/` |
+| Cluely | ✅ | — | Interview AI | `Cluely/` |
+| CodeBuddy | ✅ | — | Coding Agent | `CodeBuddy Prompts/` |
+| Comet Assistant | ✅ | ✅ | Coding Agent | `Comet Assistant/` |
+| Cursor | ✅ | ✅ | Coding Agent | `Cursor Prompts/` |
+| Devin AI | ✅ | — | Autonomous Agent | `Devin AI/` |
+| Dia | ✅ | — | Browser AI | `dia/` |
+| Emergent | ✅ | ✅ | App Builder | `Emergent/` |
+| GitHub Copilot | ✅ | — | Coding Agent | `GitHub Copilot/` |
+| Google Antigravity | ✅ | — | General AI | `Google/Antigravity/` |
+| Google Gemini (AI Studio) | ✅ | — | General AI | `Google/Gemini/` |
+| Grok | ✅ | — | General AI | `xAI/Grok/` |
+| JetBrains AI Assistant | ✅ | — | Coding Agent | `JetBrains AI/` |
+| Junie | ✅ | — | Coding Agent | `Junie/` |
+| Kiro | ✅ | — | Coding Agent | `Kiro/` |
+| Leap.new | ✅ | ✅ | App Builder | `Leap.new/` |
+| Lovable | ✅ | ✅ | App Builder | `Lovable/` |
+| Manus Agent | ✅ | ✅ | Autonomous Agent | `Manus Agent Tools & Prompt/` |
+| Mistral Le Chat | ✅ | — | General AI | `Mistral/Le Chat/` |
+| NotionAI | ✅ | ✅ | Productivity AI | `NotionAi/` |
+| Orchids.app | ✅ | — | App Builder | `Orchids.app/` |
+| Perplexity | ✅ | — | Search AI | `Perplexity/` |
+| Poke | ✅ | — | Coding Agent | `Poke/` |
+| Qoder | ✅ | — | Coding Agent | `Qoder/` |
+| Replit | ✅ | ✅ | Coding Agent | `Replit/` |
+| Same.dev | ✅ | ✅ | App Builder | `Same.dev/` |
+| Trae | ✅ | ✅ | Coding Agent | `Trae/` |
+| Traycer AI | ✅ | ✅ | Coding Agent | `Traycer AI/` |
+| v0 by Vercel | ✅ | ✅ | UI Generator | `v0 Prompts and Tools/` |
+| VSCode Agent | ✅ | — | Coding Agent | `VSCode Agent/` |
+| Warp.dev | ✅ | — | Terminal AI | `Warp.dev/` |
+| Windsurf | ✅ | ✅ | Coding Agent | `Windsurf/` |
+| Xcode | ✅ | — | Coding Agent | `Xcode/` |
+| Z.ai Code | ✅ | — | Coding Agent | `Z.ai Code/` |
 
 ### Open Source Prompts
 
@@ -123,64 +123,82 @@
 
 ---
 
-## ❤️ Support the Project
+## Highlighted Findings
 
-If you find this collection valuable and appreciate the effort involved in obtaining and sharing these insights, please consider supporting the project.
+A few things that stand out after analyzing 40+ system prompts:
 
-You can show your support via:
+**Cursor** has one of the most sophisticated tool schemas — 8 specialized tools including `codebase_search`, `edit_file`, `run_terminal_cmd`, and `web_search`, each with detailed parameter schemas and behavioral constraints.
 
-- **Cryptocurrency:**  
-  - **BTC:** `bc1q7zldmzjwspnaa48udvelwe6k3fef7xrrhg5625`  
-  - **LTC:** `LRWgqwEYDwqau1WeiTs6Mjg85NJ7m3fsdQ`  
-  - **ETH:** `0x3f844B2cc3c4b7242964373fB0A41C4fdffB192A`
-- **Patreon:** https://patreon.com/lucknite
-- **Ko-fi:** https://ko-fi.com/lucknite
+**Manus Agent** uses a 15-tool orchestration system with explicit memory management, browser control, and file system access — the clearest example of a "fully autonomous" agent architecture.
 
-🙏 Thank you for your support!
+**v0 by Vercel** is hyper-specialized: the prompt enforces strict React/Tailwind/shadcn component patterns and has explicit rules about what NOT to generate — revealing Vercel's product design philosophy directly.
+
+**Devin AI's** prompt reveals how it handles task decomposition, context management, and failure recovery — patterns you can directly apply to your own agent builds.
 
 ---
 
-# Sponsors
+## How to Use This Library
 
-Sponsor the most comprehensive repository of AI system prompts and reach thousands of developers.
-
-[Get Started](mailto:lucknitelol@proton.me)
-
----
-
-## 🛠 Roadmap & Feedback
-
-> Open an issue.
-
-> **Latest Update:** 03/30/2026
+1. **Browse by tool**: Navigate to any tool's directory and open the prompt/schema files
+2. **Search patterns**: Use GitHub's code search to find specific instructions or patterns across tools
+3. **Compare tools**: Look at how different tools handle the same problem (e.g., file editing, error recovery)
+4. **Extract patterns**: Copy architectural patterns into your own system prompts
 
 ---
 
-## 🔗 Connect With Me
+## Contributing
 
-- **X:** [NotLucknite](https://x.com/NotLucknite)
-- **Discord**: `x1xhlol`
-- **Email**: `lucknitelol@pm.me`
+Found a new prompt? Updated version? Missing tool?
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
+
+**Quick steps:**
+1. Fork this repo
+2. Add your file to the correct directory (or create a new one)
+3. Update the Tools Index in README.md
+4. Open a Pull Request with a clear description
+
+All contributions are credited in the commit history.
 
 ---
 
-## 🛡️ Security Notice for AI Startups
+## Discussions
 
-> ⚠️ **Warning:** If you're an AI startup, make sure your data is secure. Exposed prompts or AI models can easily become a target for hackers.
-
-> 🔐 **Important:** Interested in securing your AI systems?  
-> Check out **[ZeroLeaks](https://zeroleaks.ai/)**, a service designed to help startups **identify and secure** leaks in system instructions, internal tools, and model configurations. **Get a free AI security audit** to ensure your AI is protected from vulnerabilities.
+- **[Request a Tool](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/discussions)** — Which AI tool do you want analyzed next?
+- **[Share Findings](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/discussions)** — Interesting patterns you've noticed?
+- **[Use Cases](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/discussions)** — How are you using prompts from this library?
 
 ---
 
-## 📊 Star History
+## Star History
 
-<a href="https://www.star-history.com/#x1xhlol/system-prompts-and-models-of-ai-tools&Date">
+<a href="https://www.star-history.com/#VoXc2/system-prompts-and-models-of-ai-tools&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=x1xhlol/system-prompts-and-models-of-ai-tools&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=x1xhlol/system-prompts-and-models-of-ai-tools&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=x1xhlol/system-prompts-and-models-of-ai-tools&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=VoXc2/system-prompts-and-models-of-ai-tools&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=VoXc2/system-prompts-and-models-of-ai-tools&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=VoXc2/system-prompts-and-models-of-ai-tools&type=Date" />
   </picture>
 </a>
 
-⭐ **Drop a star if you find this useful!**
+⭐ **Star this repo to stay updated as new tools are added.**
+
+---
+
+## License
+
+This repository is licensed under the [MIT License](LICENSE.md).
+
+> **Note on content**: Prompts and system instructions collected here may be subject to the original tools' terms of service. This library is maintained for educational and research purposes. No proprietary code or models are included — only text-based prompt instructions.
+
+---
+
+## Connect
+
+- **GitHub Discussions**: [Join the conversation](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/discussions)
+- **Issues**: [Report problems or request tools](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/issues)
+
+---
+
+<p align="center">
+  <sub>LeaksLab — Built for engineers who want to understand how AI tools actually work.</sub>
+</p>
