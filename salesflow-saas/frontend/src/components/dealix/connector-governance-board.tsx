@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type Connector = {
   connector_key: string; display_name: string; display_name_ar: string;
   status: string; last_success_at: string | null; last_error: string | null; registered: boolean;
@@ -13,7 +15,20 @@ const STATUS_STYLES: Record<string, { bg: string; text: string; label: string; l
   not_configured: { bg: "bg-gray-500/10", text: "text-gray-400", label: "Not Configured", labelAr: "غير مهيأ" },
 };
 
-export function ConnectorGovernanceBoard({ connectors = [] }: { connectors?: Connector[] }) {
+export function ConnectorGovernanceBoard({ connectors: initialConnectors }: { connectors?: Connector[] }) {
+  const [connectors, setConnectors] = useState<Connector[]>(initialConnectors || []);
+
+  useEffect(() => {
+    if (initialConnectors) return;
+    const fetchConnectors = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/connectors/governance`);
+        if (res.ok) { const data = await res.json(); setConnectors(data.connectors || []); }
+      } catch { /* silent */ }
+    };
+    fetchConnectors();
+  }, [initialConnectors]);
   return (
     <div className="space-y-4 p-6" dir="rtl">
       <h2 className="text-xl font-bold text-right">لوحة حوكمة الموصلات | Connector Governance Board</h2>

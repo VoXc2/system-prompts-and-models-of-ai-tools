@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type ComplianceControl = {
   control_id: string; control_name: string; control_name_ar: string;
   category: string; status: string; risk_level: string;
@@ -28,7 +30,20 @@ const RISK_COLORS: Record<string, string> = {
   low: "border-r-emerald-500",
 };
 
-export function SaudiComplianceDashboard({ controls = [] }: { controls?: ComplianceControl[] }) {
+export function SaudiComplianceDashboard({ controls: initialControls }: { controls?: ComplianceControl[] }) {
+  const [controls, setControls] = useState<ComplianceControl[]>(initialControls || []);
+
+  useEffect(() => {
+    if (initialControls) return;
+    const fetchControls = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/compliance/matrix/`);
+        if (res.ok) { const data = await res.json(); setControls(data.controls || []); }
+      } catch { /* silent */ }
+    };
+    fetchControls();
+  }, [initialControls]);
   const grouped: Record<string, ComplianceControl[]> = {};
   controls.forEach((c) => {
     if (!grouped[c.category]) grouped[c.category] = [];

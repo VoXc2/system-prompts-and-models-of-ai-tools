@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Approval = {
   id: string; channel: string; resource_type: string;
@@ -24,8 +24,25 @@ const PRIORITY_COLORS: Record<string, string> = {
   low: "bg-gray-500/20 text-gray-400",
 };
 
-export function ApprovalCenter({ approvals = [] }: { approvals?: Approval[] }) {
+export function ApprovalCenter({ approvals: initialApprovals }: { approvals?: Approval[] }) {
+  const [approvals, setApprovals] = useState<Approval[]>(initialApprovals || []);
   const [filter, setFilter] = useState<string>("all");
+  const [loading, setLoading] = useState(!initialApprovals);
+
+  useEffect(() => {
+    if (initialApprovals) return;
+    const fetchApprovals = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/approval-center/`);
+        if (res.ok) { const data = await res.json(); setApprovals(data.approvals || []); }
+      } catch { /* silent */ }
+      setLoading(false);
+    };
+    fetchApprovals();
+    const interval = setInterval(fetchApprovals, 15000);
+    return () => clearInterval(interval);
+  }, [initialApprovals]);
 
   const filtered = filter === "all" ? approvals : approvals.filter((a) => a.category === filter);
   const categories = ["all", ...new Set(approvals.map((a) => a.category))];
