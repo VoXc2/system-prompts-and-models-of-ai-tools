@@ -30,6 +30,8 @@ from app.models.api_key import APIKey, AppSetting
 from app.models.contradiction import Contradiction
 from app.models.evidence_pack import EvidencePack
 from app.models.compliance_control import ComplianceControl
+from app.models.idempotency_key import IdempotencyKey
+from app.models.durable_checkpoint import DurableCheckpoint
 
 __all__ = [
     "BaseModel", "TenantModel", "Tenant", "User", "Lead", "Customer",
@@ -46,4 +48,5 @@ __all__ = [
     "Sequence", "SequenceStep", "SequenceEnrollment", "SequenceEvent",
     "CompanyProfile", "StrategicDeal", "DealMatch",
     "Contradiction", "EvidencePack", "ComplianceControl",
+    "IdempotencyKey", "DurableCheckpoint",
 ]

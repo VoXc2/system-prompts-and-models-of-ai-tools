@@ -33,6 +33,7 @@ CHECKS = {
     "current_vs_target": ROOT / "docs" / "current-vs-target-register.md",
     "closure_checklist": ROOT / "docs" / "tier1-master-closure-checklist.md",
     "endpoint_inventory": ROOT / "docs" / "governance" / "endpoint-inventory.md",
+    "release_gates_doc": ROOT / "docs" / "governance" / "release-gates.md",
     "golden_path_service": ROOT / "backend" / "app" / "services" / "golden_path.py",
     "golden_path_api": ROOT / "backend" / "app" / "api" / "v1" / "golden_path.py",
     "saudi_workflow_service": ROOT / "backend" / "app" / "services" / "saudi_sensitive_workflow.py",
@@ -51,6 +52,20 @@ CHECKS = {
     "one_pager": ROOT / "revenue-activation" / "sales-pack" / "ONE_PAGER.md",
     "admin_guide": ROOT / "revenue-activation" / "deployment" / "ADMIN_SETUP_GUIDE.md",
     "exec_quickstart": ROOT / "revenue-activation" / "deployment" / "EXECUTIVE_QUICKSTART.md",
+    # Program E — Durable Execution
+    "durable_checkpoint_model": ROOT / "backend" / "app" / "models" / "durable_checkpoint.py",
+    "durable_runtime_service": ROOT / "backend" / "app" / "services" / "durable_runtime.py",
+    # Program F — RLS
+    "rls_migration": ROOT / "backend" / "alembic" / "versions" / "20260417_0002_add_rls.py",
+    "rls_helpers": ROOT / "backend" / "app" / "database_rls.py",
+    "rls_middleware": ROOT / "backend" / "app" / "middleware" / "tenant_rls.py",
+    # Program G — Idempotency
+    "idempotency_model": ROOT / "backend" / "app" / "models" / "idempotency_key.py",
+    "idempotency_service": ROOT / "backend" / "app" / "services" / "idempotency_service.py",
+    "idempotency_middleware": ROOT / "backend" / "app" / "middleware" / "idempotency.py",
+    # Program K — OTel
+    "otel_module": ROOT / "backend" / "app" / "observability" / "otel.py",
+    "otel_init": ROOT / "backend" / "app" / "observability" / "__init__.py",
 }
 
 CONTENT_CHECKS = {
@@ -65,6 +80,22 @@ CONTENT_CHECKS = {
     "auto_evidence_on_close": {
         "file": ROOT / "backend" / "app" / "api" / "v1" / "deals.py",
         "pattern": "on_deal_closed",
+    },
+    "rls_policies_defined": {
+        "file": ROOT / "backend" / "alembic" / "versions" / "20260417_0002_add_rls.py",
+        "pattern": "tenant_isolation_select",
+    },
+    "idempotency_middleware_active": {
+        "file": ROOT / "backend" / "app" / "middleware" / "idempotency.py",
+        "pattern": "Idempotency-Key",
+    },
+    "durable_checkpointer_persisted": {
+        "file": ROOT / "backend" / "app" / "services" / "durable_runtime.py",
+        "pattern": "DurableCheckpoint",
+    },
+    "otel_correlation_bridge": {
+        "file": ROOT / "backend" / "app" / "openclaw" / "gateway.py",
+        "pattern": "inject_correlation_id",
     },
 }
 

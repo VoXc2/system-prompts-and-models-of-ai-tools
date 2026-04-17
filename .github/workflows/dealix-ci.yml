@@ -28,6 +28,9 @@ jobs:
       - name: Architecture Brief (governance validation)
         working-directory: salesflow-saas
         run: python scripts/architecture_brief.py
+      - name: Release Readiness Matrix (Tier-1 gate)
+        working-directory: salesflow-saas
+        run: python scripts/release_readiness_matrix.py
       - name: Pytest (full suite + launch scenarios)
         env:
           DATABASE_URL: sqlite+aiosqlite:///./ci_dealix.db
