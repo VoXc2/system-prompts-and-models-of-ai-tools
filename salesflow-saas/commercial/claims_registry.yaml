@@ -1,0 +1,109 @@
+# claims_registry.yaml — Dealix Commercial Claims Registry
+# Rule: No marketing material may state a capability unless it exists here with status=approved.
+# Last updated: 2026-04-17
+
+claims:
+  # ── APPROVED (backed by runtime evidence) ──────────────
+  - id: golden_path_works
+    claim_en: "End-to-end partner workflow with structured outputs, approval enforcement, and evidence packs"
+    claim_ar: "مسار شراكة كامل من البداية للنهاية مع مخرجات مهيكلة وموافقات إلزامية وحزم أدلة"
+    status: approved
+    evidence: "POST /api/v1/golden-path/run — creates dossier, economics, approval, evidence"
+    disclaimer_required: false
+
+  - id: evidence_packs_sha256
+    claim_en: "Tamper-evident evidence packs with SHA256 hash verification"
+    claim_ar: "حزم أدلة مقاومة للتلاعب مع تحقق SHA256"
+    status: approved
+    evidence: "backend/app/services/evidence_pack_service.py — hash computed and stored"
+
+  - id: executive_room_live
+    claim_en: "Real-time Executive Room aggregating live data from 7 sources"
+    claim_ar: "غرفة قيادة تنفيذية لحظية تجمع بيانات من 7 مصادر"
+    status: approved
+    evidence: "GET /api/v1/executive-room/snapshot — queries Deal, Approval, Connector, Compliance, Contradiction, StrategicDeal, EvidencePack tables"
+
+  - id: approval_sla
+    claim_en: "Approval Center with SLA tracking and escalation"
+    claim_ar: "مركز موافقات مع تتبع SLA وتصعيد"
+    status: approved
+    evidence: "sla_escalation_alerts.py — escalation levels 0-3"
+
+  - id: arabic_first
+    claim_en: "Arabic-first UI with full RTL support"
+    claim_ar: "واجهة عربية أولاً مع دعم RTL كامل"
+    status: approved
+    evidence: "9 frontend components with Arabic labels, RTL layout, i18n"
+
+  - id: pdpl_consent_checks
+    claim_en: "PDPL consent verification before outbound messaging"
+    claim_ar: "التحقق من موافقة PDPL قبل الرسائل الصادرة"
+    status: approved
+    evidence: "services/pdpl/consent_manager.py — check before send"
+
+  - id: trust_enforcement
+    claim_en: "Class B actions blocked without correlation_id traceability"
+    claim_ar: "الإجراءات الحساسة محظورة بدون معرف تتبع"
+    status: approved
+    evidence: "openclaw/approval_bridge.py — missing_correlation_id check"
+
+  - id: seventeen_schemas
+    claim_en: "17 structured output schemas with Provenance (trace_id, confidence, freshness)"
+    claim_ar: "17 مخطط مخرج مهيكل مع بيانات المصدر والثقة"
+    status: approved
+    evidence: "schemas/structured_outputs.py + services/structured_output_producers.py"
+
+  # ── RESTRICTED (partially true, needs qualifier) ──────
+  - id: rls_isolation
+    claim_en: "Database-level tenant isolation via PostgreSQL RLS"
+    claim_ar: "عزل المستأجرين على مستوى قاعدة البيانات عبر RLS"
+    status: restricted
+    qualifier: "Migration exists; production deployment pending. Say 'RLS-ready architecture' not 'RLS-enforced'."
+    evidence: "alembic/versions/20260417_0002_add_rls.py"
+
+  - id: durable_execution
+    claim_en: "Crash-safe durable workflows with persistent checkpoints"
+    claim_ar: "تنفيذ متين مع نقاط حفظ دائمة"
+    status: restricted
+    qualifier: "Checkpointer exists; not yet integrated into golden path. Say 'durable execution architecture' not 'crash-proof workflows'."
+
+  # ── FORBIDDEN (never claim) ────────────────────────────
+  - id: soc2_compliant
+    claim_en: "SOC 2 Type II compliant"
+    status: forbidden
+    reason: "No auditor report. Can only say 'SOC 2 readiness in progress'."
+
+  - id: ai_perfect
+    claim_en: "100% AI accuracy"
+    status: forbidden
+    reason: "No ML system achieves 100% accuracy."
+
+  - id: better_than_salesforce
+    claim_en: "Better than Salesforce"
+    status: forbidden
+    reason: "Different positioning, not direct comparison. Say 'complementary' or 'specialized for GCC'."
+
+  - id: temporal_production
+    claim_en: "Temporal in production"
+    status: forbidden
+    reason: "Temporal is Watch tier. No code exists."
+
+  - id: opa_production
+    claim_en: "OPA policy engine in production"
+    status: forbidden
+    reason: "OPA is Watch tier. No code exists."
+
+  - id: full_autonomy
+    claim_en: "Fully autonomous AI decisions"
+    status: forbidden
+    reason: "HITL is mandatory for Class B actions. Never claim full autonomy."
+
+  - id: enterprise_grade
+    claim_en: "Enterprise-grade"
+    status: forbidden
+    reason: "No SOC 2, no pentest, no production deployment yet. Too early."
+
+  - id: ten_x_revenue
+    claim_en: "10x revenue increase"
+    status: forbidden
+    reason: "No customer data supports this claim."
