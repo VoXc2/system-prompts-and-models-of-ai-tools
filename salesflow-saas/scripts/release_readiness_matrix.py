@@ -66,6 +66,19 @@ CHECKS = {
     # Program K — OTel
     "otel_module": ROOT / "backend" / "app" / "observability" / "otel.py",
     "otel_init": ROOT / "backend" / "app" / "observability" / "__init__.py",
+    # Blueprint execution (TASK-010, 101, 999)
+    "truth_registry": ROOT / "docs" / "registry" / "TRUTH.yaml",
+    "claims_registry": ROOT / "commercial" / "claims_registry.yaml",
+    "state_audit": ROOT / "docs" / "internal" / "STATE_AUDIT.md",
+    "legal_status": ROOT / "docs" / "internal" / "legal_status.md",
+    "rotation_log": ROOT / "docs" / "internal" / "rotation_log.md",
+    "execution_log": ROOT / "docs" / "execution_log.md",
+    "blueprint": ROOT / "DEALIX_EXECUTION_BLUEPRINT.md",
+    "truth_validator": ROOT / "scripts" / "validate_truth_registry.py",
+    "release_gate_script": ROOT / "scripts" / "release_readiness_gate.py",
+    "extraction_script": ROOT / "scripts" / "extract_dealix_repo.sh",
+    "pre_commit_config": ROOT / ".pre-commit-config.yaml",
+    "backend_pyproject": ROOT / "backend" / "pyproject.toml",
 }
 
 CONTENT_CHECKS = {

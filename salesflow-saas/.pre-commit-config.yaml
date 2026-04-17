@@ -1,0 +1,36 @@
+# Pre-commit hooks — run before every commit
+# Install: pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.20.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: detect-private-key
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^salesflow-saas/backend/
+
+  - repo: local
+    hooks:
+      - id: truth-registry-validator
+        name: Validate TRUTH.yaml
+        entry: python salesflow-saas/scripts/validate_truth_registry.py
+        language: system
+        files: ^salesflow-saas/docs/registry/TRUTH\.yaml$
+        pass_filenames: false
