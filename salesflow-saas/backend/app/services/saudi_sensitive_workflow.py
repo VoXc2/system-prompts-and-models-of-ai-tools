@@ -125,24 +125,50 @@ class SaudiSensitiveWorkflow:
         }
 
     async def _check_consent(self, db: AsyncSession, *, tenant_id: str, purpose: str) -> Dict[str, Any]:
-        """Check PDPL consent for data sharing purpose."""
+        """Check PDPL consent — queries real PDPLConsent table."""
+        from app.models.consent import PDPLConsent
+        from sqlalchemy import select, func
+
+        total = int(
+            (await db.execute(
+                select(func.count()).select_from(PDPLConsent).where(PDPLConsent.tenant_id == tenant_id)
+            )).scalar() or 0
+        )
+        active = int(
+            (await db.execute(
+                select(func.count()).select_from(PDPLConsent)
+                .where(PDPLConsent.tenant_id == tenant_id, PDPLConsent.status == "granted")
+            )).scalar() or 0
+        )
+
+        consent_valid = active > 0 or total == 0  # allow if no consent records exist yet (new tenant)
         return {
-            "consent_valid": True,
-            "consent_type": "legitimate_interest",
+            "consent_valid": consent_valid,
+            "consent_type": "explicit" if active > 0 else "not_found",
             "purpose": purpose,
+            "total_records": total,
+            "active_consents": active,
             "expires_at": None,
-            "note_ar": "موافقة سارية — المصلحة المشروعة",
+            "note_ar": "موافقة سارية" if consent_valid else "لا توجد موافقة PDPL سارية — مطلوب الحصول على موافقة",
         }
 
     def _check_export_rules(self, classification: Dict, partner_name: str) -> Dict[str, Any]:
-        """Check PDPL cross-border transfer rules."""
+        """Check PDPL cross-border transfer rules — enforces based on classification."""
         gcc_countries = {"SA", "AE", "BH", "KW", "OM", "QA"}
+        has_restricted = classification.get("highest_classification") == "restricted"
+        requires_dpo = classification.get("requires_dpo_review", False)
+
+        # Restricted data requires explicit DPO review — block by default
+        export_allowed = not (has_restricted and requires_dpo)
+
         return {
-            "export_allowed": True,
+            "export_allowed": export_allowed,
             "partner_jurisdiction": "SA",
             "gcc_transfer": True,
-            "restricted_data_present": classification.get("highest_classification") == "restricted",
-            "note_ar": "النقل مسموح ضمن دول مجلس التعاون",
+            "restricted_data_present": has_restricted,
+            "requires_dpo_review": requires_dpo,
+            "blocked_reason_ar": "بيانات مقيدة تتطلب مراجعة مسؤول حماية البيانات" if not export_allowed else None,
+            "note_ar": "النقل مسموح" if export_allowed else "النقل محظور — بيانات مقيدة",
         }
 
     async def _create_approval(

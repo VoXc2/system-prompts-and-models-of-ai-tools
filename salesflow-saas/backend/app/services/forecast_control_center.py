@@ -95,7 +95,30 @@ class ForecastControlCenter:
         return {"tenant_id": tenant_id, "top_variances": variances, "root_causes": [], "recommendations": []}
 
     async def get_accuracy_trend(self, db: AsyncSession, tenant_id: str, periods: int = 6) -> Dict[str, Any]:
-        return {"tenant_id": tenant_id, "periods": periods, "trend": [], "average_accuracy_percent": 0.0}
+        """Returns forecast accuracy based on actual closed deal data."""
+        from app.models.deal import Deal
+        tid = UUID(tenant_id)
+
+        closed_won = float(
+            (await db.execute(
+                select(func.coalesce(func.sum(Deal.value), 0))
+                .where(Deal.tenant_id == tid, Deal.stage == "closed_won")
+            )).scalar() or 0
+        )
+        total_pipeline = float(
+            (await db.execute(
+                select(func.coalesce(func.sum(Deal.value), 0))
+                .where(Deal.tenant_id == tid)
+            )).scalar() or 0
+        )
+        accuracy = round((closed_won / total_pipeline * 100), 1) if total_pipeline else 0.0
+
+        return {
+            "tenant_id": tenant_id,
+            "periods": periods,
+            "trend": [{"period": "current", "accuracy_percent": accuracy, "actual": closed_won, "total_pipeline": total_pipeline}],
+            "average_accuracy_percent": accuracy,
+        }
 
 
 forecast_control_center = ForecastControlCenter()

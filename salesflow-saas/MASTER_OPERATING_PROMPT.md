@@ -83,7 +83,7 @@ Implementation: [`backend/app/openclaw/policy.py`](backend/app/openclaw/policy.p
 3. **Trust-enforced** — No sensitive action bypasses the policy gate.
 4. **Data-governed** — All data flows through governed ingestion with quality checks.
 5. **Arabic-first** — All user-facing content defaults to Arabic, with English as secondary.
-6. **Saudi-ready** — PDPL, ZATCA, SDAIA, NCA controls are live, not aspirational.
+6. **Saudi-ready** — PDPL consent checks, ZATCA invoicing, SDAIA AI governance, and NCA cybersecurity controls are implemented with live enforcement on the golden path and Saudi workflow. Full production coverage is tracked in `docs/current-vs-target-register.md`.
 7. **Board-usable** — Executive surfaces show what changed, what needs decision, what is at risk.
 8. **Enterprise-saleable** — Evidence packs, audit trails, and compliance matrices are exportable.
 
