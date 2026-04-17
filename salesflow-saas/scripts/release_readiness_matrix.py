@@ -126,6 +126,15 @@ CHECKS = {
     "friction_log": ROOT / "docs" / "customer_learnings" / "friction_log.md",
     "feature_requests_registry": ROOT / "docs" / "customer_learnings" / "feature_requests.yaml",
     "weekly_review_template": ROOT / "docs" / "customer_learnings" / "weekly_review_template.md",
+    # Business Viability Kit — discovery-phase operating artifacts
+    "business_viability_kit": ROOT / "DEALIX_BUSINESS_VIABILITY_KIT.md",
+    "hypotheses_tracker": ROOT / "docs" / "customer_learnings" / "hypotheses.yaml",
+    "interview_template_ar": ROOT / "docs" / "customer_learnings" / "interviews" / "_template_ar.md",
+    "interview_template_en": ROOT / "docs" / "customer_learnings" / "interviews" / "_template_en.md",
+    "founder_dashboard": ROOT / "docs" / "customer_learnings" / "founder_dashboard.md",
+    "pricing_discovery": ROOT / "docs" / "customer_learnings" / "pricing_discovery.md",
+    "unit_economics": ROOT / "docs" / "customer_learnings" / "unit_economics.md",
+    "defensibility_scorecard": ROOT / "docs" / "customer_learnings" / "defensibility_scorecard.md",
 }
 
 CONTENT_CHECKS = {

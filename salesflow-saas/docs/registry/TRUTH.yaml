@@ -222,3 +222,10 @@ customer_validation:
   design_partners_signed: 0
   week12_phase_gate: not_reached
   friction_log_entries: 0
+  hypotheses_total: 12
+  hypotheses_supported: 0
+  hypotheses_falsified: 0
+  hypotheses_ambiguous: 0
+  hypotheses_untested: 12
+  discovery_interviews_logged: 0
+  business_viability_kit: "DEALIX_BUSINESS_VIABILITY_KIT.md"

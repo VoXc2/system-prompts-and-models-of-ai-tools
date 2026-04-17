@@ -13,6 +13,13 @@
 | [friction_log.md](friction_log.md) | Weekly running log of every customer friction | Head of CS |
 | [feature_requests.yaml](feature_requests.yaml) | Structured registry of customer-requested features with 3-pilot threshold | Founder |
 | [weekly_review_template.md](weekly_review_template.md) | Format for the Wed customer-learnings synthesis | Founder + Head of CS |
+| [hypotheses.yaml](hypotheses.yaml) | 12 viability hypotheses tracked to SUPPORTED/FALSIFIED/AMBIGUOUS | Founder |
+| [interviews/_template_ar.md](interviews/_template_ar.md) | Arabic 45-min discovery call script + log | Founder |
+| [interviews/_template_en.md](interviews/_template_en.md) | English 45-min discovery call script + log | Founder |
+| [founder_dashboard.md](founder_dashboard.md) | Weekly Monday printable dashboard (Business Viability Kit §8) | Founder |
+| [pricing_discovery.md](pricing_discovery.md) | Van Westendorp + value-based pricing worksheet | Founder |
+| [unit_economics.md](unit_economics.md) | Per-customer economics (fill after 3 paying customers) | Founder |
+| [defensibility_scorecard.md](defensibility_scorecard.md) | 5-moat scorecard, measured Week 12 + quarterly | Founder |
 
 ## Rules
 
