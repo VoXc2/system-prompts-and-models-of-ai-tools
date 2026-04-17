@@ -25,26 +25,14 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt -r requirements-dev.txt
-          echo "--- Installed test deps ---"
-          pip show pytest pytest-asyncio pytest-cov aiosqlite httpx 2>/dev/null | grep -E "^(Name|Version):"
-      - name: Verify import chain
-        env:
-          DATABASE_URL: sqlite+aiosqlite:///./ci_verify.db
-          DEALIX_INTERNAL_API_TOKEN: ""
-        run: |
-          python -c "
-          from app.sqlite_patch import apply_patch; apply_patch()
-          from app.main import app; print('app.main import OK')
-          " || echo "IMPORT FAILED"
       - name: Architecture Brief (governance validation)
         working-directory: salesflow-saas
-        continue-on-error: true
         run: python scripts/architecture_brief.py
       - name: Pytest (full suite + launch scenarios)
         env:
           DATABASE_URL: sqlite+aiosqlite:///./ci_dealix.db
           DEALIX_INTERNAL_API_TOKEN: ""
-        run: python -m pytest tests -q --tb=short
+        run: python -m pytest tests -q --tb=line
 
   frontend:
     runs-on: ubuntu-latest
