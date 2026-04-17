@@ -200,11 +200,11 @@
   },
   "counts": {
     "total_models": 32,
-    "total_services": 81,
-    "total_api_routes": 59,
+    "total_services": 84,
+    "total_api_routes": 61,
     "total_frontend_components": 48,
     "total_agents": 19,
-    "total_governance_docs": 17,
+    "total_governance_docs": 18,
     "total_legal_docs": 7,
     "total_tests": 19
   },
