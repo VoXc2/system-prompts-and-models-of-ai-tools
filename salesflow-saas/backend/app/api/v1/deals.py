@@ -172,5 +172,14 @@ async def update_deal_stage(
         event_type="deal.stage_changed",
         payload={"deal_id": str(deal.id), "from": prev_stage, "to": data.stage},
     )
+
+    # Auto-assemble evidence pack on deal close
+    if data.stage == "closed_won":
+        try:
+            from app.services.deal_lifecycle_hooks import on_deal_closed
+            await on_deal_closed(db, tenant_id=str(current_user.tenant_id), deal_id=str(deal.id))
+        except Exception:
+            pass  # evidence pack assembly is best-effort, not blocking
+
     await db.refresh(deal)
     return DealResponse.model_validate(deal)

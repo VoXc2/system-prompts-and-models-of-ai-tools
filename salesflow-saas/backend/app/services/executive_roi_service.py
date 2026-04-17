@@ -152,5 +152,48 @@ class ExecutiveRoomService:
         )
         return {"ready": ready, "pending_review": pending}
 
+    async def build_weekly_pack(self, db: AsyncSession, tenant_id: str) -> Dict[str, Any]:
+        """Build ExecWeeklyPack contract — the CANONICAL executive surface data source."""
+        from app.schemas.structured_outputs import ExecWeeklyPack, Provenance
+        from datetime import datetime, timezone
+        import uuid
+
+        snapshot = await self.build_snapshot(db, tenant_id)
+        rev = snapshot["revenue"]
+        approvals = snapshot["approvals"]
+        compliance = snapshot["compliance"]
+        contradictions = snapshot["contradictions"]
+
+        # Determine RAG status
+        blockers = []
+        if approvals["breach"] > 0:
+            blockers.append(f"خرق SLA: {approvals['breach']} موافقة متجاوزة")
+        if contradictions["critical"] > 0:
+            blockers.append(f"تناقضات حرجة: {contradictions['critical']}")
+        if compliance["non_compliant"] > 0:
+            blockers.append(f"ضوابط غير ممتثلة: {compliance['non_compliant']}")
+
+        rag = "red" if blockers else ("amber" if approvals["warning"] > 0 or compliance["partial"] > 0 else "green")
+
+        pack = ExecWeeklyPack(
+            week_of=datetime.now(timezone.utc).strftime("%Y-W%W"),
+            overall_rag=rag,
+            completed_this_week=[],
+            planned_next_week=[],
+            blockers=blockers,
+            synergy_actual_sar=rev["actual"],
+            synergy_target_sar=rev["forecast"],
+            people_update="",
+            risk_summary=[f"Approvals pending: {approvals['pending']}", f"Compliance posture: {compliance['posture']}"],
+            provenance=Provenance(
+                generated_by="executive_room_service.build_weekly_pack",
+                model_provider="system",
+                confidence=0.9,
+                freshness_hours=0.0,
+                trace_id=str(uuid.uuid4()),
+            ),
+        )
+        return pack.model_dump(mode="json")
+
 
 executive_room_service = ExecutiveRoomService()

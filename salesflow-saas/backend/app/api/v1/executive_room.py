@@ -67,3 +67,15 @@ async def forecast_vs_actual(
         "tracks": {"revenue": {"actual": rev["actual"], "forecast": rev["forecast"], "variance_percent": rev["variance_percent"]}, "strategic_deals": snapshot["strategic_deals"]},
         "overall_health": "on_track" if rev["variance_percent"] >= -10 else "at_risk",
     }
+
+
+@router.get("/weekly-pack")
+async def weekly_pack(
+    tenant_id: str = "00000000-0000-0000-0000-000000000000",
+    db=Depends(_get_db),
+) -> Dict[str, Any]:
+    """ExecWeeklyPack — canonical contract for executive surfaces.
+    This is the SINGLE source of truth for Executive Room rendering.
+    """
+    from app.services.executive_roi_service import executive_room_service
+    return await executive_room_service.build_weekly_pack(db, tenant_id)
