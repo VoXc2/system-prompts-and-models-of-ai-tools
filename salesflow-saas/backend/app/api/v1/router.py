@@ -117,6 +117,10 @@ api_router.include_router(saudi_compliance_router.router)
 api_router.include_router(forecast_control_router.router)
 api_router.include_router(approval_center_router.router)
 
+# ── Golden Path — Tier-1 Verification Flow ───────────────────
+from app.api.v1 import golden_path as golden_path_router
+api_router.include_router(golden_path_router.router)
+
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)

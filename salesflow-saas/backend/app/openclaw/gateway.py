@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from typing import Any, Dict
 
 from app.openclaw.approval_bridge import approval_bridge
@@ -19,7 +20,11 @@ class OpenClawGateway:
         payload: Dict[str, Any],
         model_provider: str = "auto",
         cache_hint: str = "prompt-cache-reuse",
+        correlation_id: str | None = None,
     ) -> Dict[str, Any]:
+        corr_id = correlation_id or str(uuid.uuid4())
+        payload.setdefault("_correlation_id", corr_id)
+
         gate = approval_bridge.evaluate(action=action, payload=payload, tenant_id=tenant_id)
         run_id = observability_bridge.start_run(
             tenant_id=tenant_id,
@@ -38,11 +43,11 @@ class OpenClawGateway:
             result = await task_router.route(task_type, tenant_id, payload)
             observability_bridge.step(run_id, "execution", "ok")
             observability_bridge.finish(run_id, status="completed")
-            return {"run_id": run_id, "status": "completed", "gate": gate, "result": result}
+            return {"run_id": run_id, "correlation_id": corr_id, "status": "completed", "gate": gate, "result": result}
         except Exception as e:
             observability_bridge.step(run_id, "execution", "error", {"error": str(e)})
             observability_bridge.finish(run_id, status="failed", error=str(e))
-            return {"run_id": run_id, "status": "failed", "gate": gate, "error": str(e)}
+            return {"run_id": run_id, "correlation_id": corr_id, "status": "failed", "gate": gate, "error": str(e)}
 
 
 openclaw_gateway = OpenClawGateway()
