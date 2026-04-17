@@ -121,6 +121,14 @@ api_router.include_router(approval_center_router.router)
 from app.api.v1 import golden_path as golden_path_router
 api_router.include_router(golden_path_router.router)
 
+# ── Structured Outputs — Schema-Bound Decision Artifacts ─────
+from app.api.v1 import structured_outputs as structured_outputs_router
+api_router.include_router(structured_outputs_router.router)
+
+# ── Saudi Sensitive Workflow — PDPL-Controlled Data Sharing ──
+from app.api.v1 import saudi_workflow as saudi_workflow_router
+api_router.include_router(saudi_workflow_router.router)
+
 # ── Omnichannel — Unified channel management ─────────────────
 from app.api.v1 import channels as channels_router
 api_router.include_router(channels_router.router)
