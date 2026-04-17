@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type EvidenceItem = { type: string; source: string; data: Record<string, unknown>; timestamp?: string };
 type EvidencePack = {
@@ -17,8 +17,21 @@ const TYPE_LABELS: Record<string, { en: string; ar: string }> = {
   board_report: { en: "Board Report", ar: "تقرير مجلس الإدارة" },
 };
 
-export function EvidencePackViewer({ packs = [] }: { packs?: EvidencePack[] }) {
+export function EvidencePackViewer({ packs: initialPacks }: { packs?: EvidencePack[] }) {
+  const [packs, setPacks] = useState<EvidencePack[]>(initialPacks || []);
   const [selected, setSelected] = useState<EvidencePack | null>(null);
+
+  useEffect(() => {
+    if (initialPacks) return;
+    const fetchPacks = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/evidence-packs/`);
+        if (res.ok) { const data = await res.json(); setPacks(data.packs || []); }
+      } catch { /* silent */ }
+    };
+    fetchPacks();
+  }, [initialPacks]);
 
   return (
     <div className="space-y-4 p-6" dir="rtl">

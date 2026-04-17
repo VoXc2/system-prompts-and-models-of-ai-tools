@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type HeatmapData = Record<string, Record<string, number>>;
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -34,7 +36,22 @@ function HeatCell({ count, risk }: { count: number; risk: string }) {
   );
 }
 
-export function RiskHeatmap({ heatmap = {}, totalControls = 0 }: { heatmap?: HeatmapData; totalControls?: number }) {
+export function RiskHeatmap({ heatmap: initialHeatmap, totalControls: initialTotal }: { heatmap?: HeatmapData; totalControls?: number }) {
+  const [heatmap, setHeatmap] = useState<HeatmapData>(initialHeatmap || {});
+  const [totalControls, setTotalControls] = useState(initialTotal || 0);
+
+  useEffect(() => {
+    if (initialHeatmap) return;
+    const fetchHeatmap = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/compliance/matrix/risk-heatmap`);
+        if (res.ok) { const data = await res.json(); setHeatmap(data.heatmap || {}); setTotalControls(data.total_controls || 0); }
+      } catch { /* silent */ }
+    };
+    fetchHeatmap();
+  }, [initialHeatmap]);
+
   const categories = Object.keys(heatmap);
 
   return (

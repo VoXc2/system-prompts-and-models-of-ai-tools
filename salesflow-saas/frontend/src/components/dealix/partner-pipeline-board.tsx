@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type PartnerDeal = {
   id: string; company_name: string; company_name_ar?: string;
   deal_type: string; stage: string; estimated_value: number;
@@ -24,7 +26,28 @@ const STAGE_COLORS: Record<string, string> = {
   closed: "border-t-emerald-500",
 };
 
-export function PartnerPipelineBoard({ deals = [] }: { deals?: PartnerDeal[] }) {
+export function PartnerPipelineBoard({ deals: initialDeals }: { deals?: PartnerDeal[] }) {
+  const [deals, setDeals] = useState<PartnerDeal[]>(initialDeals || []);
+
+  useEffect(() => {
+    if (initialDeals) return;
+    const fetchDeals = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/strategic-deals/`);
+        if (res.ok) {
+          const data = await res.json();
+          setDeals((data.deals || []).map((d: Record<string, unknown>) => ({
+            id: d.id, company_name: d.target_company_name || d.deal_title,
+            company_name_ar: d.deal_title_ar, deal_type: d.deal_type,
+            stage: d.status, estimated_value: d.estimated_value_sar || 0,
+            created_at: d.created_at,
+          })));
+        }
+      } catch { /* silent */ }
+    };
+    fetchDeals();
+  }, [initialDeals]);
   const byStage: Record<string, PartnerDeal[]> = {};
   STAGES.forEach((s) => { byStage[s.key] = []; });
   deals.forEach((d) => {

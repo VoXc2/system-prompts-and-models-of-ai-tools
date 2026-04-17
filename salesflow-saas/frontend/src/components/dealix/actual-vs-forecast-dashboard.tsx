@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type TrackForecast = {
   actual: number; forecast: number; variance: number;
   variance_percent?: number; unit: string;
@@ -37,8 +39,22 @@ function TrackRow({ label, labelAr, actual, target, variance, unit }: {
   );
 }
 
-export function ActualVsForecastDashboard({ data }: { data?: UnifiedForecast }) {
-  const d = data || {
+export function ActualVsForecastDashboard({ data: initialData }: { data?: UnifiedForecast }) {
+  const [fetchedData, setFetchedData] = useState<UnifiedForecast | null>(initialData || null);
+
+  useEffect(() => {
+    if (initialData) return;
+    const fetchData = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/forecast-control/unified`);
+        if (res.ok) { const json = await res.json(); setFetchedData(json.tracks || null); }
+      } catch { /* silent */ }
+    };
+    fetchData();
+  }, [initialData]);
+
+  const d = fetchedData || {
     revenue: { actual: 0, forecast: 0, variance: 0, variance_percent: 0, unit: "SAR" },
     partnerships: { actual_count: 0, target_count: 0, variance: 0, unit: "partners" },
     ma: { deals_in_progress: 0, pipeline_target: 0, variance: 0, unit: "deals" },

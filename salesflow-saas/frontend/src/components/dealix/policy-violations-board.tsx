@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type Violation = {
   id: string; source: string; description: string;
   severity: string; status: string; detected_at: string;
@@ -20,7 +22,26 @@ const STATUS_LABELS: Record<string, string> = {
   accepted: "مقبول",
 };
 
-export function PolicyViolationsBoard({ violations = [] }: { violations?: Violation[] }) {
+export function PolicyViolationsBoard({ violations: initialViolations }: { violations?: Violation[] }) {
+  const [violations, setViolations] = useState<Violation[]>(initialViolations || []);
+
+  useEffect(() => {
+    if (initialViolations) return;
+    const fetchViolations = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/api/v1/contradictions/`);
+        if (res.ok) {
+          const data = await res.json();
+          setViolations((data.contradictions || []).map((c: Record<string, unknown>) => ({
+            id: c.id, source: c.source_a, description: `${c.claim_a} ↔ ${c.claim_b}`,
+            severity: c.severity, status: c.status, detected_at: c.created_at,
+          })));
+        }
+      } catch { /* silent */ }
+    };
+    fetchViolations();
+  }, [initialViolations]);
   const active = violations.filter((v) => v.status === "detected" || v.status === "reviewing");
   const resolved = violations.filter((v) => v.status === "resolved" || v.status === "accepted");
 
