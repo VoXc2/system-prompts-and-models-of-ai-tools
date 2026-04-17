@@ -161,3 +161,64 @@ phase_2_capabilities:
     status: roadmap
     evidence_path: "docs/labs/README.md"
     public_claim_allowed: false
+
+verification_protocol:
+  - id: v001_secret_scan
+    name: "V001 — Git history secret scan (trufflehog + gitleaks)"
+    status: partial  # scripted; execution pending external reviewer
+    evidence_path: "scripts/v001_secret_scan.sh"
+    public_claim_allowed: false
+  - id: v002_rls_fuzz
+    name: "V002 — RLS runtime fuzz (10K cross-tenant queries)"
+    status: partial  # test scripted; must be wired into nightly CI
+    evidence_path: "backend/tests/security/test_rls_fuzz.py"
+    public_claim_allowed: false
+  - id: v003_pentest
+    name: "V003 — External penetration test"
+    status: roadmap  # vendor not yet engaged (founder action)
+    evidence_path: "docs/verification/V003_pentest_engagement.md"
+    public_claim_allowed: false
+  - id: v004_no_founder_demo
+    name: "V004 — No-founder customer demo test"
+    status: roadmap  # testers not yet scheduled (founder action)
+    evidence_path: "docs/verification/V004_no_founder_demo_test.md"
+    public_claim_allowed: false
+  - id: v005_truth_audit
+    name: "V005 — Truth Registry independent audit"
+    status: partial  # scripted; must be run by independent engineer
+    evidence_path: "scripts/v005_truth_registry_audit.py"
+    public_claim_allowed: false
+  - id: v006_perf_baseline
+    name: "V006 — Performance baseline (k6)"
+    status: partial  # script ready; no baseline JSON yet
+    evidence_path: "infra/load-tests/baseline.js"
+    public_claim_allowed: false
+  - id: v007_a11y_baseline
+    name: "V007 — Accessibility baseline (axe)"
+    status: partial  # spec ready; no baseline JSON yet
+    evidence_path: "frontend/tests/a11y/baseline.spec.ts"
+    public_claim_allowed: false
+
+founder_decision_sprint:
+  - id: fd001_legal_entity
+    status: pending
+    evidence_path: "docs/internal/legal_entity_decision.md"
+  - id: fd002_counsel_engaged
+    status: pending
+    evidence_path: null
+  - id: fd003_repo_extraction
+    status: pending  # script ready, new GitHub org not yet created
+    evidence_path: "scripts/extract_dealix_repo.sh"
+  - id: fd004_saip_trademark
+    status: pending
+    evidence_path: "docs/internal/trademark_status.md"
+  - id: fd005_first_hires
+    status: pending  # specs ready, outreach not started
+    evidence_path: "docs/hiring/README.md"
+
+customer_validation:
+  pilots_signed: 0
+  pilots_active: 0
+  design_partners_signed: 0
+  week12_phase_gate: not_reached
+  friction_log_entries: 0

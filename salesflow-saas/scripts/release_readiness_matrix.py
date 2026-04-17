@@ -99,6 +99,33 @@ CHECKS = {
     "arabic_ui_direction": ROOT / "packages" / "arabic-ui" / "src" / "direction.ts",
     "manifesto": ROOT / "marketing" / "manifesto.md",
     "dealix_labs": ROOT / "docs" / "labs" / "README.md",
+    # Phase 2 Execution Waves — 90-day plan
+    "phase2_execution_waves": ROOT / "DEALIX_PHASE2_EXECUTION_WAVES.md",
+    # Verification Protocol (§1)
+    "v001_secret_scan_script": ROOT / "scripts" / "v001_secret_scan.sh",
+    "v002_rls_fuzz_test": ROOT / "backend" / "tests" / "security" / "test_rls_fuzz.py",
+    "v003_pentest_engagement": ROOT / "docs" / "verification" / "V003_pentest_engagement.md",
+    "v004_no_founder_demo": ROOT / "docs" / "verification" / "V004_no_founder_demo_test.md",
+    "v005_truth_audit_script": ROOT / "scripts" / "v005_truth_registry_audit.py",
+    "v006_perf_baseline_script": ROOT / "infra" / "load-tests" / "baseline.js",
+    "v007_a11y_baseline_spec": ROOT / "frontend" / "tests" / "a11y" / "baseline.spec.ts",
+    "baselines_readme": ROOT / "docs" / "baselines" / "README.md",
+    "verification_readme": ROOT / "docs" / "verification" / "README.md",
+    # Founder Decision Sprint (§2)
+    "fd001_legal_entity": ROOT / "docs" / "internal" / "legal_entity_decision.md",
+    "fd004_trademark_status": ROOT / "docs" / "internal" / "trademark_status.md",
+    "fd005_hiring_readme": ROOT / "docs" / "hiring" / "README.md",
+    "fd005_job_design_engineer": ROOT / "docs" / "hiring" / "01_founding_design_engineer.md",
+    "fd005_job_backend_engineer": ROOT / "docs" / "hiring" / "02_founding_backend_engineer.md",
+    "fd005_job_customer_success": ROOT / "docs" / "hiring" / "03_head_of_customer_success.md",
+    # Customer Validation (§3)
+    "customer_learnings_readme": ROOT / "docs" / "customer_learnings" / "README.md",
+    "pilot_agreement_template": ROOT / "docs" / "customer_learnings" / "pilot_agreement_template.md",
+    "pilot_success_criteria": ROOT / "docs" / "customer_learnings" / "pilot_template" / "success_criteria.md",
+    "pilot_kickoff_checklist": ROOT / "docs" / "customer_learnings" / "pilot_template" / "kickoff_checklist.md",
+    "friction_log": ROOT / "docs" / "customer_learnings" / "friction_log.md",
+    "feature_requests_registry": ROOT / "docs" / "customer_learnings" / "feature_requests.yaml",
+    "weekly_review_template": ROOT / "docs" / "customer_learnings" / "weekly_review_template.md",
 }
 
 CONTENT_CHECKS = {
