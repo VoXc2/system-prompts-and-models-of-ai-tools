@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from typing import Any, Dict
 from uuid import UUID
 
@@ -197,3 +198,46 @@ class ExecutiveRoomService:
 
 
 executive_room_service = ExecutiveRoomService()
+
+
+# ──────────────────────────────────────────────────────────────────────
+# Executive ROI snapshot (compat shim for autonomous_foundation endpoint)
+# ──────────────────────────────────────────────────────────────────────
+class ExecutiveROIService:
+    """Lightweight ROI snapshot builder used by /dashboard/executive-roi.
+
+    Takes a baseline and current metrics dict and returns a structured delta.
+    Intentionally synchronous and dependency-free so the endpoint stays fast.
+    """
+
+    def build_snapshot(
+        self, baseline: Dict[str, Any], current: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        baseline = baseline or {}
+        current = current or {}
+
+        def _delta(key: str) -> Dict[str, Any]:
+            b = float(baseline.get(key, 0) or 0)
+            c = float(current.get(key, 0) or 0)
+            pct = ((c - b) / b * 100.0) if b else None
+            return {"baseline": b, "current": c, "delta": c - b, "pct_change": pct}
+
+        tracked_keys = sorted(set(baseline.keys()) | set(current.keys()))
+        metrics = {k: _delta(k) for k in tracked_keys}
+
+        return {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "metrics": metrics,
+            "summary": {
+                "keys_tracked": len(tracked_keys),
+                "improved": sum(
+                    1 for m in metrics.values() if m["delta"] > 0
+                ),
+                "regressed": sum(
+                    1 for m in metrics.values() if m["delta"] < 0
+                ),
+            },
+        }
+
+
+executive_roi_service = ExecutiveROIService()
