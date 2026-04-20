@@ -544,7 +544,10 @@ def _seed_sample_data(conn):
         '["صفقة أرامكو: تأخر RFP","تجديد Oracle: انتهاء العقد في 30 يوم"]',
         '["أغلق خصم البنك الأهلي — 25%","ادفع تجديد Oracle قبل الانتهاء","جدول kickoff مع Deloitte"]')""")
 
-    # Audit chain seed
+    # Audit chain seed — only insert if no entries exist yet
+    existing = conn.execute("SELECT COUNT(*) FROM audit_log").fetchone()[0]
+    if existing > 0:
+        return
     prev = "GENESIS"
     entries = [
         ("dealix","revenue","lead_created","admin-001","lead-001","{}"),
