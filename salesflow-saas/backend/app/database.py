@@ -16,7 +16,7 @@ def _get_db_url() -> str:
                             break
             except FileNotFoundError:
                 continue
-    return url or "sqlite+aiosqlite:///./dealix.db"
+    return url or "postgresql+asyncpg://salesflow:change_me_in_production@db:5432/salesflow"
 
 
 _DB_URL = _get_db_url()

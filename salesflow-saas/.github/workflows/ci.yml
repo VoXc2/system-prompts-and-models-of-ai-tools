@@ -1,53 +1,90 @@
-name: Dealix CI — Service Reality Protocol
+name: Dealix CI
 
 on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
-  test:
-    name: 8-Gate Reality Protocol
+  backend:
+    name: Backend checks
     runs-on: ubuntu-latest
-
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: salesflow
+          POSTGRES_USER: salesflow
+          POSTGRES_PASSWORD: salesflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U salesflow -d salesflow"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+asyncpg://salesflow:salesflow@localhost:5432/salesflow
+      REDIS_URL: redis://localhost:6379/0
+      DEALIX_INTERNAL_API_TOKEN: ""
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.10"
 
-      - name: Install dependencies
-        working-directory: backend
+      - name: Install backend dependencies
         run: |
-          pip install --upgrade pip
-          pip install flask flask-cors requests pytest
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
 
-      - name: Initialize database
-        working-directory: backend
-        run: python -c "from app.core.database import init_db; init_db()"
+      - name: Compile backend
+        run: python -m compileall app tests
 
-      - name: Start backend server
-        working-directory: backend
-        run: |
-          python main.py &
-          sleep 3
-          curl --retry 5 --retry-delay 1 http://localhost:8000/api/health
+      - name: Backend smoke tests
+        run: pytest -q tests/test_api_smoke.py tests/test_auth_rbac_api.py
 
-      - name: Run existing unit tests
-        working-directory: backend
-        run: pytest tests/test_audit.py tests/test_lead_flow.py tests/test_approval_flow.py -v
+  frontend:
+    name: Frontend checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Run 8-Gate Reality Protocol
-        working-directory: backend
-        run: python tests/reality_protocol.py
-
-      - name: Upload protocol results
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          name: reality-protocol-results
-          path: backend/tests/
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
