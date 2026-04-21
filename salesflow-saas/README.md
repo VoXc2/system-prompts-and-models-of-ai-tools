@@ -38,7 +38,7 @@ Frontend: `http://localhost:3000`
 
 **Launch verification:** see `docs/LAUNCH_CHECKLIST.md`. From `salesflow-saas`: copy `frontend/.env.example` to `frontend/.env.local` and set `NEXT_PUBLIC_API_URL`. Run `.\verify-launch.ps1 -HttpCheck -SoftReady` (use `-BaseUrl` if the API is not on port 8000).
 
-**CI:** GitHub Actions workflow `.github/workflows/dealix-ci.yml` (repo root) runs backend `pytest` and frontend `lint` + `build` when `salesflow-saas/**` changes.
+**CI:** GitHub Actions workflow `.github/workflows/ci.yml` runs backend `pytest` (with `PYTHONPATH=.`) and frontend `lint` + `build`.
 
 **DB migrations:** from `backend`, set `PYTHONPATH` to the backend folder (e.g. `set PYTHONPATH=%CD%` on Windows), then `alembic upgrade head`. For Postgres schema evolution, prefer `alembic revision --autogenerate` against a dev database after the baseline revision.
 
