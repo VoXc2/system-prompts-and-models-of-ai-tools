@@ -31,7 +31,8 @@ class LeadCandidate:
     contact_title: str = ""
     contact_email: str = ""
     contact_linkedin: str = ""
-    phone: str = ""
+    phone: str = ""                                    # legacy field
+    contact_phone: str = ""                            # canonical field (alias for phone)
     signals: List[str] = field(default_factory=list)   # ["hiring", "expansion", ...]
     trigger: str = ""                                   # what triggered discovery
     confidence: float = 0.5                             # 0-1 source confidence
