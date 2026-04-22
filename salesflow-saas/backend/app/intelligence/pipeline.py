@@ -74,7 +74,7 @@ def run_pipeline(
             "signals": c.signals,
             "trigger": c.trigger,
             "contact_email": c.contact_email,
-            "contact_phone": c.phone,
+            "contact_phone": c.contact_phone or c.phone,
             "contact_linkedin": c.contact_linkedin,
             "confidence": c.confidence,
             "_candidate": c,
@@ -107,7 +107,7 @@ def run_pipeline(
                 raw_snippet=c.raw_snippet,
                 trigger=c.trigger,
                 contact_email=c.contact_email,
-                contact_phone=c.phone,
+                contact_phone=c.contact_phone or c.phone,
                 enrichment_confidence=c.confidence,
             )
             enriched_leads.append(e)
