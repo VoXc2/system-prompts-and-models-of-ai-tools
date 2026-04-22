@@ -255,3 +255,167 @@ def enrich_batch(candidates: List[LeadCandidate], delay: float = 0.5) -> List[En
         enriched_leads.append(enriched)
         time.sleep(delay)
     return enriched_leads
+
+
+# ═══════════════════════════════════════════════════════════════════
+# APOLLO.IO / PDL API INTEGRATION
+# Set env vars to activate: APOLLO_API_KEY or PDL_API_KEY
+# ═══════════════════════════════════════════════════════════════════
+
+APOLLO_API_KEY = os.environ.get("APOLLO_API_KEY", "")
+PDL_API_KEY = os.environ.get("PDL_API_KEY", "")
+CLEARBIT_API_KEY = os.environ.get("CLEARBIT_API_KEY", "")
+
+
+def enrich_with_apollo(domain: str, company_name: str) -> Dict[str, Any]:
+    """
+    Enrich company + contacts via Apollo.io API.
+    Returns contact info, company size, LinkedIn URLs.
+    Requires APOLLO_API_KEY env var.
+    """
+    if not APOLLO_API_KEY:
+        return {}
+    try:
+        # Apollo organization search
+        payload = json.dumps({
+            "api_key": APOLLO_API_KEY,
+            "domain": domain,
+            "organization_name": company_name,
+        }).encode()
+        req = urllib.request.Request(
+            "https://api.apollo.io/v1/organizations/enrich",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            data = json.loads(resp.read())
+        org = data.get("organization", {})
+        return {
+            "company_size": str(org.get("estimated_num_employees", "")),
+            "annual_revenue_sar": org.get("annual_revenue", 0),
+            "headquarters": org.get("city", ""),
+            "linkedin_url": org.get("linkedin_url", ""),
+            "description": org.get("short_description", ""),
+            "industry": org.get("industry", ""),
+            "source": "apollo",
+        }
+    except Exception:
+        return {}
+
+
+def enrich_person_apollo(email: str = "", name: str = "", domain: str = "") -> Dict[str, Any]:
+    """
+    Find decision maker contact via Apollo people search.
+    Returns: name, title, email, linkedin, phone.
+    """
+    if not APOLLO_API_KEY:
+        return {}
+    try:
+        payload = json.dumps({
+            "api_key": APOLLO_API_KEY,
+            "q_organization_domains": [domain] if domain else [],
+            "person_titles": ["CEO", "CTO", "VP Sales", "Sales Director", "مدير مبيعات"],
+            "page": 1,
+            "per_page": 1,
+        }).encode()
+        req = urllib.request.Request(
+            "https://api.apollo.io/v1/mixed_people/search",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            data = json.loads(resp.read())
+        people = data.get("people", [])
+        if people:
+            p = people[0]
+            return {
+                "contact_name": p.get("name", ""),
+                "contact_title": p.get("title", ""),
+                "contact_email": p.get("email", ""),
+                "contact_linkedin": p.get("linkedin_url", ""),
+                "contact_phone": p.get("sanitized_phone", ""),
+                "decision_maker_score": 90 if "CEO" in p.get("title", "") else 75,
+            }
+    except Exception:
+        pass
+    return {}
+
+
+def enrich_with_pdl(domain: str, company_name: str) -> Dict[str, Any]:
+    """
+    Enrich via People Data Labs API.
+    Requires PDL_API_KEY env var.
+    """
+    if not PDL_API_KEY:
+        return {}
+    try:
+        params = urllib.parse.urlencode({
+            "api_key": PDL_API_KEY,
+            "website": f"https://{domain}" if domain else "",
+            "pretty": "true",
+            "size": 1,
+        })
+        req = urllib.request.Request(
+            f"https://api.peopledatalabs.com/v5/company/search?{params}",
+            headers={"X-Api-Key": PDL_API_KEY},
+        )
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            data = json.loads(resp.read())
+        companies = data.get("data", [])
+        if companies:
+            c = companies[0]
+            return {
+                "company_size": str(c.get("employee_count", "")),
+                "headquarters": c.get("location", {}).get("locality", ""),
+                "linkedin_url": c.get("profiles", {}).get("linkedin", ""),
+                "description": c.get("summary", ""),
+                "source": "pdl",
+            }
+    except Exception:
+        return {}
+
+
+def enrich_candidate_full(candidate: LeadCandidate) -> EnrichedLead:
+    """
+    Full enrichment: web + Apollo/PDL if keys available.
+    Drop-in replacement for enrich_candidate() with API enrichment.
+    """
+    # Start with basic web enrichment
+    enriched = enrich_candidate(candidate)
+
+    # Apollo company enrichment
+    if APOLLO_API_KEY and candidate.domain:
+        apollo_data = enrich_with_apollo(candidate.domain, candidate.company_name)
+        if apollo_data:
+            if apollo_data.get("company_size"):
+                enriched.company_size = apollo_data["company_size"]
+            if apollo_data.get("description") and not enriched.description:
+                enriched.description = apollo_data["description"]
+            if apollo_data.get("headquarters") and not enriched.headquarters:
+                enriched.headquarters = apollo_data["headquarters"]
+            enriched.enrichment_source = "apollo"
+            enriched.enrichment_confidence = min(1.0, enriched.enrichment_confidence + 0.3)
+
+        # Apollo person enrichment
+        if not enriched.contact_email:
+            person_data = enrich_person_apollo(domain=candidate.domain)
+            if person_data:
+                enriched.contact_name = person_data.get("contact_name", enriched.contact_name)
+                enriched.contact_title = person_data.get("contact_title", enriched.contact_title)
+                enriched.contact_email = person_data.get("contact_email", "")
+                enriched.contact_linkedin = person_data.get("contact_linkedin", "")
+                enriched.contact_phone = person_data.get("contact_phone", "")
+                enriched.decision_maker_score = person_data.get("decision_maker_score", enriched.decision_maker_score)
+
+    # PDL fallback if Apollo not available
+    elif PDL_API_KEY and candidate.domain:
+        pdl_data = enrich_with_pdl(candidate.domain, candidate.company_name)
+        if pdl_data:
+            if pdl_data.get("company_size"):
+                enriched.company_size = pdl_data["company_size"]
+            enriched.enrichment_source = "pdl"
+            enriched.enrichment_confidence = min(1.0, enriched.enrichment_confidence + 0.25)
+
+    return enriched
