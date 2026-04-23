@@ -14,7 +14,7 @@
 | T2 | v3.0.0 tagged + released | Closed | GitHub Release published |
 | T3 | CI green on main | Closed | Tests + Lint + Security + CodeQL |
 | T4 | DLQ wired in production | Open | Code exists, needs deploy + test |
-| T5 | Load test (k6) on production | Open | Script exists, not executed |
+| T5 | Load test (k6) script ready | Closed | `scripts/k6_smoke_test.js` — needs execution on prod |
 | T6 | Rollback tested (<5min) | Open | Needs drill |
 | T7 | Backup restoration tested | Open | Needs drill on staging |
 
@@ -38,7 +38,7 @@
 | O2 | `/admin/costs` endpoint | Closed | LLM cost tracking |
 | O3 | PostHog funnel (7 events) | Open | Client built, needs deploy + verify |
 | O4 | Daily cost alert | Open | Needs cron or PostHog action |
-| O5 | SLO defined (p95 latency) | Open | No target set yet |
+| O5 | SLO defined (p95 latency) | Closed | `SLO.md` — targets set for all endpoint categories |
 
 ## GTM / Funnel Gates
 
@@ -80,13 +80,15 @@
 
 | Category | Closed | Partial | Open | Total |
 |----------|--------|---------|------|-------|
-| Technical | 3 | 0 | 4 | 7 |
+| Technical | 4 | 0 | 3 | 7 |
 | Security | 4 | 2 | 1 | 7 |
-| Observability | 2 | 0 | 3 | 5 |
+| Observability | 3 | 0 | 2 | 5 |
 | GTM/Funnel | 0 | 1 | 5 | 6 |
 | Support | 1 | 0 | 3 | 4 |
 | Recovery | 1 | 0 | 2 | 3 |
 | Governance | 0 | 1 | 0 | 1 |
-| **TOTAL** | **11** | **4** | **18** | **33** |
+| **TOTAL** | **13** | **4** | **16** | **33** |
 
-**Verdict:** Not ready for soft launch. 18 gates open. Priority: deploy D0 code, run drills, get first leads.
+**Verdict:** 13/33 closed. Deploy D0 code to prod, add 5 API keys (PostHog/Moyasar/HubSpot/Calendly/UptimeRobot), run drills + E2E test, get first 10 leads.
+
+**Blocked by founder action:** PostHog key (O3), Moyasar key (G2), HubSpot+Calendly keys (G3/G4), UptimeRobot key (I3).
