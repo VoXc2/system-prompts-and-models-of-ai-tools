@@ -115,6 +115,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/health")
+async def root_health():
+    """Root-level health check for Railway/load balancer healthchecks."""
+    return {"status": "ok"}
+
+
 # API Routes
 app.include_router(api_router, prefix="/api/v1")
 
