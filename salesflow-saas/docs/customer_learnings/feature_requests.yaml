@@ -1,0 +1,29 @@
+# Customer Feature Request Registry
+#
+# Rule (from §6 Failure Modes — Integration Sprawl):
+#   A feature enters the Wave backlog ONLY after ≥3 pilot customers
+#   independently request it within a 60-day window.
+#
+# Owner: Founder (reviewed weekly Wednesday).
+# Schema is stable — do not rename fields.
+
+version: 1
+
+requests:
+  # Example entry. Delete or overwrite on first real request.
+  - id: FR-0001
+    title: "Exportable Evidence Pack as signed PDF for board meetings"
+    requested_by:
+      - customer: "example-retail-group"
+        role: "CFO"
+        date: "2026-04-17"
+        quote: "لو نقدر نطلع الإيفيدنس باك كـPDF موقع لمجلس الإدارة يكون رهيب"
+    theme_tags: ["evidence", "executive_room", "reporting"]
+    estimated_effort: "M"  # S/M/L/XL
+    threshold_met: false   # flips true when ≥3 distinct customers request
+    in_backlog: false
+    wave: null             # one of A/B/C/D/E once promoted
+    notes: |
+      Currently Evidence Packs export as JSON + SHA256 manifest.
+      PDF export would require: signed PDF service, bilingual rendering,
+      sponsor signature block. Watch for 2 more requests before promoting.

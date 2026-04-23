@@ -62,9 +62,9 @@ prometheus-fastapi-instrumentator>=7.0.0  # Prometheus metrics
 structlog>=24.0.0            # Structured JSON logging with tenant context
 
 # === Testing ===
-pytest>=8.0.0
-pytest-asyncio>=0.23.0       # Async test support
-pytest-cov>=5.0.0            # Coverage reporting
+pytest==8.3.4
+pytest-asyncio==0.24.0         # Async test support — pinned for CI stability
+pytest-cov==5.0.0              # Coverage reporting — pinned for stability
 factory-boy>=3.3.0           # Test data factories for SQLAlchemy models
 
 # === Forecasting ===

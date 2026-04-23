@@ -35,6 +35,15 @@ class OpenClawApprovalBridge:
                 "policy": decision.as_dict(),
             }
 
+        # Trust enforcement: Class B actions require correlation_id
+        if decision.requires_approval and not payload.get("_correlation_id"):
+            return {
+                "allowed": False,
+                "requires_approval": True,
+                "reason": "missing_correlation_id:class_b_requires_traceability",
+                "policy": decision.as_dict(),
+            }
+
         settings = get_settings()
         canary = [x.strip() for x in (settings.OPENCLAW_CANARY_TENANTS or "").split(",") if x.strip()]
         canary_restrict_auto = bool(settings.OPENCLAW_CANARY_ENFORCE_AUTO_ACTIONS)

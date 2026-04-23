@@ -71,6 +71,15 @@ async def lifespan(app: FastAPI):
     print(f"   Environment: {settings.ENVIRONMENT}")
     print(f"   LLM Primary: {settings.LLM_PRIMARY_PROVIDER}")
     print(f"   LLM Fallback: {settings.LLM_FALLBACK_PROVIDER}")
+
+    # Initialize PostHog
+    from app.services.posthog_client import get_posthog
+    ph = get_posthog()
+    print(f"   PostHog: {'enabled' if ph._enabled else 'disabled (no API key)'}")
+
+    # Initialize DLQ
+    from app.services.dlq import dlq
+    print("   DLQ: initialized")
     if IS_SQLITE:
         await init_db()
     yield

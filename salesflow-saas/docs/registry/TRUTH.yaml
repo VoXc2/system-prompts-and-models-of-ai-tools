@@ -1,0 +1,231 @@
+# TRUTH.yaml — Dealix Canonical Truth Registry
+# Last updated: 2026-04-17
+# Owner: Founder + CTO
+# Rule: Edited only via PR with review. No file outside this registry may create a new claim.
+
+version: "1.0.0"
+
+orchestrator:
+  canonical: "dealix-core-orchestrator"
+  engine: "openclaw-2026.4.x"
+  deprecated: []
+
+llm_policy:
+  primary: "groq/llama-3.3-70b-versatile"
+  fallback: "openai/gpt-4o"
+  arabic_specialist: "groq/llama-3.3-70b-versatile"
+  embedding: "openai/text-embedding-3-large"
+  budget_per_tenant_monthly_usd: 50
+  cost_alert_threshold: 0.7
+  cost_throttle_threshold: 0.9
+
+capabilities:
+  - id: golden_path_partner
+    name: "Partner Golden Path"
+    status: live
+    evidence_path: "backend/app/services/golden_path.py"
+    runtime_flag: null
+    public_claim_allowed: true
+
+  - id: saudi_sensitive_workflow
+    name: "Saudi PDPL Data Sharing Workflow"
+    status: live
+    evidence_path: "backend/app/services/saudi_sensitive_workflow.py"
+    runtime_flag: null
+    public_claim_allowed: true
+
+  - id: structured_outputs
+    name: "17 Schema-Bound Decision Outputs"
+    status: live
+    evidence_path: "backend/app/schemas/structured_outputs.py"
+    runtime_flag: null
+    public_claim_allowed: true
+
+  - id: executive_room
+    name: "Executive Room + Weekly Pack"
+    status: live
+    evidence_path: "backend/app/api/v1/executive_room.py"
+    runtime_flag: null
+    public_claim_allowed: true
+
+  - id: approval_center
+    name: "Approval Center with SLA"
+    status: live
+    evidence_path: "backend/app/api/v1/approval_center.py"
+    runtime_flag: null
+    public_claim_allowed: true
+
+  - id: evidence_packs
+    name: "Evidence Packs with SHA256"
+    status: live
+    evidence_path: "backend/app/services/evidence_pack_service.py"
+    runtime_flag: null
+    public_claim_allowed: true
+
+  - id: contradiction_engine
+    name: "Contradiction Detection & Tracking"
+    status: live
+    evidence_path: "backend/app/services/contradiction_engine.py"
+    runtime_flag: null
+    public_claim_allowed: true
+
+  - id: rls_multi_tenancy
+    name: "PostgreSQL Row-Level Security"
+    status: partial  # migration exists, not applied to production
+    evidence_path: "backend/alembic/versions/20260417_0002_add_rls.py"
+    runtime_flag: null
+    public_claim_allowed: false
+
+  - id: durable_execution
+    name: "Persistent Durable Checkpoints"
+    status: partial  # model + service exist, not integrated into golden path
+    evidence_path: "backend/app/services/durable_runtime.py"
+    runtime_flag: null
+    public_claim_allowed: false
+
+  - id: idempotency
+    name: "Idempotency Keys for Side Effects"
+    status: partial  # middleware + model exist, not in app middleware stack
+    evidence_path: "backend/app/middleware/idempotency.py"
+    runtime_flag: null
+    public_claim_allowed: false
+
+  - id: opentelemetry
+    name: "OpenTelemetry Observability"
+    status: partial  # gateway spans + otel.py, packages not in requirements
+    evidence_path: "backend/app/observability/otel.py"
+    runtime_flag: null
+    public_claim_allowed: false
+
+  - id: ma_os
+    name: "M&A / Corporate Development"
+    status: roadmap
+    evidence_path: "docs/governance/ma-os.md"
+    runtime_flag: null
+    public_claim_allowed: false
+
+  - id: pmi_os
+    name: "PMI / Strategic PMO"
+    status: roadmap
+    evidence_path: "docs/governance/pmi-os.md"
+    runtime_flag: null
+    public_claim_allowed: false
+
+  - id: temporal_integration
+    name: "Temporal Durable Workflows"
+    status: roadmap
+    evidence_path: null
+    runtime_flag: null
+    public_claim_allowed: false
+
+  - id: soc2_type_ii
+    name: "SOC 2 Type II Certification"
+    status: roadmap
+    evidence_path: null
+    runtime_flag: null
+    public_claim_allowed: false
+
+data_residency:
+  regions_supported: ["me-south-1"]  # AWS Bahrain
+  default_region: "me-south-1"
+  ksa_option: "planned"
+
+security_claims:
+  rls_enforced: false  # migration exists, production deployment pending
+  soc2_type_ii: false
+  pdpl_compliant: "in-progress"
+  annual_pentest: false
+  iso_27001: false
+  iso_27017: false
+  iso_27018: false
+  bug_bounty_program: false
+
+phase_2_capabilities:
+  - id: design_system
+    name: "Dealix Design System"
+    status: partial
+    evidence_path: "packages/design-system/tokens/"
+    public_claim_allowed: false
+  - id: arabic_ui_package
+    name: "@dealix/arabic-ui utilities"
+    status: partial
+    evidence_path: "packages/arabic-ui/src/"
+    public_claim_allowed: false
+  - id: manifesto
+    name: "Dealix Manifesto (bilingual)"
+    status: partial
+    evidence_path: "marketing/manifesto.md"
+    public_claim_allowed: false
+  - id: dealix_labs
+    name: "Dealix Labs (research program)"
+    status: roadmap
+    evidence_path: "docs/labs/README.md"
+    public_claim_allowed: false
+
+verification_protocol:
+  - id: v001_secret_scan
+    name: "V001 — Git history secret scan (trufflehog + gitleaks)"
+    status: partial  # scripted; execution pending external reviewer
+    evidence_path: "scripts/v001_secret_scan.sh"
+    public_claim_allowed: false
+  - id: v002_rls_fuzz
+    name: "V002 — RLS runtime fuzz (10K cross-tenant queries)"
+    status: partial  # test scripted; must be wired into nightly CI
+    evidence_path: "backend/tests/security/test_rls_fuzz.py"
+    public_claim_allowed: false
+  - id: v003_pentest
+    name: "V003 — External penetration test"
+    status: roadmap  # vendor not yet engaged (founder action)
+    evidence_path: "docs/verification/V003_pentest_engagement.md"
+    public_claim_allowed: false
+  - id: v004_no_founder_demo
+    name: "V004 — No-founder customer demo test"
+    status: roadmap  # testers not yet scheduled (founder action)
+    evidence_path: "docs/verification/V004_no_founder_demo_test.md"
+    public_claim_allowed: false
+  - id: v005_truth_audit
+    name: "V005 — Truth Registry independent audit"
+    status: partial  # scripted; must be run by independent engineer
+    evidence_path: "scripts/v005_truth_registry_audit.py"
+    public_claim_allowed: false
+  - id: v006_perf_baseline
+    name: "V006 — Performance baseline (k6)"
+    status: partial  # script ready; no baseline JSON yet
+    evidence_path: "infra/load-tests/baseline.js"
+    public_claim_allowed: false
+  - id: v007_a11y_baseline
+    name: "V007 — Accessibility baseline (axe)"
+    status: partial  # spec ready; no baseline JSON yet
+    evidence_path: "frontend/tests/a11y/baseline.spec.ts"
+    public_claim_allowed: false
+
+founder_decision_sprint:
+  - id: fd001_legal_entity
+    status: pending
+    evidence_path: "docs/internal/legal_entity_decision.md"
+  - id: fd002_counsel_engaged
+    status: pending
+    evidence_path: null
+  - id: fd003_repo_extraction
+    status: pending  # script ready, new GitHub org not yet created
+    evidence_path: "scripts/extract_dealix_repo.sh"
+  - id: fd004_saip_trademark
+    status: pending
+    evidence_path: "docs/internal/trademark_status.md"
+  - id: fd005_first_hires
+    status: pending  # specs ready, outreach not started
+    evidence_path: "docs/hiring/README.md"
+
+customer_validation:
+  pilots_signed: 0
+  pilots_active: 0
+  design_partners_signed: 0
+  week12_phase_gate: not_reached
+  friction_log_entries: 0
+  hypotheses_total: 12
+  hypotheses_supported: 0
+  hypotheses_falsified: 0
+  hypotheses_ambiguous: 0
+  hypotheses_untested: 12
+  discovery_interviews_logged: 0
+  business_viability_kit: "DEALIX_BUSINESS_VIABILITY_KIT.md"

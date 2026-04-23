@@ -1,0 +1,25 @@
+# Dealix CODEOWNERS — require review for sensitive paths
+
+# Default owner
+* @VoXc2
+
+# Governance docs — changes require explicit review
+salesflow-saas/MASTER_OPERATING_PROMPT.md @VoXc2
+salesflow-saas/docs/governance/ @VoXc2
+salesflow-saas/docs/adr/ @VoXc2
+
+# Security-sensitive code
+salesflow-saas/backend/app/openclaw/ @VoXc2
+salesflow-saas/backend/app/services/pdpl/ @VoXc2
+salesflow-saas/backend/app/services/auth_service.py @VoXc2
+salesflow-saas/backend/app/services/security_gate.py @VoXc2
+salesflow-saas/backend/app/services/shannon_security.py @VoXc2
+
+# Trust plane
+salesflow-saas/backend/app/services/contradiction_engine.py @VoXc2
+salesflow-saas/backend/app/services/evidence_pack_service.py @VoXc2
+salesflow-saas/backend/app/services/saudi_compliance_matrix.py @VoXc2
+
+# Infrastructure
+salesflow-saas/docker-compose.yml @VoXc2
+salesflow-saas/.github/ @VoXc2

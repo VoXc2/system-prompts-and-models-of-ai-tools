@@ -1,0 +1,117 @@
+# 12 Business Viability Hypotheses
+#
+# Each hypothesis MUST reach verdict by Week 12: SUPPORTED, FALSIFIED, or AMBIGUOUS.
+# Edited only after customer interactions — never from founder intuition alone.
+#
+# Rule: an interview log in docs/customer_learnings/interviews/ must be cited
+# as evidence for every status change.
+
+version: 1
+kit: "DEALIX_BUSINESS_VIABILITY_KIT.md v1.0.0"
+window_weeks: [4, 12]
+
+hypotheses:
+  - id: H1
+    claim: "The commitment-tracking problem is real and painful for 200–2000-employee KSA firms"
+    falsification_trigger: "10 CFO/COO interviews answer 'can't remember' or take >60s to cite an example"
+    status: UNTESTED        # UNTESTED | SUPPORTED | FALSIFIED | AMBIGUOUS
+    evidence_interviews: [] # e.g. ["acme_20260422.md"]
+    confidence: null        # null | low | medium | high
+    last_update: null
+
+  - id: H2
+    claim: "Pain clears the $10K/yr willingness-to-pay threshold"
+    falsification_trigger: "Unprompted annual-value answers cluster below $10K across interviews"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H3
+    claim: "Decision maker is reachable within 3 meetings of first call"
+    falsification_trigger: "'Procurement committee + 6 months' is the dominant answer"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H4
+    claim: "Clear trigger event (board pressure, audit fail, reg change) drives purchase"
+    falsification_trigger: "No identifiable triggers across 10 interviews"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H5
+    claim: "Buyer owns ≥ $50K/yr budget for ContOps / RevOps / Governance tech"
+    falsification_trigger: "No comparable tool purchase in last 12 months"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H6
+    claim: "Saudi enterprises genuinely prefer Arabic-first over translated English SaaS"
+    falsification_trigger: "'We stayed on the English interface' is the pattern"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H7
+    claim: "PDPL + ZATCA depth is a stated RFP criterion, not a late-added checkbox"
+    falsification_trigger: "'Compliance added at end' is typical"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H8
+    claim: "Serious customers accept paid pilot (50% of Business tier upfront)"
+    falsification_trigger: "'We pay only after value proven' pattern blocks close"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H9
+    claim: "Successful pilot customers will be public references (logo, testimonial, case)"
+    falsification_trigger: "Refusal in pilot negotiations across 3+ candidates"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H10
+    claim: "Land-and-expand viable: after one workflow wins, customers want more"
+    falsification_trigger: "Month-3 review: 'no other workflows' dominant"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H11
+    claim: "Quantified customer value ≥ 10× price"
+    falsification_trigger: "Ratio under 10× in 3+ pilots once measured"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+  - id: H12
+    claim: "Organic referrals emerge within 6 months of first successful pilot"
+    falsification_trigger: "Zero unprompted referrals after 3 successful wins + 6 months"
+    status: UNTESTED
+    evidence_interviews: []
+    confidence: null
+    last_update: null
+
+# Weekly rollup (auto-filled by founder Friday review)
+rollup:
+  total: 12
+  supported: 0
+  falsified: 0
+  ambiguous: 0
+  untested: 12
+  notes: "Kit issued Week 4. No interactions logged yet."

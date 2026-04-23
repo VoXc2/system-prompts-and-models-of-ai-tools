@@ -1,0 +1,69 @@
+{
+  "sequences": [
+    {
+      "id": "cold-b2b-saudi",
+      "name": "Cold B2B Saudi Outreach",
+      "name_ar": "التواصل البارد مع شركات B2B السعودية",
+      "steps": [
+        {
+          "step": 1,
+          "channel": "whatsapp",
+          "delay_hours": 0,
+          "template_ar": "السلام عليكم {name} 👋\n\nأنا {sender_name} من Dealix — نظام ذكي للشركات السعودية B2B\n\nنساعد شركات مثل {company} على:\n• تسريع إقفال الصفقات 40%\n• أتمتة الموافقات بـ SLA\n• لوحة تنفيذية لحظية\n\nعندي pilot مجاني 14 يوم — تحب أعرض لك demo سريع؟",
+          "template_en": "Hi {name},\n\nI'm {sender_name} from Dealix — AI-powered deal OS for Saudi B2B.\n\nWe help companies like {company}:\n• Close deals 40% faster\n• Automate approvals with SLA\n• Real-time executive dashboard\n\n14-day free pilot — want a quick demo?"
+        },
+        {
+          "step": 2,
+          "channel": "whatsapp",
+          "delay_hours": 24,
+          "template_ar": "مرحبًا {name}،\n\nأرسلت لك أمس عن Dealix — نظام الصفقات الذكي\n\nشركة في نفس قطاعك بدأت معنا وقصّرت وقت الموافقات من 3 أيام إلى 4 ساعات\n\nلو عندك 15 دقيقة هالأسبوع أعرض لك كيف يشتغل عندكم بالضبط؟",
+          "template_en": "Hi {name},\n\nFollowing up on Dealix — a company in your sector cut approval time from 3 days to 4 hours with us.\n\n15 minutes this week for a quick demo?"
+        },
+        {
+          "step": 3,
+          "channel": "email",
+          "delay_hours": 72,
+          "subject_ar": "{company} — تسريع الصفقات بدون تغيير فريقك",
+          "subject_en": "{company} — Accelerate deals without changing your team",
+          "template_ar": "{name}،\n\nأكتب لك لأن شركات B2B في قطاعك بالسعودية تواجه:\n1. صفقات تطول — الموافقات يدوية\n2. الإدارة ما تشوف الصورة كاملة\n3. PDPL compliance يخوّف\n\nDealix يحل الثلاثة بنظام واحد.\n\nPilot 14 يوم — لو ما عجبك، بلاش.\n\nمتى نرتب demo؟",
+          "template_en": "{name},\n\nB2B companies in your sector face: slow approvals, no executive visibility, PDPL concerns.\n\nDealix solves all three. 14-day pilot — money back if no results.\n\nWhen can we schedule a demo?"
+        },
+        {
+          "step": 4,
+          "channel": "whatsapp",
+          "delay_hours": 144,
+          "template_ar": "{name}، آخر رسالة مني 🙏\n\nلو مو الوقت المناسب، أفهم تمامًا.\n\nبس لو في يوم حبيت تشوف كيف ممكن النظام يساعدك — ردّ على هالرسالة وبرتّب لك demo في أي وقت يناسبك.\n\nكل التوفيق 🌟",
+          "template_en": "{name}, last message from me 🙏\n\nIf timing isn't right, I understand.\n\nWhenever you're ready to see how Dealix can help — just reply and I'll arrange a demo at your convenience.\n\nBest of luck 🌟"
+        }
+      ]
+    },
+    {
+      "id": "referral-warm",
+      "name": "Warm Referral Outreach",
+      "name_ar": "تواصل دافئ عبر إحالة",
+      "steps": [
+        {
+          "step": 1,
+          "channel": "whatsapp",
+          "delay_hours": 0,
+          "template_ar": "السلام عليكم {name}،\n\n{referrer_name} من {referrer_company} رشّحك — قال إنكم ممكن تستفيدون من نفس النظام اللي يستخدمونه.\n\nNdealix ساعدهم يقصّرون وقت الموافقات {referrer_result}.\n\nعندك 15 دقيقة أعرض لك؟",
+          "template_en": "Hi {name},\n\n{referrer_name} from {referrer_company} referred you — they thought you'd benefit from the same system they use.\n\nDealix helped them {referrer_result}.\n\n15 minutes for a demo?"
+        }
+      ]
+    },
+    {
+      "id": "post-pilot-convert",
+      "name": "Post-Pilot Conversion",
+      "name_ar": "تحويل بعد التجربة",
+      "steps": [
+        {
+          "step": 1,
+          "channel": "whatsapp",
+          "delay_hours": 0,
+          "template_ar": "{name}، مرت أسبوعين على الـ pilot 🎉\n\nالنتائج:\n• وقت الموافقة: انخفض {approval_improvement}%\n• استخدام الفريق: {usage_count} مرة\n• صفقات أوضح: {deals_clarity}\n\nتحب نستمر بالاشتراك الشهري؟\n\nالخطة المناسبة لك: {plan_name} بـ {price} SAR/شهر",
+          "template_en": "{name}, your 2-week pilot results 🎉\n\nResults:\n• Approval time: down {approval_improvement}%\n• Team usage: {usage_count} actions\n• Deal clarity: {deals_clarity}\n\nReady to continue with a monthly subscription?\n\nRecommended plan: {plan_name} at {price} SAR/month"
+        }
+      ]
+    }
+  ]
+}

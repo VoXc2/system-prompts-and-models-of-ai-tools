@@ -2,6 +2,10 @@
   "name": "dealix-frontend",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20.10.0 <21.0.0"
+  },
   "scripts": {
     "predev": "node ../scripts/sync-marketing-to-public.cjs",
     "prebuild": "node ../scripts/sync-marketing-to-public.cjs",
