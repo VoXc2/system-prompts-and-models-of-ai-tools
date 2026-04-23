@@ -143,6 +143,19 @@ class Settings(BaseSettings):
     GOOGLE_MAPS_API_KEY: str = ""
     RAPIDAPI_KEY: str = ""  # For LinkedIn data enrichment
 
+    # ── PostHog Analytics ────────────────────────────────
+    POSTHOG_API_KEY: str = ""
+    POSTHOG_HOST: str = "https://eu.i.posthog.com"
+
+    # ── Moyasar Payments (Saudi) ────────────────────────
+    MOYASAR_SECRET_KEY: str = ""
+    MOYASAR_PUBLISHABLE_KEY: str = ""
+    MOYASAR_WEBHOOK_SECRET: str = ""
+
+    # ── DLQ Configuration ───────────────────────────────
+    DLQ_MAX_RETRIES: int = 5
+    DLQ_DRAIN_BATCH_SIZE: int = 10
+
     # ── Rate Limiting ────────────────────────────────────
     RATE_LIMIT_PER_MINUTE: int = 60
     RATE_LIMIT_PER_HOUR: int = 1000

@@ -193,3 +193,50 @@ async def get_setting(
         "version": policy.version,
         "is_active": policy.is_active,
     }
+
+
+# ── DLQ Admin Endpoints ─────────────────────────────────────────
+
+
+@router.get("/dlq/queues")
+async def dlq_list_queues() -> dict:
+    from app.services.dlq import dlq
+    queues = await dlq.all_queues()
+    total = sum(queues.values())
+    return {"queues": queues, "total_depth": total}
+
+
+@router.get("/dlq/{queue_name}")
+async def dlq_peek(queue_name: str, limit: int = Query(20, ge=1, le=100)) -> dict:
+    from app.services.dlq import dlq
+    entries = await dlq.peek(queue_name, limit=limit)
+    return {
+        "queue": queue_name,
+        "entries": [
+            {
+                "id": e.id,
+                "error": e.error,
+                "attempt": e.attempt,
+                "max_retries": e.max_retries,
+                "created_at": e.created_at,
+            }
+            for e in entries
+        ],
+        "count": len(entries),
+    }
+
+
+@router.post("/dlq/{queue_name}/purge")
+async def dlq_purge(queue_name: str) -> dict:
+    from app.services.dlq import dlq
+    count = await dlq.purge(queue_name)
+    return {"queue": queue_name, "purged": count}
+
+
+# ── Circuit Breaker Status ───────────────────────────────────────
+
+
+@router.get("/circuit-breakers")
+async def circuit_breaker_states() -> dict:
+    from app.utils.circuit_breaker import registry
+    return {"breakers": registry.all_states()}
