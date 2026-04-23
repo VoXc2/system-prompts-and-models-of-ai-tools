@@ -1,0 +1,29 @@
+name: "Update Existing Prompt"
+description: "Report that an existing AI tool's prompt has changed"
+title: "[Update] "
+labels: ["update"]
+body:
+  - type: input
+    id: tool_name
+    attributes:
+      label: Tool Name
+      placeholder: "e.g., Cursor, Claude Code"
+    validations:
+      required: true
+  - type: textarea
+    id: changes
+    attributes:
+      label: What Changed?
+      description: "Describe what's different in the new version"
+    validations:
+      required: true
+  - type: textarea
+    id: new_prompt
+    attributes:
+      label: Updated Prompt Content
+      render: markdown
+  - type: input
+    id: date_captured
+    attributes:
+      label: Date of New Version
+      placeholder: "2026-04-23"

@@ -1,0 +1,48 @@
+name: "New AI Tool Prompt"
+description: "Submit or request a new AI tool's system prompt"
+title: "[New] "
+labels: ["new-prompt"]
+body:
+  - type: input
+    id: tool_name
+    attributes:
+      label: Tool Name
+      placeholder: "e.g., Cursor, Devin, GitHub Copilot"
+    validations:
+      required: true
+  - type: input
+    id: tool_url
+    attributes:
+      label: Tool URL
+      placeholder: "https://..."
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Submission Type
+      options:
+        - "I have the prompt and will submit a PR"
+        - "I found a prompt but need help formatting"
+        - "Requesting someone to extract this prompt"
+    validations:
+      required: true
+  - type: textarea
+    id: prompt_content
+    attributes:
+      label: Prompt Content (if you have it)
+      description: "Paste the system prompt here, or describe where you found it"
+      render: markdown
+  - type: checkboxes
+    id: includes
+    attributes:
+      label: What's included?
+      options:
+        - label: System prompt
+        - label: Tool/function definitions
+        - label: Model configuration
+  - type: input
+    id: date_captured
+    attributes:
+      label: Date Captured
+      placeholder: "2026-04-23"
