@@ -1,74 +1,108 @@
-# Contributing to System Prompts & Models of AI Tools
+# Contributing to LeaksLab
 
-Thanks for your interest in contributing! This is the largest collection of real AI system prompts and tool definitions on GitHub. Here's how you can help grow it.
+Thank you for helping grow the most complete AI system prompt library on GitHub.
+
+## What We Accept
+
+### High Priority
+- **New AI tool system prompts** not yet in the library
+- **Updated versions** of existing prompts (tools update frequently)
+- **Tool schemas** (JSON function/tool definitions used by AI agents)
+- **Model configurations** (context window, temperature settings, model identifiers)
+
+### Also Accepted
+- Fixes to formatting or encoding issues
+- Better organization within existing directories
+- Additional analysis or documentation for existing tools
+
+### Not Accepted
+- Proprietary code, weights, or model binaries
+- Content that violates a tool's Terms of Service in a harmful way
+- Fabricated or AI-generated "fake" prompts
+- Duplicate content without clear differentiation
+
+---
 
 ## How to Contribute
 
-### 1. Add a New AI Tool's System Prompt
+### 1. Fork the Repository
 
-Found a system prompt that's not in the collection yet? Submit it!
-
-**Steps:**
-1. Fork this repo
-2. Create a folder: `Tool Name/`
-3. Add the prompt as `system-prompt.md` (or `.txt`)
-4. If the tool has function/tool definitions, add them as `tools.json` or `tools.md`
-5. Open a PR with title: `Add: [Tool Name] system prompt`
-
-**Format your PR description:**
-```
-## Tool: [Name]
-- **Source:** [How you obtained it — e.g., browser DevTools, API inspection, documentation]
-- **Date captured:** [YYYY-MM-DD]
-- **Model/Version:** [e.g., GPT-4o, Claude 3.5 Sonnet]
-- **Includes tools:** [Yes/No]
+```bash
+git clone https://github.com/VoXc2/system-prompts-and-models-of-ai-tools.git
+cd system-prompts-and-models-of-ai-tools
 ```
 
-### 2. Update an Existing Prompt
+### 2. Add Your Files
 
-AI tools update their prompts frequently. If you notice a prompt has changed:
-
-1. Update the file with the new version
-2. In your PR, note what changed and when
-3. If possible, keep the old version in a `previous-versions/` subfolder
-
-### 3. Report a Missing Tool
-
-Don't have the prompt yourself but know a tool is missing? Open an issue with:
-- Tool name and URL
-- Why it's notable (user count, unique features, etc.)
-
-## What We're Looking For
-
-**High-value additions:**
-- Popular AI coding assistants (IDE plugins, CLI tools)
-- AI chat products with unique system prompts
-- AI agents with tool/function definitions
-- Enterprise AI tools with complex prompt structures
-
-**Quality standards:**
-- Must be the actual system prompt (not a guess or recreation)
-- Include the date it was captured
-- No personal API keys or credentials in the content
-- Organize files cleanly in a dedicated folder
-
-## Directory Structure
-
+**Directory structure:**
 ```
 Tool Name/
-  system-prompt.md      # The main system prompt
-  tools.json            # Tool/function definitions (if available)
-  previous-versions/    # Older versions (optional)
-    2025-01-system-prompt.md
+  system_prompt.md          # The system prompt (required)
+  tools.json                # Tool/function schemas if available (optional)
+  model.md                  # Model info (optional)
+  README.md                 # Brief notes about source/version (optional)
 ```
+
+**Naming conventions:**
+- Use the tool's official name for the directory
+- `system_prompt.md` for the main system prompt
+- `tools.json` for tool/function schemas
+- `model.md` for model configuration info
+
+### 3. Update the README Index
+
+Add your tool to the appropriate table in `README.md`:
+
+```markdown
+| Tool Name | ✅ | ✅ | Category | `Tool Name/` |
+```
+
+Categories: `Coding Agent` | `Browser AI` | `General AI` | `Autonomous Agent` | `App Builder` | `Productivity AI` | `Terminal AI` | `UI Generator` | `Search AI`
+
+### 4. Open a Pull Request
+
+**PR title format:** `Add [Tool Name] system prompt` or `Update [Tool Name] to v[version]`
+
+**PR description should include:**
+- Where the prompt came from (public disclosure, your own extraction, community research)
+- Version/date of the prompt if known
+- Any interesting patterns or notable aspects worth highlighting
+
+---
+
+## Quality Standards
+
+### For System Prompts
+- Must be the actual system prompt, not a paraphrase
+- Include the full prompt — partial prompts are less useful
+- Preserve exact formatting (whitespace, line breaks matter in prompts)
+- Mark clearly if it's a partial extraction
+
+### For Tool Schemas
+- Use valid JSON
+- Include all available fields (name, description, parameters)
+- If extracted programmatically, note the extraction method
+
+### For README Updates
+- Keep the table alphabetically sorted within each section
+- Use the exact category labels listed above
+- Link to the correct directory path
+
+---
 
 ## Code of Conduct
 
-- Don't include credentials, API keys, or personal data
-- Credit sources when possible
-- Be respectful in issues and PRs
-- This is for educational and research purposes
+- Be respectful to other contributors
+- Don't claim credit for others' work
+- If you're submitting content originally found/extracted by someone else, credit them in the PR description
+- No spam PRs — quality over quantity
+
+---
 
 ## Questions?
 
-Open an issue or join the [Discord](https://discord.gg/NwzrWErdMU).
+Open a [GitHub Discussion](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/discussions) and we'll help.
+
+---
+
+Thank you for contributing. Every prompt added helps engineers worldwide build better AI products.

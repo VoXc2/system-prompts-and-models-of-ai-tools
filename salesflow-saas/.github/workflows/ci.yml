@@ -1,0 +1,53 @@
+name: Dealix CI — Service Reality Protocol
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: 8-Gate Reality Protocol
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          pip install --upgrade pip
+          pip install flask flask-cors requests pytest
+
+      - name: Initialize database
+        working-directory: backend
+        run: python -c "from app.core.database import init_db; init_db()"
+
+      - name: Start backend server
+        working-directory: backend
+        run: |
+          python main.py &
+          sleep 3
+          curl --retry 5 --retry-delay 1 http://localhost:8000/api/health
+
+      - name: Run existing unit tests
+        working-directory: backend
+        run: pytest tests/test_audit.py tests/test_lead_flow.py tests/test_approval_flow.py -v
+
+      - name: Run 8-Gate Reality Protocol
+        working-directory: backend
+        run: python tests/reality_protocol.py
+
+      - name: Upload protocol results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reality-protocol-results
+          path: backend/tests/
