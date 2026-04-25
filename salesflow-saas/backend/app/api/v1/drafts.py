@@ -177,9 +177,14 @@ async def send_draft(draft_id: str, db: AsyncSession = Depends(_get_db)) -> Dict
 
     elif draft.channel == "whatsapp" and draft.contact_phone:
         try:
-            from app.integrations.whatsapp import send_whatsapp_message
-            r = await send_whatsapp_message(draft.contact_phone, draft.body)
-            send_result = {"channel": "whatsapp", "status": "sent", "result": r}
+            from app.api.v1.outreach_engine import _send_via_ultramsg, _format_phone
+            r = await _send_via_ultramsg(draft.contact_phone, draft.body)
+            if "error" not in r:
+                send_result = {"channel": "whatsapp_ultramsg", "status": "sent", "result": r}
+            else:
+                from app.integrations.whatsapp import send_whatsapp_message
+                r2 = await send_whatsapp_message(draft.contact_phone, draft.body)
+                send_result = {"channel": "whatsapp_business_api", "status": "sent", "result": r2}
         except Exception as exc:
             send_result = {"channel": "whatsapp", "status": "failed", "error": str(exc)[:200]}
 
@@ -242,6 +247,99 @@ async def edit_draft(
         setattr(draft, field, value)
     await db.commit()
     return {"id": str(draft.id), "status": "edited", "updated_fields": list(req.model_dump(exclude_none=True).keys())}
+
+
+@router.post("/send-approved-batch")
+async def send_approved_batch(
+    channel: str = "whatsapp",
+    batch_size: int = 10,
+    db: AsyncSession = Depends(_get_db),
+) -> Dict[str, Any]:
+    """Send up to batch_size approved drafts via specified channel.
+
+    Uses Ultramsg for WhatsApp (fallback to Business API),
+    SMTP for email, Unifonic for SMS. LinkedIn = manual only.
+    """
+    from app.models.outreach_draft import OutreachDraft
+
+    stmt = (
+        select(OutreachDraft)
+        .where(
+            OutreachDraft.status == "approved",
+            OutreachDraft.channel == channel,
+        )
+        .order_by(OutreachDraft.approved_at.asc())
+        .limit(batch_size)
+    )
+    result = await db.execute(stmt)
+    drafts = list(result.scalars().all())
+
+    sent = 0
+    failed = 0
+    results = []
+
+    for draft in drafts:
+        send_result = {}
+
+        if channel == "whatsapp" and draft.contact_phone:
+            try:
+                from app.api.v1.outreach_engine import _send_via_ultramsg
+                r = await _send_via_ultramsg(draft.contact_phone, draft.body)
+                if "error" not in r:
+                    send_result = {"status": "sent", "provider": "ultramsg", "result": r}
+                    draft.status = "sent"
+                    draft.sent_at = datetime.now(timezone.utc)
+                    sent += 1
+                else:
+                    send_result = {"status": "failed", "error": str(r)}
+                    failed += 1
+            except Exception as exc:
+                send_result = {"status": "failed", "error": str(exc)[:100]}
+                failed += 1
+
+        elif channel == "email" and draft.contact_email:
+            try:
+                from app.integrations.email_sender import send_email
+                r = await send_email(draft.contact_email, draft.subject, draft.body)
+                send_result = {"status": "sent", "provider": "smtp", "result": r}
+                draft.status = "sent"
+                draft.sent_at = datetime.now(timezone.utc)
+                sent += 1
+            except Exception as exc:
+                send_result = {"status": "failed", "error": str(exc)[:100]}
+                failed += 1
+
+        elif channel == "sms" and draft.contact_phone:
+            try:
+                from app.integrations.sms import send_sms
+                r = await send_sms(draft.contact_phone, draft.body)
+                send_result = {"status": "sent", "provider": "unifonic", "result": r}
+                draft.status = "sent"
+                draft.sent_at = datetime.now(timezone.utc)
+                sent += 1
+            except Exception as exc:
+                send_result = {"status": "failed", "error": str(exc)[:100]}
+                failed += 1
+
+        elif channel == "linkedin":
+            send_result = {"status": "manual_required", "message": "Copy from dashboard and send on LinkedIn"}
+
+        results.append({
+            "id": str(draft.id),
+            "company": draft.company,
+            **send_result,
+        })
+
+    await db.commit()
+
+    return {
+        "channel": channel,
+        "batch_size": batch_size,
+        "sent": sent,
+        "failed": failed,
+        "manual": len([r for r in results if r.get("status") == "manual_required"]),
+        "results": results,
+    }
 
 
 @router.post("/{draft_id}/log-reply")
