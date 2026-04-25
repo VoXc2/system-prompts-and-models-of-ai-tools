@@ -148,3 +148,7 @@ api_router.include_router(drafts_router.router)
 # ── Follow-ups — auto-generate follow-up drafts for unreplied ──
 from app.api.v1 import followups as followups_router
 api_router.include_router(followups_router.router)
+
+# ── Full OS — unified deal lifecycle orchestration ─────────────
+from app.api.v1 import full_os as full_os_router
+api_router.include_router(full_os_router.router)
