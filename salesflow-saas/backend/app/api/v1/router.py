@@ -136,3 +136,7 @@ api_router.include_router(channels_router.router)
 # ── Pricing & Checkout — Moyasar-powered payment flow ────────
 from app.api.v1 import pricing as pricing_router
 api_router.include_router(pricing_router.router)
+
+# ── Automation — Daily targeting + email + reply classification ─
+from app.api.v1 import automation as automation_router
+api_router.include_router(automation_router.router)
