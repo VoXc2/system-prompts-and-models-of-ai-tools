@@ -152,3 +152,7 @@ api_router.include_router(followups_router.router)
 # ── Full OS — unified deal lifecycle orchestration ─────────────
 from app.api.v1 import full_os as full_os_router
 api_router.include_router(full_os_router.router)
+
+# ── Founder Outreach — hyper-personalized founder emails ───────
+from app.api.v1 import founder_outreach as founder_outreach_router
+api_router.include_router(founder_outreach_router.router)
