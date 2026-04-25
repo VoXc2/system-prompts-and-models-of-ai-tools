@@ -22,6 +22,27 @@ router = APIRouter(prefix="/pricing", tags=["Pricing & Checkout"])
 
 PLANS: List[Dict[str, Any]] = [
     {
+        "id": "pilot",
+        "name_en": "7-Day Pilot",
+        "name_ar": "تجربة 7 أيام",
+        "price_sar": 499,
+        "billing": "one-time",
+        "features_en": [
+            "7-day full access",
+            "AI lead response (45 sec)",
+            "Lead qualification",
+            "Demo booking automation",
+            "Full money-back guarantee",
+        ],
+        "features_ar": [
+            "وصول كامل 7 أيام",
+            "رد ذكي على العملاء (45 ثانية)",
+            "تأهيل العملاء المحتملين",
+            "حجز مواعيد تلقائي",
+            "ضمان استرداد كامل",
+        ],
+    },
+    {
         "id": "starter",
         "name_en": "Starter",
         "name_ar": "المبتدئ",
