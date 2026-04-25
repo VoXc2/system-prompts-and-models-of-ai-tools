@@ -99,6 +99,7 @@ class EmailGenerateRequest(BaseModel):
     pain_hypothesis: str = ""
     website: str = ""
     signals: List[str] = []
+    language: str = "ar"  # ar | en — auto-detected from website or default
 
 
 def _is_personal_email(email: str) -> bool:
@@ -124,8 +125,45 @@ def _compliance_check(req: ComplianceCheckRequest) -> Dict[str, Any]:
     return {"allowed": True, "reason": "compliant", "action": "send"}
 
 
+SECTOR_PAIN_MAP_EN = {
+    "real_estate": {
+        "pain_en": "Inquiries about prices, locations, and sizes are lost due to slow response times",
+        "angle_en": "Dealix responds within 45 seconds, asks about budget and preferred location, and books viewings automatically",
+    },
+    "construction": {
+        "pain_en": "Quote requests need quick screening before reaching engineers",
+        "angle_en": "Dealix receives the request, asks about project type and budget, and classifies urgency",
+    },
+    "agency": {
+        "pain_en": "Your clients' ad-generated leads go cold because follow-up is slow",
+        "angle_en": "Dealix becomes a new service you sell: AI response + qualification + booking",
+    },
+    "saas": {
+        "pain_en": "Leads from your website and ads go cold because the sales team is small",
+        "angle_en": "Dealix responds in Arabic within 45 seconds, qualifies, and books demos automatically",
+    },
+}
+
+
+def _detect_language(req: EmailGenerateRequest) -> str:
+    """Detect preferred language from signals or explicit setting."""
+    if req.language and req.language in ("ar", "en"):
+        return req.language
+    if req.website:
+        domain = req.website.lower()
+        if any(d in domain for d in [".sa", ".com.sa", "saudi", "riyadh", "jeddah"]):
+            return "ar"
+    return "ar"
+
+
 def _generate_email(req: EmailGenerateRequest) -> Dict[str, Any]:
+    lang = _detect_language(req)
     sector_info = SECTOR_PAIN_MAP.get(req.sector, SECTOR_PAIN_MAP.get("saas", {}))
+    sector_info_en = SECTOR_PAIN_MAP_EN.get(req.sector, SECTOR_PAIN_MAP_EN.get("saas", {}))
+
+    if lang == "en":
+        return _generate_email_en(req, sector_info_en)
+
     pain = req.pain_hypothesis or sector_info.get("pain_ar", "تأخر الرد على العملاء المحتملين")
     angle = sector_info.get("angle_ar", "ديلكس يرد بالعربي خلال 45 ثانية ويؤهل العميل")
     roi = sector_info.get("roi_ar", "الرد السريع يحفظ فرص كانت بتضيع")
@@ -205,12 +243,84 @@ calendly.com/sami-assiri11/dealix-demo
     return {
         "company": req.company,
         "sector": req.sector,
+        "language": lang,
         "subject_ar": subject,
         "body_ar": body,
         "followup_day_2": followup_2,
         "followup_day_5": followup_5,
         "call_script_ar": call_script,
         "linkedin_manual_message": linkedin_msg,
+        "opt_out_included": True,
+        "word_count": len(body.split()),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def _generate_email_en(req: EmailGenerateRequest, sector_info_en: Dict) -> Dict[str, Any]:
+    """Generate English version of outreach email."""
+    pain = sector_info_en.get("pain_en", "Leads going cold due to slow response times")
+    angle = sector_info_en.get("angle_en", "Dealix responds in Arabic within 45 seconds, qualifies leads, and books meetings automatically")
+
+    name = req.contact_name or f"{req.company} team"
+    signal_line = ""
+    if "hubspot" in [s.lower() for s in req.signals]:
+        signal_line = f"I noticed {req.company} uses HubSpot — "
+    elif "whatsapp_widget" in [s.lower() for s in req.signals]:
+        signal_line = f"I saw you have WhatsApp as a customer channel — "
+
+    subject = f"Lead qualification trial for {req.company}"
+    body = f"""Hi {name},
+
+{signal_line}{pain}.
+
+I'm Sami from Dealix. {angle}.
+
+We offer a 7-day trial on 10-25 of your leads with daily reporting.
+Launch price: 499 SAR.
+
+Would you like me to show you an example based on your business?
+
+To stop receiving these emails, reply "STOP".
+
+Sami Alassiri
+Dealix — AI Sales Rep for Saudi Businesses
+dealix.me"""
+
+    followup_2 = f"""Hi {name},
+
+Following up on my email 2 days ago about Dealix.
+
+Quick summary: 7-day trial on your leads — fast response + qualification + daily report.
+
+Would 10 minutes this week work?
+calendly.com/sami-assiri11/dealix-demo
+
+Reply "STOP" to unsubscribe.
+
+Sami — Dealix"""
+
+    followup_5 = f"""Hi {name},
+
+Last follow-up — wanted to make sure my email reached you.
+
+Dealix helps {req.sector} companies respond to inquiries faster and convert more leads.
+
+If timing isn't right, no worries. If it is, I'm available anytime.
+
+Reply "STOP" to unsubscribe.
+
+Sami — Dealix"""
+
+    return {
+        "company": req.company,
+        "sector": req.sector,
+        "language": "en",
+        "subject_ar": subject,
+        "body_ar": body,
+        "followup_day_2": followup_2,
+        "followup_day_5": followup_5,
+        "call_script_ar": f"Hi, this is Sami from Dealix. We help {req.sector} companies respond to leads faster. Do you have 5 minutes?",
+        "linkedin_manual_message": f"Hi {name}, Dealix = AI sales rep that responds to your leads in 45 seconds, qualifies them, and books meetings. 20-min demo? calendly.com/sami-assiri11/dealix-demo",
         "opt_out_included": True,
         "word_count": len(body.split()),
         "generated_at": datetime.now(timezone.utc).isoformat(),
