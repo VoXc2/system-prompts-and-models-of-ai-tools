@@ -101,8 +101,8 @@ def _format_phone(phone: str) -> str:
 
 async def _send_via_ultramsg(phone: str, message: str) -> dict:
     """Send a message via Ultramsg API."""
-    instance_id = os.getenv("ULTRAMSG_INSTANCE_ID", "instance168132")
-    token = os.getenv("ULTRAMSG_TOKEN", "7azj2ss74wpg9jwp")
+    instance_id = os.getenv("ULTRAMSG_INSTANCE_ID", "")
+    token = os.getenv("ULTRAMSG_TOKEN", "")
 
     if not instance_id or not token:
         return {"error": "Ultramsg not configured"}

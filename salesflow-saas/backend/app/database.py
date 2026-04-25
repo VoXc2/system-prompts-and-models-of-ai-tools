@@ -16,7 +16,14 @@ def _get_db_url() -> str:
                             break
             except FileNotFoundError:
                 continue
-    return url or "sqlite+aiosqlite:///./dealix.db"
+    if not url:
+        return "sqlite+aiosqlite:///./dealix.db"
+    # Railway Postgres gives postgres:// but SQLAlchemy needs postgresql+asyncpg://
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql+asyncpg://", 1)
+    elif url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    return url
 
 
 _DB_URL = _get_db_url()

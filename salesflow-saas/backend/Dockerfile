@@ -12,9 +12,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt ./
 
-# Install CPU-only torch first (saves ~3 GB vs CUDA version)
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
-    && pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
     && pip install --no-cache-dir -r requirements.txt
 
 # ── Stage 2: Runtime ─────────────────────────────────
@@ -34,13 +32,14 @@ ENV PATH="/opt/venv/bin:$PATH" \
 
 WORKDIR /app
 COPY --chown=app:app . .
+RUN chmod +x start.sh
 
 USER app
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=5 \
+    CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
 ENTRYPOINT ["tini", "--"]
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+CMD ["./start.sh"]

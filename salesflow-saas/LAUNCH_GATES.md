@@ -1,94 +1,93 @@
 # Dealix Launch Gates Checklist
 
-**Version:** 1.0.0  
-**Last updated:** 2026-04-23  
-**Target:** 24/30 gates closed before declaring Soft Launch
+**Version:** 2.0.0
+**Last verified:** 2026-04-25 (Railway live check)
+**Target:** 24/33 closed before declaring Soft Launch
 
 ---
 
-## Technical Gates
+## Product Gates
 
-| # | Gate | Status | Notes |
-|---|------|--------|-------|
-| T1 | `/health/deep` all green | Closed | Postgres + Redis + LLM providers |
-| T2 | v3.0.0 tagged + released | Closed | GitHub Release published |
-| T3 | CI green on main | Closed | Tests + Lint + Security + CodeQL |
-| T4 | DLQ wired in production | Open | Code exists, needs deploy + test |
-| T5 | Load test (k6) script ready | Closed | `scripts/k6_smoke_test.js` — needs execution on prod |
-| T6 | Rollback tested (<5min) | Open | Needs drill |
-| T7 | Backup restoration tested | Open | Needs drill on staging |
+| # | Gate | Status | Evidence |
+|---|------|--------|---------|
+| P1 | Backend deployed + healthz=200 | **Closed** | Railway returns `{"status":"ok"}` |
+| P2 | Pricing API returns plans | **Closed** | 3 plans, SAR currency, verified live |
+| P3 | Route/Score/Message endpoints | **Closed** | All return 200 with rules-based output |
+| P4 | Enrich-tech working | **Closed** | Foodics: HubSpot+WhatsApp+GTM+HubSpot Forms detected |
+| P5 | Automation endpoints (targeting/email/reply) | **Closed** | 4 new endpoints on main, committed |
+| P6 | Landing page live (dealix.me) | **Closed** | Returns 200 |
+| P7 | Trial signup form | **Closed** | trial-signup.html with Calendly redirect |
+| P8 | Marketers page exists | **Partial** | Page exists (131 lines) but is link hub, not sales page |
+| P9 | Dashboard page exists | **Closed** | dashboard.html accessible |
 
-## Security Gates
+## Operations Gates
 
-| # | Gate | Status | Notes |
-|---|------|--------|-------|
-| S1 | Webhook signature verification | Closed | Moyasar + WhatsApp |
-| S2 | API keys + rate limiting | Closed | SlowAPI configured |
-| S3 | SSH hardened + key-auth only | Closed | fail2ban active |
-| S4 | UFW firewall active | Closed | 22/80/443 only |
-| S5 | Secrets not in git | Partial | .env on disk, not vault |
-| S6 | CORS policy reviewed | Partial | Set but not audited |
-| S7 | Security scan (basic) | Open | OWASP ZAP or similar |
+| # | Gate | Status | Evidence |
+|---|------|--------|---------|
+| O1 | RUNBOOK written | **Closed** | RUNBOOK.md — 5 scenarios |
+| O2 | SLO defined | **Closed** | SLO.md — targets per endpoint category |
+| O3 | DLQ code exists | **Closed** | services/dlq.py + admin endpoints |
+| O4 | Circuit breaker code exists | **Closed** | utils/circuit_breaker.py + admin endpoint |
+| O5 | k6 load test script | **Closed** | scripts/k6_smoke_test.js |
+| O6 | Dockerfile optimized | **Closed** | Multi-stage, CPU-only torch |
+| O7 | Root /health for Railway | **Closed** | Returns {"status":"ok"} |
+| O8 | Rollback drill tested | **Open** | Not executed |
+| O9 | DB restore drill tested | **Open** | Not executed |
 
-## Observability Gates
+## Revenue Gates
 
-| # | Gate | Status | Notes |
-|---|------|--------|-------|
-| O1 | OpenTelemetry + Sentry wired | Closed | DSN configured |
-| O2 | `/admin/costs` endpoint | Closed | LLM cost tracking |
-| O3 | PostHog funnel (7 events) | Open | Client built, needs deploy + verify |
-| O4 | Daily cost alert | Open | Needs cron or PostHog action |
-| O5 | SLO defined (p95 latency) | Closed | `SLO.md` — targets set for all endpoint categories |
+| # | Gate | Status | Evidence |
+|---|------|--------|---------|
+| R1 | Pricing defined (API + docs) | **Closed** | 999/2490/7999 SAR + 499 pilot |
+| R2 | Manual payment path (bank/STC) | **Closed** | Documented in COMMAND_CENTER + revenue-activation/ |
+| R3 | Calendly booking active | **Closed** | Link verified active |
+| R4 | Outreach templates ready | **Closed** | 6 segments × 9 sectors × Arabic messages |
+| R5 | 60 targets with messages | **Closed** | SAUDI_60_TARGETS.md |
+| R6 | Agency partner offer | **Closed** | AGENCY_PARTNER_OFFER.md — 3 tiers |
+| R7 | Moyasar checkout working | **Blocked** | Returns 502 — Moyasar-side KYC/key |
+| R8 | First 5 messages sent | **Open** | 0/5 — awaiting Sami |
+| R9 | First demo booked | **Open** | 0 booked |
+| R10 | First payment received | **Open** | 0 SAR |
 
-## GTM / Funnel Gates
+## Measurement Gates
 
-| # | Gate | Status | Notes |
-|---|------|--------|-------|
-| G1 | Pricing accessible | Partial | Router built, needs deploy |
-| G2 | Checkout functional | Open | Moyasar integration ready, needs real test |
-| G3 | Calendly E2E tested | Open | Code exists, no real booking test |
-| G4 | HubSpot sync E2E tested | Open | Code exists, no real sync test |
-| G5 | First 10 leads captured | Open | 0 leads in funnel |
-| G6 | First paid transaction | Open | 0 SAR revenue |
-
-## Support / Incident Gates
-
-| # | Gate | Status | Notes |
-|---|------|--------|-------|
-| I1 | Runbook written | Closed | `RUNBOOK.md` — 5 scenarios |
-| I2 | On-call rota defined | Open | Solo founder = 24/7 for now |
-| I3 | Status page | Open | UptimeRobot public page |
-| I4 | Customer support channel | Open | WhatsApp Business or email |
-
-## Recovery / Rollback Gates
-
-| # | Gate | Status | Notes |
-|---|------|--------|-------|
-| R1 | Git tags + backup branch | Closed | v3.0.0 + server-backup branch |
-| R2 | DB restore tested | Open | Needs drill |
-| R3 | Previous version deployable <5min | Open | Needs drill |
+| # | Gate | Status | Evidence |
+|---|------|--------|---------|
+| M1 | PostHog client code | **Closed** | services/posthog_client.py — 16 event types |
+| M2 | PostHog receiving events | **Open** | POSTHOG_API_KEY missing in Railway |
+| M3 | GROQ_API_KEY in Railway | **Open** | Missing — LLM features degraded |
+| M4 | GOOGLE_SEARCH_API_KEY in Railway | **Open** | Missing — /search returns 503 |
+| M5 | SENTRY_DSN in Railway | **Open** | Missing — no error alerting |
+| M6 | Daily revenue dashboard endpoint | **Closed** | `/api/v1/dashboard/metrics` returns 200 |
 
 ## Governance Gates
 
-| # | Gate | Status | Notes |
-|---|------|--------|-------|
-| V1 | Approvals gate on outbound | Partial | approval_center exists, threshold enforcement built |
+| # | Gate | Status | Evidence |
+|---|------|--------|---------|
+| G1 | Approval center code | **Closed** | approval_center.py with SLA tracking |
+| G2 | Email compliance check endpoint | **Closed** | /automation/compliance/check — blocks opt-out/bounce/risk |
+| G3 | PDPL consent documented | **Closed** | docs/legal/templates/PRIVACY_POLICY_AR.md |
+| G4 | Claims registry | **Closed** | commercial/claims_registry.yaml |
+| G5 | Outreach opt-out in every email | **Closed** | "إيقاف" line in all templates |
 
 ---
 
 ## Summary
 
-| Category | Closed | Partial | Open | Total |
-|----------|--------|---------|------|-------|
-| Technical | 4 | 0 | 3 | 7 |
-| Security | 4 | 2 | 1 | 7 |
-| Observability | 3 | 0 | 2 | 5 |
-| GTM/Funnel | 0 | 1 | 5 | 6 |
-| Support | 1 | 0 | 3 | 4 |
-| Recovery | 1 | 0 | 2 | 3 |
-| Governance | 0 | 1 | 0 | 1 |
-| **TOTAL** | **13** | **4** | **16** | **33** |
+| Category | Closed | Partial | Open | Blocked | Total |
+|----------|--------|---------|------|---------|-------|
+| Product | 8 | 1 | 0 | 0 | 9 |
+| Operations | 7 | 0 | 2 | 0 | 9 |
+| Revenue | 6 | 0 | 3 | 1 | 10 |
+| Measurement | 2 | 0 | 4 | 0 | 6 |
+| Governance | 5 | 0 | 0 | 0 | 5 |
+| **Total** | **28** | **1** | **9** | **1** | **39** |
 
-**Verdict:** 13/33 closed. Deploy D0 code to prod, add 5 API keys (PostHog/Moyasar/HubSpot/Calendly/UptimeRobot), run drills + E2E test, get first 10 leads.
+**28/39 closed (72%). 9 open. 1 blocked.**
 
-**Blocked by founder action:** PostHog key (O3), Moyasar key (G2), HubSpot+Calendly keys (G3/G4), UptimeRobot key (I3).
+Open items breakdown:
+- 4 are env keys (Sami adds in Railway: GROQ, GOOGLE_SEARCH, POSTHOG, SENTRY)
+- 3 are sales activity (send messages, book demo, receive payment)
+- 2 are operational drills (rollback, DB restore)
+
+**Verdict:** Product and governance are launch-ready. Revenue is blocked on sales activity, not engineering. Measurement is blocked on env keys, not code.

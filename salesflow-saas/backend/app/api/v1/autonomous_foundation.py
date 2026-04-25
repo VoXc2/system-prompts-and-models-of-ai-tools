@@ -17,7 +17,7 @@ from app.openclaw.observability_bridge import observability_bridge
 from app.openclaw.policy import classify_action
 from app.openclaw.task_router import task_router
 from app.services.contract_intelligence_service import contract_intelligence_service
-from app.services.executive_roi_service import executive_roi_service
+from app.services.executive_roi_service import executive_room_service as executive_roi_service
 from app.services.predictive_revenue_service import predictive_revenue_service
 from app.openclaw.plugins.salesforce_agentforce_plugin import SalesforceAgentforcePlugin
 from app.openclaw.plugins.whatsapp_plugin import WhatsAppCloudPlugin

@@ -136,3 +136,23 @@ api_router.include_router(channels_router.router)
 # ── Pricing & Checkout — Moyasar-powered payment flow ────────
 from app.api.v1 import pricing as pricing_router
 api_router.include_router(pricing_router.router)
+
+# ── Automation — Daily targeting + email + reply classification ─
+from app.api.v1 import automation as automation_router
+api_router.include_router(automation_router.router)
+
+# ── Draft Queue — review, approve, send outreach drafts ────────
+from app.api.v1 import drafts as drafts_router
+api_router.include_router(drafts_router.router)
+
+# ── Follow-ups — auto-generate follow-up drafts for unreplied ──
+from app.api.v1 import followups as followups_router
+api_router.include_router(followups_router.router)
+
+# ── Full OS — unified deal lifecycle orchestration ─────────────
+from app.api.v1 import full_os as full_os_router
+api_router.include_router(full_os_router.router)
+
+# ── Founder Outreach — hyper-personalized founder emails ───────
+from app.api.v1 import founder_outreach as founder_outreach_router
+api_router.include_router(founder_outreach_router.router)

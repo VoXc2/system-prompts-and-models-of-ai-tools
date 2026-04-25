@@ -156,6 +156,23 @@ class Settings(BaseSettings):
     DLQ_MAX_RETRIES: int = 5
     DLQ_DRAIN_BATCH_SIZE: int = 10
 
+    # ── Local LLM (Ollama) ──────────────────────────────
+    OLLAMA_BASE_URL: str = "http://localhost:11434/v1"
+    OLLAMA_MODEL: str = "qwen2.5:7b"
+    LLM_CACHE_ENABLED: bool = True
+    LLM_CACHE_TTL: int = 3600
+    LLM_RATE_LIMIT_RPM: int = 60
+
+    # ── Green API (WhatsApp) ────────────────────────────
+    GREEN_API_INSTANCE_ID: str = ""
+    GREEN_API_TOKEN: str = ""
+
+    # ── Outreach Rate Limits ────────────────────────────
+    WHATSAPP_DAILY_LIMIT: int = 15
+    EMAIL_DAILY_LIMIT: int = 50
+    EMAIL_BATCH_SIZE: int = 10
+    EMAIL_BATCH_DELAY_MINUTES: int = 90
+
     # ── Rate Limiting ────────────────────────────────────
     RATE_LIMIT_PER_MINUTE: int = 60
     RATE_LIMIT_PER_HOUR: int = 1000
