@@ -240,3 +240,16 @@ async def dlq_purge(queue_name: str) -> dict:
 async def circuit_breaker_states() -> dict:
     from app.utils.circuit_breaker import registry
     return {"breakers": registry.all_states()}
+
+
+# ── Outreach Stats ───────────────────────────────────────────────
+
+
+@router.get("/outreach/stats")
+async def outreach_stats() -> dict:
+    try:
+        from app.api.v1.drafts import draft_stats, _get_db
+        async for db in _get_db():
+            return await draft_stats(db)
+    except Exception:
+        return {"total": 0, "draft": 0, "approved": 0, "sent": 0, "replied": 0, "opted_out": 0, "bounced": 0, "skipped": 0}

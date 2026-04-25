@@ -144,3 +144,7 @@ api_router.include_router(automation_router.router)
 # ── Draft Queue — review, approve, send outreach drafts ────────
 from app.api.v1 import drafts as drafts_router
 api_router.include_router(drafts_router.router)
+
+# ── Follow-ups — auto-generate follow-up drafts for unreplied ──
+from app.api.v1 import followups as followups_router
+api_router.include_router(followups_router.router)
