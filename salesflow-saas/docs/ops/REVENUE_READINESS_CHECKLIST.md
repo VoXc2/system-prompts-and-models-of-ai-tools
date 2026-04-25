@@ -1,66 +1,133 @@
 # Dealix — Revenue Readiness Checklist
 
-## Pricing Path
-- [x] 3 plans defined in API (Starter 999 / Growth 2999 / Scale 7999 SAR)
-- [x] Pilot offer (499 SAR / 7 days) documented
-- [x] Agency pricing (setup 3K-15K + 20-30% MRR) documented
-- [ ] Pricing page on dealix.me (exists in API, not as public page)
+**Last verified:** 2026-04-25
+**Railway healthz:** 200 (verified)
+**Pricing API:** 200 (verified: Starter 999 / Growth 2999 / Scale 7999 SAR)
 
-## Invoice Path
-- [x] Manual invoice template ready (FIRST_REVENUE_ATTEMPT.md)
-- [ ] Moyasar live invoice — blocked (502, KYC/key issue)
-- [x] Bank transfer info ready
-- [x] STC Pay ready
+---
 
-## Payment Path
-- [x] Manual payment: bank transfer + STC Pay + proof workflow
-- [x] Payment confirmation → onboarding trigger documented
-- [ ] Moyasar automated: checkout returns 502
-- [ ] Moyasar sandbox: no test key in Railway
+## 1. Pricing Path
 
-**Verdict: Manual payment path = READY. Automated = BLOCKED.**
+| Item | Status | Evidence |
+|------|--------|---------|
+| Plans in API | DONE | `/api/v1/pricing/plans` returns 3 plans, SAR currency |
+| Pilot offer defined | DONE | 499 SAR / 7 days / documented in COMMAND_CENTER.md |
+| Agency pricing defined | DONE | AGENCY_PARTNER_OFFER.md: setup 3K-15K + 20-30% MRR |
+| Public pricing page | NOT DONE | API exists but no public-facing pricing page on dealix.me |
 
-## Booking Path
-- [x] Calendly link active (calendly.com/sami-assiri11/dealix-demo)
-- [x] Landing page links to Calendly
-- [x] Trial signup form redirects to Calendly on success
-- [x] Email templates include Calendly link
-- [ ] Calendly webhook → CRM sync (code exists, E2E untested)
+**Blocker:** None for manual sales. Pricing page is P1 for inbound.
 
-## CRM Sync Path
-- [x] HubSpot connector code exists (services/crm_sync_service.py)
-- [ ] HubSpot API key in Railway — missing
-- [ ] E2E test: lead → HubSpot contact — untested
-- [x] Manual CRM: Google Sheet tracker template ready
+## 2. Invoice Path
 
-**Verdict: Manual CRM (Google Sheet) = READY. HubSpot = BLOCKED on key.**
+| Item | Status | Evidence |
+|------|--------|---------|
+| Manual invoice template | DONE | FIRST_REVENUE_ATTEMPT in revenue-activation/ |
+| Bank transfer details | DONE | Documented in COMMAND_CENTER.md |
+| STC Pay | DONE | Ready |
+| Moyasar live invoice | BLOCKED | `/api/v1/checkout` returns 502 — Moyasar-side issue |
+| Moyasar sandbox | NOT TESTED | No `MOYASAR_TEST_SECRET_KEY` in Railway env |
 
-## Follow-up Path
-- [x] Automation endpoint: reply classifier (12 categories)
-- [x] Follow-up templates: Day +2, +5, +10
-- [x] Reply response templates in Arabic
-- [ ] Gmail OAuth send adapter — needs Google Cloud setup
-- [x] Manual follow-up: copy-paste from templates
+**Workaround:** Manual invoice via bank transfer or STC Pay. Works today.
 
-**Verdict: Manual follow-up = READY. Automated = needs Gmail OAuth.**
+## 3. Payment Path
 
-## Overall Revenue Readiness
+| Item | Status | Evidence |
+|------|--------|---------|
+| Bank transfer acceptance | READY | Account info available |
+| STC Pay acceptance | READY | Number available |
+| Manual proof workflow | READY | Customer sends screenshot → Sami confirms → onboarding starts |
+| Moyasar automated payment | BLOCKED | 502 on checkout — Moyasar dashboard issue (KYC or key) |
+| Moyasar test payment (1 SAR) | NOT TESTED | Needs `MOYASAR_TEST_SECRET_KEY` or Sami to test `sk_live_` via curl |
+| Payment → onboarding trigger | MANUAL | On payment proof → start onboarding checklist within 4h |
 
-| Component | Manual | Automated |
-|-----------|--------|-----------|
-| Pricing | READY | READY (API) |
-| Invoice | READY | BLOCKED (Moyasar) |
-| Payment | READY | BLOCKED (Moyasar) |
-| Booking | READY | READY (Calendly) |
-| CRM | READY (Sheet) | BLOCKED (HubSpot key) |
-| Follow-up | READY (copy-paste) | BLOCKED (Gmail OAuth) |
-| Outreach | READY (manual) | READY (automation endpoints) |
+**Manual payment path: FULLY OPERATIONAL.**
 
-**GO/NO-GO: GO for manual revenue. First sale possible today.**
+## 4. Booking Path
+
+| Item | Status | Evidence |
+|------|--------|---------|
+| Calendly link | ACTIVE | calendly.com/sami-assiri11/dealix-demo |
+| Landing → Calendly | DONE | trial-signup.html redirects on form submit |
+| Email templates → Calendly | DONE | All email templates include Calendly link |
+| Outreach messages → Calendly | DONE | All DM templates include Calendly link |
+| Calendly → webhook | NOT TESTED | Code exists but no E2E booking verified |
+| Calendly → CRM | NOT TESTED | HubSpot key missing in Railway |
+
+**Booking path: OPERATIONAL for manual flow (link → booking → Sami sees in Calendly).**
+
+## 5. CRM Sync Path
+
+| Item | Status | Evidence |
+|------|--------|---------|
+| HubSpot connector code | EXISTS | `services/crm_sync_service.py` |
+| HubSpot API key in Railway | MISSING | Not set in Railway env Dealix/web |
+| E2E: lead → HubSpot contact | NOT TESTED | Cannot test without key |
+| Manual CRM (Google Sheet) | READY | Tracker template in ops docs |
+| Pipeline stages defined | DONE | new → sent → replied → demo → pilot → paid → churned |
+
+**Manual CRM: READY. HubSpot automated: BLOCKED on API key.**
+
+## 6. Follow-up Path
+
+| Item | Status | Evidence |
+|------|--------|---------|
+| Reply classifier | DONE | `POST /api/v1/automation/reply/classify` — 12 categories |
+| Follow-up templates (Day +2/+5/+10) | DONE | Generated per lead in email/generate endpoint |
+| Arabic response templates | DONE | Pre-written Khaliji response per category |
+| Gmail OAuth adapter | NOT BUILT | Needs Google Cloud OAuth setup |
+| Manual follow-up | READY | Copy-paste from templates |
+
+**Manual follow-up: READY. Gmail auto-send: BLOCKED on OAuth setup.**
+
+## 7. Test Payment Path
+
+| Test | Status | How to Test |
+|------|--------|-------------|
+| Moyasar sandbox | NOT TESTED | Add `MOYASAR_TEST_SECRET_KEY` (sk_test_...) in Railway → hit `/api/v1/checkout` |
+| Moyasar live | BLOCKED | sk_live_ exists in Railway but returns 502 |
+| Manual bank transfer | READY | Ask friend to transfer 1 SAR → verify receipt |
+| Manual STC Pay | READY | Ask friend to STC Pay 1 SAR → verify receipt |
+
+**Recommended first test:** Manual bank transfer from a friend. Zero technical dependency.
+
+## 8. Manual Fallback Summary
+
+| Function | Automated | Manual Fallback | Status |
+|----------|-----------|----------------|--------|
+| Lead response | AI endpoint exists | Sami responds manually | READY |
+| Qualification | Automation endpoint | Sami asks questions manually | READY |
+| Booking | Calendly auto | Sami proposes 2 times | READY |
+| Payment | Moyasar | Bank/STC Pay + proof | READY |
+| CRM | HubSpot | Google Sheet | READY |
+| Follow-up | Gmail OAuth | Copy-paste templates | READY |
+| Reporting | Dashboard | Manual WhatsApp/email to client | READY |
+
+**Every function has a working manual fallback. No function is truly blocked.**
+
+---
 
 ## Definition of Done for "Revenue Live"
-- [ ] First 5 outreach messages sent (WhatsApp warm)
-- [ ] First demo booked via Calendly
-- [ ] First pilot payment received (499 SAR bank/STC)
-- [ ] First customer onboarded (Day 0 checklist)
-- [ ] First daily report sent to customer
+
+| Gate | Status | What Proves It |
+|------|--------|---------------|
+| First 5 outreach messages sent | NOT DONE | Sami confirms SENT |
+| First demo booked via Calendly | NOT DONE | Calendly notification |
+| First pilot payment received (499 SAR) | NOT DONE | Bank/STC Pay screenshot |
+| First customer onboarded (Day 0 checklist) | NOT DONE | Checklist filled |
+| First daily report sent to customer | NOT DONE | WhatsApp/email sent |
+| PostHog receives at least 1 event | NOT DONE | PostHog dashboard check |
+| Manual payment log has 1 entry | NOT DONE | File updated |
+
+**0/7 done. Revenue is NOT live. Product is live. The gap is sales activity, not engineering.**
+
+---
+
+## Moyasar Diagnostic Checklist (for Sami)
+
+If 502 persists, check these in order:
+1. Moyasar dashboard → Account Status: Active? Pending KYC? Suspended?
+2. Moyasar dashboard → API Keys: Is `sk_live_` the latest generated key?
+3. Test from terminal: `curl -u "sk_live_...:" https://api.moyasar.com/v1/invoices -d "amount=100" -d "currency=SAR"`
+4. If "authentication_error" → key wrong or regenerated. Get new key.
+5. If "account_inactive" → KYC not complete. Finish KYC in Moyasar.
+6. If success → Railway env has whitespace or wrong value. Re-paste key carefully.
