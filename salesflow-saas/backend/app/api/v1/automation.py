@@ -217,6 +217,94 @@ calendly.com/sami-assiri11/dealix-demo
     }
 
 
+class DailyPipelineRequest(BaseModel):
+    sectors: List[str] = ["real_estate", "construction", "hospitality", "logistics", "agency"]
+    cities: List[str] = ["الرياض", "جدة", "الدمام"]
+    daily_target_count: int = 50
+    channel: str = "email"
+    approval_required: bool = True
+
+
+@router.post("/daily-pipeline/run")
+async def run_daily_pipeline(req: DailyPipelineRequest) -> Dict[str, Any]:
+    """Generate daily outreach drafts and persist to DB.
+
+    Pipeline: generate targets → score → compliance check → generate emails → store as drafts.
+    All drafts start with status='draft'. Sami approves before any send.
+    """
+    batch_id = f"batch_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M')}_{str(uuid4())[:6]}"
+    drafts_created = []
+    skipped = []
+
+    for i, sector in enumerate(req.sectors):
+        sector_info = SECTOR_PAIN_MAP.get(sector, SECTOR_PAIN_MAP.get("saas", {}))
+        for j, city in enumerate(req.cities[:3]):
+            idx = i * 3 + j
+            if len(drafts_created) >= req.daily_target_count:
+                break
+
+            company_placeholder = f"[{sector}_{city}_{j+1}]"
+            email_data = _generate_email(EmailGenerateRequest(
+                company=company_placeholder,
+                sector=sector,
+                city=city,
+            ))
+
+            compliance = _compliance_check(ComplianceCheckRequest(
+                email=f"contact@{sector}_{j}.example.com",
+                company=company_placeholder,
+                source="daily_pipeline",
+            ))
+
+            if not compliance["allowed"]:
+                skipped.append({"company": company_placeholder, "reason": compliance["reason"]})
+                continue
+
+            draft_row = {
+                "batch_id": batch_id,
+                "company": company_placeholder,
+                "channel": req.channel,
+                "subject": email_data.get("subject_ar", ""),
+                "body": email_data.get("body_ar", ""),
+                "followup_2d": email_data.get("followup_day_2", ""),
+                "followup_5d": email_data.get("followup_day_5", ""),
+                "call_script": email_data.get("call_script_ar", ""),
+                "sector": sector,
+                "city": city,
+                "pain_hypothesis": sector_info.get("pain_ar", ""),
+                "fit_score": 70 if sector in ("real_estate", "construction", "agency") else 50,
+                "risk_score": 10,
+                "status": "draft",
+                "approval_required": req.approval_required,
+                "source": "daily_pipeline",
+            }
+
+            try:
+                from app.models.outreach_draft import OutreachDraft
+                from app.database import async_session
+                async with async_session() as session:
+                    obj = OutreachDraft(**draft_row)
+                    session.add(obj)
+                    await session.commit()
+                    draft_row["id"] = str(obj.id)
+                    drafts_created.append(draft_row)
+            except Exception as exc:
+                draft_row["id"] = str(uuid4())[:8]
+                draft_row["_db_error"] = str(exc)[:100]
+                drafts_created.append(draft_row)
+
+    return {
+        "batch_id": batch_id,
+        "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "drafts_created": len(drafts_created),
+        "skipped": len(skipped),
+        "channel": req.channel,
+        "approval_required": req.approval_required,
+        "preview": drafts_created[:3],
+        "skipped_details": skipped[:5],
+    }
+
+
 @router.post("/compliance/check")
 async def check_compliance(req: ComplianceCheckRequest) -> Dict[str, Any]:
     return _compliance_check(req)

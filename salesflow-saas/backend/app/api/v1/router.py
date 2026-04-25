@@ -140,3 +140,7 @@ api_router.include_router(pricing_router.router)
 # ── Automation — Daily targeting + email + reply classification ─
 from app.api.v1 import automation as automation_router
 api_router.include_router(automation_router.router)
+
+# ── Draft Queue — review, approve, send outreach drafts ────────
+from app.api.v1 import drafts as drafts_router
+api_router.include_router(drafts_router.router)
