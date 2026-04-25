@@ -70,13 +70,24 @@ async def get_db():
 async def init_db():
     import app.models  # noqa: F401 — register all models on Base.metadata before create_all
 
-    async with engine.begin() as conn:
-        if not IS_SQLITE:
-            for ext in ["CREATE EXTENSION IF NOT EXISTS vector",
-                        "CREATE EXTENSION IF NOT EXISTS pg_trgm"]:
-                try:
-                    await conn.execute(text(ext))
-                except Exception:
-                    pass
-        await conn.run_sync(Base.metadata.create_all)
-        print("✅ Database initialized")
+    for attempt in range(3):
+        try:
+            async with engine.begin() as conn:
+                if not IS_SQLITE:
+                    for ext in ["CREATE EXTENSION IF NOT EXISTS vector",
+                                "CREATE EXTENSION IF NOT EXISTS pg_trgm"]:
+                        try:
+                            await conn.execute(text(ext))
+                        except Exception:
+                            pass
+                await conn.run_sync(Base.metadata.create_all)
+                print("✅ Database initialized")
+                return
+        except Exception as e:
+            if attempt < 2:
+                import asyncio
+                print(f"⚠️ DB init attempt {attempt + 1} failed: {e}, retrying in 3s...")
+                await asyncio.sleep(3)
+            else:
+                print(f"❌ DB init failed after 3 attempts: {e}")
+                raise

@@ -50,18 +50,22 @@ async def lifespan(app: FastAPI):
     stop_event = asyncio.Event()
 
     async def _self_improvement_worker():
+        await asyncio.sleep(30)
         while not stop_event.is_set():
-            self_improvement_flow.run(
-                tenant_id="system_tenant",
-                input_state={
-                    "signals": [],
-                    "bottlenecks": [],
-                    "experiments": [{"name": "always-on-ab-loop"}],
-                    "ab_results": {},
-                    "governance_passed": True,
-                    "promoted": True,
-                },
-            )
+            try:
+                self_improvement_flow.run(
+                    tenant_id="system_tenant",
+                    input_state={
+                        "signals": [],
+                        "bottlenecks": [],
+                        "experiments": [{"name": "always-on-ab-loop"}],
+                        "ab_results": {},
+                        "governance_passed": True,
+                        "promoted": True,
+                    },
+                )
+            except Exception:
+                pass
             await asyncio.sleep(max(60, settings.SELF_IMPROVEMENT_INTERVAL_SECONDS))
 
     worker_task = asyncio.create_task(_self_improvement_worker())
@@ -72,16 +76,20 @@ async def lifespan(app: FastAPI):
     print(f"   LLM Primary: {settings.LLM_PRIMARY_PROVIDER}")
     print(f"   LLM Fallback: {settings.LLM_FALLBACK_PROVIDER}")
 
-    # Initialize PostHog
-    from app.services.posthog_client import get_posthog
-    ph = get_posthog()
-    print(f"   PostHog: {'enabled' if ph._enabled else 'disabled (no API key)'}")
+    try:
+        from app.services.posthog_client import get_posthog
+        ph = get_posthog()
+        print(f"   PostHog: {'enabled' if getattr(ph, '_enabled', False) else 'disabled (no API key)'}")
+    except Exception as e:
+        print(f"   PostHog: init failed ({e})")
 
-    # Initialize DLQ
-    from app.services.dlq import dlq
-    print("   DLQ: initialized")
-    if IS_SQLITE:
-        await init_db()
+    try:
+        from app.services.dlq import dlq  # noqa: F841
+        print("   DLQ: initialized")
+    except Exception as e:
+        print(f"   DLQ: init failed ({e})")
+
+    await init_db()
     yield
     # Shutdown
     stop_event.set()

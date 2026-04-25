@@ -115,8 +115,8 @@ class WhatsAppMessenger:
     """Send messages via Ultramsg API."""
 
     def __init__(self):
-        self.instance_id = os.getenv("ULTRAMSG_INSTANCE_ID", "instance168132")
-        self.token = os.getenv("ULTRAMSG_TOKEN", "7azj2ss74wpg9jwp")
+        self.instance_id = os.getenv("ULTRAMSG_INSTANCE_ID", "")
+        self.token = os.getenv("ULTRAMSG_TOKEN", "")
         self.api_base = f"https://api.ultramsg.com/{self.instance_id}"
 
     async def send_message(self, phone: str, message: str) -> Dict:
