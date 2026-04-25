@@ -83,8 +83,8 @@ async def process_and_act(req: ProcessEventRequest) -> Dict[str, Any]:
     if result.get("auto_send_allowed") and result.get("response_message_ar") and req.phone:
         if "send_whatsapp" in result.get("actions", []):
             try:
-                from app.api.v1.outreach_engine import _send_via_ultramsg
-                send_result = await _send_via_ultramsg(req.phone, result["response_message_ar"])
+                from app.services.whatsapp_multi_provider import send_whatsapp_smart
+                send_result = await send_whatsapp_smart(req.phone, result["response_message_ar"])
                 execution = {
                     "action_taken": "whatsapp_sent",
                     "send_result": send_result,
@@ -152,6 +152,20 @@ async def bulk_process(req: BulkProcessRequest) -> Dict[str, Any]:
         "processed": len(results),
         "results": results,
     }
+
+
+@router.get("/whatsapp-providers")
+async def whatsapp_provider_status() -> Dict[str, Any]:
+    """Check which WhatsApp providers are configured."""
+    from app.services.whatsapp_multi_provider import check_providers
+    return await check_providers()
+
+
+@router.post("/test-send")
+async def test_whatsapp_send(phone: str, message: str = "اختبار Dealix — النظام شغّال 🚀") -> Dict[str, Any]:
+    """Test WhatsApp send via all configured providers."""
+    from app.services.whatsapp_multi_provider import send_whatsapp_smart
+    return await send_whatsapp_smart(phone, message)
 
 
 @router.get("/stages")
