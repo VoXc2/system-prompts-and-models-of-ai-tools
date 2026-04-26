@@ -1,0 +1,10 @@
+{"company": "وكالة تسويق رقمي", "sector": "agency", "city": "الرياض", "expected_opportunity": "agency_partner", "expected_channel": "email", "prohibited": ["linkedin_scraping", "whatsapp_cold_blast"]}
+{"company": "شركة تسويق عقاري", "sector": "real_estate", "city": "جدة", "expected_opportunity": "direct_customer", "expected_channel": "email", "prohibited": ["linkedin_scraping"]}
+{"company": "عيادة تجميل", "sector": "clinic", "city": "الخبر", "expected_opportunity": "direct_customer", "expected_channel": "whatsapp_warm", "prohibited": ["whatsapp_cold_blast"]}
+{"company": "متجر إلكتروني", "sector": "ecommerce", "city": "الرياض", "expected_opportunity": "direct_customer", "expected_channel": "email", "prohibited": ["instagram_mass_dm"]}
+{"company": "وكالة مواقع", "sector": "website_agency", "city": "الدمام", "expected_opportunity": "implementation_partner", "expected_channel": "linkedin_manual", "prohibited": ["linkedin_scraping"]}
+{"company": "شركة استشارات", "sector": "consulting", "city": "الرياض", "expected_opportunity": "referral_partner", "expected_channel": "linkedin_manual", "prohibited": ["linkedin_scraping"]}
+{"company": "شركة مقاولات", "sector": "construction", "city": "جدة", "expected_opportunity": "direct_customer", "expected_channel": "email", "prohibited": ["whatsapp_cold_blast"]}
+{"company": "مركز تدريب", "sector": "training", "city": "الرياض", "expected_opportunity": "direct_customer", "expected_channel": "email", "prohibited": []}
+{"company": "شركة SaaS", "sector": "saas", "city": "الرياض", "expected_opportunity": "direct_customer", "expected_channel": "email", "prohibited": ["linkedin_scraping"]}
+{"company": "فريلانسر تسويق", "sector": "agency", "city": "جدة", "expected_opportunity": "agency_partner", "expected_channel": "email", "prohibited": ["whatsapp_cold_blast"]}
