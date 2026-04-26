@@ -428,20 +428,22 @@ export default function MarketersPage() {
         </div>
       </section>
 
-      {/* ── Founder Direct ── */}
+      {/* ── Trust / Proof ── */}
       <section className="border-y border-white/10 bg-slate-900/50 py-10">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <p className="text-lg text-slate-300">
-            أي سؤال؟ تواصل مع المؤسس مباشرة:
+            أسئلة عن الشراكة؟
           </p>
           <a
-            href="tel:+966597788539"
-            className="mt-3 inline-block text-2xl font-bold text-amber-400 hover:text-amber-300"
-            dir="ltr"
+            href={CALENDLY}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-2 text-amber-400 hover:text-amber-300"
           >
-            0597788539
+            <Calendar className="h-5 w-5" />
+            احجز مكالمة شراكة
           </a>
-          <p className="mt-1 text-sm text-slate-500">سامي العسيري — مؤسس Dealix</p>
+          <p className="mt-1 text-sm text-slate-500">20 دقيقة — بدون التزام</p>
         </div>
       </section>
 

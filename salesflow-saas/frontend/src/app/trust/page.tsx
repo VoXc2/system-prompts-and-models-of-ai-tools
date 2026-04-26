@@ -118,12 +118,7 @@ export default function TrustPage() {
       {/* CTA */}
       <section className="py-16">
         <div className="mx-auto max-w-2xl px-6 text-center">
-          <p className="text-lg text-slate-300">
-            أي سؤال عن الأمان؟ تواصل مع المؤسس مباشرة:
-          </p>
-          <a href="tel:+966597788539" className="mt-3 inline-block text-2xl font-bold text-amber-400" dir="ltr">0597788539</a>
-          <p className="mt-1 text-sm text-slate-500">سامي العسيري — مؤسس Dealix</p>
-          <a
+          <
             href={CALENDLY}
             target="_blank"
             rel="noopener noreferrer"

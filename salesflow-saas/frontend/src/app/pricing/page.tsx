@@ -154,7 +154,7 @@ export default function PricingPage() {
             <p className="mt-1 text-sm text-slate-300">IBAN: <strong className="text-white font-mono" dir="ltr">SA3305000068207328877000</strong></p>
           </div>
           <p className="mt-4 text-sm text-slate-500">بعد التحويل أرسل الإيصال ونفعّل النظام خلال 24 ساعة</p>
-          <p className="mt-2 text-sm text-slate-400">أي سؤال: <a href="tel:+966597788539" className="text-amber-400 hover:text-amber-300" dir="ltr">0597788539</a></p>
+          <p className="mt-2 text-sm text-slate-400">أي سؤال؟ <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:text-amber-300">احجز مكالمة</a></p>
         </div>
       </section>
 
