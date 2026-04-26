@@ -1,0 +1,48 @@
+weights:
+  fit: 1
+  urgency: 1
+  access: 1
+  partner: 1
+  payment: 1
+  case_study: 1
+  risk: -1
+
+priority_thresholds:
+  send_today: 24
+  send_this_week: 18
+  send_this_month: 12
+  backlog: 0
+
+sector_defaults:
+  marketing_agency:
+    fit: 5
+    partner: 5
+    urgency: 4
+  real_estate:
+    fit: 5
+    urgency: 5
+    partner: 2
+  clinic:
+    fit: 4
+    urgency: 4
+    partner: 1
+  ecommerce:
+    fit: 4
+    urgency: 3
+    partner: 2
+  website_agency:
+    fit: 4
+    partner: 4
+    urgency: 3
+  consulting:
+    fit: 3
+    partner: 3
+    urgency: 2
+  construction:
+    fit: 3
+    urgency: 3
+    partner: 1
+  training:
+    fit: 3
+    urgency: 3
+    partner: 1

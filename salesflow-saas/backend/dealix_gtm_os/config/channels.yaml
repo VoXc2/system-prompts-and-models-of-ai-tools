@@ -1,0 +1,48 @@
+channels:
+  email:
+    automation_level: semi_automated
+    daily_limit: 10
+    best_for: [b2b, agencies, companies_with_email]
+    requires: [identity, optout, relevant_reason]
+
+  linkedin_manual:
+    automation_level: manual_required
+    daily_limit: 5
+    best_for: [founders, agencies, b2b_decision_makers]
+    requires: [personalization, manual_send]
+
+  whatsapp_warm:
+    automation_level: manual_required
+    daily_limit: 5
+    best_for: [warm_network, optin_leads, demo_confirmations]
+    requires: [existing_relationship_or_optin, stop_condition]
+
+  instagram_inbound:
+    automation_level: semi_automated
+    daily_limit: 3
+    best_for: [local_brands, visual_businesses, inbound_engagement]
+    requires: [prior_engagement, official_api]
+
+  x_post:
+    automation_level: fully_automated
+    daily_limit: 3
+    best_for: [thought_leadership, founder_content, market_insights]
+    requires: [original_content]
+
+  x_reply:
+    automation_level: manual_required
+    daily_limit: 5
+    best_for: [engagement, conversations, founder_community]
+    requires: [value_add, no_spam]
+
+  phone:
+    automation_level: manual_required
+    daily_limit: 3
+    best_for: [warm_leads, post_demo, partner_conversations]
+    requires: [prior_context]
+
+  partner_intro:
+    automation_level: manual_required
+    daily_limit: 2
+    best_for: [agency_partners, referral_partners]
+    requires: [partner_relationship]

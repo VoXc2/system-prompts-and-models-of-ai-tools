@@ -1,0 +1,64 @@
+linkedin:
+  scraping: prohibited
+  auto_dm: prohibited
+  auto_connect: prohibited
+  auto_like: prohibited
+  auto_comment: prohibited
+  manual_dm: allowed
+  manual_dm_daily_limit: 5
+  posts: allowed
+  comments: manual_only
+  research: allowed
+
+email:
+  cold_b2b: allowed_with_optout
+  max_sequence_length: 3
+  identity_required: true
+  optout_required: true
+  daily_limit_initial: 10
+  daily_limit_proven: 20
+  misleading_subject: prohibited
+
+whatsapp:
+  cold_blast: prohibited
+  warm_optin: allowed
+  templates_with_approval: allowed
+  daily_limit_initial: 5
+  daily_limit_proven: 10
+  stop_words:
+    - "إيقاف"
+    - "stop"
+    - "لا"
+    - "لا شكراً"
+    - "ما يناسبني"
+
+instagram:
+  mass_dm: prohibited
+  inbound_reply: allowed
+  official_api: allowed
+  warm_dm_after_engagement: allowed
+  daily_dm_limit: 3
+
+x_twitter:
+  auto_mentions: prohibited
+  auto_replies: prohibited
+  auto_dms: prohibited
+  posts: allowed
+  scheduled_posts: allowed
+  safe_manual_replies: allowed
+  daily_reply_limit: 5
+
+tiktok:
+  dm_scraping: prohibited
+  mass_dm: prohibited
+  content: allowed
+  lead_form_ads: allowed_official
+  dm_ads: allowed_official
+
+general:
+  fake_accounts: prohibited
+  fake_engagement: prohibited
+  buying_lead_lists: prohibited
+  scraping_restricted_sites: prohibited
+  overclaiming_results: prohibited
+  guaranteed_revenue_claims: prohibited

@@ -1,0 +1,72 @@
+offers:
+  speed_to_lead_audit:
+    name_ar: "تحليل سرعة الرد"
+    price_sar: 0
+    alternative_price: 99
+    duration: "30 دقيقة"
+    purpose: "فتح الباب — ليس بيع"
+    deliverables:
+      - "تحليل أين تضيع الاستفسارات"
+      - "تقييم سرعة الرد الحالية"
+      - "توصية flow بسيط"
+      - "اقتراح pilot مخصص"
+    best_for: [real_estate, clinics, ecommerce]
+    cta: "أقدر أعمل لكم audit مجاني"
+
+  pilot:
+    name_ar: "تجربة 7 أيام"
+    price_sar: 499
+    duration: "7 أيام"
+    purpose: "أول دفع + أول proof"
+    deliverables:
+      - "قناة واحدة (واتساب/إيميل/نماذج)"
+      - "حد 20 lead"
+      - "رسائل متابعة مخصصة"
+      - "تصنيف ردود"
+      - "تقرير نهاية التجربة"
+    guarantee: "استرداد كامل"
+    best_for: [all_sectors]
+    cta: "نبدأ بعميل واحد / قناة واحدة / أسبوع واحد"
+
+  starter:
+    name_ar: "المبتدئ"
+    price_sar: 990
+    billing: monthly
+    purpose: "إيراد متكرر"
+    deliverables:
+      - "واتساب + إيميل"
+      - "follow-up sequences"
+      - "lead tracker"
+      - "booking CTA"
+      - "تقرير أسبوعي"
+    best_for: [proven_pilot_customers]
+    cta: "نكمّل بـ Starter"
+
+  agency_addon:
+    name_ar: "باقة الوكالات"
+    price_sar_range: "1499-2999"
+    purpose: "الوكالة تبيع لعملائها"
+    deliverables:
+      - "إعداد لعميل واحد"
+      - "سكريبتات متابعة"
+      - "tracker + تقارير"
+      - "تدريب بسيط للوكالة"
+      - "قوالب بيع للعميل"
+    partner_share: "20% MRR + 50% setup fee"
+    best_for: [marketing_agencies, digital_agencies]
+    cta: "كن شريك وكالة"
+
+  partner_ops:
+    name_ar: "شراكة مخصصة"
+    price_sar: custom
+    purpose: "شراكات استراتيجية"
+    models: [referral, co_selling, implementation, service_exchange]
+    best_for: [strategic_partners, large_agencies]
+    cta: "نصمم النموذج حسب حجمكم"
+
+payment:
+  bank: "مصرف الإنماء"
+  account_name: "سامي محمد زايد عسيري — ذكاء الاعمال"
+  account_number: "68207328877000"
+  iban: "SA3305000068207328877000"
+  swift: "INMASARIXXX"
