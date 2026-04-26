@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 echo "[dealix] PORT=$PORT"
+echo "[dealix] DATABASE_URL prefix: $(echo ${DATABASE_URL:-NOT_SET} | cut -d: -f1)"
 echo "[dealix] Testing imports..."
 python3 -c "
 try:

@@ -139,7 +139,7 @@ def apply_patch():
     import sys
     import types
     db_url = _get_db_url()
-    if "sqlite" in db_url.lower():
+    if not db_url or "sqlite" in db_url.lower():
         # Patch PostgreSQL dialect
         sys.modules["sqlalchemy.dialects.postgresql"] = _FakePGModule()  # type: ignore
 

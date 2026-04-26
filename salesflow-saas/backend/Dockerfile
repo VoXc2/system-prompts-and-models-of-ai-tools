@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
 FROM python:3.12-slim AS runtime
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq5 curl tini \
+    libpq5 curl tini libxml2 libxslt1.1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --gid 1000 app \
@@ -38,7 +38,7 @@ USER app
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=5 \
+HEALTHCHECK --interval=20s --timeout=15s --start-period=120s --retries=5 \
     CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
 ENTRYPOINT ["tini", "--"]
