@@ -34,17 +34,21 @@ If error: check Railway logs
 - Check Railway logs for payment confirmation
 - Verify customer record updated
 
-## Manual Payment Fallback (until Moyasar works)
+## Manual Payment Fallback (ACTIVE — use until Moyasar works)
 1. Send bank transfer details:
    ```
-   البنك: [بنك سامي]
-   IBAN: [IBAN سامي]
-   المبلغ: 499 ريال
+   البنك: مصرف الإنماء
+   الاسم: سامي محمد زايد عسيري — ذكاء الاعمال
+   رقم الحساب: 68207328877000
+   IBAN: SA3305000068207328877000
+   SWIFT: INMASARIXXX
+   المبلغ: 499 ريال (Pilot) أو 990 ريال (Starter)
    المرجع: Dealix Pilot - [اسم الشركة]
    ```
-2. Confirm receipt manually
-3. Activate pilot
-4. Update scorecard
+2. العميل يرسل إيصال التحويل
+3. تأكد من وصول المبلغ في تطبيق الإنماء
+4. أرسل رسالة تأكيد + ابدأ onboarding
+5. سجّل في scorecard
 
 ## Verdict After Test
 - Payment works → Revenue Live
