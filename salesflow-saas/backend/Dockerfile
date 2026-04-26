@@ -31,6 +31,7 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /app
+ARG APP_CACHEBUST=3
 COPY --chown=app:app . .
 RUN chmod +x start.sh
 
