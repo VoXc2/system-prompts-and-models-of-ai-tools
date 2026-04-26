@@ -328,6 +328,123 @@ export default function MarketersPage() {
         </div>
       </section>
 
+      {/* ── Earn From First Signup ── */}
+      <section className="py-16">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="text-center">
+            <DollarSign className="mx-auto h-10 w-10 text-emerald-400" />
+            <h2 className="mt-4 text-2xl font-bold">
+              اربح من{" "}
+              <span className="text-emerald-400">أول اشتراك مدفوع مؤهل</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
+              ديليكس مصمم عشان المسوقين والفريلانسرز والوكالات يقدرون يستفيدون من
+              شبكتهم من أول عميل مدفوع. إذا أحلت عميل مؤهل واشترك في بايلوت أو باقة
+              مدفوعة، تصبح مؤهلاً لعمولة أو عائد شراكة حسب الشروط المتفق عليها.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6">
+              <Users className="h-8 w-8 text-emerald-400" />
+              <h3 className="mt-4 text-lg font-semibold">شريك إحالة</h3>
+              <p className="mt-2 text-sm text-slate-400">
+                تعرّفنا على شركة مناسبة. Dealix يتولى الديمو والتشغيل. تستحق عمولتك
+                بعد الدفع المؤكد.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
+              <Briefcase className="h-8 w-8 text-amber-400" />
+              <h3 className="mt-4 text-lg font-semibold">شريك بيع / وكالة</h3>
+              <p className="mt-2 text-sm text-slate-400">
+                تبيع Dealix ضمن خدماتك التسويقية. تحتفظ بهامش خدمتك وDealix يشغّل
+                طبقة المتابعة والحجز والتقارير.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-6">
+              <Zap className="h-8 w-8 text-blue-400" />
+              <h3 className="mt-4 text-lg font-semibold">شريك تبادل خدمات</h3>
+              <p className="mt-2 text-sm text-slate-400">
+                تساعد في المحتوى أو الإحالات أو الوصول لعملاء. Dealix يدعمك بتجربة
+                وتشغيل مشترك ضمن اتفاق واضح لمدة 30 يوم.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10 text-slate-400">
+                  <th className="py-3 pe-4 text-start font-medium">نوع الشراكة</th>
+                  <th className="py-3 pe-4 text-start font-medium">من يبيع</th>
+                  <th className="py-3 pe-4 text-start font-medium">من ينفّذ</th>
+                  <th className="py-3 pe-4 text-start font-medium">كيف تربح</th>
+                  <th className="py-3 text-start font-medium">متى يبدأ العائد</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-300">
+                <tr className="border-b border-white/5">
+                  <td className="py-3 pe-4 font-medium">شريك إحالة</td>
+                  <td className="py-3 pe-4">المسوق يعرّف</td>
+                  <td className="py-3 pe-4">Dealix</td>
+                  <td className="py-3 pe-4">عمولة إحالة / نسبة</td>
+                  <td className="py-3">أول اشتراك مدفوع مؤكد</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="py-3 pe-4 font-medium">شريك بيع</td>
+                  <td className="py-3 pe-4">الوكالة تبيع</td>
+                  <td className="py-3 pe-4">Dealix + الوكالة</td>
+                  <td className="py-3 pe-4">هامش خدمة / revenue share</td>
+                  <td className="py-3">أول عميل مدفوع</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pe-4 font-medium">تبادل خدمات</td>
+                  <td className="py-3 pe-4">مشترك</td>
+                  <td className="py-3 pe-4">مشترك</td>
+                  <td className="py-3 pe-4">رصيد / rev-share / قيمة متفق عليها</td>
+                  <td className="py-3">بعد المساهمة + الاشتراك المدفوع</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="mt-6 text-center text-xs text-slate-500">
+            استحقاق العمولة يبدأ من أول اشتراك مدفوع مؤهل. الدفع يجب أن يكون مستلماً
+            ومؤكداً. الاستردادات أو الإلغاءات قد تؤثر على العمولة. شروط الشراكة يجب أن
+            تكون متفق عليها مسبقاً.
+          </p>
+
+          <div className="mt-8 text-center">
+            <a
+              href={CALENDLY}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-8 py-3.5 text-base font-bold text-white transition hover:bg-emerald-400"
+            >
+              <Users className="h-5 w-5" />
+              كن شريك Dealix — أحل أول عميل
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Founder Direct ── */}
+      <section className="border-y border-white/10 bg-slate-900/50 py-10">
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <p className="text-lg text-slate-300">
+            أي سؤال؟ تواصل مع المؤسس مباشرة:
+          </p>
+          <a
+            href="tel:+966597788539"
+            className="mt-3 inline-block text-2xl font-bold text-amber-400 hover:text-amber-300"
+            dir="ltr"
+          >
+            0597788539
+          </a>
+          <p className="mt-1 text-sm text-slate-500">سامي العسيري — مؤسس Dealix</p>
+        </div>
+      </section>
+
       {/* ── Trust / Proof ── */}
       <section className="py-16">
         <div className="mx-auto max-w-3xl px-6">
