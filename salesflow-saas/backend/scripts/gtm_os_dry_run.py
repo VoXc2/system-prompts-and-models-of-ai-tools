@@ -29,6 +29,7 @@ async def run(company_name: str, website: str, sector: str, city: str, email: st
     print(f"  DEALIX GTM OS — DRY RUN")
     print(f"  Company: {company_name}")
     print(f"  ⚠️  DRY-RUN ONLY — لا يرسل رسائل")
+    print(f"  Trace ID: {result.get('trace_id', 'N/A')}")
     print("=" * 60)
 
     intel = result["intelligence"]
@@ -53,20 +54,25 @@ async def run(company_name: str, website: str, sector: str, city: str, email: st
     print(f"  Risk: {score['risk']}/5")
     print(f"  TOTAL: {score['total']} → Priority: {score['priority']}")
 
+    partnership = result.get("partnership", {})
+    print(f"\n{'━' * 40}")
+    print("3. PARTNERSHIP CLASSIFICATION")
+    print(f"{'━' * 40}")
+    print(f"  Primary: {partnership.get('primary_type', 'N/A')}")
+    print(f"  All types: {', '.join(partnership.get('opportunity_types', []))}")
+    print(f"  Model: {partnership.get('recommended_model', 'N/A')}")
+
     channel = result["channel_plan"]
     print(f"\n{'━' * 40}")
-    print("3. CHANNEL STRATEGY")
+    print("4. CHANNEL STRATEGY")
     print(f"{'━' * 40}")
     print(f"  Primary: {channel['primary_channel']}")
     print(f"  Secondary: {channel['secondary_channel']}")
     print(f"  Automation: {channel['automation_level']}")
-    print(f"  Reason: {channel['reason']}")
-    if channel.get("risk_flags"):
-        print(f"  Risk Flags: {', '.join(channel['risk_flags'])}")
 
     comp = result["compliance"]
     print(f"\n{'━' * 40}")
-    print("4. COMPLIANCE")
+    print("5. COMPLIANCE GATE")
     print(f"{'━' * 40}")
     print(f"  Allowed: {'✅' if comp['allowed'] else '❌'}")
     print(f"  Level: {comp['level']}")
@@ -74,35 +80,49 @@ async def run(company_name: str, website: str, sector: str, city: str, email: st
 
     msg = result["message"]
     print(f"\n{'━' * 40}")
-    print("5. MESSAGE (DRAFT — NOT SENT)")
+    print("6. MESSAGE (DRAFT)")
     print(f"{'━' * 40}")
-    print(f"  Channel: {msg['channel']}")
     print(f"  Subject: {msg.get('subject', 'N/A')}")
-    print(f"  Approval Required: {'✅ YES' if msg['approval_required'] else 'No'}")
-    print(f"\n  --- BODY ---")
-    for line in msg["body"].split("\n"):
-        print(f"  {line}")
-    print(f"  --- END ---")
-    print(f"\n  Follow-up 24h: {msg['follow_up_24h'][:80]}...")
-    print(f"  Follow-up 72h: {msg['follow_up_72h'][:80]}...")
-    print(f"  Stop: {msg['stop_condition']}")
+    print(f"  Approval: {'✅ REQUIRED' if msg.get('approval_required') else 'No'}")
+    body_preview = msg.get("body", "")[:150]
+    print(f"  Preview: {body_preview}...")
+
+    proof = result.get("proof_pack", {})
+    print(f"\n{'━' * 40}")
+    print("7. PROOF PACK")
+    print(f"{'━' * 40}")
+    print(f"  Confidence: {proof.get('intelligence_confidence', 0):.0%}")
+    print(f"  Scoring: {proof.get('scoring_method', '?')}")
+    print(f"  Channel reason: {proof.get('channel_reason', '?')}")
+    print(f"  Message validated: {proof.get('message_validated', '?')}")
+    print(f"  No real send: {proof.get('no_real_send', True)}")
+    print(f"  Sources: {', '.join(proof.get('sources', []))}")
+
+    val = result.get("output_validation", {})
+    print(f"\n{'━' * 40}")
+    print("8. AI COST & QUALITY")
+    print(f"{'━' * 40}")
+    print(f"  Model: {result.get('model_selected', '?')}")
+    tokens = result.get("estimated_tokens", {})
+    print(f"  Tokens: {tokens.get('input', 0)} in / {tokens.get('output', 0)} out")
+    print(f"  Cost: {result.get('estimated_cost_sar', 0)} SAR")
+    print(f"  Cache: {result.get('cache_status', '?')}")
+    print(f"  Output valid: {val.get('valid', '?')} ({val.get('issue_count', 0)} issues)")
+
+    trace = result.get("trace", {})
+    print(f"\n{'━' * 40}")
+    print("9. TRACE")
+    print(f"{'━' * 40}")
+    print(f"  Trace ID: {trace.get('trace_id', result.get('trace_id', '?'))}")
+    print(f"  Time: {trace.get('total_time_s', '?')}s")
+    print(f"  Steps: {trace.get('steps', '?')}")
+    print(f"  Cost: {trace.get('total_cost_sar', '?')} SAR")
 
     print(f"\n{'━' * 40}")
-    print("6. NEXT ACTION")
+    print("10. NEXT ACTION")
     print(f"{'━' * 40}")
-    print(f"  Action: {result['next_action']}")
-    print(f"  Approval Required: {'✅ YES — Sami must approve before sending' if result['approval_required'] else 'No'}")
-
-    prohibited = []
-    if "linkedin" in channel["primary_channel"]:
-        prohibited.append("LinkedIn scraping")
-        prohibited.append("LinkedIn auto-DM")
-    prohibited.extend(["WhatsApp cold blast", "Instagram mass DM", "Fake accounts"])
-    print(f"\n{'━' * 40}")
-    print("7. PROHIBITED ACTIONS")
-    print(f"{'━' * 40}")
-    for p in prohibited:
-        print(f"  ❌ {p}")
+    print(f"  Action: {result.get('next_action', '?')}")
+    print(f"  Approval Required: {'✅ YES — Sami must approve' if result.get('approval_required') else 'No'}")
 
     print(f"\n{'=' * 60}")
     print("  ⚠️  DRY-RUN COMPLETE — NO MESSAGES SENT")
