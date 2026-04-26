@@ -89,7 +89,10 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"   DLQ: init failed ({e})")
 
-    await init_db()
+    try:
+        await init_db()
+    except Exception as e:
+        print(f"   DB init: failed ({e}) — will retry on first request")
     yield
     # Shutdown
     stop_event.set()
