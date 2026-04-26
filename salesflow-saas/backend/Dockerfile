@@ -38,8 +38,5 @@ USER app
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=20s --timeout=15s --start-period=120s --retries=5 \
-    CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
-
 ENTRYPOINT ["tini", "--"]
 CMD ["./start.sh"]
