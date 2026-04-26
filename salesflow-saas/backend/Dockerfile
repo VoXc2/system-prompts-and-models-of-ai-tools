@@ -1,42 +1,19 @@
-# ── Stage 1: Builder ──────────────────────────────────
-FROM python:3.12-slim AS builder
+FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential libpq-dev curl \
+    build-essential libpq-dev libpq5 curl tini libxml2 libxslt1.1 \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /build
-
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+WORKDIR /app
 
 COPY requirements.txt ./
-ARG CACHEBUST=2
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt
 
-# ── Stage 2: Runtime ─────────────────────────────────
-FROM python:3.12-slim AS runtime
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq5 curl tini libxml2 libxslt1.1 \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN groupadd --gid 1000 app \
-    && useradd --uid 1000 --gid app --shell /bin/bash --create-home app
-
-COPY --from=builder /opt/venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
-
-WORKDIR /app
-ARG APP_CACHEBUST=3
-COPY --chown=app:app . .
+COPY . .
 RUN chmod +x start.sh
 
-USER app
-
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 EXPOSE 8000
 
 ENTRYPOINT ["tini", "--"]
