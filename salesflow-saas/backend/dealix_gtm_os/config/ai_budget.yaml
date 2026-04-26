@@ -1,0 +1,71 @@
+models:
+  cheap:
+    id: "groq/llama-3.1-8b-instant"
+    max_tokens: 500
+    cost_per_1k_input: 0.0001
+    cost_per_1k_output: 0.0002
+    use_for: ["csv_cleanup", "classification", "initial_scoring", "reply_classification"]
+  mid:
+    id: "groq/llama-3.3-70b-versatile"
+    max_tokens: 800
+    cost_per_1k_input: 0.0006
+    cost_per_1k_output: 0.0008
+    use_for: ["company_research", "website_summary", "enrichment", "content_draft"]
+  high:
+    id: "anthropic/claude-sonnet-4-20250514"
+    max_tokens: 1200
+    cost_per_1k_input: 0.003
+    cost_per_1k_output: 0.015
+    use_for: ["sales_message", "negotiation", "partnership_strategy", "eval_judge", "complex_analysis"]
+
+agent_budgets:
+  company_research_agent:
+    model_tier: mid
+    max_output_tokens: 700
+    cache_ttl_hours: 168
+  scoring_agent:
+    model_tier: cheap
+    max_output_tokens: 200
+    cache_ttl_hours: 24
+  channel_strategy_agent:
+    model_tier: cheap
+    max_output_tokens: 300
+    cache_ttl_hours: 24
+  message_generation_agent:
+    model_tier: high
+    max_output_tokens: 500
+    cache_ttl_hours: 0
+  negotiation_agent:
+    model_tier: high
+    max_output_tokens: 800
+    cache_ttl_hours: 0
+  compliance_agent:
+    model_tier: cheap
+    max_output_tokens: 200
+    cache_ttl_hours: 720
+  partnership_strategist_agent:
+    model_tier: mid
+    max_output_tokens: 500
+    cache_ttl_hours: 168
+  icp_strategist_agent:
+    model_tier: mid
+    max_output_tokens: 600
+    cache_ttl_hours: 168
+  learning_agent:
+    model_tier: mid
+    max_output_tokens: 400
+    cache_ttl_hours: 0
+  content_strategy_agent:
+    model_tier: mid
+    max_output_tokens: 400
+    cache_ttl_hours: 24
+
+daily_budget:
+  max_cost_sar: 10.0
+  max_requests: 500
+  alert_at_percent: 80
+
+cache:
+  enabled: true
+  backend: "memory"
+  default_ttl_hours: 24
