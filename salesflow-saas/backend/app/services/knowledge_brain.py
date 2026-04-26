@@ -10,9 +10,17 @@ from typing import Any, Optional
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
-WIKI_DIR = Path(__file__).resolve().parents[4] / "memory" / "wiki"
-INDEX_DIR = Path(__file__).resolve().parents[4] / "memory" / "indexes"
-MEMORY_DIR = Path(__file__).resolve().parents[4] / "memory"
+def _find_memory_dir() -> Path:
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        candidate = parent / "memory"
+        if candidate.is_dir():
+            return candidate
+    return p.parents[min(2, len(p.parents) - 1)] / "memory"
+
+MEMORY_DIR = _find_memory_dir()
+WIKI_DIR = MEMORY_DIR / "wiki"
+INDEX_DIR = MEMORY_DIR / "indexes"
 STALE_DAYS = 30
 
 

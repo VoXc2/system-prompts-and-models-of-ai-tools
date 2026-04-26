@@ -9,7 +9,12 @@ from typing import Any, Optional
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
-SESSIONS_DIR = Path(__file__).resolve().parents[4] / "memory" / "_sessions"
+def _find_sessions():
+    for p in Path(__file__).resolve().parents:
+        if (p / "memory").is_dir():
+            return p / "memory" / "_sessions"
+    return Path(__file__).resolve().parent.parent / "memory" / "_sessions"
+SESSIONS_DIR = _find_sessions()
 SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
 
 

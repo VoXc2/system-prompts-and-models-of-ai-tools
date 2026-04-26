@@ -9,7 +9,12 @@ from typing import Any, Optional
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
-MEMORY_BASE = Path(__file__).resolve().parents[4] / "memory"
+def _find_memory():
+    for p in Path(__file__).resolve().parents:
+        if (p / "memory").is_dir():
+            return p / "memory"
+    return Path(__file__).resolve().parent.parent / "memory"
+MEMORY_BASE = _find_memory()
 STALE_DAYS = 30
 
 
