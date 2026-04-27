@@ -1,0 +1,40 @@
+pillars:
+  - id: lost_leads
+    name_ar: "ضياع الاستفسارات بعد الإعلان"
+    hook: "كل حملة تجيب leads ثم تضيع"
+  - id: whatsapp_followup
+    name_ar: "متابعة واتساب"
+    hook: "واتسابك مليان استفسارات بدون متابعة"
+  - id: speed_to_lead
+    name_ar: "سرعة الرد"
+    hook: "أول 5 دقائق هي اللي تحدد"
+  - id: agency_addon
+    name_ar: "خدمة جديدة للوكالات"
+    hook: "أضف خدمة متابعة leads لعملائك"
+  - id: partner_earning
+    name_ar: "اربح كشريك"
+    hook: "اربح من أول اشتراك مدفوع مؤهل"
+  - id: arabic_first
+    name_ar: "عربي أولاً"
+    hook: "مبني للسوق السعودي — مو ترجمة"
+  - id: build_in_public
+    name_ar: "بناء أمام الجميع"
+    hook: "رحلة بناء Dealix"
+  - id: revenue_ops
+    name_ar: "تشغيل الإيراد"
+    hook: "من lead إلى دفع — مسار كامل"
+  - id: customer_delivery
+    name_ar: "خدمة العميل"
+    hook: "مو بس نبيع — نشغّل"
+  - id: proof_and_safety
+    name_ar: "إثبات وأمان"
+    hook: "لا spam. لا scraping. موافقة بشرية."
+
+formats:
+  linkedin: {type: "text", max_words: 200, cta: true, arabic: true}
+  x: {type: "text", max_words: 50, cta: false, arabic: true}
+  instagram_story: {type: "visual+text", max_words: 30, cta: true}
+  instagram_carousel: {type: "slides", slides: "5-7", cta: true}
+  reel_script: {type: "video", duration_sec: "30-60", hook_first: true}
+  whatsapp_status: {type: "text", max_words: 25, informal: true}
+  email_newsletter: {type: "long", max_words: 500, cta: true}

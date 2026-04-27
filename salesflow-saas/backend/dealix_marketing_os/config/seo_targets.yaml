@@ -1,0 +1,39 @@
+clusters:
+  - keyword: "نظام متابعة عملاء السعودية"
+    intent: commercial
+    priority: P0
+  - keyword: "رد تلقائي واتساب للشركات"
+    intent: commercial
+    priority: P0
+  - keyword: "CRM عربي للشركات الصغيرة"
+    intent: commercial
+    priority: P1
+  - keyword: "نظام تأهيل العملاء المحتملين"
+    intent: informational
+    priority: P0
+  - keyword: "وكالة تسويق شراكة follow-up"
+    intent: commercial
+    priority: P0
+  - keyword: "متابعة استفسارات العقار"
+    intent: commercial
+    priority: P0
+  - keyword: "حجز مواعيد تلقائي عيادات"
+    intent: commercial
+    priority: P1
+  - keyword: "lead response time Saudi Arabia"
+    intent: informational
+    priority: P1
+
+pages:
+  - slug: "whatsapp-lead-followup"
+    keyword: "متابعة واتساب للعملاء"
+    type: service_page
+  - slug: "agency-partner-program"
+    keyword: "برنامج شراكة وكالات"
+    type: partner_page
+  - slug: "real-estate-lead-management"
+    keyword: "إدارة استفسارات العقار"
+    type: sector_page
+  - slug: "clinic-booking-followup"
+    keyword: "حجز مواعيد العيادات"
+    type: sector_page
