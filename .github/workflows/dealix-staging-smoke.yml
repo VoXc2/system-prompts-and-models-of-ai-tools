@@ -1,4 +1,4 @@
-# Manual smoke against a deployed Dealix staging URL (secrets in GitHub only).
+# Manual smoke + launch readiness against a deployed Dealix staging URL (secrets in GitHub only).
 name: Dealix staging smoke
 
 on:
@@ -17,17 +17,46 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
+          cache-dependency-path: dealix/requirements.txt
 
-      - name: Install httpx
-        run: pip install httpx
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio httpx aiosqlite
 
       - name: Run staging smoke
         env:
           STAGING_BASE_URL: ${{ secrets.STAGING_BASE_URL }}
           STAGING_API_KEY: ${{ secrets.STAGING_API_KEY }}
+          APP_ENV: test
+          APP_DEBUG: "false"
+          ANTHROPIC_API_KEY: test-anthropic-key
+          DEEPSEEK_API_KEY: test-deepseek-key
+          GROQ_API_KEY: test-groq-key
+          GLM_API_KEY: test-glm-key
+          GOOGLE_API_KEY: test-google-key
         run: |
           if [ -z "$STAGING_BASE_URL" ]; then
             echo "STAGING_BASE_URL secret not set — skipping."
             exit 0
           fi
           python scripts/smoke_staging.py --base-url "$STAGING_BASE_URL"
+
+      - name: Launch readiness (expect PAID_BETA_READY)
+        env:
+          STAGING_BASE_URL: ${{ secrets.STAGING_BASE_URL }}
+          APP_ENV: test
+          APP_DEBUG: "false"
+          ANTHROPIC_API_KEY: test-anthropic-key
+          DEEPSEEK_API_KEY: test-deepseek-key
+          GROQ_API_KEY: test-groq-key
+          GLM_API_KEY: test-glm-key
+          GOOGLE_API_KEY: test-google-key
+        run: |
+          if [ -z "$STAGING_BASE_URL" ]; then
+            echo "STAGING_BASE_URL secret not set — skipping launch readiness."
+            exit 0
+          fi
+          python scripts/launch_readiness_check.py --base-url "$STAGING_BASE_URL"

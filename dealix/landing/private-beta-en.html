@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix — Private Beta | Growth Control Tower</title>
+  <meta name="description" content="Private beta: unified inbox, safe drafts, decision log, and proof — no automated sends without your approval." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>body{font-family:Inter,system-ui,sans-serif;}</style>
+</head>
+<body>
+  <p style="text-align:center;margin:0.75rem 0;font-size:0.9rem;"><a href="private-beta.html">العربية</a></p>
+  <header class="hero" style="padding: 3rem 1.5rem; text-align: center;">
+    <p class="eyebrow" style="letter-spacing: 0.08em; color: #64748b; font-size: 0.85rem;">Private beta</p>
+    <h1 style="font-size: clamp(1.75rem, 4vw, 2.5rem); margin: 0.5rem 0;">
+      Growth control tower — drafts first, you decide last
+    </h1>
+    <p class="lede" style="max-width: 36rem; margin: 1rem auto; line-height: 1.7; color: #475569;">
+      One growth inbox, command cards, an agent safety layer, and proof summaries — with channel policies that block cold blasts and automatic charging in the MVP phase.
+    </p>
+    <p style="max-width: 40rem; margin: 1rem auto; padding: 0.75rem 1rem; background: #f1f5f9; border-radius: 8px; font-size: 0.95rem; line-height: 1.65;">
+      <strong>No outbound send without your approval.</strong> Drafts and offers are for review only. Collect payment via manual invoice or payment link (e.g. Moyasar dashboard) — not in-app API charges at this stage.
+    </p>
+    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+      <a class="btn btn--primary" href="mailto:hello@dealix.sa?subject=Free%20growth%20diagnostic%20Dealix">Free growth diagnostic</a>
+      <a class="btn btn--primary" href="mailto:hello@dealix.sa?subject=7-day%20pilot%20499%20SAR">7-day pilot — 499 SAR</a>
+      <a class="btn btn--ghost" href="mailto:hello@dealix.sa?subject=15-minute%20demo">15-minute demo</a>
+      <a class="btn btn--ghost" href="../docs/PRIVATE_BETA_LAUNCH_TODAY.md">Runbook</a>
+    </div>
+  </header>
+  <main style="max-width: 48rem; margin: 0 auto 4rem; padding: 0 1.25rem;">
+    <section style="margin-bottom: 2rem; padding: 1.25rem; border: 1px solid #e2e8f0; border-radius: 12px;">
+      <h2 style="font-size: 1.25rem; margin-top: 0;">Beta offers (today)</h2>
+      <ul style="line-height: 1.9; color: #475569; margin-bottom: 0;">
+        <li><strong>Free growth diagnostic:</strong> sample opportunities, one message, channel risk — fast entry.</li>
+        <li><strong>7-day pilot — 499 SAR:</strong> 10 opportunities, Arabic drafts, contactability check, follow-up plan, short proof pack.</li>
+        <li><strong>Growth OS pilot (30 days):</strong> broader scope — typically 1,500–3,000 SAR; confirmed after demo.</li>
+      </ul>
+    </section>
+    <section style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.25rem;">API (same backend)</h2>
+      <ul style="line-height: 1.9; color: #475569;">
+        <li><code>GET /api/v1/launch/private-beta/offer</code></li>
+        <li><code>GET /api/v1/revenue-launch/offer</code> — optional <code>?lang=en</code> for English labels alongside Arabic fields.</li>
+        <li><code>GET /api/v1/growth-operator/missions</code></li>
+      </ul>
+    </section>
+    <section>
+      <h2 style="font-size: 1.25rem;">Compliance</h2>
+      <p style="line-height: 1.8; color: #475569;">
+        Signed pilot path, PDPL, and WhatsApp Business policies. See <code>docs/PRIVATE_BETA_RUNBOOK.md</code> and <a href="../docs/FRONTEND_AND_API_MAP.md">FRONTEND_AND_API_MAP.md</a>.
+      </p>
+    </section>
+  </main>
+</body>
+</html>

@@ -112,6 +112,17 @@ from auto_client_acquisition.revenue_graph.why_now import (
     explain_why_now,
 )
 
+# Revenue Company OS (events → cards → RWU; deterministic demo)
+from auto_client_acquisition.revenue_company_os.action_graph import demo_action_graph
+from auto_client_acquisition.revenue_company_os.channel_health import demo_channel_health
+from auto_client_acquisition.revenue_company_os.command_feed_engine import build_company_os_command_feed
+from auto_client_acquisition.revenue_company_os.event_to_card import event_to_card
+from auto_client_acquisition.revenue_company_os.opportunity_factory import demo_opportunities
+from auto_client_acquisition.revenue_company_os.proof_ledger import demo_proof_ledger
+from auto_client_acquisition.revenue_company_os.revenue_work_units import demo_work_units
+from auto_client_acquisition.revenue_company_os.self_improvement_loop import weekly_growth_curator_report_ar
+from auto_client_acquisition.revenue_company_os.service_factory import demo_service_snapshot
+
 router = APIRouter(prefix="/api/v1/revenue-os", tags=["revenue-os"])
 log = logging.getLogger(__name__)
 
@@ -654,6 +665,59 @@ async def get_vertical_templates(vertical_id: str) -> dict[str, Any]:
         "proposal_template_ar": v.proposal_template_ar,
         "qbr_section_template_ar": v.qbr_section_template_ar,
     }
+
+
+# ── Revenue Company OS (additive; does not replace POST /events) ─────
+
+
+@router.get("/company-os/command-feed/demo")
+async def company_os_command_feed_demo() -> dict[str, Any]:
+    return build_company_os_command_feed(
+        [{"type": "email.received", "payload": {"from": "demo@example.com"}}],
+    )
+
+
+@router.post("/company-os/events/ingest")
+async def company_os_events_ingest(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+    et = str(body.get("type") or body.get("event_type") or "form.submitted")
+    payload = body.get("payload") if isinstance(body.get("payload"), dict) else {}
+    card = event_to_card(et, payload)
+    return {"ingested": True, "card": card, "demo": True}
+
+
+@router.get("/company-os/work-units/demo")
+async def company_os_work_units_demo() -> dict[str, Any]:
+    return demo_work_units()
+
+
+@router.get("/company-os/channel-health/demo")
+async def company_os_channel_health_demo() -> dict[str, Any]:
+    return demo_channel_health()
+
+
+@router.get("/company-os/opportunity-factory/demo")
+async def company_os_opportunity_factory_demo() -> dict[str, Any]:
+    return demo_opportunities()
+
+
+@router.get("/company-os/action-graph/demo")
+async def company_os_action_graph_demo() -> dict[str, Any]:
+    return demo_action_graph()
+
+
+@router.get("/company-os/self-improvement/weekly-report")
+async def company_os_self_improvement_weekly() -> dict[str, Any]:
+    return weekly_growth_curator_report_ar()
+
+
+@router.get("/company-os/proof-ledger/demo")
+async def company_os_proof_ledger_demo() -> dict[str, Any]:
+    return demo_proof_ledger()
+
+
+@router.get("/company-os/services/snapshot")
+async def company_os_services_snapshot() -> dict[str, Any]:
+    return demo_service_snapshot()
 
 
 # ─────────────────────────────────────────────────────────────────

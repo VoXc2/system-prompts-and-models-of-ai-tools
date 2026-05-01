@@ -26,6 +26,22 @@ PATHS = [
     "/api/v1/business/pricing",
     "/api/v1/innovation/growth-missions",
     "/api/v1/innovation/command-feed/demo",
+    "/api/v1/services/catalog",
+    "/api/v1/launch/go-no-go",
+    "/api/v1/launch/scorecard",
+    "/api/v1/revenue-launch/offer",
+    "/api/v1/revenue-launch/offer?lang=en",
+    "/api/v1/revenue-launch/payment/manual-flow",
+    "/api/v1/operator/bundles",
+    "/api/v1/operator/proof-pack/demo",
+    "/api/v1/operator/whatsapp/daily-brief",
+    "/api/v1/operator/tools/matrix",
+    "/api/v1/revenue-os/company-os/command-feed/demo",
+    "/api/v1/revenue-os/company-os/work-units/demo",
+    "/api/v1/revenue-os/company-os/self-improvement/weekly-report",
+    "/api/v1/customer-ops/onboarding/checklist",
+    "/api/v1/customer-ops/support/sla",
+    "/api/v1/customer-ops/connectors/status",
 ]
 
 
