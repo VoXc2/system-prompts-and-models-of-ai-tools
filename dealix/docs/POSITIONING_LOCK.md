@@ -7,7 +7,7 @@
 ## ليس Dealix
 
 - ليس CRM عاماً يحتاج إدخال يدوي كاملاً للبيانات.
-- ليس «بوت واتساب» للإرسال الجماعي.
+- ليس بوت واتساب للإرسال الجماعي.
 - ليس أداة scraping أو جمع بيانات أشخاص من LinkedIn أو غيره بطرق مخالفة.
 - ليس وكالة تقليدية فقط (المنصة تُكمّل الوكالة وتكرّر التشغيل).
 - ليس مساعد ذكاء اصطناعي عاماً بلا سياسات وموافقات.
@@ -31,5 +31,21 @@
 - لا إرسال حي (واتساب/إيميل/تقويم/دفع) إلا بعد سياسة وموافقة صريحة حيث ينطبق.
 - لا واتساب بارد افتراضياً؛ التواصل عبر واتساب يتطلب opt-in أو inbound أو علاقة واضحة.
 - لا scraping لـ LinkedIn ولا أتمتة DM/Connect.
+
+## Bundles (5) — مرجع تسمية
+
+- Growth Starter
+- Data to Revenue
+- Executive Growth OS
+- Partnership Growth
+- Full Growth Control Tower
+
+## Modes (5) — مرجع تسمية
+
+- CEO Mode
+- Growth Manager Mode
+- Agency Partner Mode
+- Self-Growth Mode
+- Service Delivery Mode
 
 **آخر تحديث:** 2026-05-01
