@@ -1,215 +1,90 @@
-"""Service bundles — 6 packaged offerings instead of 20 raw services."""
+"""Productized service bundles — SAR ranges and catalog service_ids."""
 
 from __future__ import annotations
 
 from typing import Any
 
-# 6 bundles that simplify the customer's choice.
-BUNDLES: tuple[dict[str, Any], ...] = (
-    {
-        "id": "growth_starter",
-        "name_ar": "Growth Starter",
-        "best_for_ar": "أي شركة تجرب Dealix لأول مرة",
-        "services": [
-            "free_growth_diagnostic",
-            "first_10_opportunities_sprint",
-        ],
-        "deliverables_ar": [
-            "تشخيص نمو مجاني خلال 24 ساعة",
-            "10 فرص + رسائل عربية",
-            "Proof Pack مختصر",
-        ],
-        "timeline_ar": "8 أيام (1 ديمو + 7 Pilot)",
-        "price_min_sar": 499,
-        "price_max_sar": 1500,
-        "proof_metrics": [
-            "opportunities_count", "drafts_approved",
-            "positive_replies", "diagnostic_to_paid_conversion",
-        ],
-        "upgrade_path": ["executive_growth_os"],
+BundleId = str
+
+_BUNDLES: dict[BundleId, dict[str, Any]] = {
+    "growth_starter": {
+        "bundle_id": "growth_starter",
+        "title_ar": "Growth Starter",
+        "services": ["free_growth_diagnostic", "first_10_opportunities"],
+        "timeline_days": 14,
+        "price_range_sar": {"min": 499, "max": 499},
+        "best_for_ar": "شركات تريد أول قيمة سريعة + Pilot واضح.",
+        "deliverables_ar": ["تشخيص مجاني", "١٠ فرص + مسودات", "Proof Pack مختصر"],
+        "proof_metrics": ["opportunities_count", "drafts_created", "approvals_logged"],
+        "risk_policy_ar": "لا إرسال حي بدون موافقة؛ لا واتساب بارد.",
+        "upsell_path": "data_to_revenue",
     },
-    {
-        "id": "data_to_revenue",
-        "name_ar": "Data to Revenue",
-        "best_for_ar": "شركات لديها قائمة عملاء/أرقام لم تُستثمر",
-        "services": [
-            "list_intelligence",
-            "first_10_opportunities_sprint",
-        ],
-        "deliverables_ar": [
-            "قائمة منظفة + تصنيف مصادر",
-            "أفضل 50 target بالقنوات الآمنة",
-            "رسائل عربية لكل segment",
-            "Risk report + retention",
-        ],
-        "timeline_ar": "10 أيام",
-        "price_min_sar": 1500,
-        "price_max_sar": 3000,
-        "proof_metrics": [
-            "contacts_classified", "safe_targets_found",
-            "risks_blocked", "pipeline_influenced_sar",
-        ],
-        "upgrade_path": ["executive_growth_os"],
+    "data_to_revenue": {
+        "bundle_id": "data_to_revenue",
+        "title_ar": "من البيانات إلى الإيراد",
+        "services": ["list_intelligence", "first_10_opportunities"],
+        "timeline_days": 21,
+        "price_range_sar": {"min": 1500, "max": 2500},
+        "best_for_ar": "من لديه قائمة جهات ويريد أهدافاً مرتبة ومسودات.",
+        "deliverables_ar": ["أفضل ٥٠ هدفاً", "تقرير قابلية تواصل", "مسودات رسائل"],
+        "proof_metrics": ["safe_ratio", "drafts_created", "target_ranked"],
+        "risk_policy_ar": "مسودات فقط؛ موافقة قبل أي إرسال.",
+        "upsell_path": "executive_growth_os",
     },
-    {
-        "id": "executive_growth_os",
-        "name_ar": "Executive Growth OS",
-        "best_for_ar": "CEO / Growth Manager — تشغيل شهري",
-        "services": [
-            "growth_os_monthly",
-            "executive_growth_brief",
-        ],
-        "deliverables_ar": [
-            "Daily Command Feed عربي",
-            "Approval Center عبر واتساب",
-            "First 10 Opportunities أسبوعياً",
-            "Proof Pack شهري",
-            "Founder Shadow Board أسبوعي",
-            "Revenue Leak Detector",
-        ],
-        "timeline_ar": "شهري متجدد (ابدأ بـPilot 30 يوم)",
-        "price_min_sar": 2999,
-        "price_max_sar": 2999,
-        "proof_metrics": [
-            "monthly_pipeline_sar", "monthly_meetings",
-            "monthly_revenue_influenced", "monthly_risks_blocked",
-        ],
-        "upgrade_path": ["partnership_growth", "full_growth_control_tower"],
+    "executive_growth_os": {
+        "bundle_id": "executive_growth_os",
+        "title_ar": "Executive Growth OS",
+        "services": ["executive_growth_brief", "growth_os"],
+        "timeline_days": 30,
+        "price_range_sar": {"min": 2999, "max": 9999},
+        "best_for_ar": "CEO ومدير نمو يريدان موجزاً يومياً وتشغيل Growth OS.",
+        "deliverables_ar": ["موجز يومي", "Command feed", "Proof Pack أسبوعي"],
+        "proof_metrics": ["decisions_logged", "revenue_influenced_sar", "risks_blocked"],
+        "risk_policy_ar": "بوابة أدوات آمنة؛ تكاملات مسودة افتراضياً.",
+        "upsell_path": "full_growth_control_tower",
     },
-    {
-        "id": "partnership_growth",
-        "name_ar": "Partnership Growth",
-        "best_for_ar": "شركات تنمو عبر الشركاء/الوكالات/الموزعين",
-        "services": [
-            "partner_sprint",
-            "meeting_booking_sprint",
-        ],
-        "deliverables_ar": [
-            "20 شريك محتمل + scorecard",
-            "10 رسائل + drafts اجتماعات",
-            "Referral Agreement Draft",
-            "Partner-Proof Pack",
-        ],
-        "timeline_ar": "14 يوم",
-        "price_min_sar": 3000,
-        "price_max_sar": 7500,
-        "proof_metrics": [
-            "partners_identified", "partner_meetings",
-            "referral_revenue_sar",
-        ],
-        "upgrade_path": ["full_growth_control_tower"],
+    "partnership_growth": {
+        "bundle_id": "partnership_growth",
+        "title_ar": "نمو عبر الشراكات",
+        "services": ["partner_sprint", "meeting_booking_sprint"],
+        "timeline_days": 30,
+        "price_range_sar": {"min": 3000, "max": 7500},
+        "best_for_ar": "توسع عبر شركاء ووكالات.",
+        "deliverables_ar": ["قائمة شركاء", "مسودات اجتماعات", "مسودة اتفاق إحالة"],
+        "proof_metrics": ["partner_meetings", "referral_pipeline"],
+        "risk_policy_ar": "مراجعة قانونية للاتفاقيات.",
+        "upsell_path": "agency_partner_program",
     },
-    {
-        "id": "local_growth_os",
-        "name_ar": "Local Growth OS",
-        "best_for_ar": "عيادات / متاجر / فروع / خدمات محلية",
-        "services": [
-            "local_growth_os",
-            "whatsapp_compliance_setup",
-            "list_intelligence",
-        ],
-        "deliverables_ar": [
-            "Google Business reviews ledger + draft replies",
-            "WhatsApp opt-in audit + templates",
-            "Customer reactivation campaign drafts",
-            "Branch-level Proof Pack",
-        ],
-        "timeline_ar": "3 أسابيع",
-        "price_min_sar": 999,
-        "price_max_sar": 2999,
-        "proof_metrics": [
-            "reviews_handled", "opt_ins_collected",
-            "customers_reactivated", "risks_blocked",
-        ],
-        "upgrade_path": ["executive_growth_os"],
+    "local_growth_os": {
+        "bundle_id": "local_growth_os",
+        "title_ar": "نمو محلي",
+        "services": ["local_growth_os"],
+        "timeline_days": 30,
+        "price_range_sar": {"min": 999, "max": 2999},
+        "best_for_ar": "عيادات ومطاعم ومتاجر محلية.",
+        "deliverables_ar": ["كروت سمعة", "مسودات رد", "روابط دفع draft"],
+        "proof_metrics": ["reviews_addressed", "reactivation_drafts"],
+        "risk_policy_ar": "موافقة على الرسائل العامة.",
+        "upsell_path": "growth_os",
     },
-    {
-        "id": "full_growth_control_tower",
-        "name_ar": "Full Growth Control Tower",
-        "best_for_ar": "مؤسسات تريد تشغيل كامل على 30+ يوم",
-        "services": [
-            "growth_os_monthly",
-            "list_intelligence",
-            "first_10_opportunities_sprint",
-            "partner_sprint",
-            "executive_growth_brief",
-            "linkedin_lead_gen_setup",
-        ],
-        "deliverables_ar": [
-            "كل خدمات Growth OS",
-            "Partnership Sprint موازٍ",
-            "LinkedIn Lead Gen campaign",
-            "Founder Shadow Board",
-            "Service Excellence weekly review",
-        ],
-        "timeline_ar": "30 يوم — قابل للتجديد",
-        "price_min_sar": 12000,
-        "price_max_sar": 25000,
-        "proof_metrics": [
-            "monthly_pipeline_sar", "monthly_revenue_influenced",
-            "partners_signed", "monthly_meetings",
-        ],
-        "upgrade_path": [],
+    "full_growth_control_tower": {
+        "bundle_id": "full_growth_control_tower",
+        "title_ar": "برج تحكم كامل — مخصص",
+        "services": ["growth_os", "agency_partner_program"],
+        "timeline_days": 90,
+        "price_range_sar": {"min": 15000, "max": 80000},
+        "best_for_ar": "مؤسسات تريد كل الطبقات على مراحل.",
+        "deliverables_ar": ["خارطة ٣٠/٦٠/٩٠ يوماً", "حوكمة موافقات", "Proof شهري"],
+        "proof_metrics": ["pipeline_influenced", "partners_created", "payments_requested"],
+        "risk_policy_ar": "DPA + مراجعة امتثال قبل التوسع.",
+        "upsell_path": None,
     },
-)
+}
 
 
 def list_bundles() -> dict[str, Any]:
-    return {
-        "total": len(BUNDLES),
-        "bundles": [dict(b) for b in BUNDLES],
-    }
+    return {"bundles": list(_BUNDLES.values()), "demo": True}
 
 
 def get_bundle(bundle_id: str) -> dict[str, Any] | None:
-    return next((dict(b) for b in BUNDLES if b["id"] == bundle_id), None)
-
-
-def recommend_bundle(
-    *,
-    intent: str | None = None,
-    has_contact_list: bool = False,
-    is_agency: bool = False,
-    is_local_business: bool = False,
-    budget_sar: int = 1000,
-) -> dict[str, Any]:
-    """
-    Recommend the best-fit bundle deterministically.
-
-    Order of priority:
-      agency → partnership_growth
-      local business → local_growth_os
-      has list → data_to_revenue
-      monthly budget → executive_growth_os
-      partnerships intent → partnership_growth
-      default → growth_starter
-    """
-    if is_agency:
-        chosen = "partnership_growth"
-        reason = "وكالة → Partnership Growth + ترقية لـ Agency Partner Program."
-    elif is_local_business:
-        chosen = "local_growth_os"
-        reason = "نشاط محلي → Local Growth OS."
-    elif has_contact_list:
-        chosen = "data_to_revenue"
-        reason = "العميل لديه قائمة → Data to Revenue."
-    elif intent == "want_partnerships":
-        chosen = "partnership_growth"
-        reason = "هدف الشراكات → Partnership Growth."
-    elif intent == "want_daily_growth" or budget_sar >= 2999:
-        chosen = "executive_growth_os"
-        reason = "تشغيل يومي/ميزانية شهرية → Executive Growth OS."
-    elif budget_sar >= 12000:
-        chosen = "full_growth_control_tower"
-        reason = "ميزانية كبيرة → Full Growth Control Tower."
-    else:
-        chosen = "growth_starter"
-        reason = "ابدأ بـ Growth Starter."
-
-    bundle = get_bundle(chosen)
-    return {
-        "recommended_bundle_id": chosen,
-        "bundle": bundle,
-        "reason_ar": reason,
-        "approval_required": True,
-    }
+    return _BUNDLES.get((bundle_id or "").strip())

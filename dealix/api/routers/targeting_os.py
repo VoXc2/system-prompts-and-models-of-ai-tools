@@ -1,4 +1,4 @@
-"""Targeting & Acquisition OS router."""
+"""Targeting & Acquisition OS API — planning and evaluation only, no live send."""
 
 from __future__ import annotations
 
@@ -6,235 +6,128 @@ from typing import Any
 
 from fastapi import APIRouter, Body
 
-from auto_client_acquisition.targeting_os import (
-    analyze_uploaded_list_preview,
-    build_dealix_self_growth_plan,
-    build_daily_targeting_brief,
-    build_end_of_day_report,
-    build_followup_sequence,
+from auto_client_acquisition.intelligence_layer.trust_score import compute_trust_score
+from auto_client_acquisition.platform_services.contact_import_preview import build_import_preview
+from auto_client_acquisition.targeting_os.account_finder import recommend_accounts, recommend_account_source_strategy
+from auto_client_acquisition.targeting_os.acquisition_scorecard import build_acquisition_scorecard
+from auto_client_acquisition.targeting_os.buyer_role_mapper import map_buying_committee
+from auto_client_acquisition.targeting_os.contactability_matrix import evaluate_contactability
+from auto_client_acquisition.targeting_os.contract_drafts import list_contract_templates
+from auto_client_acquisition.targeting_os.daily_autopilot import build_daily_targeting_brief
+from auto_client_acquisition.targeting_os.free_diagnostic import (
     build_free_growth_diagnostic,
+    recommend_paid_pilot_offer,
+)
+from auto_client_acquisition.targeting_os.linkedin_strategy import (
     build_lead_gen_form_plan,
-    build_outreach_plan,
-    build_self_growth_daily_brief,
-    build_weekly_learning_report,
-    calculate_channel_reputation,
-    draft_b2b_email,
-    draft_role_based_angle,
-    draft_whatsapp_message,
-    enforce_daily_limits,
-    evaluate_contactability,
-    explain_contactability_ar,
-    list_targeting_services,
-    map_buying_committee,
-    recommend_accounts,
-    recommend_dealix_targets,
     recommend_linkedin_strategy,
-    recommend_recovery_action,
-    recommend_service_offer,
-    recommend_today_actions,
-    score_email_risk,
-    score_whatsapp_risk,
-    summarize_plan_ar,
-    summarize_reputation_ar,
 )
-from auto_client_acquisition.targeting_os.contract_drafts import (
-    draft_agency_partner_outline,
-    draft_dpa_outline,
-    draft_pilot_agreement_outline,
-    draft_referral_agreement_outline,
-)
+from auto_client_acquisition.targeting_os.outreach_scheduler import build_outreach_plan
+from auto_client_acquisition.targeting_os.reputation_guard import calculate_channel_reputation, should_pause_channel
+from auto_client_acquisition.targeting_os.self_growth_mode import build_self_growth_daily_brief
+from auto_client_acquisition.targeting_os.service_offers import list_targeting_services
 
-router = APIRouter(prefix="/api/v1/targeting", tags=["targeting-os"])
+router = APIRouter(prefix="/api/v1/targeting", tags=["targeting_os"])
 
 
-# ── Accounts ─────────────────────────────────────────────────
 @router.post("/accounts/recommend")
-async def accounts_recommend(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
+async def accounts_recommend(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
     return recommend_accounts(
-        sector=payload.get("sector", "saas"),
-        city=payload.get("city", "Riyadh"),
-        offer=payload.get("offer", ""),
-        goal=payload.get("goal", "fill_pipeline"),
-        limit=int(payload.get("limit", 10)),
+        str(payload.get("sector") or ""),
+        str(payload.get("city") or ""),
+        str(payload.get("offer") or ""),
+        str(payload.get("goal") or ""),
+        limit=int(payload.get("limit") or 10),
     )
 
 
-# ── Buying committee ─────────────────────────────────────────
 @router.post("/buying-committee/map")
-async def buying_committee_map(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
+async def buying_committee_map(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
     return map_buying_committee(
-        sector=payload.get("sector", "saas"),
-        company_size=payload.get("company_size", "small"),
-        goal=payload.get("goal", "fill_pipeline"),
+        str(payload.get("sector") or ""),
+        payload.get("company_size"),
+        payload.get("goal"),
     )
 
 
-# ── Contacts ─────────────────────────────────────────────────
 @router.post("/contacts/evaluate")
-async def contacts_evaluate(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    contact = payload.get("contact") or payload
+async def contacts_evaluate(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    contact = payload.get("contact") if isinstance(payload.get("contact"), dict) else payload
     desired = payload.get("desired_channel")
-    result = evaluate_contactability(contact, desired_channel=desired)
-    result["explanation_ar"] = explain_contactability_ar(result)
-    return result
+    return evaluate_contactability(contact, str(desired) if desired else None)
 
 
 @router.post("/uploaded-list/analyze")
-async def uploaded_list_analyze(
-    contacts: list[dict[str, Any]] = Body(..., embed=True),
-) -> dict[str, Any]:
-    return analyze_uploaded_list_preview(contacts)
+async def uploaded_list_analyze(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    """Delegates to platform import preview for full bucket logic."""
+    return build_import_preview(payload or {})
 
 
-# ── Outreach ─────────────────────────────────────────────────
 @router.post("/outreach/plan")
-async def outreach_plan(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    plan = build_outreach_plan(
-        targets=payload.get("targets", []),
-        channels=payload.get("channels"),
-        goal=payload.get("goal", "fill_pipeline"),
-    )
-    plan = enforce_daily_limits(plan)
-    plan["summary_ar"] = summarize_plan_ar(plan)
-    return plan
+async def outreach_plan(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    targets = payload.get("targets") if isinstance(payload.get("targets"), list) else []
+    channels = payload.get("channels") if isinstance(payload.get("channels"), list) else ["email"]
+    goal = str(payload.get("goal") or "growth")
+    return build_outreach_plan([dict(t) for t in targets if isinstance(t, dict)], [str(c) for c in channels], goal)
 
 
-# ── Daily autopilot ──────────────────────────────────────────
 @router.get("/daily-autopilot/demo")
 async def daily_autopilot_demo() -> dict[str, Any]:
-    return {
-        "brief": build_daily_targeting_brief(),
-        "today_actions": recommend_today_actions(),
-        "end_of_day_template": build_end_of_day_report(),
-    }
+    return build_daily_targeting_brief({"sector": "training", "city": "الرياض", "offer": "Growth OS", "goal": "meetings"})
 
 
-# ── Self-Growth Mode ─────────────────────────────────────────
 @router.get("/self-growth/demo")
 async def self_growth_demo() -> dict[str, Any]:
-    return {
-        "plan": build_dealix_self_growth_plan(),
-        "today": build_self_growth_daily_brief(),
-    }
+    return build_self_growth_daily_brief()
 
 
-@router.post("/self-growth/targets")
-async def self_growth_targets(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
-    return recommend_dealix_targets(
-        sector_focus=payload.get("sector"),
-        city_focus=payload.get("city"),
-        limit=int(payload.get("limit", 10)),
-    )
-
-
-@router.post("/self-growth/weekly-report")
-async def self_growth_weekly(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
-    return build_weekly_learning_report(payload)
-
-
-# ── Reputation guard ────────────────────────────────────────
 @router.get("/reputation/status")
 async def reputation_status() -> dict[str, Any]:
-    """Demo reputation snapshot."""
-    healthy_email = {"bounce_rate": 0.005, "complaint_rate": 0.0001,
-                     "opt_out_rate": 0.01, "reply_rate": 0.04}
-    risky_wa = {"block_rate": 0.04, "report_rate": 0.005,
-                "opt_out_rate": 0.06, "reply_rate": 0.02}
-    return {
-        "email": calculate_channel_reputation(healthy_email, channel="email"),
-        "whatsapp": calculate_channel_reputation(risky_wa, channel="whatsapp"),
-    }
+    metrics = {"bounce_rate": 0.12, "opt_out_rate": 0.01, "complaint_rate": 0.0, "reply_rate": 0.08}
+    rep = calculate_channel_reputation(metrics)
+    return {**rep, "should_pause": should_pause_channel(metrics)}
 
 
-@router.post("/reputation/recovery")
-async def reputation_recovery(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return recommend_recovery_action(
-        payload.get("metrics", {}),
-        channel=payload.get("channel", "email"),
-    )
-
-
-# ── LinkedIn strategy ────────────────────────────────────────
 @router.post("/linkedin/strategy")
-async def linkedin_strategy(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    strategy = recommend_linkedin_strategy(
-        segment=payload.get("segment", "B2B Saudi"),
-        goal=payload.get("goal", "fill_pipeline"),
-    )
-    if payload.get("with_lead_gen_form"):
-        strategy["lead_gen_form_plan"] = build_lead_gen_form_plan(
-            segment=payload.get("segment", "B2B Saudi"),
-            offer=payload.get("offer", "Pilot 7 days"),
-            campaign_name=payload.get("campaign_name", ""),
+async def linkedin_strategy(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    seg = str(payload.get("segment") or "b2b")
+    goal = str(payload.get("goal") or "leads")
+    base = recommend_linkedin_strategy(seg, goal)
+    if payload.get("include_lead_gen_plan"):
+        base["lead_gen_plan"] = build_lead_gen_form_plan(
+            seg,
+            str(payload.get("offer") or "Pilot"),
+            str(payload.get("campaign_name") or "dealix"),
         )
-    return strategy
+    return base
 
 
-# ── Drafts ───────────────────────────────────────────────────
-@router.post("/drafts/email")
-async def drafts_email(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    contact = payload.get("contact", {})
-    draft = draft_b2b_email(
-        contact,
-        offer=payload.get("offer", ""),
-        why_now=payload.get("why_now", ""),
-    )
-    risk = score_email_risk(contact, draft.get("body_ar", ""))
-    return {**draft, "risk": risk}
-
-
-@router.post("/drafts/whatsapp")
-async def drafts_whatsapp(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    contact = payload.get("contact", {})
-    return draft_whatsapp_message(
-        contact,
-        offer=payload.get("offer", ""),
-        why_now=payload.get("why_now", ""),
-    )
-
-
-@router.post("/drafts/email-followup")
-async def drafts_email_followup(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return build_followup_sequence(
-        payload.get("contact", {}),
-        offer=payload.get("offer", ""),
-    )
-
-
-@router.post("/drafts/role-angle")
-async def drafts_role_angle(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return draft_role_based_angle(
-        role_key=payload.get("role_key", "founder_ceo"),
-        sector=payload.get("sector", "saas"),
-        offer=payload.get("offer", ""),
-    )
-
-
-# ── Free diagnostic ──────────────────────────────────────────
-@router.post("/free-diagnostic")
-async def free_diagnostic(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return build_free_growth_diagnostic(payload)
-
-
-# ── Services + contracts ─────────────────────────────────────
 @router.get("/services")
-async def services_list() -> dict[str, Any]:
+async def targeting_services() -> dict[str, Any]:
     return list_targeting_services()
 
 
-@router.post("/services/recommend")
-async def services_recommend(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return recommend_service_offer(
-        customer_type=payload.get("customer_type", ""),
-        goal=payload.get("goal", "fill_pipeline"),
-    )
+@router.post("/free-diagnostic")
+async def free_diagnostic(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    company = payload.get("company") if isinstance(payload.get("company"), dict) else payload
+    if not isinstance(company, dict):
+        company = {}
+    diag = build_free_growth_diagnostic(company or {"sector": "b2b", "city": "الرياض"})
+    return {"diagnostic": diag, "pilot_offer": recommend_paid_pilot_offer(diag)}
 
 
 @router.get("/contracts/templates")
 async def contracts_templates() -> dict[str, Any]:
-    return {
-        "pilot": draft_pilot_agreement_outline(),
-        "dpa": draft_dpa_outline(),
-        "referral": draft_referral_agreement_outline(),
-        "agency_partner": draft_agency_partner_outline(),
-    }
+    return list_contract_templates()
+
+
+@router.post("/trust-score")
+async def targeting_trust_score(signals: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    """Bridge to intelligence trust score for targeting workflows."""
+    return compute_trust_score(signals or {})
+
+
+@router.post("/account-strategy")
+async def account_strategy(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    acct = payload.get("account") if isinstance(payload.get("account"), dict) else {}
+    return recommend_account_source_strategy(acct)

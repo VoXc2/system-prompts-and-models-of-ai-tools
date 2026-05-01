@@ -1,91 +1,59 @@
-"""Deliverables + Proof Pack templates per service."""
+"""Deliverables and proof pack outlines per service."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from .service_catalog import get_service
+from auto_client_acquisition.service_tower.service_catalog import get_service_by_id
 
 
 def build_deliverables(service_id: str) -> dict[str, Any]:
-    """Return the deliverables list for a service."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
-    return {
-        "service_id": service_id,
-        "service_name_ar": s.name_ar,
-        "deliverables_ar": list(s.deliverables_ar),
-        "approval_required": True,
-    }
+    svc = get_service_by_id(service_id)
+    if not svc:
+        return {"service_id": service_id, "deliverables": [], "demo": True}
+    items = list(svc.get("deliverables_ar") or [])
+    return {"service_id": service_id, "deliverables_ar": items, "count": len(items), "demo": True}
 
 
 def build_proof_pack_template(service_id: str) -> dict[str, Any]:
-    """Build a proof-pack template for a service."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
+    svc = get_service_by_id(service_id)
+    metrics = list((svc or {}).get("proof_metrics") or [])
     return {
         "service_id": service_id,
-        "service_name_ar": s.name_ar,
-        "metrics_to_track": list(s.proof_metrics),
-        "report_sections_ar": [
-            "ملخص الفترة",
-            "ما تم إنجازه (ledger entries)",
-            "النتائج بالأرقام (الـ proof_metrics)",
+        "sections_ar": [
+            "ملخص الأسبوع",
+            "ما تم اعتماده",
             "المخاطر التي تم منعها",
-            "تجربة الأسبوع/الشهر القادم",
-            "التوصية بالخطوة التالية",
+            "الأثر المقدّر",
+            "الخطوة التالية",
         ],
-        "delivery_format": ["pdf", "json", "whatsapp_summary"],
-        "approval_required": True,
+        "proof_metrics": metrics,
+        "demo": True,
     }
 
 
 def build_client_report_outline(service_id: str) -> dict[str, Any]:
-    """Outline of the client-facing report for a service."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
     return {
         "service_id": service_id,
-        "title_ar": f"تقرير {s.name_ar}",
-        "sections_ar": [
-            "ملخص تنفيذي (10 أسطر)",
-            "السياق والأهداف",
-            "ما عمله Dealix",
-            "النتائج (الأرقام مقابل الأهداف)",
-            "أبرز الاعتراضات والـsignals",
-            "المخاطر التي تم منعها",
-            "Proof — ledger events",
-            "التوصية بالخطوة التالية",
+        "outline_ar": [
+            "الهدف والمدخلات",
+            "ما نفّذناه (مسودات/موافقات)",
+            "النتائج المقيسة",
+            "المخاطر والامتثال",
+            "التوصية للأسبوع القادم",
         ],
-        "approval_required": True,
+        "demo": True,
     }
 
 
 def build_internal_operator_checklist(service_id: str) -> dict[str, Any]:
-    """Internal operator checklist (for the team running the service)."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
     return {
         "service_id": service_id,
-        "service_name_ar": s.name_ar,
         "checklist_ar": [
-            "مراجعة الـ intake واكتمال الحقول.",
-            "تشغيل targeting + contactability.",
-            "صياغة الـ drafts الأولى.",
-            "إرسال للـ approval center.",
-            "تنفيذ بعد الاعتماد فقط.",
-            "تتبع النتائج في الـ Action Ledger.",
-            "بناء Proof Pack.",
-            "اقتراح الترقية للعميل.",
+            "تأكد من عدم وجود إرسال حي",
+            "راجع contactability",
+            "سجّل الموافقات في الدفتر",
+            "حدّث Proof Pack",
         ],
-        "do_not_do_ar": [
-            "لا live send بدون env flag + اعتماد.",
-            "لا إرسال على cold list.",
-            "لا charge بدون تأكيد.",
-            "لا تخزين أسرار في الـ payload.",
-        ],
+        "demo": True,
     }

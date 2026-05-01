@@ -1,59 +1,47 @@
-"""Upgrade paths — يوصي بالخدمة التالية بعد كل خدمة."""
+"""Upsell / upgrade paths between services."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from .service_catalog import get_service
+from auto_client_acquisition.service_tower.service_catalog import get_service_by_id, list_tower_services
 
 
-def recommend_upgrade(
-    service_id: str,
-    *,
-    results: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    """Recommend the next service for a customer to buy."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
+def build_all_upgrade_paths() -> dict[str, Any]:
+    paths = []
+    for s in list_tower_services().get("services") or []:
+        paths.append(
+            {
+                "service_id": s["service_id"],
+                "name_ar": s.get("name_ar"),
+                "upgrade_path": s.get("upgrade_path"),
+            }
+        )
+    return {"paths": paths, "demo": True}
 
-    upgrade_targets = list(s.upgrade_path) or ["growth_os_monthly"]
-    next_id = upgrade_targets[0]
-    next_s = get_service(next_id)
 
+def recommend_upgrade(service_id: str, results: dict[str, Any]) -> dict[str, Any]:
+    svc = get_service_by_id(service_id)
+    default_next = (svc or {}).get("upgrade_path") or "growth_os"
+    r = results or {}
+    if int(r.get("paid_conversion", 0)) > 0:
+        default_next = "growth_os"
     return {
         "from_service": service_id,
-        "from_service_name_ar": s.name_ar,
-        "recommended_service_id": next_id,
-        "recommended_service_name_ar": next_s.name_ar if next_s else next_id,
-        "monthly_sar": next_s.pricing_min_sar if next_s else 0,
-        "reason_ar": (
-            f"بعد {s.name_ar}، الترقية الطبيعية هي "
-            f"{next_s.name_ar if next_s else next_id} للحفاظ على الاستمرارية."
-        ),
+        "recommended_upgrade": default_next,
+        "reason_ar": "بعد إثبات القيمة: Growth OS للتشغيل الشهري.",
+        "demo": True,
     }
 
 
-def build_upsell_message_ar(
-    service_id: str,
-    next_offer: str,
-) -> str:
-    """Build a one-paragraph Arabic upsell message."""
-    s = get_service(service_id)
-    next_s = get_service(next_offer)
-    if not s or not next_s:
-        return "بعد إثبات النتائج، نوصي بالترقية للخدمة التالية."
+def build_upsell_message_ar(service_id: str, next_offer: str) -> str:
     return (
-        f"شاكر لك على تجربة {s.name_ar}. "
-        f"بناءً على النتائج، الترقية المنطقية هي {next_s.name_ar} "
-        "للاستمرار في النمو شهرياً مع نفس مستوى الـ Proof Pack. "
-        "أرسل لي تأكيد ونبدأ الأسبوع القادم."
+        f"أكملنا {service_id} بنجاح. الخطوة المنطقية: {next_offer} "
+        "للتشغيل الشهري مع Proof Pack — بدون إرسال حي بدون موافقتك."
     )
 
 
-def map_service_to_subscription(service_id: str) -> str:
-    """Map any service to its eventual subscription."""
-    s = get_service(service_id)
-    if s is None:
-        return "growth_os_monthly"
-    return s.upgrade_path[0] if s.upgrade_path else "growth_os_monthly"
+def map_service_to_subscription(service_id: str) -> dict[str, Any]:
+    if service_id in ("growth_os", "self_growth_operator", "local_growth_os"):
+        return {"subscription_id": "growth_os_monthly", "eligible": True, "demo": True}
+    return {"subscription_id": "growth_os_monthly", "eligible": False, "note_ar": "خدمة مشروع — اشتراك اختياري بعد Pilot.", "demo": True}

@@ -1,203 +1,185 @@
-"""Platform Services router — channel registry + events + inbox + policy + proof."""
+"""Platform Services API — Growth Control Tower (no live external sends)."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Body, Query
+from fastapi import APIRouter, Body
 
 from auto_client_acquisition.platform_services import (
-    ALL_CHANNELS,
-    POLICY_RULES,
-    SELLABLE_SERVICES,
-    build_card_from_event,
-    build_demo_feed,
-    build_demo_platform_proof,
+    build_proof_summary,
     evaluate_action,
-    get_channel,
-    invoke_tool,
-    list_services,
-    make_event,
-    resolve_identity,
+    event_to_inbox_card,
+    execute_tool,
+    get_action_ledger,
+    get_service_catalog,
+    list_channels,
+    validate_event,
 )
-from auto_client_acquisition.platform_services.action_ledger import ActionLedger
-from auto_client_acquisition.platform_services.channel_registry import channels_summary
+from auto_client_acquisition.innovation.proof_ledger import build_demo_proof_ledger
+from auto_client_acquisition.platform_services.contact_import_preview import build_import_preview
+from auto_client_acquisition.platform_services.identity_resolution import resolve_identity_demo
+from auto_client_acquisition.platform_services.inbox_feed import build_inbox_feed
+from auto_client_acquisition.platform_services.lead_form_ingest import ingest_lead_form
+from auto_client_acquisition.platform_services.proof_overview import build_proof_overview
 
-router = APIRouter(prefix="/api/v1/platform", tags=["platform-services"])
-
-_LEDGER = ActionLedger()
+router = APIRouter(prefix="/api/v1/platform", tags=["platform_services"])
 
 
-# ── Catalog ────────────────────────────────────────────────────
+@router.get("/service-catalog")
+async def service_catalog() -> dict[str, Any]:
+    return get_service_catalog()
+
+
 @router.get("/services/catalog")
-async def services_catalog() -> dict[str, Any]:
-    return list_services()
+async def services_catalog_alias() -> dict[str, Any]:
+    """Alias path for product docs compatibility."""
+    return get_service_catalog()
 
 
 @router.get("/channels")
 async def channels() -> dict[str, Any]:
-    return {
-        "summary": channels_summary(),
-        "channels": [
-            {
-                "key": c.key, "label_ar": c.label_ar, "label_en": c.label_en,
-                "capabilities": list(c.capabilities), "beta_status": c.beta_status,
-                "required_permissions": list(c.required_permissions),
-                "allowed_actions": list(c.allowed_actions),
-                "blocked_actions": list(c.blocked_actions),
-                "risk_level": c.risk_level, "notes_ar": c.notes_ar,
-            }
-            for c in ALL_CHANNELS
-        ],
-    }
+    return list_channels()
 
 
-@router.get("/channels/{channel_key}")
-async def channel_detail(channel_key: str) -> dict[str, Any]:
-    c = get_channel(channel_key)
-    if c is None:
-        return {"error": f"unknown channel: {channel_key}"}
-    return {
-        "key": c.key, "label_ar": c.label_ar, "label_en": c.label_en,
-        "capabilities": list(c.capabilities), "beta_status": c.beta_status,
-        "required_permissions": list(c.required_permissions),
-        "allowed_actions": list(c.allowed_actions),
-        "blocked_actions": list(c.blocked_actions),
-        "risk_level": c.risk_level, "notes_ar": c.notes_ar,
-    }
+@router.post("/events/validate")
+async def events_validate(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return validate_event(payload or {})
 
 
-# ── Policy ─────────────────────────────────────────────────────
-@router.get("/policy/rules")
-async def policy_rules() -> dict[str, Any]:
-    return {"count": len(POLICY_RULES), "rules": POLICY_RULES}
-
-
-@router.post("/actions/evaluate")
-async def actions_evaluate(
-    action: str = Body(..., embed=True),
-    context: dict[str, Any] = Body(default_factory=dict, embed=True),
-) -> dict[str, Any]:
-    d = evaluate_action(action=action, context=context)
-    return {
-        "decision": d.decision,
-        "matched_rule_id": d.matched_rule_id,
-        "reasons_ar": d.reasons_ar,
-        "suggested_next_action_ar": d.suggested_next_action_ar,
-    }
+@router.post("/events/ingest")
+async def events_ingest(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    """Validate normalized event and return inbox card — no persistence."""
+    v = validate_event(payload or {})
+    if not v["valid"]:
+        return {"ok": False, "errors": v["errors"], "approval_required": True}
+    ev = v.get("normalized") or {}
+    return {"ok": True, "event": ev, "card": event_to_inbox_card(ev), "approval_required": True}
 
 
 @router.post("/actions/approve")
-async def actions_approve(
-    customer_id: str = Body(..., embed=True),
-    action_type: str = Body(..., embed=True),
-    channel: str = Body(..., embed=True),
-    actor: str = Body(default="user", embed=True),
-    payload: dict[str, Any] = Body(default_factory=dict, embed=True),
-    correlation_id: str | None = Body(default=None, embed=True),
-) -> dict[str, Any]:
-    entry = _LEDGER.append(
-        customer_id=customer_id,
-        action_type=action_type,
-        channel=channel,
-        stage="approved",
-        actor=actor,
-        payload=payload,
-        correlation_id=correlation_id,
+async def actions_approve(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    """Record human approval/rejection in the in-memory action ledger — no live side effects."""
+    ledger = get_action_ledger()
+    action_id = str(payload.get("action_id") or payload.get("request_id") or "unspecified")
+    actor = str(payload.get("actor") or "operator")
+    approved = payload.get("approved")
+    is_approved = True if approved is None else bool(approved)
+    entry = ledger.append_decision(
+        tool="human_approval",
+        outcome="approved" if is_approved else "rejected",
+        detail={
+            "action_id": action_id,
+            "actor": actor,
+            "notes": payload.get("notes"),
+        },
     )
-    return {"approved": True, "entry": entry.to_dict()}
-
-
-@router.get("/ledger/summary")
-async def ledger_summary(customer_id: str = Query(...)) -> dict[str, Any]:
-    return _LEDGER.summary(customer_id=customer_id)
-
-
-# ── Events + Inbox ─────────────────────────────────────────────
-@router.post("/events/ingest")
-async def events_ingest(
-    event_type: str = Body(..., embed=True),
-    channel: str = Body(..., embed=True),
-    customer_id: str = Body(..., embed=True),
-    payload: dict[str, Any] = Body(default_factory=dict, embed=True),
-) -> dict[str, Any]:
-    try:
-        evt = make_event(
-            event_type=event_type, channel=channel,
-            customer_id=customer_id, payload=payload,
-        )
-    except ValueError as exc:
-        return {"error": str(exc)}
-    card = build_card_from_event(evt)
     return {
-        "event": evt.to_dict(),
-        "card": card.to_dict() if card else None,
-        "actionable": card is not None,
+        "ok": True,
+        "ledger_entry": entry,
+        "detail_ar": "سُجّل القرار في دفتر MVP — لا يُطلق إرسالاً أو دفعاً تلقائياً من هذا المسار.",
+        "approval_required": False,
     }
+
+
+@router.post("/actions/evaluate")
+async def actions_evaluate_alias(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    """Alias of ``POST /policy/evaluate`` for docs that refer to ``actions/evaluate``."""
+    return evaluate_action(
+        action=str(payload.get("action") or ""),
+        channel_id=str(payload.get("channel_id") or ""),
+        context=payload.get("context") if isinstance(payload.get("context"), dict) else {},
+    )
+
+
+@router.post("/inbox/from-event")
+async def inbox_from_event(
+    payload: dict[str, Any] = Body(default_factory=dict),
+) -> dict[str, Any]:
+    event = payload.get("event") if isinstance(payload.get("event"), dict) else payload
+    merge = bool(payload.get("merge_demo_hint"))
+    return {"card": event_to_inbox_card(event or {}, merge_demo_hint=merge)}
+
+
+@router.post("/policy/evaluate")
+async def policy_evaluate(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return evaluate_action(
+        action=str(payload.get("action") or ""),
+        channel_id=str(payload.get("channel_id") or ""),
+        context=payload.get("context") if isinstance(payload.get("context"), dict) else {},
+    )
+
+
+@router.post("/tools/execute")
+async def tools_execute(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return execute_tool(str(payload.get("tool_name") or ""), payload.get("payload") if isinstance(payload.get("payload"), dict) else {})
+
+
+@router.get("/proof/summary")
+async def proof_summary() -> dict[str, Any]:
+    return build_proof_summary()
+
+
+@router.get("/proof-ledger/demo")
+async def proof_ledger_demo() -> dict[str, Any]:
+    """Demo ledger events — same source as innovation demo."""
+    return build_demo_proof_ledger()
+
+
+@router.get("/identity/resolve-demo")
+async def identity_resolve_demo(
+    phone: str | None = None,
+    email: str | None = None,
+    company_hint: str | None = None,
+) -> dict[str, Any]:
+    return resolve_identity_demo(phone=phone, email=email, company_hint=company_hint)
+
+
+@router.get("/proof/overview")
+async def proof_overview() -> dict[str, Any]:
+    return build_proof_overview()
 
 
 @router.get("/inbox/feed")
 async def inbox_feed() -> dict[str, Any]:
-    """Demo unified-inbox feed; production version reads from event store."""
-    return build_demo_feed()
+    return build_inbox_feed()
 
 
-# ── Identity + Tool gateway ───────────────────────────────────
-@router.post("/identity/resolve")
-async def identity_resolve(
-    signals: list[dict[str, Any]] = Body(..., embed=True),
-) -> dict[str, Any]:
-    out = resolve_identity(signals=signals)
-    return {
-        "identity_id": out.identity_id,
-        "primary_phone": out.primary_phone,
-        "primary_email": out.primary_email,
-        "company": out.company,
-        "crm_id": out.crm_id,
-        "social_handles": out.social_handles,
-        "confidence": out.confidence,
-        "sources": out.sources,
-    }
+@router.post("/contacts/import-preview")
+async def contacts_import_preview(body: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return build_import_preview(body or {})
 
 
-@router.get("/identity/resolve-demo")
-async def identity_resolve_demo() -> dict[str, Any]:
-    """Sample multi-source identity resolution."""
-    out = resolve_identity(signals=[
-        {"phone": "+966500000001", "company": "شركة العقار الذهبي", "source": "whatsapp"},
-        {"email": "ali@example.sa", "company": "شركة العقار الذهبي", "source": "gmail"},
-        {"crm_id": "crm_5421", "company": "شركة العقار الذهبي", "source": "crm"},
-        {"social_handles": {"linkedin": "ali-realestate"}, "source": "linkedin_lead_forms"},
-    ])
-    return {
-        "identity_id": out.identity_id,
-        "primary_phone": out.primary_phone,
-        "primary_email": out.primary_email,
-        "company": out.company,
-        "crm_id": out.crm_id,
-        "social_handles": out.social_handles,
-        "confidence": out.confidence,
-        "sources": out.sources,
-    }
+@router.get("/action-ledger/recent")
+async def action_ledger_recent(limit: int = 50) -> dict[str, Any]:
+    lim = max(1, min(limit, 200))
+    return {"entries": get_action_ledger().recent(lim)}
 
 
-@router.post("/tools/invoke")
-async def tools_invoke(
-    tool: str = Body(..., embed=True),
-    payload: dict[str, Any] = Body(default_factory=dict, embed=True),
-    context: dict[str, Any] = Body(default_factory=dict, embed=True),
-) -> dict[str, Any]:
-    r = invoke_tool(tool=tool, payload=payload, context=context)
-    return {
-        "status": r.status,
-        "tool": r.tool,
-        "matched_policy_rule": r.matched_policy_rule,
-        "reasons_ar": r.reasons_ar,
-        "next_action_ar": r.next_action_ar,
-    }
+@router.post("/ingest/lead-form")
+async def ingest_lead_form_route(body: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return ingest_lead_form(body or {})
 
 
-# ── Proof ──────────────────────────────────────────────────────
-@router.get("/proof-ledger/demo")
-async def proof_ledger_demo() -> dict[str, Any]:
-    return build_demo_platform_proof().to_dict()
+# --- Wave 4: draft payloads only (re-export from aca.integrations) ---
+
+
+@router.post("/integrations/gmail/draft")
+async def gmail_draft(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    from auto_client_acquisition.integrations.gmail_operator import build_gmail_draft_payload
+
+    return build_gmail_draft_payload(payload or {})
+
+
+@router.post("/integrations/calendar/draft")
+async def calendar_draft(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    from auto_client_acquisition.integrations.calendar_operator import build_calendar_draft_payload
+
+    return build_calendar_draft_payload(payload or {})
+
+
+@router.post("/integrations/moyasar/payment-draft")
+async def moyasar_payment_draft(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    from auto_client_acquisition.integrations.moyasar_draft import build_moyasar_payment_draft
+
+    return build_moyasar_payment_draft(payload or {})

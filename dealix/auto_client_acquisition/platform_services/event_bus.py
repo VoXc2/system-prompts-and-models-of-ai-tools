@@ -1,110 +1,74 @@
-"""
-Omni-Channel Event Bus — every channel emits typed events here.
-
-Pure structures + helpers; the actual transport (Redis/Kafka) lives in a
-production adapter. This module is testable in isolation.
-"""
+"""Unified event types and field validation — no transport."""
 
 from __future__ import annotations
 
-import uuid
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from enum import Enum
 from typing import Any
 
 
-# ── Event taxonomy ────────────────────────────────────────────────
-EVENT_TYPES: tuple[str, ...] = (
-    # WhatsApp
-    "whatsapp.message_received",
-    "whatsapp.message_sent",
-    "whatsapp.opt_out",
-    # Email (Gmail or company SMTP)
-    "email.received",
-    "email.draft_created",
-    "email.sent",
-    # Calendar
-    "calendar.meeting_scheduled",
-    "calendar.meeting_held",
-    "calendar.no_show",
-    # Social (X / LinkedIn / Instagram / Facebook)
-    "social.comment_received",
-    "social.dm_received",
-    "social.mention_received",
-    "social.lead_form_submitted",
-    # Website + CRM
-    "lead.form_submitted",
-    "lead.crm_imported",
-    # Payments (Moyasar)
-    "payment.initiated",
-    "payment.paid",
-    "payment.failed",
-    "payment.refunded",
-    # Reviews / reputation (Google Business Profile)
-    "review.created",
-    "review.replied",
-    # Partners
-    "partner.suggested",
-    "partner.intro_made",
-    # Internal lifecycle
-    "action.requested",
-    "action.approved",
-    "action.rejected",
-    "action.executed",
-    "action.blocked",
-    # Sheets / CRM sync
-    "sheet.row_added",
-    "crm.deal_updated",
-)
+class EventType(str, Enum):
+    """Stable event type names for platform ingest and internal cards."""
+
+    LEAD_RECEIVED = "lead_received"
+    EXTERNAL_SEND_REQUESTED = "external_send_requested"
+    PAYMENT_INTENT = "payment_intent"
+    WHATSAPP_MESSAGE_REQUESTED = "whatsapp_message_requested"
+    REVIEW_REQUIRED = "review_required"
+    DRAFT_CREATED = "draft_created"
+    # Omni-channel extensions (dotted names) — backward compatible with existing types.
+    EMAIL_RECEIVED = "email.received"
+    CALENDAR_MEETING_SCHEDULED = "calendar.meeting_scheduled"
+    SOCIAL_COMMENT_RECEIVED = "social.comment_received"
+    SOCIAL_DM_RECEIVED = "social.dm_received"
+    LEAD_FORM_SUBMITTED = "lead.form_submitted"
+    PAYMENT_PAID = "payment.paid"
+    PAYMENT_FAILED = "payment.failed"
+    REVIEW_CREATED = "review.created"
+    PARTNER_SUGGESTED = "partner.suggested"
+    ACTION_APPROVED = "action.approved"
+    ACTION_BLOCKED = "action.blocked"
 
 
-# ── Event envelope ────────────────────────────────────────────────
-@dataclass(frozen=True)
-class PlatformEvent:
-    """Immutable platform event."""
-
-    event_id: str
-    event_type: str
-    channel: str             # whatsapp / gmail / google_calendar / x / ...
-    customer_id: str
-    occurred_at: datetime
-    payload: dict[str, Any] = field(default_factory=dict)
-    correlation_id: str | None = None
-    actor: str = "system"
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "event_id": self.event_id,
-            "event_type": self.event_type,
-            "channel": self.channel,
-            "customer_id": self.customer_id,
-            "occurred_at": self.occurred_at.isoformat(),
-            "payload": self.payload,
-            "correlation_id": self.correlation_id,
-            "actor": self.actor,
-        }
+_REQUIRED: dict[EventType, tuple[str, ...]] = {
+    EventType.LEAD_RECEIVED: ("source", "channel_id"),
+    EventType.EXTERNAL_SEND_REQUESTED: ("channel_id", "action"),
+    EventType.PAYMENT_INTENT: ("amount_halalas", "currency"),
+    EventType.WHATSAPP_MESSAGE_REQUESTED: ("intent", "audience"),
+    EventType.REVIEW_REQUIRED: ("reason_code",),
+    EventType.DRAFT_CREATED: ("draft_kind",),
+    EventType.EMAIL_RECEIVED: ("channel_id", "subject_ar"),
+    EventType.CALENDAR_MEETING_SCHEDULED: ("channel_id", "title_ar"),
+    EventType.SOCIAL_COMMENT_RECEIVED: ("channel_id", "snippet_ar"),
+    EventType.SOCIAL_DM_RECEIVED: ("channel_id", "sender_hint"),
+    EventType.LEAD_FORM_SUBMITTED: ("source", "channel_id"),
+    EventType.PAYMENT_PAID: ("amount_halalas", "currency"),
+    EventType.PAYMENT_FAILED: ("amount_halalas", "reason_code"),
+    EventType.REVIEW_CREATED: ("channel_id", "rating"),
+    EventType.PARTNER_SUGGESTED: ("partner_name_ar", "sector"),
+    EventType.ACTION_APPROVED: ("action_id", "actor"),
+    EventType.ACTION_BLOCKED: ("action_id", "reason_code"),
+}
 
 
-def make_event(
-    *,
-    event_type: str,
-    channel: str,
-    customer_id: str,
-    payload: dict[str, Any] | None = None,
-    correlation_id: str | None = None,
-    actor: str = "system",
-    occurred_at: datetime | None = None,
-) -> PlatformEvent:
-    """Construct a validated event."""
-    if event_type not in EVENT_TYPES:
-        raise ValueError(f"unknown event_type: {event_type}")
-    return PlatformEvent(
-        event_id=f"pevt_{uuid.uuid4().hex[:24]}",
-        event_type=event_type,
-        channel=channel,
-        customer_id=customer_id,
-        occurred_at=occurred_at or datetime.now(timezone.utc).replace(tzinfo=None),
-        payload=payload or {},
-        correlation_id=correlation_id,
-        actor=actor,
-    )
+def validate_event(payload: dict[str, Any]) -> dict[str, Any]:
+    """
+    Validate ``event_type`` and required keys. Unknown types are rejected
+    (forces explicit extension rather than silent typos).
+    """
+    errors: list[str] = []
+    raw_type = payload.get("event_type")
+    if not isinstance(raw_type, str) or not raw_type.strip():
+        return {"valid": False, "errors": ["event_type_required"], "normalized": None}
+
+    try:
+        et = EventType(raw_type.strip())
+    except ValueError:
+        return {"valid": False, "errors": [f"unknown_event_type:{raw_type}"], "normalized": None}
+
+    for key in _REQUIRED[et]:
+        if key not in payload or payload[key] in (None, ""):
+            errors.append(f"missing_field:{key}")
+
+    normalized = {"event_type": et.value, **{k: v for k, v in payload.items() if k != "event_type"}}
+    normalized["event_type"] = et.value
+    return {"valid": len(errors) == 0, "errors": errors, "normalized": normalized if not errors else None}

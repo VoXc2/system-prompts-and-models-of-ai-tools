@@ -1,103 +1,30 @@
-"""Route a task to the right provider, with fallback chain + cost class."""
+"""Map task types to suggested provider + cost class — deterministic."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from typing import Any
 
-from .cost_policy import CostClass, classify_cost
-from .fallback_policy import build_fallback_chain
-from .provider_registry import ALL_TASK_TYPES, get_provider
-
-
-@dataclass(frozen=True)
-class RouteDecision:
-    task_type: str
-    primary_provider: str | None
-    fallback_chain: list[str]
-    cost_class: CostClass
-    reasons_ar: list[str]
-    requires_arabic: bool
-    requires_vision: bool
-    sensitivity: str
-
-    def to_dict(self) -> dict[str, object]:
-        return {
-            "task_type": self.task_type,
-            "primary_provider": self.primary_provider,
-            "fallback_chain": self.fallback_chain,
-            "cost_class": self.cost_class,
-            "reasons_ar": self.reasons_ar,
-            "requires_arabic": self.requires_arabic,
-            "requires_vision": self.requires_vision,
-            "sensitivity": self.sensitivity,
-        }
+_ROUTES: dict[str, dict[str, Any]] = {
+    "strategic_reasoning": {"provider": "anthropic", "cost_class": "high", "needs_guardrail": True},
+    "arabic_copywriting": {"provider": "anthropic", "cost_class": "medium", "needs_guardrail": True},
+    "classification": {"provider": "openai", "cost_class": "low", "needs_guardrail": True},
+    "compliance_guardrail": {"provider": "openai", "cost_class": "low", "needs_guardrail": False},
+    "meeting_analysis": {"provider": "google", "cost_class": "medium", "needs_guardrail": True},
+    "vision_analysis": {"provider": "google", "cost_class": "medium", "needs_guardrail": True},
+    "extraction": {"provider": "groq", "cost_class": "low", "needs_guardrail": True},
+    "summarization": {"provider": "openai", "cost_class": "low", "needs_guardrail": True},
+    "low_cost_bulk": {"provider": "groq", "cost_class": "minimal", "needs_guardrail": True},
+    "coding_project_understanding": {"provider": "anthropic", "cost_class": "high", "needs_guardrail": True},
+}
 
 
-def route_task(
-    task_type: str,
-    *,
-    requires_arabic: bool = False,
-    requires_vision: bool = False,
-    sensitivity: str = "low",
-    expected_input_tokens: int = 0,
-    expected_output_tokens: int = 0,
-    bulk: bool = False,
-    primary_provider: str | None = None,
-) -> RouteDecision:
-    """Route a task → primary provider + ordered fallback chain + cost class."""
-    reasons: list[str] = []
+def list_tasks() -> dict[str, Any]:
+    return {"task_types": sorted(_ROUTES.keys()), "demo": True}
 
-    if task_type not in ALL_TASK_TYPES:
-        return RouteDecision(
-            task_type=task_type,
-            primary_provider=None,
-            fallback_chain=[],
-            cost_class="low",
-            reasons_ar=[f"نوع المهمة غير معروف: {task_type}"],
-            requires_arabic=requires_arabic,
-            requires_vision=requires_vision,
-            sensitivity=sensitivity,
-        )
 
-    cost_class = classify_cost(
-        task_type=task_type,
-        expected_input_tokens=expected_input_tokens,
-        expected_output_tokens=expected_output_tokens,
-        bulk=bulk,
-    )
-
-    chain = build_fallback_chain(
-        task_type,
-        requires_arabic=requires_arabic,
-        requires_vision=requires_vision,
-        sensitivity=sensitivity,
-        primary_key=primary_provider,
-    )
-
-    if not chain:
-        reasons.append(
-            "لا يوجد مزود مناسب — راجع capabilities أو خفّف القيود (vision/arabic)."
-        )
-
-    primary = chain[0] if chain else None
-    if primary:
-        p = get_provider(primary)
-        if p:
-            reasons.append(
-                f"المزود الأساسي: {p.label} — {p.notes_ar}"
-            )
-    if sensitivity == "high":
-        reasons.append("حساسية عالية: تم تفضيل KSA-region/self-hosted أولاً.")
-    if bulk:
-        reasons.append("مهمة جماعية كبيرة: تم اختيار cost_class=low.")
-
-    return RouteDecision(
-        task_type=task_type,
-        primary_provider=primary,
-        fallback_chain=chain,
-        cost_class=cost_class,
-        reasons_ar=reasons,
-        requires_arabic=requires_arabic,
-        requires_vision=requires_vision,
-        sensitivity=sensitivity,
-    )
+def route_task(task_type: str) -> dict[str, Any]:
+    t = (task_type or "").strip().lower().replace("-", "_")
+    if t not in _ROUTES:
+        return {"ok": False, "error": "unknown_task_type", "known": sorted(_ROUTES.keys()), "demo": True}
+    r = _ROUTES[t]
+    return {"ok": True, "task_type": t, **r, "fallback_provider": "groq", "demo": True}

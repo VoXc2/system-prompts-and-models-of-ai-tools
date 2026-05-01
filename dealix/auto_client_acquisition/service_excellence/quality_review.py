@@ -1,82 +1,56 @@
-"""Quality review — يمنع الخدمات الضعيفة من الإطلاق."""
+"""Launch gate checks for services."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from auto_client_acquisition.service_tower import get_service
-
-from .service_scoring import calculate_service_excellence_score
-
-
-def block_if_missing_proof(service_id: str) -> dict[str, Any]:
-    s = get_service(service_id)
-    if s is None:
-        return {"blocked": True, "reason_ar": f"خدمة غير معروفة: {service_id}"}
-    if not s.proof_metrics:
-        return {"blocked": True, "reason_ar": "لا توجد proof metrics."}
-    return {"blocked": False}
-
-
-def block_if_missing_approval_policy(service_id: str) -> dict[str, Any]:
-    s = get_service(service_id)
-    if s is None:
-        return {"blocked": True, "reason_ar": f"خدمة غير معروفة: {service_id}"}
-    if not s.approval_policy:
-        return {"blocked": True, "reason_ar": "سياسة الاعتماد غير محددة."}
-    return {"blocked": False}
-
-
-def block_if_unclear_pricing(service_id: str) -> dict[str, Any]:
-    s = get_service(service_id)
-    if s is None:
-        return {"blocked": True, "reason_ar": f"خدمة غير معروفة: {service_id}"}
-    if s.pricing_max_sar < 0:
-        return {"blocked": True, "reason_ar": "تسعير غير صحيح."}
-    if s.pricing_max_sar > 0 and s.pricing_max_sar < s.pricing_min_sar:
-        return {"blocked": True, "reason_ar": "نطاق التسعير غير منطقي."}
-    return {"blocked": False}
-
-
-def block_if_unsafe_channel(service_id: str) -> dict[str, Any]:
-    """Block if a service depends on an unsafe channel (e.g., scraping)."""
-    s = get_service(service_id)
-    if s is None:
-        return {"blocked": True, "reason_ar": f"خدمة غير معروفة: {service_id}"}
-    unsafe = {"scraping", "auto_dm", "auto_connect", "browser_extension"}
-    for ch in s.required_integrations:
-        if ch.lower() in unsafe:
-            return {"blocked": True,
-                    "reason_ar": f"تكامل غير آمن: {ch}."}
-    return {"blocked": False}
+from auto_client_acquisition.service_tower.service_catalog import get_service_by_id
 
 
 def review_service_before_launch(service_id: str) -> dict[str, Any]:
-    """Run all gates + scoring before allowing a service to ship."""
-    gates = {
-        "proof": block_if_missing_proof(service_id),
-        "approval": block_if_missing_approval_policy(service_id),
-        "pricing": block_if_unclear_pricing(service_id),
-        "channels": block_if_unsafe_channel(service_id),
-    }
-    blocked = [k for k, v in gates.items() if v.get("blocked")]
-    score = calculate_service_excellence_score(service_id)
+    svc = get_service_by_id(service_id) or {}
+    issues: list[str] = []
+    if not svc.get("pricing_range_sar"):
+        issues.append("missing_pricing")
+    if not svc.get("approval_policy"):
+        issues.append("missing_approval_policy")
+    if not svc.get("proof_metrics"):
+        issues.append("missing_proof_metrics")
+    ok = len(issues) == 0
+    return {"service_id": service_id, "ok": ok, "issues": issues, "demo": True}
 
-    if blocked:
-        verdict = "blocked_at_gate"
-    elif score.get("status") == "launch_ready":
-        verdict = "launch_ready"
-    elif score.get("status") == "beta_only":
-        verdict = "beta_only"
-    else:
-        verdict = "needs_work"
 
+def block_if_missing_proof(service_id: str) -> bool:
+    return not (get_service_by_id(service_id) or {}).get("proof_metrics")
+
+
+def block_if_missing_approval_policy(service_id: str) -> bool:
+    return not (get_service_by_id(service_id) or {}).get("approval_policy")
+
+
+def block_if_unclear_pricing(service_id: str) -> bool:
+    if service_id == "free_growth_diagnostic":
+        return False
+    pr = (get_service_by_id(service_id) or {}).get("pricing_range_sar") or {}
+    return pr.get("max") in (None, 0)
+
+
+def block_if_unsafe_channel(service_id: str) -> bool:
+    """Block launch if policy suggests unguarded external send."""
+    pol = ((get_service_by_id(service_id) or {}).get("approval_policy") or "").lower()
+    return pol in ("", "none", "auto_send")
+
+
+def review_all_services() -> dict[str, Any]:
+    from auto_client_acquisition.service_tower.service_catalog import list_service_ids
+
+    results: list[dict[str, Any]] = []
+    for sid in list_service_ids():
+        results.append(review_service_before_launch(sid))
+    ok_count = sum(1 for r in results if r.get("ok"))
     return {
-        "service_id": service_id,
-        "verdict": verdict,
-        "score": score,
-        "gates": gates,
-        "blocked_reasons_ar": [
-            gates[k].get("reason_ar", "") for k in blocked
-        ],
+        "count": len(results),
+        "ok_count": ok_count,
+        "results": results,
+        "demo": True,
     }

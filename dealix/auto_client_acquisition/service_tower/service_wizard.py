@@ -1,137 +1,109 @@
-"""Service wizard — يوصي بالخدمة المناسبة من إجابات بسيطة."""
+"""Recommend sellable service from intake — deterministic, no live actions."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from .service_catalog import ALL_SERVICES, get_service
+from auto_client_acquisition.service_tower.service_catalog import get_service_by_id, list_service_ids
 
 
 def recommend_service(
-    *,
-    company_type: str = "",
-    goal: str = "fill_pipeline",
+    company_type: str,
+    goal: str,
     has_contact_list: bool = False,
     channels: list[str] | None = None,
-    budget_sar: int = 1000,
+    budget_sar: int | None = None,
 ) -> dict[str, Any]:
-    """
-    Recommend the best-fit service based on inputs. Deterministic.
-    """
-    channels = channels or []
-    company_type_lc = (company_type or "").lower()
+    ct = (company_type or "").lower().strip()
+    gl = (goal or "").lower().strip()
+    ch = [c.lower() for c in (channels or [])]
 
-    chosen_id: str
-    reason: str
+    recommended = "first_10_opportunities"
+    reasons: list[str] = []
 
-    # Highest priority first.
-    if "agency" in company_type_lc or "وكالة" in company_type:
-        chosen_id = "agency_partner_program" if budget_sar >= 10_000 else "partner_sprint"
-        reason = "وكالة → برنامج شريك أو سبرنت شراكات."
-    elif has_contact_list:
-        chosen_id = "list_intelligence"
-        reason = "العميل لديه قائمة → ابدأ بـ List Intelligence."
-    elif "founder" in company_type_lc or "مؤسس" in company_type:
-        chosen_id = "self_growth_operator"
-        reason = "مؤسس بدون فريق نمو → Self-Growth Operator."
-    elif "executive" in company_type_lc or "ceo" in company_type_lc:
-        chosen_id = "executive_growth_brief"
-        reason = "CEO/تنفيذي → موجز نمو يومي."
-    elif "whatsapp" in company_type_lc or "واتساب" in company_type:
-        chosen_id = "whatsapp_compliance_setup"
-        reason = "حالة واتساب عشوائية → امتثال أولاً."
-    elif goal == "rescue_lost_revenue":
-        chosen_id = "email_revenue_rescue"
-        reason = "الهدف استعادة إيراد ضائع → Email Revenue Rescue."
-    elif goal == "book_meetings":
-        chosen_id = "meeting_booking_sprint"
-        reason = "الهدف اجتماعات → Meeting Booking Sprint."
-    elif goal == "expand_partners":
-        chosen_id = "partner_sprint"
-        reason = "الهدف شراكات → Partner Sprint."
-    elif budget_sar >= 2999:
-        chosen_id = "growth_os_monthly"
-        reason = "الميزانية شهرية → Growth OS."
-    else:
-        chosen_id = "first_10_opportunities_sprint"
-        reason = "الافتراضي: ابدأ بـ 10 فرص في 10 دقائق."
+    if "agency" in ct or "وكالة" in company_type:
+        recommended = "agency_partner_program"
+        reasons.append("وكالات: قناة توزيع + برنامج شركاء.")
+    elif has_contact_list or "list" in gl or "csv" in gl or "قائمة" in goal:
+        recommended = "list_intelligence"
+        reasons.append("قائمة مرفوعة: ذكاء القوائم يقلل المخاطر أولاً.")
+    elif "email" in gl or "بريد" in goal or "inbox" in gl:
+        recommended = "email_revenue_rescue"
+        reasons.append("هدف بريدي: إنقاذ فرص ضائعة بمسودات فقط.")
+    elif "partner" in gl or "شراكة" in goal:
+        recommended = "partner_sprint"
+        reasons.append("هدف شراكات: سباق شركاء منظم.")
+    elif "meeting" in gl or "اجتماع" in goal:
+        recommended = "meeting_booking_sprint"
+        reasons.append("تحويل prospects لاجتماعات بمسودات موافقة.")
+    elif "linkedin" in gl or "لينكد" in goal:
+        recommended = "linkedin_lead_gen_setup"
+        reasons.append("لينكدإن: Lead Gen رسمي بدون أتمتة مخالفة.")
+    elif "whatsapp" in gl or "واتساب" in goal or "whatsapp" in ch:
+        recommended = "whatsapp_compliance_setup"
+        reasons.append("واتساب: امتثال وopt-in قبل أي حملة.")
+    elif "local" in gl or "عيادة" in goal or "متجر" in goal:
+        recommended = "local_growth_os"
+        reasons.append("نمو محلي: تقييمات + inbound + دفع draft.")
+    elif budget_sar is not None and budget_sar < 1500:
+        recommended = "free_growth_diagnostic"
+        reasons.append("ميزانية منخفضة: تشخيص مجاني ثم ترقية.")
 
-    service = get_service(chosen_id)
+    svc = get_service_by_id(recommended)
     return {
-        "recommended_service_id": chosen_id,
-        "service": service.to_dict() if service else None,
-        "reason_ar": reason,
-        "next_step_ar": (
-            "املأ نموذج الـ intake، وسنبدأ خلال 24 ساعة عمل."
-        ),
+        "recommended_service_id": recommended,
+        "service": svc,
+        "reasons_ar": reasons or ["أسرع إثبات قيمة: سباق ١٠ فرص."],
+        "live_send": False,
+        "demo": True,
     }
 
 
 def build_intake_questions(service_id: str) -> dict[str, Any]:
-    """Return intake questions for a service. Empty if service unknown."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}", "questions": []}
-
-    base_q = [
-        {"key": "company_name", "label_ar": "اسم الشركة", "required": True},
-        {"key": "sector", "label_ar": "القطاع", "required": True},
-        {"key": "city", "label_ar": "المدينة", "required": True},
-        {"key": "decision_maker_name", "label_ar": "اسم صانع القرار", "required": True},
-        {"key": "decision_maker_role", "label_ar": "المسمى الوظيفي", "required": True},
-    ]
-    extra = []
-    if "uploaded_csv" in s.inputs_required:
-        extra.append({"key": "uploaded_csv", "label_ar": "ملف CSV", "required": True})
-    if "offer" in s.inputs_required:
-        extra.append({"key": "offer", "label_ar": "وصف العرض", "required": True})
-    if "goal" in s.inputs_required:
-        extra.append({"key": "goal", "label_ar": "الهدف الأساسي", "required": True})
-    if "channels_available" in s.inputs_required:
-        extra.append({"key": "channels", "label_ar": "القنوات المتاحة", "required": False})
-
-    return {
-        "service_id": service_id,
-        "service_name_ar": s.name_ar,
-        "questions": base_q + extra,
-        "approval_required": True,
-    }
+    svc = get_service_by_id(service_id)
+    if not svc:
+        return {"service_id": service_id, "questions": [], "error": "unknown_service", "demo": True}
+    qs: list[dict[str, str]] = []
+    for inp in svc.get("inputs_required") or []:
+        qs.append(
+            {
+                "field": inp,
+                "prompt_ar": f"ما قيمة الحقل: {inp}؟",
+                "required": "true",
+            }
+        )
+    return {"service_id": service_id, "questions": qs, "demo": True}
 
 
-def validate_service_inputs(
-    service_id: str, payload: dict[str, Any],
-) -> dict[str, Any]:
-    """Validate intake payload against service requirements."""
-    s = get_service(service_id)
-    if s is None:
-        return {"valid": False, "errors_ar": [f"خدمة غير معروفة: {service_id}"]}
-
-    errors: list[str] = []
-    for required in s.inputs_required:
-        if required in ("uploaded_csv", "offer", "goal", "channels_available",
-                        "ICP", "calendar_link", "company_profile",
-                        "current_practice", "ad_budget", "client_count",
-                        "partner_goal", "team_size", "channels", "agency_profile",
-                        "prospect_list", "gmail_label", "contact_list",
-                        "goals", "sector", "city"):
-            if not payload.get(required):
-                errors.append(f"الحقل ناقص: {required}")
-
-    return {
-        "valid": not errors,
-        "errors_ar": errors,
-        "service_id": service_id,
-    }
+def validate_service_inputs(service_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    svc = get_service_by_id(service_id)
+    if not svc:
+        return {"ok": False, "missing": ["unknown_service"], "demo": True}
+    missing: list[str] = []
+    for key in svc.get("inputs_required") or []:
+        if key not in (payload or {}) or payload.get(key) in (None, "", []):
+            missing.append(key)
+    return {"ok": len(missing) == 0, "missing": missing, "demo": True}
 
 
 def summarize_recommendation_ar(result: dict[str, Any]) -> str:
-    """Build a one-paragraph Arabic recommendation summary."""
-    sid = result.get("recommended_service_id", "?")
-    reason = result.get("reason_ar", "")
-    svc = result.get("service") or {}
-    name = svc.get("name_ar", sid)
-    outcome = svc.get("outcome_ar", "")
-    return (
-        f"الخدمة المقترحة: {name}. السبب: {reason} "
-        f"المخرجات: {outcome}"
-    )
+    rid = result.get("recommended_service_id") or "غير محدد"
+    reasons = result.get("reasons_ar") or []
+    tail = " ".join(reasons) if reasons else ""
+    return f"التوصية: {rid}. {tail} لا يوجد إرسال حي من هذا المسار."
+
+
+def start_service(service_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """MVP: validate + return workflow handle — no side effects."""
+    v = validate_service_inputs(service_id, payload or {})
+    svc = get_service_by_id(service_id)
+    return {
+        "started": bool(v.get("ok")),
+        "service_id": service_id,
+        "validation": v,
+        "workflow_ref": f"wf_{service_id}_demo" if v.get("ok") else None,
+        "approval_required": True,
+        "live_send": False,
+        "service_snapshot": {"name_ar": (svc or {}).get("name_ar"), "risk_level": (svc or {}).get("risk_level")},
+        "demo": True,
+    }

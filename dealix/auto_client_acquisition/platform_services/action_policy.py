@@ -1,173 +1,82 @@
-"""
-Action Policy Engine — decides whether an action can run, needs approval,
-or is blocked. The single chokepoint that protects the customer's
-reputation + enforces PDPL.
-
-Design: pure deterministic rules. Easily testable, easily auditable,
-easy for the customer to explain to compliance.
-"""
+"""Deterministic policy — no network."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Literal
 
+from core.config.settings import get_settings
 
-# ── Policy rules — each rule is (action_type, condition, decision, reason_ar)
-POLICY_RULES: list[dict[str, Any]] = [
-    # Hard blocks — never executed
-    {
-        "rule_id": "block_cold_whatsapp",
-        "action": "send_whatsapp",
-        "when": {"source": "cold_list", "consent": False},
-        "decision": "blocked",
-        "reason_ar": "WhatsApp البارد محظور بدون lawful basis (PDPL م.5).",
-    },
-    {
-        "rule_id": "block_payment_no_confirm",
-        "action": "charge_payment",
-        "when": {"user_confirmed": False},
-        "decision": "blocked",
-        "reason_ar": "الخصم يحتاج تأكيد المستخدم على Moyasar — لا charge مباشر.",
-    },
-    {
-        "rule_id": "block_secrets_in_payload",
-        "action": "*",
-        "when": {"payload_contains_secret": True},
-        "decision": "blocked",
-        "reason_ar": "تم اكتشاف secret في الـ payload — حماية تلقائية.",
-    },
-    # Approval gates — must pass through human
-    {
-        "rule_id": "external_send_needs_approval",
-        "action": "send_whatsapp,send_email,send_inmail,post_social",
-        "when": {"approval_status": "pending"},
-        "decision": "approval_required",
-        "reason_ar": "كل إرسال خارجي يحتاج موافقة العميل قبل التنفيذ.",
-    },
-    {
-        "rule_id": "calendar_insert_needs_approval",
-        "action": "calendar_insert_event",
-        "when": {"approval_status": "pending"},
-        "decision": "approval_required",
-        "reason_ar": "إنشاء اجتماع في تقويم العميل يحتاج موافقة قبل insert.",
-    },
-    {
-        "rule_id": "social_dm_needs_explicit",
-        "action": "send_social_dm",
-        "when": {"explicit_permission": False},
-        "decision": "approval_required",
-        "reason_ar": "DM السوشيال يحتاج إذن صريح لكل حساب.",
-    },
-    # Needs review
-    {
-        "rule_id": "unknown_source_review",
-        "action": "*",
-        "when": {"source": "unknown"},
-        "decision": "approval_required",
-        "reason_ar": "مصدر البيانات غير محدد — يحتاج توثيق lawful basis.",
-    },
-    {
-        "rule_id": "high_value_deal_review",
-        "action": "*",
-        "when": {"deal_value_sar_gte": 100_000},
-        "decision": "approval_required",
-        "reason_ar": "صفقة قيمتها ≥100K ريال — راجعها قبل التنفيذ.",
-    },
-    # Allowed (default for safe paths)
-    {
-        "rule_id": "draft_only_safe",
-        "action": "create_draft,read_data,classify_reply",
-        "when": {},
-        "decision": "allow",
-        "reason_ar": "إجراء داخلي آمن — لا يخرج للعميل النهائي.",
-    },
-]
-
-
-@dataclass
-class PolicyDecision:
-    """Output of evaluate_action."""
-
-    decision: str            # allow / approval_required / blocked
-    matched_rule_id: str | None
-    reasons_ar: list[str] = field(default_factory=list)
-    suggested_next_action_ar: str = ""
+PolicyState = Literal["approved", "blocked", "approval_required", "review"]
 
 
 def evaluate_action(
     *,
     action: str,
+    channel_id: str,
     context: dict[str, Any] | None = None,
-) -> PolicyDecision:
+) -> dict[str, Any]:
     """
-    Evaluate a proposed action against the policy rules.
-
-    First matching rule wins. Default: needs_review (defensive).
+    Rules:
+    - External-ish sends → approval_required unless explicitly internal draft.
+    - Cold WhatsApp → blocked when ``intent`` is cold/campaign_cold.
+    - Payment → approval_required + confirm flag if amount present.
+    - Unknown channel → review.
     """
     ctx = context or {}
-    matched_reasons: list[str] = []
-    final_decision = "allow"
-    matched_rule_id: str | None = None
-    next_action = "ready_for_execution"
+    reason_ar = ""
+    state: PolicyState = "approval_required"
 
-    for rule in POLICY_RULES:
-        # Action match (comma-separated list, "*" = match-any)
-        applicable_actions = rule["action"].split(",") if rule["action"] != "*" else [action]
-        if action not in applicable_actions and rule["action"] != "*":
-            continue
+    known = {
+        "whatsapp",
+        "email",
+        "linkedin_lead_form",
+        "website_form",
+        "google_business",
+        "x_twitter",
+        "instagram",
+        "moyasar",
+    }
+    if channel_id not in known:
+        return {
+            "state": "review",
+            "reason_ar": "قناة غير معروفة في السجل — يلزم مراجعة يدوية.",
+            "action": action,
+            "channel_id": channel_id,
+        }
 
-        # Condition match — every key in `when` must match the context
-        when = rule["when"]
-        cond_match = True
-        for k, expected in when.items():
-            if k.endswith("_gte"):
-                attr = k[:-4]
-                if not (float(ctx.get(attr, 0)) >= float(expected)):
-                    cond_match = False
-                    break
-            elif k == "payload_contains_secret":
-                if expected and not _has_secret_marker(ctx.get("payload", {})):
-                    cond_match = False
-                    break
-            elif ctx.get(k) != expected:
-                cond_match = False
-                break
+    if channel_id == "whatsapp" and action in ("send", "send_live", "external_send"):
+        intent = str(ctx.get("intent") or "").lower()
+        audience = str(ctx.get("audience") or "").lower()
+        cold_markers = ("cold", "campaign_cold", "purchased_list", "unknown_opt_in")
+        if intent in cold_markers or audience in cold_markers:
+            return {
+                "state": "blocked",
+                "reason_ar": "الواتساب البارد أو قوائم غير موثقة محظور حتى موافقة امتثال وتسجيل opt-in.",
+                "action": action,
+                "channel_id": channel_id,
+            }
+        settings = get_settings()
+        if action == "send_live" and not settings.whatsapp_allow_live_send:
+            return {
+                "state": "blocked",
+                "reason_ar": "الإرسال الحي للواتساب معطّل في الإعدادات (WHATSAPP_ALLOW_LIVE_SEND=false).",
+                "action": action,
+                "channel_id": channel_id,
+            }
 
-        if not cond_match:
-            continue
+    if action in ("send", "send_live", "external_send", "smtp_send"):
+        state = "approval_required"
+        reason_ar = "أي إرسال خارجي يتطلب موافقة بشرية في هذا الإصدار."
 
-        decision = rule["decision"]
-        matched_reasons.append(rule["reason_ar"])
-        matched_rule_id = rule["rule_id"]
+    if action in ("payment_charge", "payment_capture", "moyasar_charge"):
+        state = "approval_required"
+        if not ctx.get("user_confirmed"):
+            reason_ar = "عمليات الدفع تتطلب تأكيداً صريحاً من المشغّل قبل التنفيذ."
+        else:
+            reason_ar = "تم تسجيل تأكيد المشغّل — ما زال التنفيذ الفعلي معطّلاً في MVP."
 
-        if decision == "blocked":
-            return PolicyDecision(
-                decision="blocked",
-                matched_rule_id=matched_rule_id,
-                reasons_ar=matched_reasons,
-                suggested_next_action_ar="معالجة سبب الحظر قبل المحاولة مرة أخرى.",
-            )
-        if decision == "approval_required":
-            final_decision = "approval_required"
-            next_action = "operator_approves_then_execute"
-        # 'allow' rules just confirm — keep looking for stricter rule
+    if action in ("draft_only", "draft_message", "draft_email"):
+        state = "approved"
+        reason_ar = "مسودة داخلية — مسموح للعرض فقط."
 
-    return PolicyDecision(
-        decision=final_decision,
-        matched_rule_id=matched_rule_id,
-        reasons_ar=matched_reasons or ["لا قاعدة مطابقة — الإجراء آمن افتراضياً."],
-        suggested_next_action_ar=next_action,
-    )
-
-
-# ── Helpers ──────────────────────────────────────────────────────
-_SECRET_MARKERS = ("api_key", "secret_key", "private_key", "password", "ghp_", "sk-ant-", "moyasar_secret")
-
-
-def _has_secret_marker(payload: dict[str, Any]) -> bool:
-    """Cheap heuristic check — production pairs this with a stronger scanner."""
-    if not isinstance(payload, dict):
-        return False
-    flat = str(payload).lower()
-    return any(marker in flat for marker in _SECRET_MARKERS)
+    return {"state": state, "reason_ar": reason_ar or "قرار سياسة افتراضي.", "action": action, "channel_id": channel_id}

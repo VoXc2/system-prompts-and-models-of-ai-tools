@@ -1,102 +1,40 @@
-"""Tool action planner — plan + review actions before they hit Tool Gateway."""
+"""Safe Tool Gateway matrix — execution modes per tool (deterministic)."""
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Final
 
-# Tools that REQUIRE explicit human approval, no exceptions.
-_HIGH_RISK_TOOLS: frozenset[str] = frozenset({
-    "whatsapp.send_message",
-    "gmail.send",
-    "calendar.insert_event",
-    "moyasar.charge",
-    "google_business.publish_review_reply",
-    "social.publish_dm",
-    "social.publish_post",
-})
+MODE_SUGGEST_ONLY: Final = "suggest_only"
+MODE_DRAFT_ONLY: Final = "draft_only"
+MODE_APPROVAL_REQUIRED: Final = "approval_required"
+MODE_APPROVED_EXECUTE: Final = "approved_execute"
+MODE_BLOCKED: Final = "blocked"
 
-# Tools that are safe in draft mode (still approval-required, never live-by-default).
-_DRAFT_SAFE_TOOLS: frozenset[str] = frozenset({
-    "whatsapp.draft_message",
-    "gmail.create_draft",
-    "calendar.draft_event",
-    "moyasar.create_invoice_draft",
-    "moyasar.create_payment_link_draft",
-    "google_business.draft_review_reply",
-    "social.draft_post",
-})
-
-# Tools never to plan, period.
-_FORBIDDEN_TOOLS: frozenset[str] = frozenset({
-    "linkedin.scrape_profile",
-    "linkedin.auto_dm",
-    "linkedin.auto_connect",
-    "social.scrape_followers",
-    "phone.cold_call_unscripted",
-})
+# tool_id -> default mode when autonomy is draft_and_approve (Dealix beta default)
+_TOOL_MATRIX: dict[str, dict[str, Any]] = {
+    "gmail_send": {"mode": MODE_BLOCKED, "reason_ar": "إرسال Gmail مباشر محظور افتراضياً."},
+    "gmail_draft": {"mode": MODE_DRAFT_ONLY, "reason_ar": "مسودات Gmail مسموحة للمراجعة."},
+    "linkedin_scrape": {"mode": MODE_BLOCKED, "reason_ar": "scraping LinkedIn محظور."},
+    "linkedin_auto_dm": {"mode": MODE_BLOCKED, "reason_ar": "رسائل LinkedIn آلية محظورة."},
+    "cold_whatsapp": {"mode": MODE_BLOCKED, "reason_ar": "واتساب بارد / غير موافق عليه محظور."},
+    "whatsapp_opt_in_template": {"mode": MODE_DRAFT_ONLY, "reason_ar": "قوالب opt-in كمسودات."},
+    "moyasar_charge": {"mode": MODE_BLOCKED, "reason_ar": "شحن بطاقة من API غير مفعّل."},
+    "moyasar_payment_link_draft": {"mode": MODE_DRAFT_ONLY, "reason_ar": "مسودة رابط دفع مسموحة."},
+    "google_calendar_insert": {"mode": MODE_APPROVAL_REQUIRED, "reason_ar": "إدراج تقويم يحتاج موافقة."},
+    "crm_update": {"mode": MODE_APPROVAL_REQUIRED, "reason_ar": "تحديث CRM بعد موافقة."},
+    "google_sheets_export": {"mode": MODE_APPROVAL_REQUIRED, "reason_ar": "تصدير مع موافقة عند الحساسية."},
+    "meeting_transcript_read": {"mode": MODE_APPROVAL_REQUIRED, "reason_ar": "قراءة محضر تتطلب نطاقاً وموافقة."},
+}
 
 
-def plan_tool_action(
-    *,
-    tool: str,
-    payload: dict[str, Any] | None = None,
-    customer_id: str | None = None,
-    context: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    """
-    Plan a tool action — does NOT execute. Returns the plan + safety verdict.
-
-    Verdicts:
-        - "blocked"          (tool is forbidden or unsafe)
-        - "draft_only"       (tool may run as draft, requires approval)
-        - "approval_required"(tool requires human approval before execution)
-        - "ready_for_gateway"(tool is safe internal — pass to Tool Gateway)
-    """
-    payload = payload or {}
-    context = context or {}
-    tool_lc = (tool or "").strip().lower()
-
-    if tool_lc in _FORBIDDEN_TOOLS:
-        return {
-            "tool": tool, "verdict": "blocked",
-            "reason_ar": "أداة محظورة (LinkedIn scraping/auto-DM/scraping social).",
-            "live_send_allowed": False,
-        }
-
-    if tool_lc in _HIGH_RISK_TOOLS:
-        return {
-            "tool": tool, "verdict": "approval_required",
-            "reason_ar": (
-                "أداة عالية المخاطرة — تحتاج اعتماد بشري + env flag مفعّل."
-            ),
-            "live_send_allowed": False,
-        }
-
-    if tool_lc in _DRAFT_SAFE_TOOLS:
-        return {
-            "tool": tool, "verdict": "draft_only",
-            "reason_ar": "draft فقط — أرسل للمراجعة قبل الاعتماد.",
-            "live_send_allowed": False,
-        }
-
-    # Unknown tool — default to safest verdict.
-    return {
-        "tool": tool, "verdict": "approval_required",
-        "reason_ar": "أداة غير مصنّفة — تحتاج مراجعة قبل التنفيذ.",
-        "live_send_allowed": False,
-    }
+def evaluate_tool(tool_id: str, autonomy_mode: str = "draft_and_approve") -> dict[str, Any]:
+    tid = (tool_id or "").strip().lower()
+    row = _TOOL_MATRIX.get(tid, {"mode": MODE_APPROVAL_REQUIRED, "reason_ar": "أداة غير مسجّلة — موافقة افتراضية."})
+    mode = row["mode"]
+    if autonomy_mode in ("manual", "suggest_only") and mode == MODE_APPROVED_EXECUTE:
+        mode = MODE_SUGGEST_ONLY
+    return {"tool_id": tid, "mode": mode, "reason_ar": row["reason_ar"], "demo": True}
 
 
-def review_planned_action(plan: dict[str, Any]) -> dict[str, Any]:
-    """
-    Quick safety review on an already-planned action. Returns updated plan.
-
-    Strips any 'live_send_allowed=True' and forces it back to False.
-    """
-    out = dict(plan)
-    out["live_send_allowed"] = False
-    out["safety_reviewed"] = True
-    if out.get("verdict") == "ready_for_gateway":
-        # Even safe tools must be audited — promote to approval_required.
-        out["verdict"] = "approval_required"
-    return out
+def list_tool_matrix() -> dict[str, Any]:
+    return {"tools": [{**{"tool_id": k}, **v} for k, v in _TOOL_MATRIX.items()], "demo": True}

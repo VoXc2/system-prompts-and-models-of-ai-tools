@@ -1,4 +1,4 @@
-"""Intelligence Layer router — growth brain + missions + DNA + simulator + brief."""
+"""Intelligence layer API — deterministic JSON; optional ten-in-ten bridge."""
 
 from __future__ import annotations
 
@@ -6,135 +6,117 @@ from typing import Any
 
 from fastapi import APIRouter, Body
 
-from auto_client_acquisition.intelligence_layer import (
-    DecisionMemory,
-    analyze_competitive_move,
-    build_board_brief,
-    build_command_feed_demo,
-    build_growth_brain,
-    build_revenue_dna_demo,
-    compute_trust_score,
-    extract_revenue_dna,
-    learn_from_decision,
-    list_intel_missions,
-    recommend_missions,
-    simulate_opportunity,
-)
+from auto_client_acquisition.innovation.ten_in_ten import build_ten_opportunities
+from auto_client_acquisition.intelligence_layer.action_graph import build_action_graph_trace
+from auto_client_acquisition.intelligence_layer.board_brief import build_board_brief
+from auto_client_acquisition.intelligence_layer.competitive_moves import build_competitive_moves
+from auto_client_acquisition.intelligence_layer.decision_memory import list_decisions, record_decision
+from auto_client_acquisition.intelligence_layer.growth_brain import build_growth_profile
+from auto_client_acquisition.intelligence_layer.intel_command_feed import build_intel_command_feed
+from auto_client_acquisition.intelligence_layer.mission_engine import get_mission, list_mission_catalog
+from auto_client_acquisition.intelligence_layer.opportunity_simulator import simulate_opportunities
+from auto_client_acquisition.intelligence_layer.revenue_dna import build_revenue_dna
+from auto_client_acquisition.intelligence_layer.trust_score import compute_trust_score
 
-router = APIRouter(prefix="/api/v1/intelligence", tags=["intelligence-layer"])
-
-# Per-customer in-memory decision memory (demo; production = Supabase)
-_MEMORY: dict[str, DecisionMemory] = {}
+router = APIRouter(prefix="/api/v1/intelligence", tags=["intelligence_layer"])
 
 
-def _memory_for(customer_id: str) -> DecisionMemory:
-    if customer_id not in _MEMORY:
-        _MEMORY[customer_id] = DecisionMemory(customer_id=customer_id)
-    return _MEMORY[customer_id]
+@router.post("/growth-profile")
+async def growth_profile(company: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return build_growth_profile(company or {})
 
 
-# ── Growth Brain ──────────────────────────────────────────────
-@router.post("/growth-brain/build")
-async def growth_brain_build(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
-    brain = build_growth_brain(payload)
-    return {**brain.to_dict(), "ready_for_autopilot": brain.is_ready_for_autopilot()}
+@router.get("/command-feed")
+async def intel_command_feed() -> dict[str, Any]:
+    return build_intel_command_feed()
 
 
-# ── Command Feed ──────────────────────────────────────────────
 @router.get("/command-feed/demo")
-async def command_feed_demo() -> dict[str, Any]:
-    return build_command_feed_demo()
+async def intel_command_feed_demo() -> dict[str, Any]:
+    """Alias of ``GET /command-feed`` for product/docs compatibility."""
+    return build_intel_command_feed()
 
 
-# ── Missions ──────────────────────────────────────────────────
-@router.get("/missions")
-async def missions_list() -> dict[str, Any]:
-    return list_intel_missions()
+@router.post("/missions/first-10-opportunities")
+async def missions_first_10_opportunities(
+    payload: dict[str, Any] = Body(default_factory=dict),
+) -> dict[str, Any]:
+    """Thin wrapper around innovation ``build_ten_opportunities`` — no duplicate logic."""
+    return build_ten_opportunities(payload or None)
 
 
-@router.post("/missions/recommend")
-async def missions_recommend(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
-    brain_payload = payload.get("growth_brain") or payload
-    brain = build_growth_brain(brain_payload) if brain_payload else None
-    return recommend_missions(brain, limit=int(payload.get("limit", 3)))
+@router.get("/missions/catalog")
+async def missions_catalog() -> dict[str, Any]:
+    """Mission engine metadata + pointer to innovation missions."""
+    return list_mission_catalog()
 
 
-# ── Trust Score ───────────────────────────────────────────────
+@router.get("/missions/{mission_id}")
+async def mission_detail(mission_id: str) -> dict[str, Any]:
+    return get_mission(mission_id)
+
+
+@router.post("/action-graph/demo")
+async def action_graph_demo(payload: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return build_action_graph_trace(payload or {})
+
+
+@router.get("/decision-memory/demo")
+async def decision_memory_demo() -> dict[str, Any]:
+    return list_decisions(limit=20)
+
+
+@router.post("/decision-memory/record")
+async def decision_memory_record(entry: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return record_decision(entry or {})
+
+
 @router.post("/trust-score")
-async def trust_score(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return compute_trust_score(
-        source_quality=payload.get("source_quality", "unknown"),
-        opt_in=bool(payload.get("opt_in", False)),
-        channel=payload.get("channel", "whatsapp"),
-        message_text=payload.get("message_text", ""),
-        frequency_count_this_week=int(payload.get("frequency_count_this_week", 0)),
-        weekly_cap=int(payload.get("weekly_cap", 2)),
-        approval_status=payload.get("approval_status", "pending"),
-    )
-
-
-# ── Revenue DNA ───────────────────────────────────────────────
-@router.get("/revenue-dna/demo")
-async def revenue_dna_demo() -> dict[str, Any]:
-    return build_revenue_dna_demo()
+async def trust_score(signals: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return compute_trust_score(signals or {})
 
 
 @router.post("/revenue-dna")
-async def revenue_dna_post(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return extract_revenue_dna(
-        customer_id=payload.get("customer_id", "unknown"),
-        won_deals=payload.get("won_deals", []),
-        replies=payload.get("replies", []),
-        objections=payload.get("objections", []),
-    )
+async def revenue_dna(context: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return build_revenue_dna(context or {})
 
 
-# ── Opportunity Simulator ─────────────────────────────────────
-@router.post("/simulate-opportunity")
-async def simulate_opportunity_endpoint(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return simulate_opportunity(
-        target_count=int(payload.get("target_count", 100)),
-        sector=payload.get("sector", "saas"),
-        avg_deal_value_sar=float(payload.get("avg_deal_value_sar", 25_000)),
-        channel=payload.get("channel", "whatsapp"),
-        cold_pct=float(payload.get("cold_pct", 0)),
-        quality_lift=float(payload.get("quality_lift", 1.0)),
-    )
+@router.post("/opportunity-simulator")
+async def opportunity_simulator(inputs: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return simulate_opportunities(inputs or {})
 
 
-# ── Competitive Moves ─────────────────────────────────────────
-@router.post("/competitive-move/analyze")
-async def competitive_move_analyze(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    return analyze_competitive_move(
-        competitor_name=payload.get("competitor_name", "?"),
-        move_type=payload.get("move_type", "new_offer"),
-        payload=payload.get("payload", {}),
-    )
+@router.post("/board-brief")
+async def board_brief(snapshot: dict[str, Any] = Body(default_factory=dict)) -> dict[str, Any]:
+    return build_board_brief(snapshot or {})
 
 
-# ── Board Brief ───────────────────────────────────────────────
-@router.get("/board-brief/demo")
-async def board_brief_demo() -> dict[str, Any]:
-    return build_board_brief()
+@router.get("/competitive-moves")
+async def competitive_moves(sector: str | None = None) -> dict[str, Any]:
+    return build_competitive_moves(sector)
 
 
-# ── Decision Memory ───────────────────────────────────────────
-@router.post("/decisions/record")
-async def decisions_record(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
-    customer_id = payload.get("customer_id", "demo")
-    mem = _memory_for(customer_id)
-    return learn_from_decision(
-        memory=mem,
-        decision=payload.get("decision", "skip"),
-        action_type=payload.get("action_type", "send_whatsapp"),
-        channel=payload.get("channel", "whatsapp"),
-        sector=payload.get("sector"),
-        tone=payload.get("tone"),
-        objection_id=payload.get("objection_id"),
-    )
-
-
-@router.get("/decisions/preferences")
-async def decisions_preferences(customer_id: str) -> dict[str, Any]:
-    mem = _memory_for(customer_id)
-    return {"customer_id": customer_id, "preferences": mem.preferences()}
+@router.post("/bundle")
+async def intelligence_bundle(
+    payload: dict[str, Any] = Body(default_factory=dict),
+) -> dict[str, Any]:
+    """
+    Single round-trip for demos. Optional ``include_ten_in_ten`` merges
+    ``build_ten_opportunities`` without exposing a duplicate HTTP path.
+    """
+    company = payload.get("company") if isinstance(payload.get("company"), dict) else {}
+    out: dict[str, Any] = {
+        "growth_profile": build_growth_profile(company),
+        "intel_command_feed": build_intel_command_feed({"append_custom": payload.get("extra_card")}),
+        "trust_score": compute_trust_score(payload.get("trust_signals") if isinstance(payload.get("trust_signals"), dict) else {}),
+        "revenue_dna": build_revenue_dna(payload.get("revenue_context") if isinstance(payload.get("revenue_context"), dict) else {}),
+        "opportunity_simulator": simulate_opportunities(
+            payload.get("simulator") if isinstance(payload.get("simulator"), dict) else {}
+        ),
+        "board_brief": build_board_brief(payload.get("board") if isinstance(payload.get("board"), dict) else {}),
+        "competitive_moves": build_competitive_moves(str(payload.get("sector") or "") or None),
+    }
+    if payload.get("include_ten_in_ten"):
+        ten_payload = payload.get("ten_in_ten") if isinstance(payload.get("ten_in_ten"), dict) else company
+        out["ten_in_ten"] = build_ten_opportunities(ten_payload)
+    return out

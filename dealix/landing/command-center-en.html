@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix Revenue Command Center — API hub (EN)</title>
+  <meta name="description" content="English hub linking the revenue command center APIs and the full Arabic marketing dashboard." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box} body{font-family:Inter,system-ui,sans-serif;margin:0;background:#f1f5f9;color:#0f172a;line-height:1.6}
+    .bar{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+    .bar a{color:#bae6fd}
+    .wrap{max-width:900px;margin:0 auto;padding:28px 20px 48px}
+    h1{font-size:1.5rem;margin:0 0 8px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:18px}
+    code{font-size:0.85rem;background:#f1f5f9;padding:2px 6px;border-radius:4px}
+    ul{padding-left:1.25rem}
+    li{margin:6px 0}
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <strong>Dealix — Revenue Command Center (EN)</strong>
+    <span>
+      <a href="command-center.html">Full Arabic dashboard (static demo)</a>
+      · <a href="../docs/FRONTEND_AND_API_MAP.md">API map</a>
+    </span>
+  </div>
+  <div class="wrap">
+    <h1>API hub</h1>
+    <p>This page is a <strong>short English companion</strong> to the rich RTL demo in <code>command-center.html</code>. Wire a real dashboard to these endpoints (same origin or CORS-enabled staging).</p>
+
+    <div class="card">
+      <h2 style="margin-top:0;font-size:1.1rem;">Command center (revenue graph)</h2>
+      <ul>
+        <li><code>GET /api/v1/command-center/snapshot?customer_id=demo</code> — aggregated snapshot for in-product dashboards.</li>
+        <li>Additional routes: see <a href="../api/routers/command_center.py"><code>api/routers/command_center.py</code></a> (agents, proof pack, leaks, maturity, …).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;font-size:1.1rem;">v3 stack (autonomous revenue OS)</h2>
+      <ul>
+        <li><code>GET /api/v1/v3/stack</code> — layer names and recommended tools.</li>
+        <li><code>GET /api/v1/v3/command-center/snapshot</code> — included in staging smoke scripts.</li>
+        <li><code>GET /api/v1/v3/agents</code> — agent catalog.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;font-size:1.1rem;">Growth tower (platform + services)</h2>
+      <ul>
+        <li><code>GET /api/v1/platform/inbox/feed</code></li>
+        <li><code>GET /api/v1/services/catalog</code></li>
+        <li><code>GET /api/v1/launch/go-no-go</code> · <code>GET /api/v1/revenue-launch/offer?lang=en</code></li>
+      </ul>
+    </div>
+
+    <p style="font-size:0.9rem;color:#64748b;">No live WhatsApp/Gmail/calendar sends from these demos unless explicitly enabled in production policy.</p>
+  </div>
+</body>
+</html>

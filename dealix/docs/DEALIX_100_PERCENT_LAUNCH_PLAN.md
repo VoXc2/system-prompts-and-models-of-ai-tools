@@ -148,234 +148,68 @@ OAuth Gmail/Calendar، حصص، سياسات.
 
 وعد منتجي مركزي: من مدخلات شركة/قطاع/مدينة/عرض/هدف إلى قائمة ١٠ فرص مع Why Now ومستوى مخاطرة ومسودات عربية **بانتظار الموافقة فقط** — **`POST /api/v1/innovation/opportunities/ten-in-ten`**؛ وصف المهمة في `GET /api/v1/innovation/growth-missions`؛ الاستراتيجية في [`INNOVATION_STRATEGY.md`](INNOVATION_STRATEGY.md)؛ الإطار التشغيلي بجانب `GET /api/v1/business/gtm/first-10` عند التوسع.
 
-## 32. Platform Services Layer — برج التحكم بالنمو
+## 32. Growth Control Tower — ترتيب الموجات (0→6)
 
-طبقة موحدة multi-channel فوق `growth_operator` تحوّل Dealix من قناة WhatsApp إلى منصة:
+رؤية منتج: **برج تحكم بالنمو** — Inbox موحّد، سياسة قنوات، ذكاء تشغيلي خفيف، ومسودات تكاملات (بدون live) حتى اكتمال البوابات.
 
-- **11 قناة** (`whatsapp, gmail, google_calendar, moyasar, linkedin_lead_forms, x_api, instagram_graph, google_business_profile, google_sheets, crm, website_forms`).
-- **Action Policy Engine**: block_cold_whatsapp / block_payment_no_confirm / block_secrets / external_send_needs_approval / high_value_deal_review.
-- **Tool Gateway** هو المخرج التنفيذي الوحيد — كل أداة تمر منه. Live env flags افتراضياً OFF.
-- **Unified Inbox**: 8 أنواع بطاقات، ≤3 أزرار، عربية.
-- **Action Ledger** + **Proof Ledger** (أثر فعلي مقاس بالقناة).
-- **12 خدمة قابلة للبيع** (`growth_operator_subscription`, `channel_setup_service`, `lead_intelligence_service`, `partnership_sprint`, `email_revenue_rescue`, `social_growth_os`, `local_business_growth`, `ai_visibility_aeo_sprint`, `revenue_proof_pack_service`, `customer_success_operator`, `payments_collections_operator`, `outreach_approval_service`).
+| موجة | المحتوى | وثائق / كود |
+|------|---------|-------------|
+| **0** | تثبيت: `compileall`، `pytest`، `print_routes`، `smoke_inprocess` | [`POST_MERGE_VERIFICATION.md`](POST_MERGE_VERIFICATION.md) |
+| **1** | استراتيجية Platform + Intelligence | [`PLATFORM_SERVICES_STRATEGY.md`](PLATFORM_SERVICES_STRATEGY.md)، [`INTELLIGENCE_LAYER_STRATEGY.md`](INTELLIGENCE_LAYER_STRATEGY.md) |
+| **2** | `platform_services` + `/api/v1/platform/*` | `auto_client_acquisition/platform_services/` |
+| **3** | `intelligence_layer` + `/api/v1/intelligence/*` | `auto_client_acquisition/intelligence_layer/` |
+| **4** | Gmail / Calendar / Moyasar — **payload فقط** | `auto_client_acquisition/integrations/` |
+| **5** | Ingest نماذج leads (MVP) + قنوات اجتماعية **مسجّلة فقط** في السجل | `ingest/lead-form` + `channel_registry` |
+| **6** | وكلاء متينة (مفاهيم) — **بدون** LangGraph في `requirements.txt` حتى موافقة | [`AGENT_WORKFLOW_ARCHITECTURE.md`](AGENT_WORKFLOW_ARCHITECTURE.md) |
 
-**Endpoints:** `/api/v1/platform/{services/catalog, channels, policy/rules, actions/evaluate, tools/invoke, events/ingest, inbox/feed, identity/resolve, ledger/summary, proof-ledger/demo}`. **التفصيل:** [`PLATFORM_SERVICES_STRATEGY.md`](PLATFORM_SERVICES_STRATEGY.md).
+الالتزام بالبيتا الخاصة والـ PDPL كما في الأقسام أعلاه؛ لا إرسال حي من مسارات المنصة في هذه الموجات.
 
-## 33. Intelligence Layer — الشبكة العصبية للنمو
+## 33. مواءمة مسارات API (canonical و aliases)
 
-طبقة فوق Platform Services تجعل Dealix يتعلم ويقترح ويحاكي:
+جدول يوحّد أسماء المسارات بين المنتج والكود: [`docs/architecture/API_CANONICAL_ALIASES.md`](architecture/API_CANONICAL_ALIASES.md) — يُحدَّث عند إضافة مسار جديد أو alias.
 
-- **Growth Brain** لكل عميل + `is_ready_for_autopilot()` (≥30 signals + ≥40% accept).
-- **Command Feed**: 9 أنواع بطاقات يومية (opportunity / revenue_leak / partner_suggestion / meeting_prep / review_response / competitive_move / customer_reactivation / ai_visibility_alert / action_required).
-- **Action Graph** (10 أنواع حواف): signal → action → outcome.
-- **Mission Engine**: 7 ميشنات، **Kill Feature: `first_10_opportunities`**.
-- **Decision Memory**: تعلّم من Accept/Skip/Edit/Block.
-- **Trust Score** مركب لكل رسالة (safe ≥70 / needs_review 40-69 / blocked <40).
-- **Revenue DNA**: best_channel / best_segment / best_angle / common_objection / avg_cycle_days.
-- **Opportunity Simulator** (9 قطاعات سعودية): توقع replies/meetings/deals/pipeline_sar + risk_score.
-- **Competitive Move Detector**: 8 أنواع حركات + recommended_action_ar.
-- **Founder Shadow Board**: موجز أسبوعي (3 قرارات + 3 فرص + 3 مخاطر + علاقة + تجربة + مؤشر).
+## 34. Growth Neural Network — طبقات Curator و Meeting و Router (MVP)
 
-**Endpoints:** `/api/v1/intelligence/{growth-brain/build, command-feed/demo, missions, missions/recommend, trust-score, revenue-dna/demo, revenue-dna, simulate-opportunity, competitive-move/analyze, board-brief/demo, decisions/record, decisions/preferences}`. **التفصيل:** [`INTELLIGENCE_LAYER_STRATEGY.md`](INTELLIGENCE_LAYER_STRATEGY.md).
+بعد موجات **Growth Control Tower** (أقسام 32–33)، أُضيفت وحدات داعمة تحت `auto_client_acquisition/` مع راوترات FastAPI: **security_curator**، **growth_curator**، **meeting_intelligence**، **model_router**، **connectors**، **agent_observability**، و**growth_operator** (aliases منتجية فقط). التفاصيل التشغيلية والامتثال (مسودات، عدم إرسال حي، عدم شحن تلقائي) كما في [`PLATFORM_SERVICES_STRATEGY.md`](PLATFORM_SERVICES_STRATEGY.md) و[`PRIVATE_BETA_RUNBOOK.md`](PRIVATE_BETA_RUNBOOK.md).
 
-## 34. Self-Improving Agent Platform (Hermes-inspired)
+**وثائق موجهة للتنفيذ:** [`EXECUTION_ROADMAP_AR.md`](EXECUTION_ROADMAP_AR.md)، [`AGENT_SECURITY_CURATOR.md`](AGENT_SECURITY_CURATOR.md)، [`GROWTH_CURATOR_STRATEGY.md`](GROWTH_CURATOR_STRATEGY.md)، [`MEETING_INTELLIGENCE.md`](MEETING_INTELLIGENCE.md)، [`MODEL_PROVIDER_ROUTER.md`](MODEL_PROVIDER_ROUTER.md)، [`AGENT_OBSERVABILITY_EVALS.md`](AGENT_OBSERVABILITY_EVALS.md)، [`CONNECTOR_CATALOG.md`](CONNECTOR_CATALOG.md).
 
-طبقة "ذاتية التحسن" فوق Platform Services + Intelligence Layer. 6 modules جديدة + 6 routers جديدة + 76 اختبار:
+## 35. Targeting & Acquisition OS
 
-- **Security Curator** ([`AGENT_SECURITY_CURATOR.md`](AGENT_SECURITY_CURATOR.md)) — secret_redactor (11 نمط: GitHub/OpenAI/Anthropic/Supabase/WhatsApp/Moyasar/Sentry/Google/AWS) + patch_firewall (يحظر `.env` والـRSA keys في الـdiff) + trace_redactor (يخفي phones/emails) + tool_output_sanitizer.
-- **Growth Curator** ([`GROWTH_CURATOR_STRATEGY.md`](GROWTH_CURATOR_STRATEGY.md)) — message_curator (يقيّم الرسائل العربية، يكشف 8 عبارات محظورة) + playbook_curator (winner/promising/needs_work/archive) + mission_curator + skill_inventory (20+ skill عبر 5 طبقات) + curator_report (تقرير عربي أسبوعي).
-- **Meeting Intelligence** ([`MEETING_INTELLIGENCE.md`](MEETING_INTELLIGENCE.md)) — Pre-meeting brief (6 أقسام عربية) + transcript_parser (Google Meet entries أو نص) + objection_extractor (8 فئات) + followup_builder (email + WhatsApp drafts) + deal_risk (0..100).
-- **Model Router** ([`MODEL_PROVIDER_ROUTER.md`](MODEL_PROVIDER_ROUTER.md)) — 7 providers (Claude Sonnet/Haiku, GPT-4, GPT-4o-mini, Gemini Pro, Azure OAI KSA-region, Local Qwen) × 10 task types + cost_policy + fallback_policy (KSA-region أولاً للحالات الحساسة).
-- **Connector Catalog** ([`CONNECTOR_CATALOG.md`](CONNECTOR_CATALOG.md)) — 14 تكامل (WhatsApp Cloud, Gmail, Calendar, Meet, Moyasar, LinkedIn Lead Forms, Google Business Profile, X, Instagram, Sheets, CRM, Website Forms, Composio, MCP Gateway) كل واحد له launch_phase + risk_level + Arabic risks.
-- **Agent Observability** ([`AGENT_OBSERVABILITY_EVALS.md`](AGENT_OBSERVABILITY_EVALS.md)) — trace_events (مع hash للـuser/company IDs) + safety_eval (7 قواعد) + saudi_tone_eval (إيجابيات/سلبيات/نسبة عربية) + eval_pack (5 cases) + cost_tracker.
+طبقة [`targeting_os`](../auto_client_acquisition/targeting_os/) + مسارات `/api/v1/targeting/*` (انظر [`API_CANONICAL_ALIASES.md`](architecture/API_CANONICAL_ALIASES.md)): استهداف حسابات، لجنة شراء، تقييم مصدر وجهة، خطة outreach، استراتيجية LinkedIn المتوافقة، تشخيص مجاني، وقوالب عقود **للمسودات فقط**. الوثيقة المرجعية: [`TARGETING_ACQUISITION_OS.md`](TARGETING_ACQUISITION_OS.md).
 
-**Endpoints جديدة:**
-- `/api/v1/security-curator/{demo, redact, inspect-diff, sanitize-output}`
-- `/api/v1/growth-curator/{skills/inventory, messages/grade, messages/improve, messages/duplicates, missions/next, report/weekly, report/demo}`
-- `/api/v1/meeting-intelligence/{brief, brief/demo, transcript/summarize, followup/draft, deal-risk}`
-- `/api/v1/model-router/{providers, tasks, route, cost-class, usage/demo}`
-- `/api/v1/connector-catalog/{catalog, summary, status, risks, {key}}`
-- `/api/v1/agent-observability/{trace/build, safety/eval, tone/eval, evals/run}`
+## 36. Service Tower + Service Excellence OS
 
-## 35. Private Beta Launch — Today
+- **Service Tower** ([`service_tower/`](../auto_client_acquisition/service_tower/)، مسارات `/api/v1/services/*`): كتالوج خدمات بيعية (تشخيص مجاني، ذكاء قوائم، ١٠ فرص، Growth OS، شراكات، …) مع wizard توصية، عروض سعر تقديرية، وبطاقات CEO — مدمج مع كتالوج المنصة في `GET .../catalog` دون تكرار منطق التنفيذ الخارجي.
+- **Service Excellence OS** ([`service_excellence/`](../auto_client_acquisition/service_excellence/)، مسارات `/api/v1/service-excellence/*`): مصفوفة ميزات، درجة جاهزية، فجوات تنافسية، حزمة إطلاق، backlog تحسين — deterministic للعرض الداخلي.
+- **وثائق:** [`SERVICE_TOWER_STRATEGY.md`](SERVICE_TOWER_STRATEGY.md)، [`SERVICE_EXCELLENCE_OS.md`](SERVICE_EXCELLENCE_OS.md).
+- **Landing (عرض):** [`landing/services.html`](../landing/services.html)، [`landing/free-diagnostic.html`](../landing/free-diagnostic.html)، [`landing/first-10-opportunities.html`](../landing/first-10-opportunities.html)، [`landing/agency-partner.html`](../landing/agency-partner.html)، [`landing/list-intelligence.html`](../landing/list-intelligence.html)، [`landing/growth-os.html`](../landing/growth-os.html).
 
-راجع:
-- [`PRIVATE_BETA_LAUNCH_TODAY.md`](PRIVATE_BETA_LAUNCH_TODAY.md) — الخطة الكاملة للإطلاق.
-- [`DEMO_SCRIPT_12_MINUTES.md`](DEMO_SCRIPT_12_MINUTES.md) — السكربت المعتمد للعرض.
-- [`FIRST_20_OUTREACH_MESSAGES.md`](FIRST_20_OUTREACH_MESSAGES.md) — قوالب الرسائل العربية.
-- `landing/private-beta.html` — صفحة العرض.
+## 37. Launch Ops + جاهزية البيتا
 
-**العرض:** Pilot 7 أيام بـ499 ريال أو مجاني مقابل case study. Paid Pilot 30 يوم بـ1,500–3,000 ريال. Growth OS اشتراك شهري بـ2,999 ريال.
+- **Launch Ops** ([`launch_ops/`](../auto_client_acquisition/launch_ops/)، مسارات `/api/v1/launch/*`): عرض البيتا الخاصة، سكربت ديمو ١٢ دقيقة، قوالب أول ٢٠ تواصل، go/no-go، scorecard جاهزية.
+- **Service Tower — إضافات:** `GET /api/v1/services/verticals` (ثلاثة أبواب)، `GET /api/v1/services/upgrade-paths`، `GET /api/v1/services/contracts/templates` (مسودات عقود — ليست استشارة قانونية).
+- **وثائق:** [`PRIVATE_BETA_LAUNCH_TODAY.md`](PRIVATE_BETA_LAUNCH_TODAY.md)، [`DEMO_SCRIPT_12_MINUTES.md`](DEMO_SCRIPT_12_MINUTES.md)، [`FIRST_20_OUTREACH_MESSAGES.md`](FIRST_20_OUTREACH_MESSAGES.md)، [`COMMERCIAL_LAUNCH_MASTER_PLAN.md`](COMMERCIAL_LAUNCH_MASTER_PLAN.md)، [`FRONTEND_AND_API_MAP.md`](FRONTEND_AND_API_MAP.md) (واجهة HTML ↔ برج API + لغتين للبيتا)، [`AUTONOMOUS_REVENUE_COMPANY_OS.md`](AUTONOMOUS_REVENUE_COMPANY_OS.md).
 
-**ممنوع اليوم:** live WhatsApp send, live Gmail send, live Calendar insert, payment charge, scraping social, وعود "نضمن نتائج".
+## 38. Revenue Today (تحصيل Pilot بدون أتمتة خطرة)
 
-## 36. Targeting & Acquisition OS — نظام الاستهداف الذكي
+- **الحزمة** [`revenue_launch/`](../auto_client_acquisition/revenue_launch/): عروض ٤٩٩ و Growth OS Pilot، شرائح أول ٢٠ تواصل، ديمو/إغلاق، مخطط pipeline، checklist تسليم Pilot، قالب Proof Pack، **تعليمات دفع يدوية** (Moyasar dashboard — لا charge من كود Dealix في هذه المرحلة).
+- **المسارات** `GET /api/v1/revenue-launch/*` — انظر [`REVENUE_TODAY_PLAYBOOK.md`](REVENUE_TODAY_PLAYBOOK.md) و[`API_CANONICAL_ALIASES.md`](architecture/API_CANONICAL_ALIASES.md).
+- **أداة checklist:** `python scripts/launch_readiness_check.py` (اختياري `--base-url` مع httpx لفحص `/health` وعينات API).
 
-طبقة جديدة (16 module + 20 endpoint + 47 اختبار) تجعل Dealix يستهدف بذكاء بدلاً من جمع عشوائي:
+## 39. Autonomous Revenue Company OS (مشغّل + Company OS)
 
-- **Account-first**: `account_finder` يحدد 10-25 شركة لكل (sector, city) مع `fit_score` و`why_now_ar`.
-- **Buying Committee**: `buyer_role_mapper` بـ14 دور وخرائط حسب القطاع (training/saas/real_estate/...).
-- **Contact Source Policy**: 12 مصدر (crm_customer → opt_out) مع risk_score + retention.
-- **Contactability Matrix**: 5 action modes (suggest_only/draft_only/approval_required/approved_execute/blocked).
-- **LinkedIn Strategy**: Lead Forms + Ads + Manual فقط — `linkedin_do_not_do()` يقفل scraping/auto-DM/auto-connect.
-- **Email Strategy**: drafts + unsubscribe + pacing per domain reputation.
-- **WhatsApp Strategy**: opt-in only، rejects cold + risky phrases تلقائياً.
-- **Outreach Scheduler**: day-by-day plan + daily limits + opt-out enforcement.
-- **Reputation Guard**: bounce/complaint/opt-out thresholds → healthy/watch/pause مع recovery actions.
-- **Daily Autopilot**: Arabic brief + 7 today actions + EOD report.
-- **Self-Growth Mode**: 5 ICP focuses لـ Dealix نفسه + daily brief + weekly learning.
-- **Free Growth Diagnostic**: العرض المجاني الذي يجلب Pilots.
-- **Contract Drafts**: Pilot/DPA/Referral/Agency outlines (legal review required, PDPL-aware).
+- **الرؤية والطبقات الاثنا عشر:** [`AUTONOMOUS_REVENUE_COMPANY_OS.md`](AUTONOMOUS_REVENUE_COMPANY_OS.md) — يربط الفئة «نظام تشغيل نمو» بالمجلدات والمسارات الفعلية.
+- **المشغّل (نية → خدمة → موافقة):** حزمة [`autonomous_service_operator/`](../auto_client_acquisition/autonomous_service_operator/) ومسارات `GET|POST /api/v1/operator/*` (عرض deterministic، بدون LLM إلزامي في الموجة الأولى).
+- **Company OS (حدث → بطاقة → RWU):** [`revenue_company_os/`](../auto_client_acquisition/revenue_company_os/) ومسارات `GET /api/v1/revenue-os/company-os/*` بجانب `revenue_os` الحالي — لا يستبدل `POST /events` بل يكمّل تحت `company-os`.
 
-**Endpoints:** `/api/v1/targeting/{accounts/recommend, buying-committee/map, contacts/evaluate, uploaded-list/analyze, outreach/plan, daily-autopilot/demo, self-growth/demo, reputation/status, linkedin/strategy, drafts/email, drafts/whatsapp, free-diagnostic, services, contracts/templates, ...}`. **التفصيل:** [`TARGETING_ACQUISITION_OS.md`](TARGETING_ACQUISITION_OS.md).
+## 40. Positioning Lock + Customer Ops + صفحات الشركات/المسوقين
 
-## 37. Service Tower — برج الخدمات الذاتية
-
-**12 Productized Service** + Wizard + Pricing Engine + Scorecard + WhatsApp CEO Control + Upgrade Paths (8 modules + 20 endpoint + 38 اختبار):
-
-| الخدمة | السعر | النوع |
-|--------|------|------|
-| Free Growth Diagnostic | مجاني | one_time |
-| List Intelligence | 499–1,500 | one_time |
-| First 10 Opportunities Sprint | 499–1,500 | sprint |
-| Self-Growth Operator | 999/شهر | monthly |
-| Growth OS Monthly | 2,999/شهر | monthly |
-| Email Revenue Rescue | 1,500–5,000 | one_time |
-| Meeting Booking Sprint | 1,500–5,000 | sprint |
-| Partner Sprint | 3,000–7,500 | sprint |
-| Agency Partner Program | 10,000–50,000 | one_time |
-| WhatsApp Compliance Setup | 1,500–4,000 | one_time |
-| LinkedIn Lead Gen Setup | 2,000–7,500 | one_time |
-| Executive Growth Brief | 499–999/شهر | monthly |
-
-**3 أبواب للعميل:**
-1. أريد عملاء جدد.
-2. عندي بيانات وأبغى أستفيد منها.
-3. أبغى توسع وشراكات.
-
-**Endpoints:** `/api/v1/services/{catalog, recommend, {id}/start, {id}/workflow, {id}/quote, {id}/scorecard, {id}/upgrade-path, ceo/daily-brief, ceo/approval-card, ...}`. **التفصيل:** [`SERVICE_TOWER_STRATEGY.md`](SERVICE_TOWER_STRATEGY.md).
-
-## 38. Service Excellence OS — مصنع الخدمات الممتازة
-
-**8 modules + 22 endpoint + 33 اختبار** يضمنون أن كل خدمة تطلق بـ score ≥80 وتجاوز 4 quality gates، وتستمر في التحسين الأسبوعي:
-
-- **Feature Matrix** — 12 must-have لكل خدمة + advanced/premium/future.
-- **Service Scoring** — 10 أبعاد × 10 = 100 → launch_ready/beta_only/needs_work.
-- **Quality Review** — 4 gates: proof / approval / pricing / channels.
-- **Competitor Gap** — مقارنة بـ7 فئات منافسين (CRM, WA tools, email assistants, LinkedIn tools, agencies, revenue intelligence, generic AI).
-- **Proof Metrics** — ROI estimate (pipeline_x + closed_won_x).
-- **Research Lab** — brief شهري + hypotheses + experiments.
-- **Improvement Backlog** — feedback → backlog → prioritized weekly tasks.
-- **Launch Package** — landing + sales script + 12-min demo + 5-day onboarding.
-
-**Endpoints:** `/api/v1/service-excellence/{id}/{feature-matrix, score, quality-review, proof-metrics, gap-analysis, research-brief, experiments, monthly-review, backlog, launch-package, sales-script, demo-script}` + `/review/all`. **التفصيل:** [`SERVICE_EXCELLENCE_OS.md`](SERVICE_EXCELLENCE_OS.md).
-
-## 39. Landing Pages
-
-- `landing/services.html` — 3 أبواب + 12 خدمة productized.
-- `landing/free-diagnostic.html` — العرض المجاني.
-- `landing/first-10-opportunities.html` — Kill Feature.
-- `landing/agency-partner.html` — برنامج الوكالة الشريكة.
-- `landing/private-beta.html` — Private Beta launch.
-- `landing/list-intelligence.html` — تحليل القوائم.
-- `landing/growth-os.html` — اشتراك Growth OS الشهري.
-
-## 40. Launch Ops — برج إطلاق الـ Private Beta
-
-5 modules + 11 endpoints + 25 اختبار. كل ما يحتاجه إطلاق Private Beta اليوم:
-
-- `private_beta`: عرض اليوم (499 ريال × 7 أيام) + safety notes + FAQ عربي.
-- `demo_flow`: 12-min Arabic demo + discovery Qs + objection bank + close script.
-- `outreach_messages`: 4 segments × 5 prospects + per-segment رسائل + 3 follow-ups + 6 reply handlers.
-- `go_no_go`: 10-gate readiness + critical gates (no_secrets / live_sends_disabled / staging_health) + verdict + concrete next-actions.
-- `launch_scorecard`: daily/weekly metrics بـ11 event types + targets (20 outreach/5 ردود/3 ديمو/1 pilot يومياً).
-
-**Endpoints:** `/api/v1/launch/{private-beta/offer, demo/flow, outreach/first-20, outreach/message, outreach/followup, go-no-go, readiness, scorecard/event, scorecard/daily, scorecard/weekly, scorecard/demo}`.
-
-## 41. Revenue Launch — تحويل Dealix إلى دخل
-
-7 modules + 18 endpoints + 31 اختبار. **التفصيل:** [`REVENUE_TODAY_PLAYBOOK.md`](REVENUE_TODAY_PLAYBOOK.md).
-
-- `offer_builder`: 4 عروض (Private Beta / 499 Pilot / Growth OS Pilot / Free Case Study) + recommend per segment.
-- `pipeline_tracker`: 8 stages (identified→contacted→replied→demo_booked→diagnostic_sent→pilot_offered→paid/lost) + Sheet schema + summarize.
-- `outreach_sequence`: re-export with revenue-tier extensions.
-- `demo_closer`: re-export single source of truth.
-- `pilot_delivery`: 24-hour delivery template + intake form (12 fields) + per-service delivery (First 10 / List Intel / Free Diagnostic).
-- `proof_pack_template`: 5-line client summary + ROI x-multiples + next-step recommendation (upsell / iterate / extend).
-- `payment_manual_flow`: Moyasar invoice instructions (halalas-correct) + payment-link message + confirmation checklist. **No API charge ever**.
-
-**Endpoints:** `/api/v1/revenue-launch/{offers, offers/recommend, outreach/first-20, outreach/followup, demo-flow, pipeline/schema, pipeline/summarize, pilot-delivery/intake-form, pilot-delivery/24h-plan, pilot-delivery/first-10, pilot-delivery/list-intelligence, pilot-delivery/free-diagnostic, payment/invoice-instructions, payment/link-message, payment/confirmation-checklist, proof-pack/template, proof-pack/client-summary, proof-pack/next-step}`.
-
-## 42. Service Tower extensions
-
-- `contract_templates.py` — re-export targeting_os contracts + new SLA outline.
-- `vertical_service_map.py` — 6 verticals (B2B SaaS, agencies, training/consulting, real estate, healthcare/local, retail/ecommerce) → recommended service stack + buyer roles + common pains.
-
-## 43. Scripts
-
-- `scripts/launch_readiness_check.py` — runs 10 gates locally + against optional staging URL; reports JSON or pretty output.
-- `scripts/smoke_staging.py` — already exists (preserved).
-
-## 44. Autonomous Revenue Company OS
-
-> Dealix الآن **فئة جديدة** — ليس منصة، بل شركة نمو رقمية ذاتية التشغيل.
-
-**26 module جديد + 47 endpoint جديد + 81 اختبار**. **التفصيل:** [`AUTONOMOUS_REVENUE_COMPANY_OS.md`](AUTONOMOUS_REVENUE_COMPANY_OS.md).
-
-### Autonomous Service Operator (16 modules)
-البوت المركزي يدير كل المحادثات وتشغيل الخدمات:
-- `intent_classifier` (16 intents) → `conversation_router` → `service_orchestrator`.
-- `intake_collector` + `approval_manager` (≤3 buttons) + `workflow_runner` + `tool_action_planner` (LinkedIn scrape/auto-DM blocked).
-- `proof_pack_dispatcher` + `upsell_engine` + `whatsapp_renderer` + `operator_memory`.
-- `service_bundles` (6 bundles: Growth Starter / Data to Revenue / Executive Growth OS / Partnership Growth / Local Growth OS / Full Growth Control Tower).
-- `executive_mode` (CEO) + `client_mode` (Growth Manager) + `agency_mode` (multi-client + co-branded + revenue share).
-
-### Revenue Company OS (10 modules)
-الذكاء عبر القنوات:
-- `event_to_card` (13 event types → Arabic decision cards).
-- `command_feed_engine` (sort by risk) + `action_graph` (14 typed edges: signal→action→outcome→proof).
-- `revenue_work_units` (19 RWU types, Salesforce-inspired) + `channel_health`.
-- `opportunity_factory` + `service_factory` + `proof_ledger` (revenue-tier scoreboard).
-- `growth_memory` (cross-customer aggregates) + `self_improvement_loop` (weekly Arabic recommendations).
-
-**Endpoints:** `/api/v1/operator/*` (28) + `/api/v1/revenue-os/*` (19).
-
-**الفرق الشاسع:** Dealix لا يبيع features ولا AI ولا منصة. يبيع **شركة نمو رقمية ذاتية التشغيل** — نتائج منظمة + تشغيل يومي + Proof Pack شهري.
-
-## 45. Positioning Lock + Customer Ops + Companies/Marketers
-
-**8 modules + 20 endpoints + 44 tests + 2 modes + 7 docs**. التفاصيل:
-
-### Positioning Lock (3 docs)
-- [`POSITIONING_LOCK.md`](POSITIONING_LOCK.md) — category, one-liner, primary buyers (شركات + وكالات), wedge, 5 approved claims, 5 modes, 5 bundles.
-- [`PROHIBITED_CLAIMS.md`](PROHIBITED_CLAIMS.md) — 8 categories of forbidden marketing language + how they're enforced technically.
-- [`APPROVED_MARKET_MESSAGING.md`](APPROVED_MARKET_MESSAGING.md) — tagline, elevator pitch, headlines, 4 outreach segments, social posts, slogan bank.
-
-### Customer Ops (6 modules)
-- `onboarding_checklist`: 8-step Pilot onboarding with progress tracking.
-- `connector_setup_status`: 11 connectors (Gmail/Calendar/Sheets/Moyasar/WhatsApp/Forms/LinkedIn/GBP/CRM/Meet/Instagram) with state machine + ready_for_first_service gate.
-- `support_ticket_router`: 4-tier P0/P1/P2/P3 classification + Arabic first-response templates.
-- `sla_tracker`: per-priority SLA targets + breach detection + weekly health (healthy/watch/critical).
-- `customer_success_cadence`: 6 cadence types + at-risk alerts (risk_score 0..100) + per-bundle 30-day plans + QBR.
-- `incident_router`: SEV1/SEV2/SEV3 triage + auto-SEV1 on data leak / unauthorized send + canonical response plans (PDPL-aware).
-
-### Operator Modes (2 new)
-- `self_growth_mode` — Dealix uses its own OS to find pilots (re-exports targeting_os.self_growth_mode + operator-tier reminders).
-- `service_delivery_mode` — runs client services + tracks SLA + post-delivery handoff to Customer Success.
-
-### Customer-facing Pages (1 new + 1 updated)
-- `landing/companies.html` — Saudi B2B companies. Approval-first, no scraping, 4 bundles.
-- `landing/marketers.html` (updated) — agencies/marketers Agency Growth OS path.
-
-### Customer Ops Docs (5 new)
-- [`ONBOARDING_RUNBOOK.md`](ONBOARDING_RUNBOOK.md) — day-by-day kick-off → first Proof Pack.
-- [`SUPPORT_SLA.md`](SUPPORT_SLA.md) — P0..P3 + classifier keywords.
-- [`INCIDENT_RESPONSE.md`](INCIDENT_RESPONSE.md) — SEV1..SEV3 + post-mortem templates + Arabic comms.
-- [`CUSTOMER_SUCCESS_PLAYBOOK.md`](CUSTOMER_SUCCESS_PLAYBOOK.md) — weekly check-ins, at-risk detection, QBR, renewal.
-- [`CONNECTOR_SETUP_GUIDES.md`](CONNECTOR_SETUP_GUIDES.md) — 11 connectors with scopes + steps + troubleshooting.
-
-**Endpoints:** `/api/v1/customer-ops/*` (20).
+- **تثبيت الرسالة:** [`POSITIONING_LOCK.md`](POSITIONING_LOCK.md)، [`PROHIBITED_CLAIMS.md`](PROHIBITED_CLAIMS.md)، [`APPROVED_MARKET_MESSAGING.md`](APPROVED_MARKET_MESSAGING.md).
+- **Customer Ops (API):** حزمة [`customer_ops/`](../auto_client_acquisition/customer_ops/) ومسارات `GET|POST /api/v1/customer-ops/*` — قائمة onboarding، SLA، حالة موصلات تجريبية، cadence نجاح عميل، playbook حوادث، وتوجيه تذكرة دعم (بدون تنفيذ خارجي).
+- **صفحات عرض:** [`landing/companies.html`](../landing/companies.html) (مسار الشركات)، [`landing/marketers.html`](../landing/marketers.html) (مسار الوكالات/المسوقين) — تربط بباقي صفحات الـ landing الحالية.
+- **تشغيل المشغّل:** أوضاع إضافية في [`self_growth_mode.py`](../auto_client_acquisition/autonomous_service_operator/self_growth_mode.py) و[`service_delivery_mode.py`](../auto_client_acquisition/autonomous_service_operator/service_delivery_mode.py) بجانب الأوضاع الموجودة.
 
 ---
 
-**الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً. الإطلاق اليوم = Private Beta + Pilots + Proof Pack، ليس Public Launch. اليوم Dealix هو **Saudi Revenue Execution OS** بـ45 طبقة وثائقية، 949 اختبار ناجح، CI أخضر.
+**الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً.

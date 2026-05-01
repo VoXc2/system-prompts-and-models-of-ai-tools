@@ -1,202 +1,66 @@
-# Revenue Today Playbook — تحويل Dealix إلى دخل اليوم
+# Revenue Today — دليل تشغيل دخل اليوم (Private Beta)
 
-> **القاعدة:** الهدف اليوم ليس إطلاق عام. الهدف **أول 499 ريال أو commitment** عبر Private Beta + Pilot 7 أيام.
+> جمع بين المنتج والبيع دون كسر قواعد الأمان: **لا إرسال حي تلقائي، لا شحن من API داخل Dealix في هذه المرحلة، لا واتساب بارد، لا أتمتة LinkedIn المخالفة.**
 
----
+## 1. عرض ٤٩٩ ريال (Pilot ٧ أيام)
 
-## 1. العروض المدفوعة المتاحة اليوم
+- **الوعد:** ١٠ فرص B2B، لماذا الآن، رسائل عربية (مسودات)، فحص قابلية التواصل، خطة متابعة ٧ أيام، Proof Pack مختصر.
+- **التحصيل:** فاتورة أو رابط دفع يدوي من لوحة Moyasar (sandbox أو live حسب سياسة شركتك) — راجع [وثائق Moyasar](https://docs.moyasar.com/).
+- **API للمرجعية:** `GET /api/v1/revenue-launch/offer` (يحتوي `pilot_499`)؛ للتسميات الإنجليزية بجانب العربية: `GET /api/v1/revenue-launch/offer?lang=en`.
 
-### Pilot 7 أيام — 499 ريال (الأساسي)
-- 10 فرص B2B + رسائل عربية + خطة متابعة + Proof Pack.
-- بدائل: مجاني مقابل case study.
-- مدة التسليم: 7 أيام، تبدأ يوم الأحد بعد الدفع.
+## 2. عرض Growth OS Pilot (١٥٠٠–٣٠٠٠ ريال / ٣٠ يوم)
 
-### Growth OS Pilot — 1,500–3,000 ريال (30 يوم)
-- التشغيل الكامل لشهر: command feed + drafts + اجتماعات + Proof Pack أسبوعي.
-- الترقية المنطقية لـ Growth OS Monthly (2,999/شهر).
+- تشغيل أوسع: موجز، فرص، ذكاء قوائم، مسودات قنوات، Proof أسبوعي — كلها **مسودات وموافقة** ما لم تُفعّل سياسات الإنتاج صراحةً لاحقاً.
 
-### Free Growth Diagnostic — 0 ريال (24 ساعة)
-- 3 فرص + رسالة + توصية بخدمة مدفوعة.
-- يقود لـ Pilot 499 أو Growth OS Pilot.
+## 3. من نستهدف اليوم
 
----
+- ٥ وكالات B2B، ٥ تدريب/استشارات، ٥ SaaS صغيرة، ٥ خدمات بواتساب نشط (يدوياً — لا scraping).
 
-## 2. من نستهدف اليوم (4 فئات × 5 = 20 prospect)
+## 4. أول ٢٠ تواصل
 
-| Segment | عدد | عرض أساسي | عرض احتياطي | قناة |
-|---------|----:|-----------|-------------|------|
-| وكالات تسويق B2B | 5 | Growth OS Pilot | Free Case Study | Email |
-| تدريب/استشارات | 5 | Pilot 499 | Free Case Study | Email |
-| SaaS/تقنية صغيرة | 5 | Pilot 499 | Growth OS Pilot | LinkedIn Lead Form |
-| خدمات بقاعدة واتساب | 5 | List Intelligence | WhatsApp Compliance | Email |
+- قوالب: `GET /api/v1/launch/outreach/first-20` و`GET /api/v1/revenue-launch/outreach/first-20` (عينات + شرائح).
+- **نسخ يدوي فقط** من الرسائل.
 
-**القواعد:**
-- لا scraping ولا قوائم مشتراة.
-- استخدم علاقاتك المباشرة + جهات تعرفها.
-- كل رسالة يدوية، لا automation.
-- حد أقصى 3 follow-ups ثم أرشفة.
+## 5. سيناريو الردود
 
----
+- `GET /api/v1/revenue-launch/demo-flow` → قسم `objections`.
 
-## 3. أول 20 رسالة — جاهزة للنسخ
+## 6. حجز الديمو
 
-استخدم endpoint:
-```
-GET /api/v1/launch/outreach/first-20
-```
+- ديمو ١٢ دقيقة: `docs/DEMO_SCRIPT_12_MINUTES.md` و`GET /api/v1/revenue-launch/demo-flow`.
 
-أو يدوياً:
+## 7. إغلاق أول Pilot
 
-### رسالة عامة
-هلا [الاسم]، أطلقنا Beta محدودة لـ Dealix.
-Dealix يساعد الشركات تطلع فرص B2B مناسبة، يكتب الرسائل بالعربي، ويخلي صانع القرار يوافق قبل أي تواصل، وبعدها يعطي Proof Pack.
-أفتح 5 مقاعد Pilot هذا الأسبوع. يناسبك أعطيك Free Diagnostic لشركتكم؟
+- `GET /api/v1/revenue-launch/pilot-delivery` — نموذج intake، خطة ٢٤ ساعة، مخرجات First 10 و List Intelligence.
 
-### وكالة
-هلا [الاسم]، عندي Beta خاص للوكالات.
-Dealix يطلع فرص لعملاءكم، يجهز رسائل عربية، يدير موافقات، ويطلع Proof Pack بعلامة الوكالة.
-أبحث عن وكالة واحدة نجرب معها Pilot مشترك على عميل حقيقي. يناسبك ديمو 15 دقيقة؟
+## 8. ماذا نطلب من العميل
 
-### SaaS
-هلا [الاسم]، رأيت إصدار النسخة الجديدة من منتجكم — مبروك.
-نشتغل على مدير نمو عربي يطلع 10 فرص B2B عبر LinkedIn Lead Forms (لا scraping) ويكتب الرسائل بالعربي.
-أبغى أجربه مع شركة SaaS سعودية واحدة. يناسبك ديمو 12 دقيقة؟
+- حقول intake في نفس الـ endpoint أعلاه (موقع، قطاع، مدينة، عرض، قائمة، قنوات، موافق واتساب).
 
----
+## 9. ماذا نسلّم خلال ٢٤ ساعة
 
-## 4. الديمو — 12 دقيقة
+- حسب الاتفاق: عينة فرص + مسودات + تقرير مخاطر — **بعد موافقة داخلية** على الصياغة.
 
-استخدم:
-```
-GET /api/v1/launch/demo/flow
-```
+## 10. قالب Proof Pack
 
-ملخص: 0–2 الفكرة → 2–4 Daily Brief → 4–6 10 فرص → 6–8 Trust + Approval → 8–10 الأمان → 10–12 العرض والـCTA.
+- `GET /api/v1/revenue-launch/proof-pack/template`.
 
-**الإغلاق:**
-> "تمام، نبدأ Pilot 7 أيام بـ499 ريال. أرسل لك خلال ساعة intake form + Moyasar invoice + موعد كيك-أوف."
+## 11. الدفع اليدوي (Moyasar)
 
----
+- `GET /api/v1/revenue-launch/payment/manual-flow` — تعليمات لوحة التحكم، قالب رسالة، قائمة تأكيد بعد الدفع.
+- **تذكير:** المبالغ غالباً بالهللات (١ ريال = ١٠٠ هللة) — راجع وثائق Moyasar.
 
-## 5. Pipeline Tracker
+## 12. ما لا نفعله اليوم
 
-8 stages:
-```
-identified → contacted → replied → demo_booked →
-diagnostic_sent → pilot_offered → paid → (or lost)
-```
+- لا charge من كود Dealix، لا إرسال Gmail/واتساب/تقويم حي، لا scraping LinkedIn، لا وعود بنتائج مضمونة.
 
-استخدم:
-```
-GET /api/v1/revenue-launch/pipeline/schema
-POST /api/v1/revenue-launch/pipeline/summarize
-```
+## روابط تقنية
 
-أو افتح Sheet باسم `Dealix First 20 Pipeline` بالعمدة المعرّفة في الـ schema.
-
----
-
-## 6. تسليم أول Pilot — خلال 24 ساعة
-
-بعد الدفع:
-1. **T+0h** — كيك-أوف + استلام intake.
-2. **T+1h** — Diagnosis (targeting + contactability).
-3. **T+6h** — Drafting (10 رسائل عربية + safety/tone evals).
-4. **T+18h** — Approval Pack (cards مع ≤3 أزرار).
-5. **T+24h** — Proof Pack v1 + جدولة جلسة المراجعة.
-
-استخدم:
-```
-GET /api/v1/revenue-launch/pilot-delivery/intake-form
-POST /api/v1/revenue-launch/pilot-delivery/24h-plan
-```
-
----
-
-## 7. الدفع اليدوي عبر Moyasar
-
-**لا live charge من API.** فقط:
-- Moyasar Dashboard → Invoices → Create Invoice.
-- 499 ريال = 49,900 halalas.
-- وصف: "Dealix Private Beta Pilot — 7 days".
-- إرسال للعميل بالإيميل.
-
-استخدم:
-```
-POST /api/v1/revenue-launch/payment/invoice-instructions
-POST /api/v1/revenue-launch/payment/link-message
-GET  /api/v1/revenue-launch/payment/confirmation-checklist
-```
-
-**قبل بدء التسليم:** تأكد invoice في حالة `paid` على Moyasar dashboard.
-
----
-
-## 8. Proof Pack — في نهاية الأسبوع
-
-5 أسطر executive summary + 8 metrics + توصية بالخطوة التالية.
-
-استخدم:
-```
-POST /api/v1/revenue-launch/proof-pack/template
-POST /api/v1/revenue-launch/proof-pack/client-summary
-POST /api/v1/revenue-launch/proof-pack/next-step
-```
-
----
-
-## 9. أهداف اليوم
-
-| Metric | Target |
-|--------|-------:|
-| Outreach sent | 20 |
-| Replies | 5 |
-| Demos booked | 3 |
-| Pilots paid | 1 |
-
-أهداف 7 أيام: 100 outreach / 20 ردود / 10 ديمو / 2 pilots مدفوعة.
-
-استخدم:
-```
-GET /api/v1/launch/scorecard/demo
-POST /api/v1/launch/scorecard/event
-POST /api/v1/launch/scorecard/daily
-POST /api/v1/launch/scorecard/weekly
-```
-
----
-
-## 10. Go / No-Go اليوم
-
-10 بوابات (`POST /api/v1/launch/go-no-go` أو `python scripts/launch_readiness_check.py`):
-
-1. Tests passed.
-2. Routes check OK.
-3. No secrets in repo.
-4. Staging /health → 200.
-5. Supabase staging configured.
-6. Service catalog ≥4 services.
-7. landing/private-beta.html ready.
-8. First-20 prospects identified.
-9. WHATSAPP/GMAIL/CALENDAR/MOYASAR live=false.
-10. Moyasar invoice/payment-link manual flow ready.
-
-**Critical gates** (must pass): `no_secrets`, `live_sends_disabled`, `staging_health`. Otherwise: NO-GO.
-
----
-
-## 11. ما لا تفعله اليوم
-
-- لا live WhatsApp/Gmail/Calendar/Moyasar من API.
-- لا scraping LinkedIn ولا auto-DM.
-- لا cold WhatsApp.
-- لا Public Launch / إعلان صحفي.
-- لا "نضمن نتائج".
-
----
-
-## 12. الخطوة بعد أول Pilot
-
-- Proof Pack → Case Study → ترقية لـ Growth OS Monthly.
-- Case Study → استخدمه في الـ outreach التالي.
-- متابعة شهرية مع Service Excellence backlog (ما يحسّن الخدمة).
+| الغرض | المسار |
+|--------|--------|
+| حزمة العروض | `GET /api/v1/revenue-launch/offer` |
+| ديمو + إغلاق | `GET /api/v1/revenue-launch/demo-flow` |
+| مخطط pipeline | `GET /api/v1/revenue-launch/pipeline/schema` |
+| تسليم Pilot | `GET /api/v1/revenue-launch/pilot-delivery` |
+| دفع يدوي | `GET /api/v1/revenue-launch/payment/manual-flow` |
+| Proof template | `GET /api/v1/revenue-launch/proof-pack/template` |

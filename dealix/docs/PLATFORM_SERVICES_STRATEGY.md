@@ -1,196 +1,54 @@
-# Platform Services Strategy — برج التحكم بالنمو
-## (Dealix Growth Control Tower)
+# استراتيجية Platform Services — Growth Control Tower
 
-> **الهدف:** تحويل Dealix من "WhatsApp Growth Operator" إلى **منصة نمو متعددة القنوات** تشتغل تحت سقف واحد، بسياسات أمان موحدة، ومسار اعتماد واحد، وبروتوكول أحداث موحد.
+## الهدف
 
----
+طبقة موحّدة تحت `/api/v1/platform/*` تجمع: **أحداث موحّدة**، **سياسة قنوات**، **بوابة أدوات بدون إرسال حي**، **Inbox موحّد** (بطاقات عربية)، **سجل قرارات**، و**تلخيص Proof** متوافق مع `auto_client_acquisition/innovation/proof_ledger.py` — دون تكرار «مصدر الحقيقة» للأحداث الدائمة في DB.
 
-## 1. لماذا Platform Services؟
+## مكوّنات الكود
 
-كل قناة (WhatsApp, Gmail, Calendar, LinkedIn, X, Instagram, GBP, Sheets, CRM, Moyasar, Website Forms) تحتاج:
-- تطبيع الإشارات (signal normalization).
-- سياسة قبول/رفض موحدة (PDPL-aware).
-- حل هوية متقاطع (cross-channel identity).
-- مدخل تنفيذي موحد (single tool gateway) لمنع الإرسال البارد، تسريب الأسرار، أو الدفع بدون تأكيد.
-- صندوق بريد موحد (unified inbox) ببطاقات قابلة للاعتماد.
-- سجل أفعال (action ledger) للمراجعة (SDAIA / PDPL).
-- سجل أثر (proof ledger) لتسويق "كم وفّرنا، كم سحبنا، كم منعنا من مخاطر".
+| وحدة | مسؤولية |
+|------|----------|
+| `event_bus` | أنواع أحداث + تحقق من الحقول الإلزامية (يشمل أنماطاً موسّعة مثل `email.received`, `payment.paid`, `review.created`) |
+| `channel_registry` | قدرات القناة، `beta_status`, `allowed_actions`, `blocked_actions`, `risk_level` |
+| `action_policy` | قواعد deterministic: إرسال خارجي → موافقة؛ واتساب بارد → محظور؛ دفع → تأكيد؛ مصدر غير معروف → مراجعة |
+| `tool_gateway` | لا شبكة ولا live — `draft_created` / `blocked` / `approval_required` / `unsupported` |
+| `unified_inbox` | تحويل حدث → بطاقة (`title_ar`, `summary_ar`, أزرار ≤ 3)؛ يمكن دمج لمسات من `build_demo_command_feed` كمرجع عرض |
+| `action_ledger` | سجل قرارات in-memory في MVP (قابل للاستبدال بـ DB) |
+| `proof_summary` | تلخيص يستند إلى `build_demo_proof_ledger()` |
+| `service_catalog` | خدمات قابلة للبيع كبيانات ثابتة + metadata |
 
-بدون هذه الطبقة، كل ميزة جديدة تحتاج تكامل مخصص → فوضى أمنية + أمنية + قانونية.
+## ما يُنفَّذ الآن مقابل مؤجل
 
----
+**الآن (MVP):** مسارات read-only / مسودات؛ `WHATSAPP_ALLOW_LIVE_SEND` يبقى افتراضياً `false` في [`core/config/settings.py`](../core/config/settings.py).
 
-## 2. الوحدات (10 modules)
+**مؤجل:** OAuth، توقيع webhook إنتاجي كامل، قاعدة أحداث دائمة لـ platform خارج نموذج الابتكار، تنفيذ فعلي لـ Gmail/Calendar/Moyasar.
 
-| # | الوحدة | الدور |
-|---|--------|------|
-| 1 | `event_bus` | تصنيف موحد لـ27 نوع حدث (whatsapp/email/calendar/lead/payment/review/social/partner/sheet/crm/action). |
-| 2 | `identity_resolution` | دمج phone + email + CRM ID + social handles → هوية موحدة. |
-| 3 | `channel_registry` | 11 قناة، لكل واحدة capabilities + allowed/blocked actions + PDPL notes. |
-| 4 | `action_policy` | محرك قواعد (block_cold_whatsapp, block_payment_no_confirm, block_secrets, external_send_needs_approval...). |
-| 5 | `tool_gateway` | المخرج التنفيذي الوحيد. كل أداة تمر من هنا → سياسة → draft / approval_required / blocked / ready. |
-| 6 | `unified_inbox` | بطاقات قرار (≤3 أزرار، عربية، type+risk+recommended_action). |
-| 7 | `action_ledger` | سجل كل فعل بمراحله (requested → approved → executed). |
-| 8 | `proof_ledger` | عدّاد أثر (leads, meetings, drafts, sends, payments, revenue, risks_blocked, time_saved). |
-| 9 | `service_catalog` | 12 خدمة قابلة للبيع تحت Dealix Operator OS. |
-| 10 | (router + tests) | `api/routers/platform_services.py` + اختبارات شاملة. |
+## Inbox و Command Cards
 
----
+- كل بطاقة: عنوان عربي، ملخص، **ثلاثة أزرار كحد أقصى** (`label_ar` + `action_id`).
+- مصادر الحدث: نماذج leads موثّقة، أحداث داخلية، لاحقاً قنوات مسجّلة فقط.
 
-## 3. القنوات الـ11
+## امتثال PDPL / opt-in
 
-```
-whatsapp, gmail, google_calendar, moyasar, linkedin_lead_forms,
-x_api, instagram_graph, google_business_profile, google_sheets,
-crm, website_forms
-```
+- لا تخزين بيانات حساسة في سجل الـ MVP بدون سياسة موثّقة.
+- أي إرسال جماعي أو بارد يمر عبر `action_policy` + موافقة بشرية؛ راجع [`PRIVATE_BETA_RUNBOOK.md`](PRIVATE_BETA_RUNBOOK.md) و[`BETA_PRIVATE_GATES_CHECKLIST.md`](BETA_PRIVATE_GATES_CHECKLIST.md).
 
-كل قناة لها:
-- `capabilities`
-- `beta_status` (`live` / `beta` / `coming_soon`)
-- `allowed_actions` / `blocked_actions`
-- `risk_level`
-- `notes_ar`
+## العلاقة بـ Innovation
 
-مثال: WhatsApp **يحظر** `cold_send_without_consent`. Gmail يستخدم `gmail.compose` فقط (drafts). Calendar `live_inserted=False` حتى يربط OAuth.
+`innovation` يبقى مسار العرض والـ Kill features (`ten-in-ten`, command feed demo/live). Platform **تلتف** على الدوال التجريبية للـ Proof حيث يلزم، ولا تعيد تعريف أحداث الـ ledger الدائمة.
 
----
+## طبقات «برج التحكم» الإضافية (كود حالي)
 
-## 4. سياسة الأمان (Action Policy)
+| طبقة | مجلد | مسارات API رئيسية |
+|------|------|---------------------|
+| Security curator | `auto_client_acquisition/security_curator/` | `/api/v1/security-curator/*` — redact، inspect-diff |
+| Growth curator | `auto_client_acquisition/growth_curator/` | `/api/v1/growth-curator/*` — grade، تقرير أسبوعي demo |
+| Meeting intelligence | `auto_client_acquisition/meeting_intelligence/` | `/api/v1/meeting-intelligence/*` — تلخيص نص، متابعة، brief |
+| Model router | `auto_client_acquisition/model_router/` | `/api/v1/model-router/*` — tasks، route، providers |
+| Connectors | `auto_client_acquisition/connectors/` | `GET /api/v1/connectors/catalog` |
+| Agent observability | `auto_client_acquisition/agent_observability/` | `/api/v1/agent-observability/*` — evals، trace shape |
+| Growth operator (aliases) | `api/routers/growth_operator.py` | `/api/v1/growth-operator/missions`، `.../proof-pack/demo` |
 
-**قواعد block أساسية:**
-1. WhatsApp بارد بدون consent → **blocked** (PDPL).
-2. أي charge/refund بدون `user_confirmed=true` → **blocked**.
-3. أي payload يحوي `api_key/secret/token/...` → **blocked**.
+**Growth operator** لا يضاعف المنطق: يضيف `canonical_route` للإشارة إلى مصدر الحقيقة في `innovation` و`business`.
 
-**قواعد approval_required:**
-- أي إرسال خارجي (`send_*`) → اعتماد إنساني.
-- إدراج موعد في تقويم → اعتماد.
-- DM على سوشل → اعتماد + opt-in.
-- صفقة قيمتها ≥ 200,000 ريال → اعتماد.
-
-**default:** allow (للـ read-only data ops).
-
----
-
-## 5. Tool Gateway
-
-كل أداة (`whatsapp.send_message`, `gmail.compose`, `calendar.insert_event`, `moyasar.refund`, `gbp.reply_review`, ...) **يجب** تمر من `invoke_tool()`.
-
-النتائج المحتملة:
-- `unsupported` — أداة غير مسجلة.
-- `blocked` — السياسة منعت.
-- `approval_required` — تحتاج قبول إنساني.
-- `draft_created` — افتراضياً (live env flag = OFF).
-- `ready_for_adapter` — جاهز للتنفيذ الحقيقي إذا اشتغل live env flag.
-
-**Live env flags** (افتراضياً كلها OFF):
-```
-WHATSAPP_ALLOW_LIVE_SEND
-GMAIL_ALLOW_LIVE_SEND
-CALENDAR_ALLOW_LIVE_INSERT
-MOYASAR_ALLOW_LIVE_CHARGE
-GBP_ALLOW_LIVE_REPLY
-```
-
----
-
-## 6. صندوق البريد الموحد (Unified Inbox)
-
-8 أنواع بطاقات:
-```
-opportunity, email_lead, whatsapp_reply, payment,
-meeting_prep, review_response, partner_suggestion, action_required
-```
-
-كل بطاقة:
-- ≤3 أزرار (تطبيق قيد WhatsApp Reply Buttons).
-- عربية (title_ar, summary_ar, why_it_matters_ar, recommended_action_ar).
-- `risk_level` (low/medium/high).
-
-البطاقات تُبنى تلقائياً من `PlatformEvent` عبر `build_card_from_event()`.
-
----
-
-## 7. Proof Ledger
-
-عدّاد يقيس الأثر العملي للمنصة:
-```
-leads_created, meetings_booked, drafts_approved,
-messages_sent, payments_initiated, payments_paid,
-revenue_influenced_sar, risks_blocked, time_saved_hours,
-partner_opportunities, by_channel
-```
-
-هذا هو **Marketing Asset** — لتُري العميل: "في 30 يوم، نحن ساعدناك تعمل X، منعنا Y مخاطر، وفرنا Z ساعة".
-
----
-
-## 8. خدمات قابلة للبيع (Service Catalog)
-
-12 خدمة تجارية:
-1. `growth_operator_subscription` — اشتراك شهري للمنصة.
-2. `channel_setup_service` — ربط القنوات (one-time).
-3. `lead_intelligence_service` — إثراء + تأهيل لقاءات.
-4. `outreach_approval_service` — drafts + approval workflow.
-5. `partnership_sprint` — فرص تعاون عبر Partner Graph.
-6. `email_revenue_rescue` — استعادة عملاء إيميل.
-7. `social_growth_os` — تنبيهات + drafts + جدولة.
-8. `local_business_growth` — GBP + reviews + visibility.
-9. `ai_visibility_aeo_sprint` — Answer Engine Optimization.
-10. `revenue_proof_pack_service` — تقرير أثر لمستثمرين / عملاء.
-11. `customer_success_operator` — خفض churn + توسيع.
-12. `payments_collections_operator` — تذكير + تحصيل (Moyasar).
-
----
-
-## 9. Endpoints (`/api/v1/platform/...`)
-
-```
-GET  /services/catalog
-GET  /channels
-GET  /channels/{channel_key}
-GET  /policy/rules
-POST /actions/evaluate
-POST /actions/approve
-GET  /ledger/summary
-POST /events/ingest
-GET  /inbox/feed
-POST /identity/resolve
-GET  /identity/resolve-demo
-POST /tools/invoke
-GET  /proof-ledger/demo
-```
-
----
-
-## 10. اختبارات
-
-`tests/unit/test_platform_services.py` — تغطية لكل الوحدات الـ10:
-- catalog completeness
-- channel coverage + cold-send blocked
-- event validation
-- policy (cold WA blocked, secrets blocked, payment confirmation, external send approval, high-value review)
-- gateway (unsupported / blocked / draft default / live flag check)
-- identity multi-signal merge
-- inbox card validation (≤3 buttons + valid type)
-- action ledger summary
-- proof ledger structure
-
----
-
-## 11. ما لا تفعله هذه الطبقة
-
-- **لا** ترسل واتساب فعلياً (افتراضياً draft).
-- **لا** ترسل Gmail فعلياً.
-- **لا** تدرج موعد في Google Calendar.
-- **لا** تأخذ أو تعيد دفعة بدون user_confirmed.
-- **لا** تخزن مفاتيح API في payload.
-
----
-
-## 12. ما يلي
-
-- ربط Adapters حقيقية (WhatsApp Cloud, Gmail, Calendar) خلف الـenv flags.
-- استبدال in-memory ledgers بـ Supabase.
-- تشغيل `proof_ledger` على بيانات إنتاج مع تجربة عميل واحد.
+لخطة تنفيذ بالعربية: [`EXECUTION_ROADMAP_AR.md`](EXECUTION_ROADMAP_AR.md).

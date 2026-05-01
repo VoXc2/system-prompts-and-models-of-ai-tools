@@ -1,110 +1,59 @@
-# Private Beta Launch — Today's Plan
+# Private Beta — «اليوم» (تشغيل وبيع)
 
-> **القرار:** ندشّن **Private Beta** اليوم، ليس Public Launch.
-> **العرض الأساسي:** "10 فرص في 10 دقائق" + Pilot 7 أيام + Proof Pack.
+قائمة تشغيل قبل أول عميل بيتا. تفاصيل تقنية إضافية: [`PRIVATE_BETA_RUNBOOK.md`](PRIVATE_BETA_RUNBOOK.md). ديمو ١٢ دقيقة: [`DEMO_SCRIPT_12_MINUTES.md`](DEMO_SCRIPT_12_MINUTES.md). رسائل أول ٢٠: [`FIRST_20_OUTREACH_MESSAGES.md`](FIRST_20_OUTREACH_MESSAGES.md).
 
----
+## ما ندشّنه اليوم
 
-## 1. العرض
+- **Private Beta** (ليس إطلاقاً عاماً): عرض Pilot + قيمة واضحة + موافقات.
+- **أربعة عروض أولى:** تشخيص مجاني، ذكاء قوائم، سباق ١٠ فرص، Growth OS Pilot — انظر [`landing/services.html`](../landing/services.html).
+- **نسختان للصفحات الحرجة:** [`landing/private-beta-en.html`](../landing/private-beta-en.html)، [`landing/services-en.html`](../landing/services-en.html)، [`landing/command-center-en.html`](../landing/command-center-en.html) — روابط «English» من الصفحات العربية المقابلة. خريطة كاملة: [`FRONTEND_AND_API_MAP.md`](FRONTEND_AND_API_MAP.md).
+- **Autonomous Revenue Company OS:** مرجع الفئة والطبقات — [`AUTONOMOUS_REVENUE_COMPANY_OS.md`](AUTONOMOUS_REVENUE_COMPANY_OS.md)؛ واجهة تشغيل تجريبية: `GET /api/v1/operator/bundles`، `POST /api/v1/operator/chat/message`؛ طبقة أحداث وبطاقات: `GET /api/v1/revenue-os/company-os/command-feed/demo`.
 
-```
-Pilot 7 أيام: 499 ريال أو مجاني مقابل case study
-- 10 فرص B2B مع why-now
-- 10 رسائل عربية جاهزة
-- contactability + سياسة عدم الإرسال البارد
-- متابعة لمدة 7 أيام
-- Proof Pack بعد الأسبوع
+## ما لا ندشّنه اليوم
 
-Paid Pilot 30 يوم: 1,500–3,000 ريال
-Growth OS اشتراك شهري: 2,999 ريال
-```
+- إرسال واتساب جماعي بارد، Gmail إرسال تلقائي، إدراج تقويم حي بدون موافقة، شحن بطاقات داخل المنتج، scraping LinkedIn.
 
-## 2. من نستهدف اليوم (أول 20)
+## بيئة
 
-1. وكالات تسويق B2B سعودية.
-2. مستشارون نمو.
-3. شركات تدريب B2B.
-4. SaaS سعودية صغيرة-متوسطة.
-5. شركات عقار/خدمات لديها واتساب نشط.
-6. أصدقاء مؤسسين سعوديين.
+- [ ] Staging يعمل (`GET /health`).
+- [ ] `WHATSAPP_ALLOW_LIVE_SEND=false` (افتراضي) ما لم يُوثَّق خلاف ذلك.
+- [ ] أسرار Moyasar / Google / Meta **غير** مكشوفة في الريبو أو اللوجات.
 
-## 3. Demo Flow (12 دقيقة)
+## API سريعة للتحقق
 
-راجع [`DEMO_SCRIPT_12_MINUTES.md`](DEMO_SCRIPT_12_MINUTES.md).
+- [ ] `GET /api/v1/growth-operator/missions`
+- [ ] `GET /api/v1/platform/inbox/feed`
+- [ ] `GET /api/v1/platform/proof/overview`
+- [ ] `POST /api/v1/platform/events/ingest` مع `source: trusted_simulation`
+- [ ] `GET /api/v1/security-curator/demo`
+- [ ] `GET /api/v1/services/catalog`
+- [ ] `GET /api/v1/launch/go-no-go` و `GET /api/v1/launch/scorecard`
+- [ ] `GET /api/v1/revenue-launch/offer` و `GET /api/v1/revenue-launch/offer?lang=en` (تسميات إنجليزية إضافية بجانب العربية)
 
-## 4. شروط القبول للعميل
+## Go / No-Go (آلي demo)
 
-العميل المثالي للـPrivate Beta:
-- شركة سعودية أو خليجية B2B.
-- لديها ≥3 موظفين مبيعات أو نمو.
-- مرتاحة بالعربي + الإنجليزي.
-- مستعدة لإعطاء feedback أسبوعي.
-- تقبل أنه draft-first (لا live send افتراضياً).
+شغّل `GET /api/v1/launch/go-no-go` بعد `pytest` و`print_routes`. تحذير staging متوقع حتى يُفعّل `STAGING_BASE_URL` في `smoke_staging.py`.
 
-## 5. ما يعمل الآن (Phase 1 ready)
+## تحقق آلي (مرجع الجلسة)
 
-- `/api/v1/personal-operator/daily-brief`
-- `/api/v1/growth-operator/missions`
-- `/api/v1/growth-operator/proof-pack/demo`
-- `/api/v1/intelligence/command-feed/demo`
-- `/api/v1/intelligence/missions` + `/missions/recommend`
-- `/api/v1/intelligence/simulate-opportunity`
-- `/api/v1/intelligence/board-brief/demo`
-- `/api/v1/platform/services/catalog`
-- `/api/v1/platform/inbox/feed`
-- `/api/v1/platform/proof-ledger/demo`
-- `/api/v1/security-curator/demo`
-- `/api/v1/growth-curator/report/demo`
-- `/api/v1/meeting-intelligence/brief/demo`
-- `/api/v1/connector-catalog/catalog`
+من مجلد `dealix`: `python -m pytest -q --no-cov`، ثم `python scripts/smoke_inprocess.py`، ثم `python scripts/launch_readiness_check.py`. بعد نشر staging: `python scripts/smoke_staging.py --base-url https://<host>`. سجّل النتائج في [`POST_MERGE_VERIFICATION.md`](POST_MERGE_VERIFICATION.md).
 
-## 6. ما يبقى Draft فقط
+## عملية بشرية
 
-- WhatsApp send (live flag OFF).
-- Gmail send (live flag OFF).
-- Calendar insert (live flag OFF).
-- Moyasar charge (live flag OFF — invoice/link manual).
-- Social DMs.
+- [ ] اتفاق pilot موقّع (نطاق، PDPL، قنوات مسموحة).
+- [ ] مسؤول مراجعة لكل «إرسال» أو «دفع» خارجي.
+- [ ] قناة دعم للعميل (واتساب أو إيميل داخلي).
 
-## 7. المخاطر
+## بعد الجلسة الأولى
 
-- WhatsApp: PDPL — لا cold بدون opt-in.
-- Gmail: SPF/DKIM/DMARC للـdomain.
-- Moyasar: live keys ممنوعة في staging.
-- Secrets: GitHub Push Protection + Patch Firewall + Trace Redactor.
-- Hallucinations: Saudi Tone + Safety evals قبل publish.
+- صدّر ملاحظات إلى `growth-curator` و`meeting-intelligence` كتحسين لمسودات الأسبوع التالي.
 
-## 8. Go-Checklist قبل أول demo
+## الصفحات (عرض)
 
-- [ ] CI أخضر (`Dealix API CI`).
-- [ ] `pytest -q` ≥663 passed.
-- [ ] Staging URL يستجيب على `/health`.
-- [ ] جميع env flags الـ`*_ALLOW_LIVE_*` = false.
-- [ ] `secret_redactor` و`patch_firewall` يعملان.
-- [ ] Demo URL مفتوح على `/api/v1/intelligence/command-feed/demo`.
-- [ ] Demo URL مفتوح على `/api/v1/growth-operator/proof-pack/demo`.
-- [ ] رسالة DM 1 جاهزة (راجع `FIRST_20_OUTREACH_MESSAGES.md`).
+- [`landing/private-beta.html`](../landing/private-beta.html)
+- [`landing/list-intelligence.html`](../landing/list-intelligence.html)
+- [`landing/growth-os.html`](../landing/growth-os.html)
 
-## 9. Post-Demo Checklist
+## الإطلاق التجاري الأوسع
 
-- [ ] قائمة 5 demos مجدولة.
-- [ ] قائمة 3 pilots محتملين.
-- [ ] feedback مكتوب لكل demo.
-- [ ] Proof Pack template جاهز.
-- [ ] أول Moyasar invoice draft (إن وُجد عميل).
-
-## 10. ما لا نفعله اليوم
-
-- لا public launch.
-- لا live WhatsApp send.
-- لا charges.
-- لا "نضمن نتائج".
-- لا scraping.
-- لا إصدار صحفي.
-
-## 11. الخطوة التالية بعد أول 3 demos
-
-- استخراج الاعتراضات الموحدة → cards في `command_feed`.
-- معايرة الأسعار (هل 499 رخيص جداً؟).
-- اختيار vertical: تدريب أو وكالات أو SaaS.
-- تجهيز case study واحد على الأقل.
+انظر [`COMMERCIAL_LAUNCH_MASTER_PLAN.md`](COMMERCIAL_LAUNCH_MASTER_PLAN.md).

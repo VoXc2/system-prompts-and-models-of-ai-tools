@@ -1,291 +1,78 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dealix — Private Beta</title>
-<meta name="description" content="Dealix Private Beta — مدير نمو عربي للشركات السعودية. 10 فرص في 10 دقائق + رسائل + متابعة + Proof Pack." />
-<style>
-  :root {
-    --bg: #0f1115;
-    --panel: #181b22;
-    --text: #f5f5f7;
-    --muted: #a8aab2;
-    --brand: #ffd166;
-    --brand-2: #ef476f;
-    --good: #06d6a0;
-    --warn: #ff9f1c;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    padding: 0;
-  }
-  header {
-    padding: 48px 24px 24px;
-    text-align: center;
-    background: linear-gradient(135deg, #1a1d27 0%, #0f1115 100%);
-  }
-  header .badge {
-    display: inline-block;
-    padding: 6px 14px;
-    background: rgba(255, 209, 102, 0.15);
-    color: var(--brand);
-    border-radius: 20px;
-    font-size: 14px;
-    margin-bottom: 18px;
-    border: 1px solid rgba(255, 209, 102, 0.3);
-  }
-  header h1 {
-    font-size: 44px;
-    line-height: 1.2;
-    margin-bottom: 18px;
-    color: var(--text);
-  }
-  header h1 span { color: var(--brand); }
-  header p.subtitle {
-    font-size: 19px;
-    color: var(--muted);
-    max-width: 720px;
-    margin: 0 auto 32px;
-  }
-  .cta {
-    display: inline-block;
-    padding: 14px 28px;
-    background: var(--brand);
-    color: #0f1115;
-    border-radius: 10px;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: 17px;
-    margin: 6px;
-    border: none;
-    cursor: pointer;
-  }
-  .cta.secondary {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid #383b44;
-  }
-  main { max-width: 920px; margin: 0 auto; padding: 24px; }
-  section {
-    background: var(--panel);
-    padding: 28px;
-    border-radius: 14px;
-    margin: 18px 0;
-    border: 1px solid #232631;
-  }
-  section h2 { font-size: 24px; margin-bottom: 14px; color: var(--brand); }
-  section h3 { font-size: 18px; margin: 18px 0 8px; color: var(--text); }
-  ul { list-style: none; padding-right: 0; }
-  ul li {
-    padding: 8px 0;
-    padding-right: 26px;
-    position: relative;
-    color: var(--text);
-  }
-  ul li:before {
-    content: "✓";
-    color: var(--good);
-    position: absolute;
-    right: 0;
-    font-weight: 700;
-  }
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-    margin-top: 14px;
-  }
-  .price-card {
-    padding: 18px;
-    background: #1f232c;
-    border-radius: 10px;
-    border: 1px solid #2a2e39;
-  }
-  .price-card .label { color: var(--muted); font-size: 14px; }
-  .price-card .price { font-size: 26px; font-weight: 700; color: var(--brand); margin: 6px 0; }
-  .safe-banner {
-    background: rgba(6, 214, 160, 0.1);
-    color: var(--good);
-    padding: 14px 18px;
-    border-radius: 10px;
-    border: 1px solid rgba(6, 214, 160, 0.3);
-    margin: 18px 0;
-  }
-  footer {
-    text-align: center;
-    padding: 28px;
-    color: var(--muted);
-    font-size: 14px;
-    border-top: 1px solid #232631;
-    margin-top: 32px;
-  }
-  .endpoint {
-    background: #11141a;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-family: monospace;
-    font-size: 14px;
-    color: var(--brand);
-    display: inline-block;
-    margin: 2px 0;
-    border: 1px solid #232631;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix — البيتا الخاصة | Growth Control Tower</title>
+  <meta name="description" content="Dealix Autonomous Revenue Company OS — ليس CRM ولا بوت عادي: مشغّل نمو سعودي، مسودات أولاً، Proof Pack، Pilot 499 وGrowth OS من 2999." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <header>
-    <span class="badge">Private Beta — Pilot 499 ريال يبدأ اليوم</span>
-    <h1>10 فرص B2B + رسائل عربية + متابعة <span>خلال 48 ساعة</span></h1>
-    <p class="subtitle">
-      Dealix هو Saudi Revenue Execution OS — مش CRM، ولا WhatsApp bot، ولا lead scraper.
-      <br/>
-      <strong style="color: var(--brand);">Pilot 7 أيام بـ 499 ريال فقط.</strong>
-      تسليم خلال 48 ساعة. لا إرسال خارجي بدون موافقتك.
+  <nav style="max-width:56rem;margin:0 auto;padding:0.75rem 1rem;display:flex;flex-wrap:wrap;gap:0.5rem 1rem;justify-content:center;font-size:0.9rem;border-bottom:1px solid #e2e8f0;">
+    <a href="companies.html">للشركات</a>
+    <a href="marketers.html">للوكالات والمسوقين</a>
+    <a href="private-beta.html">Private Beta</a>
+    <a href="services.html">الخدمات</a>
+    <a href="mailto:hello@dealix.sa?subject=Dealix%20Demo">احجز ديمو</a>
+    <a href="index.html">الرئيسية</a>
+  </nav>
+  <p style="text-align:center;margin:0.75rem 0 0;font-size:0.9rem;"><a href="private-beta-en.html" hreflang="en">English</a></p>
+  <header class="hero" style="padding: 3rem 1.5rem; text-align: center;">
+    <p class="eyebrow" style="letter-spacing: 0.08em; color: var(--muted, #64748b); font-size: 0.85rem;">البيتا الخاصة</p>
+    <h1 style="font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: clamp(1.75rem, 4vw, 2.5rem); margin: 0.5rem 0;">
+      برج تحكم بالنمو — مسودات أولاً، قرارك آخراً
+    </h1>
+    <p class="lede" style="max-width: 36rem; margin: 1rem auto; line-height: 1.7; color: var(--text-secondary, #475569);">
+      <strong>Autonomous Revenue Company OS</strong> — نظام يشغّل نموك من المحادثة إلى الخدمة والموافقة والإثبات: ليس CRM، وليس أداة واتساب فقط. صندوق وارد، بطاقات قرار، <strong>Approval-first</strong>، و<strong>Proof Pack</strong> — بدون إرسال جماعي بارد ولا شحن تلقائي في MVP.
     </p>
-    <a href="mailto:bassam.m.assiri@gmail.com?subject=Pilot%20499%20-%20%5Baسم%20الشركة%5D&body=الاسم%3A%0Aالشركة%3A%0Aالقطاع%3A%0Aالمدينة%3A%0Aالعميل%20المثالي%3A" class="cta">احجز Pilot 499 الآن</a>
-    <a href="#what-you-get" class="cta secondary">شاهد ماذا تحصل</a>
-    <p style="margin-top: 18px; color: var(--muted); font-size: 14px;">
-      أو ضمان: لو ما عجبك خلال 7 أيام، تستردّ كامل المبلغ — أو نحوّله Case Study مجاني.
+    <p style="max-width: 40rem; margin: 1rem auto; padding: 0.75rem 1rem; background: #f1f5f9; border-radius: 8px; font-size: 0.95rem; line-height: 1.65;">
+      <strong>لا إرسال بدون موافقتك.</strong> المسودات والعروض للمراجعة فقط؛ التحصيل عبر فاتورة أو رابط دفع يدوي (مثلاً Moyasar) وليس charge تلقائي من المنصة في هذه المرحلة.
     </p>
+    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+      <a class="btn btn--primary" href="mailto:hello@dealix.sa?subject=Pilot%207%20أيام%20499%20ريال%20Dealix">ابدأ Pilot — ٤٩٩ ريال (٧ أيام)</a>
+      <a class="btn btn--primary" href="mailto:hello@dealix.sa?subject=تشخيص%20نمو%20مجاني%20Dealix">تشخيص نمو مجاني</a>
+      <a class="btn btn--ghost" href="mailto:hello@dealix.sa?subject=حجز%20ديمو%201٥%20دقيقة">ديمو ١٥ دقيقة</a>
+      <a class="btn btn--ghost" href="../docs/PRIVATE_BETA_LAUNCH_TODAY.md">قائمة التشغيل</a>
+    </div>
   </header>
-
-  <main style="margin-bottom: 0;">
-    <section style="background: linear-gradient(135deg, rgba(255,209,102,0.08), rgba(239,71,111,0.06)); border: 1px solid rgba(255,209,102,0.3); margin-top: 0;">
-      <h2 style="color: var(--brand);">عرض اليوم — Pilot 499 ريال</h2>
-      <div class="pricing-grid">
-        <div class="price-card" style="border: 2px solid var(--brand);">
-          <div class="label">First 10 Opportunities Sprint</div>
-          <div class="price">499 ر.س</div>
-          <div style="color: var(--good); font-weight: 700;">يبدأ خلال 24 ساعة</div>
-          <ul style="margin-top: 10px; font-size: 14px;">
-            <li>10 فرص B2B بأسماء حقيقية</li>
-            <li>10 رسائل عربية جاهزة</li>
-            <li>خطة متابعة 7 أيام</li>
-            <li>Proof Pack نهائي</li>
-            <li>تسليم ≤ 48 ساعة</li>
-          </ul>
-          <a href="mailto:bassam.m.assiri@gmail.com?subject=Pilot%20499%20-%20%5Bاسم%20الشركة%5D" class="cta" style="margin-top: 14px; width: 100%; text-align: center;">ابدأ Pilot الآن</a>
-        </div>
-        <div class="price-card">
-          <div class="label">Free Diagnostic</div>
-          <div class="price" style="color: var(--good);">مجاني</div>
-          <div>تسليم خلال 24 ساعة</div>
-          <ul style="margin-top: 10px; font-size: 14px;">
-            <li>3 فرص محددة</li>
-            <li>1 رسالة عربية جاهزة</li>
-            <li>1 مخاطرة موجودة الآن</li>
-            <li>1 توصية خدمة</li>
-          </ul>
-          <a href="mailto:bassam.m.assiri@gmail.com?subject=Free%20Diagnostic%20-%20%5Bاسم%20الشركة%5D" class="cta secondary" style="margin-top: 14px; width: 100%; text-align: center;">جرّب مجاناً</a>
-        </div>
-        <div class="price-card">
-          <div class="label">Growth OS Monthly</div>
-          <div class="price">2,999 ر.س/شهر</div>
-          <div>اشتراك مستمر</div>
-          <ul style="margin-top: 10px; font-size: 14px;">
-            <li>30+ فرصة شهرياً</li>
-            <li>متابعة + Reply classifier</li>
-            <li>Proof Pack أسبوعي</li>
-            <li>Weekly check-in</li>
-          </ul>
-          <span style="display: block; margin-top: 14px; color: var(--muted); font-size: 13px;">يُقدَّم بعد Pilot ناجح فقط.</span>
-        </div>
-      </div>
-      <p style="margin-top: 18px; color: var(--muted); font-size: 14px;">
-        الدفع عبر Moyasar (invoice يدوي). لا API charge. لا اشتراك تلقائي.
+  <main style="max-width: 48rem; margin: 0 auto 4rem; padding: 0 1.25rem;">
+    <section style="margin-bottom: 2rem; padding: 1.5rem; border: 2px solid #0ea5e9; border-radius: 14px; background: linear-gradient(165deg, #f0f9ff 0%, #fff 55%);">
+      <h2 style="font-size: 1.35rem; margin-top: 0; color: #0f172a;">Pilot — ٤٩٩ ريال / ٧ أيام</h2>
+      <p style="line-height: 1.8; color: #334155; margin: 0.5rem 0 1rem;">
+        للشركات: <strong>Dealix يحوّل بياناتك وقنواتك إلى فرص ورسائل واجتماعات وProof Pack، بموافقة قبل أي تواصل.</strong><br />
+        للوكالات: <strong>Dealix يعطي وكالتك Growth OS لعملائك: تشخيص، فرص، رسائل، موافقات، وProof Pack باسمك.</strong>
       </p>
+      <p style="line-height: 1.85; color: #475569; margin: 0 0 1rem;">
+        يشمل الـ Pilot: <strong>١٠ فرص</strong> مناسبة، <strong>رسائل عربية</strong> جاهزة للمراجعة، <strong>فحص مخاطر القنوات</strong>، <strong>خطة متابعة</strong> لسبعة أيام، و<strong>Proof Pack مختصر</strong>. بعد الدفع نحتاج: رابط الموقع، القطاع، المدينة، العرض الرئيسي، وهل لديكم قائمة عملاء أم نبدأ بدون قائمة.
+      </p>
+      <a class="btn btn--primary" href="mailto:hello@dealix.sa?subject=طلب%20Pilot%20499%20ريال%20Dealix">اطلب Pilot بـ ٤٩٩ ريال</a>
     </section>
-
-    <section id="what-you-get">
-      <h2>وعد المنتج</h2>
-      <p>خلال 7 أيام، نطلع لك:</p>
-      <ul>
-        <li>10 فرص B2B مناسبة لقطاعك ومدينتك</li>
-        <li>سبب "لماذا الآن" لكل فرصة</li>
-        <li>رسائل عربية جاهزة (تحت 80 كلمة، نبرة طبيعية سعودية)</li>
-        <li>تصنيف الأرقام: آمن / يحتاج مراجعة / محظور</li>
-        <li>متابعة 7 أيام بعد القرار</li>
-        <li>Proof Pack: leads، رسائل معتمدة، اجتماعات، إيراد متأثر، مخاطر تم منعها</li>
+    <section style="margin-bottom: 2rem; padding: 1.25rem; border: 1px solid #e2e8f0; border-radius: 12px;">
+      <h2 style="font-size: 1.25rem; margin-top: 0;">عروض البيتا (اليوم)</h2>
+      <ul style="line-height: 1.9; color: var(--text-secondary, #475569); margin-bottom: 0;">
+        <li><strong>تشخيص نمو مجاني:</strong> عينة فرص + رسالة + مخاطر قناة — نقطة دخول سريعة.</li>
+        <li><strong>Pilot ٧ أيام — ٤٩٩ ريال:</strong> ١٠ فرص، رسائل عربية (مسودات)، فحص قابلية التواصل، خطة متابعة، Proof Pack مختصر.</li>
+        <li><strong>Growth OS Pilot (٣٠ يوم):</strong> نطاق أوسع — عادة ١٥٠٠–٣٠٠٠ ريال؛ يُحدَّد بعد الديمو.</li>
       </ul>
     </section>
-
-    <section>
-      <h2>الفرق عن المنافسين</h2>
-      <ul>
-        <li><strong>عربي طبيعي سعودي</strong> — لا تحية طيبة وبعد، لا synergy.</li>
-        <li><strong>Approval-first</strong> — لا إرسال واتساب/إيميل بدون موافقتك.</li>
-        <li><strong>PDPL-aware</strong> — لا cold WhatsApp بدون opt-in.</li>
-        <li><strong>Multi-channel</strong> — واتساب + إيميل + تقويم + SOCIAL + مدفوعات تحت سقف واحد.</li>
-        <li><strong>Self-improving</strong> — يتعلم من Accept/Skip/Edit ويحسّن الرسائل.</li>
-        <li><strong>Proof Pack</strong> — تقرير شهري بكل ما عمله Dealix.</li>
+    <section style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.25rem;">ما الذي يُفعّل في البيتا؟</h2>
+      <ul style="line-height: 1.9; color: var(--text-secondary, #475569);">
+        <li>عرض المهام والفرص التجريبية عبر واجهة API (مثال: <code>/api/v1/growth-operator/missions</code>).</li>
+        <li>مسودات Gmail/Calendar/Moyasar — بدون OAuth كامل حتى اكتمال الإعداد.</li>
+        <li>تقييم رسائل وتقارير Curator أسبوعية للعرض الداخلي.</li>
       </ul>
     </section>
-
-    <section id="demo">
-      <h2>ماذا يعمل اليوم؟</h2>
-      <p>كل هذه الـendpoints تعمل في staging الآن — يمكنك تجربتها مباشرة:</p>
-      <p>
-        <span class="endpoint">GET /api/v1/personal-operator/daily-brief</span><br/>
-        <span class="endpoint">GET /api/v1/intelligence/command-feed/demo</span><br/>
-        <span class="endpoint">GET /api/v1/intelligence/missions</span><br/>
-        <span class="endpoint">POST /api/v1/intelligence/simulate-opportunity</span><br/>
-        <span class="endpoint">GET /api/v1/intelligence/board-brief/demo</span><br/>
-        <span class="endpoint">GET /api/v1/growth-operator/proof-pack/demo</span><br/>
-        <span class="endpoint">GET /api/v1/platform/proof-ledger/demo</span><br/>
-        <span class="endpoint">GET /api/v1/connector-catalog/catalog</span><br/>
-        <span class="endpoint">GET /api/v1/security-curator/demo</span><br/>
-        <span class="endpoint">GET /api/v1/growth-curator/report/demo</span><br/>
-        <span class="endpoint">GET /api/v1/meeting-intelligence/brief/demo</span><br/>
-      </p>
-    </section>
-
     <section>
-      <h2>الأمان والامتثال</h2>
-      <div class="safe-banner">
-        <strong>القاعدة الذهبية:</strong> لا إرسال خارجي بدون موافقتك.
-        لا cold WhatsApp. لا charge بدون تأكيد. لا تخزّن بياناتك خارج المملكة بدون اتفاقية.
-      </div>
-      <ul>
-        <li>Tool Gateway: كل أداة (Gmail/Calendar/WhatsApp/Moyasar) تمر من سياسة قبل التنفيذ.</li>
-        <li>Patch Firewall: ما من سر يدخل الكود.</li>
-        <li>Trace Redactor: ما من رقم/إيميل يدخل الـlogs.</li>
-        <li>Saudi Tone Eval: كل رسالة تُقيّم قبل الإرسال.</li>
-        <li>Safety Eval: عبارات مثل "ضمان 100%" محظورة تلقائياً.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>للوكالات</h2>
-      <p>
-        إذا أنت وكالة تسويق B2B، Dealix يشتغل خلفك:
-        أنت تختار العميل، Dealix يطلع له 10 فرص + رسائل + متابعة،
-        وأنت تحصل على case study + revenue share.
-        ابحث عن "Partner Sprint" في Pilot المجاني.
+      <h2 style="font-size: 1.25rem;">الامتثال</h2>
+      <p style="line-height: 1.8; color: var(--text-secondary, #475569);">
+        نلتزم بمسار pilot موقّع، PDPL، وسياسات واتساب التجارية. التفاصيل في وثائق الريبو تحت <code>docs/PRIVATE_BETA_RUNBOOK.md</code>.
       </p>
-    </section>
-
-    <section style="background: linear-gradient(135deg, rgba(255,209,102,0.08), rgba(6,214,160,0.06)); border: 1px solid rgba(255,209,102,0.3);">
-      <h2 style="color: var(--brand);">جاهز نبدأ؟ — Pilot 499 ريال يبدأ خلال 24 ساعة</h2>
-      <p>
-        أرسل لي: اسمك + اسم شركتك + قطاعك + مدينتك + عميلك المثالي.
-        خلال 24 ساعة يصلك Free Diagnostic. خلال 48 ساعة Pilot كامل (10 فرص + 10 رسائل + متابعة).
-      </p>
-      <p style="margin: 14px 0; color: var(--good); font-weight: 700;">
-        ضمان: لو ما عجبك خلال 7 أيام، تستردّ كامل المبلغ.
-      </p>
-      <a href="mailto:bassam.m.assiri@gmail.com?subject=Pilot%20499%20-%20%5Bاسم%20الشركة%5D&body=الاسم%3A%0Aالشركة%3A%0Aالقطاع%3A%0Aالمدينة%3A%0Aالعميل%20المثالي%3A" class="cta">احجز Pilot 499 الآن</a>
-      <a href="mailto:bassam.m.assiri@gmail.com?subject=Free%20Diagnostic%20-%20%5Bاسم%20الشركة%5D" class="cta secondary">جرّب Free Diagnostic</a>
     </section>
   </main>
-
-  <footer>
-    Dealix — Saudi Autonomous Revenue Platform · Private Beta · 2026<br/>
-    bassam.m.assiri@gmail.com
-  </footer>
 </body>
 </html>

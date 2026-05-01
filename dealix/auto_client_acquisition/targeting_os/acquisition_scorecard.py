@@ -1,86 +1,39 @@
-"""Acquisition scorecard — يقيس النتائج بشكل deterministic."""
+"""Acquisition metrics snapshot — deterministic."""
 
 from __future__ import annotations
 
 from typing import Any
 
 
-def calculate_pipeline_created(opportunities: list[dict[str, Any]]) -> dict[str, Any]:
-    """Sum expected_value_sar across opportunities."""
-    total = sum(float(o.get("expected_value_sar", 0)) for o in opportunities or [])
-    return {
-        "opportunities_count": len(opportunities or []),
-        "pipeline_sar": round(total, 2),
-    }
+def calculate_pipeline_created(opportunities: list[dict[str, Any]]) -> int:
+    total = 0
+    for o in opportunities:
+        total += int(o.get("expected_value_sar") or o.get("expected_impact_sar") or 5000)
+    return total
 
 
-def calculate_meetings_booked(events: list[dict[str, Any]]) -> dict[str, Any]:
-    """Count meetings by status."""
-    drafted = sum(1 for e in events or [] if e.get("status") == "drafted")
-    confirmed = sum(1 for e in events or [] if e.get("status") == "confirmed")
-    completed = sum(1 for e in events or [] if e.get("status") == "completed")
-    return {
-        "drafted": drafted, "confirmed": confirmed, "completed": completed,
-        "total": drafted + confirmed + completed,
-    }
+def calculate_meetings_booked(events: list[dict[str, Any]]) -> int:
+    return sum(1 for e in events if e.get("type") == "meeting_booked")
 
 
-def calculate_risks_blocked(actions: list[dict[str, Any]]) -> dict[str, Any]:
-    """Count actions that were blocked by policy/contactability."""
-    blocked = [a for a in actions or [] if a.get("status") == "blocked"]
-    by_reason: dict[str, int] = {}
-    for a in blocked:
-        reason = a.get("block_reason", "unknown")
-        by_reason[reason] = by_reason.get(reason, 0) + 1
-    return {"total": len(blocked), "by_reason": by_reason}
+def calculate_risks_blocked(actions: list[dict[str, Any]]) -> int:
+    return sum(1 for a in actions if a.get("outcome") == "blocked")
 
 
-def calculate_productivity_score(metrics: dict[str, Any]) -> dict[str, Any]:
-    """Compute a productivity score 0..100 from key acquisition metrics."""
-    accounts = int(metrics.get("accounts_researched", 0))
-    drafts = int(metrics.get("drafts_created", 0))
-    approvals = int(metrics.get("approvals_received", 0))
-    replies = int(metrics.get("positive_replies", 0))
-    meetings = int(metrics.get("meetings_booked", 0))
-
-    score = 0
-    score += min(20, accounts // 3)
-    score += min(20, drafts * 2)
-    score += min(20, approvals * 4)
-    score += min(20, replies * 5)
-    score += min(20, meetings * 8)
-    score = max(0, min(100, score))
-
-    if score >= 70:
-        verdict = "strong"
-    elif score >= 40:
-        verdict = "decent"
-    else:
-        verdict = "needs_focus"
-
-    return {"score": score, "verdict": verdict}
+def calculate_productivity_score(metrics: dict[str, Any]) -> int:
+    base = 50
+    base += min(30, int(metrics.get("drafts_approved", 0)) * 3)
+    base += min(20, int(metrics.get("meetings_booked", 0)) * 5)
+    return max(0, min(100, base))
 
 
 def build_acquisition_scorecard(metrics: dict[str, Any]) -> dict[str, Any]:
-    """Build a comprehensive Arabic acquisition scorecard."""
-    pipeline = calculate_pipeline_created(metrics.get("opportunities", []))
-    meetings = calculate_meetings_booked(metrics.get("events", []))
-    risks = calculate_risks_blocked(metrics.get("actions", []))
-    productivity = calculate_productivity_score(metrics)
-
     return {
-        "summary_ar": [
-            f"الحسابات المُحلّلة: {metrics.get('accounts_researched', 0)}",
-            f"أصحاب القرار المُعرَّفين: {metrics.get('decision_makers_mapped', 0)}",
-            f"رسائل drafts: {metrics.get('drafts_created', 0)}",
-            f"اعتمادات: {metrics.get('approvals_received', 0)}",
-            f"ردود إيجابية: {metrics.get('positive_replies', 0)}",
-            f"اجتماعات: {meetings['total']}",
-            f"Pipeline متأثر: {pipeline['pipeline_sar']:.0f} ريال",
-            f"مخاطر تم منعها: {risks['total']}",
-        ],
-        "pipeline": pipeline,
-        "meetings": meetings,
-        "risks_blocked": risks,
-        "productivity_score": productivity,
+        "leads_created": metrics.get("leads_created", 0),
+        "meetings_booked": metrics.get("meetings_booked", 0),
+        "drafts_approved": metrics.get("drafts_approved", 0),
+        "risks_blocked": metrics.get("risks_blocked", 0),
+        "pipeline_created_sar": metrics.get("pipeline_created_sar", 0),
+        "productivity_score": calculate_productivity_score(metrics),
+        "demo": True,
     }

@@ -1,25 +1,11 @@
-"""Meeting Intelligence — pre-meeting briefs + post-meeting follow-ups.
+"""Meeting intelligence — transcript text to brief/follow-up (no Calendar insert)."""
 
-Designed to consume Google Meet transcripts (when OAuth + scopes allow) but
-works fine with manually-pasted transcripts during private beta.
-
-All outputs are Arabic, deterministic, and approval-required before any
-external action.
-"""
-
-from __future__ import annotations
-
-from .deal_risk import compute_deal_risk
-from .followup_builder import build_post_meeting_followup
-from .meeting_brief import build_pre_meeting_brief
-from .objection_extractor import extract_objections
-from .transcript_parser import parse_transcript_entries, summarize_meeting
+from auto_client_acquisition.meeting_intelligence.followup_builder import build_post_meeting_followup
+from auto_client_acquisition.meeting_intelligence.meeting_brief import build_pre_meeting_brief
+from auto_client_acquisition.meeting_intelligence.transcript_parser import summarize_transcript_text
 
 __all__ = [
     "build_post_meeting_followup",
     "build_pre_meeting_brief",
-    "compute_deal_risk",
-    "extract_objections",
-    "parse_transcript_entries",
-    "summarize_meeting",
+    "summarize_transcript_text",
 ]

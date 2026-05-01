@@ -1,193 +1,138 @@
-"""
-Safe Tool Gateway — single chokepoint for every external action.
-
-Returns one of: draft_created / approval_required / blocked /
-ready_for_adapter / unsupported. Never executes a live action here;
-the actual API call (Gmail/Calendar/WhatsApp/Moyasar/...) happens in
-the dedicated adapter that's gated by an explicit env flag.
-"""
+"""Tool execution facade — never performs live external I/O."""
 
 from __future__ import annotations
 
-import os
-from dataclasses import dataclass, field
 from typing import Any
 
+from auto_client_acquisition.platform_services.action_ledger import get_action_ledger
 from auto_client_acquisition.platform_services.action_policy import evaluate_action
-from auto_client_acquisition.platform_services.channel_registry import get_channel
 
-
-SUPPORTED_TOOLS: tuple[str, ...] = (
-    # Gmail / Email
-    "gmail.create_draft",
-    "gmail.read_thread",
-    # Calendar
-    "calendar.draft_event",
-    "calendar.insert_event",
-    # WhatsApp
-    "whatsapp.send_message",
-    "whatsapp.draft_message",
-    # Moyasar
-    "moyasar.create_payment_link",
-    "moyasar.create_invoice",
-    "moyasar.refund",
-    # Social
-    "social.post",
-    "social.send_dm",
-    # Sheets / CRM
-    "sheets.append_row",
-    "crm.update_deal_stage",
-    # Reviews
-    "gbp.reply_review",
-    "gbp.publish_post",
+_SUPPORTED = frozenset(
+    {
+        "send_message",
+        "create_payment_draft",
+        "moyasar_charge",
+        "moyasar_payment_link",
+        "ingest_lead",
+        "render_whatsapp_template_preview",
+        "gmail_draft",
+        "gmail_send",
+        "calendar_draft",
+        "calendar_insert",
+        "google_meet_transcript_read",
+        "social_reply",
+    }
 )
 
 
-@dataclass
-class GatewayResult:
-    """Outcome of a tool invocation through the gateway."""
-
-    status: str                    # draft_created / approval_required / blocked
-                                   # / ready_for_adapter / unsupported
-    tool: str
-    matched_policy_rule: str | None = None
-    reasons_ar: list[str] = field(default_factory=list)
-    next_action_ar: str = ""
-    payload_passthrough: dict[str, Any] | None = None
-
-
-# ── Live-execution flag — defaults to OFF ───────────────────────
-def _live_send_allowed(channel: str) -> bool:
-    """Each channel has its own env flag; OFF by default everywhere."""
-    flag_map = {
-        "whatsapp": "WHATSAPP_ALLOW_LIVE_SEND",
-        "gmail": "GMAIL_ALLOW_LIVE_SEND",
-        "google_calendar": "CALENDAR_ALLOW_LIVE_INSERT",
-        "moyasar": "MOYASAR_ALLOW_LIVE_CHARGE",
-        "social": "SOCIAL_ALLOW_LIVE_POST",
-        "x_api": "SOCIAL_ALLOW_LIVE_POST",
-        "instagram_graph": "SOCIAL_ALLOW_LIVE_POST",
-        "google_business_profile": "GBP_ALLOW_LIVE_REPLY",
-    }
-    flag = flag_map.get(channel)
-    if not flag:
-        return False
-    return os.environ.get(flag, "false").lower() in ("1", "true", "yes")
-
-
-# ── Public API ──────────────────────────────────────────────────
-def invoke_tool(
-    *,
-    tool: str,
-    payload: dict[str, Any] | None = None,
-    context: dict[str, Any] | None = None,
-) -> GatewayResult:
+def execute_tool(tool_name: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
     """
-    Single entry point for every tool action.
-
-    Flow: validate tool name → map to policy action → evaluate policy
-    → check live-send flag → return GatewayResult (never throws on
-    business-logic failures).
+    Returns one of: ``draft_created``, ``blocked``, ``approval_required``, ``unsupported``.
+    Never calls HTTP, SMTP, or WhatsApp APIs.
     """
-    if tool not in SUPPORTED_TOOLS:
-        return GatewayResult(
-            status="unsupported",
-            tool=tool,
-            reasons_ar=[f"الأداة غير مدعومة: {tool}"],
+    body = payload or {}
+    ledger = get_action_ledger()
+
+    if tool_name not in _SUPPORTED:
+        ledger.append_decision(tool=tool_name, outcome="unsupported", detail=body)
+        return {"status": "unsupported", "tool": tool_name, "approval_required": False}
+
+    if tool_name == "send_message":
+        channel = str(body.get("channel_id") or "email")
+        action = str(body.get("action") or "external_send")
+        pol = evaluate_action(
+            action=action,
+            channel_id=channel,
+            context=body.get("context") if isinstance(body.get("context"), dict) else {},
         )
+        if pol["state"] == "blocked":
+            ledger.append_decision(tool=tool_name, outcome="blocked", detail={"policy": pol})
+            return {"status": "blocked", "tool": tool_name, "policy": pol, "approval_required": False}
+        if pol["state"] in ("approval_required", "review"):
+            ledger.append_decision(tool=tool_name, outcome="approval_required", detail={"policy": pol})
+            return {
+                "status": "approval_required",
+                "tool": tool_name,
+                "policy": pol,
+                "approval_required": True,
+            }
+        ledger.append_decision(tool=tool_name, outcome="draft_created", detail={"policy": pol})
+        return {
+            "status": "draft_created",
+            "tool": tool_name,
+            "draft": {"channel_id": channel, "preview_ar": "مسودة داخلية — لا إرسال."},
+            "approval_required": False,
+        }
 
-    channel_key = tool.split(".", 1)[0]
-    channel = get_channel(_normalize_channel(channel_key))
-    payload = payload or {}
-    ctx = dict(context or {})
-    if "payload" not in ctx:
-        ctx["payload"] = payload
-
-    # Map tool → policy action (the granular labels the policy understands)
-    action_map: dict[str, str] = {
-        "gmail.create_draft": "create_draft",
-        "gmail.read_thread": "read_data",
-        "calendar.draft_event": "create_draft",
-        "calendar.insert_event": "calendar_insert_event",
-        "whatsapp.send_message": "send_whatsapp",
-        "whatsapp.draft_message": "create_draft",
-        "moyasar.create_payment_link": "create_draft",
-        "moyasar.create_invoice": "create_draft",
-        "moyasar.refund": "charge_payment",
-        "social.post": "post_social",
-        "social.send_dm": "send_social_dm",
-        "sheets.append_row": "create_draft",
-        "crm.update_deal_stage": "create_draft",
-        "gbp.reply_review": "post_social",
-        "gbp.publish_post": "post_social",
-    }
-    policy_action = action_map.get(tool, "create_draft")
-
-    decision = evaluate_action(action=policy_action, context=ctx)
-
-    if decision.decision == "blocked":
-        return GatewayResult(
-            status="blocked",
-            tool=tool,
-            matched_policy_rule=decision.matched_rule_id,
-            reasons_ar=decision.reasons_ar,
-            next_action_ar=decision.suggested_next_action_ar,
+    if tool_name in ("create_payment_draft", "moyasar_charge"):
+        pol = evaluate_action(
+            action="moyasar_charge",
+            channel_id="moyasar",
+            context={"user_confirmed": body.get("user_confirmed"), "amount_halalas": body.get("amount_halalas")},
         )
-    if decision.decision == "approval_required":
-        return GatewayResult(
-            status="approval_required",
-            tool=tool,
-            matched_policy_rule=decision.matched_rule_id,
-            reasons_ar=decision.reasons_ar,
-            next_action_ar=decision.suggested_next_action_ar,
-            payload_passthrough=payload,
-        )
+        ledger.append_decision(tool=tool_name, outcome=pol["state"], detail={"policy": pol})
+        return {
+            "status": "approval_required" if pol["state"] != "blocked" else "blocked",
+            "tool": tool_name,
+            "policy": pol,
+            "approval_required": pol["state"] != "blocked",
+        }
 
-    # decision == "allow" → check live-send flag for the channel
-    if _is_external_send(tool):
-        if _live_send_allowed(_normalize_channel(channel_key)):
-            return GatewayResult(
-                status="ready_for_adapter",
-                tool=tool,
-                reasons_ar=["السياسة موافقة + LIVE flag مفعل — جاهز لـ adapter."],
-                payload_passthrough=payload,
-            )
-        # Default: keep as draft
-        return GatewayResult(
-            status="draft_created",
-            tool=tool,
-            reasons_ar=["السياسة موافقة لكن LIVE flag غير مفعل — تم حفظه draft."],
-            payload_passthrough=payload,
-        )
+    if tool_name == "moyasar_payment_link":
+        ledger.append_decision(tool=tool_name, outcome="draft_created", detail=body)
+        return {
+            "status": "draft_created",
+            "tool": tool_name,
+            "draft": {"type": "payment_link_placeholder", "approval_required": True},
+            "approval_required": False,
+        }
 
-    return GatewayResult(
-        status="draft_created",
-        tool=tool,
-        reasons_ar=["إجراء داخلي / draft — لا تفاعل خارجي."],
-        payload_passthrough=payload,
-    )
+    if tool_name == "gmail_draft":
+        ledger.append_decision(tool=tool_name, outcome="draft_created", detail=body)
+        return {"status": "draft_created", "tool": tool_name, "approval_required": False}
 
+    if tool_name == "gmail_send":
+        ledger.append_decision(tool=tool_name, outcome="blocked", detail={"reason": "gmail_send_blocked_by_default"})
+        return {
+            "status": "blocked",
+            "tool": tool_name,
+            "policy": {"state": "blocked", "reason_ar": "إرسال Gmail معطّل افتراضياً — استخدم مسودة + موافقة لاحقاً."},
+            "approval_required": False,
+        }
 
-# ── Helpers ──────────────────────────────────────────────────────
-def _normalize_channel(prefix: str) -> str:
-    """Channel registry uses dotted keys; tool prefixes use snake."""
-    return {
-        "calendar": "google_calendar",
-        "gbp": "google_business_profile",
-        "social": "x_api",  # used as an umbrella prefix
-        "sheets": "google_sheets",
-    }.get(prefix, prefix)
+    if tool_name == "calendar_draft":
+        ledger.append_decision(tool=tool_name, outcome="draft_created", detail=body)
+        return {"status": "draft_created", "tool": tool_name, "approval_required": False}
 
+    if tool_name == "calendar_insert":
+        ledger.append_decision(tool=tool_name, outcome="approval_required", detail=body)
+        return {
+            "status": "approval_required",
+            "tool": tool_name,
+            "policy": {"state": "approval_required", "reason_ar": "إدراج حدث تقويم يحتاج موافقة صريحة."},
+            "approval_required": True,
+        }
 
-def _is_external_send(tool: str) -> bool:
-    return tool in {
-        "whatsapp.send_message",
-        "calendar.insert_event",
-        "moyasar.create_payment_link",
-        "moyasar.create_invoice",
-        "moyasar.refund",
-        "social.post",
-        "social.send_dm",
-        "gbp.reply_review",
-        "gbp.publish_post",
-    }
+    if tool_name == "google_meet_transcript_read":
+        ledger.append_decision(tool=tool_name, outcome="approval_required", detail=body)
+        return {
+            "status": "approval_required",
+            "tool": tool_name,
+            "policy": {"state": "approval_required", "reason_ar": "قراءة transcript تتطلب OAuth ونطاقات صريحة."},
+            "approval_required": True,
+        }
+
+    if tool_name == "social_reply":
+        ledger.append_decision(tool=tool_name, outcome="approval_required", detail=body)
+        return {
+            "status": "approval_required",
+            "tool": tool_name,
+            "policy": {"state": "approval_required", "reason_ar": "رد السوشيال يتطلب صلاحية قناة وموافقة."},
+            "approval_required": True,
+        }
+
+    if tool_name in ("ingest_lead", "render_whatsapp_template_preview"):
+        ledger.append_decision(tool=tool_name, outcome="draft_created", detail=body)
+        return {"status": "draft_created", "tool": tool_name, "approval_required": False}
+
+    return {"status": "unsupported", "tool": tool_name, "approval_required": False}

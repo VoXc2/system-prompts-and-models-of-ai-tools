@@ -1,88 +1,90 @@
-"""WhatsApp CEO Control — كل القرارات بكروت عربية ≤3 أزرار."""
+"""Arabic CEO / growth manager cards — max 3 buttons, approval flags."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from .service_catalog import get_service
+from auto_client_acquisition.service_tower.service_catalog import list_tower_services
+
+
+def _card(
+    title_ar: str,
+    summary_ar: str,
+    buttons: list[str],
+    approval_required: bool,
+) -> dict[str, Any]:
+    btns = (buttons or [])[:3]
+    return {
+        "title_ar": title_ar,
+        "summary_ar": summary_ar,
+        "buttons": btns,
+        "approval_required": approval_required,
+        "live_send": False,
+    }
 
 
 def build_ceo_daily_service_brief() -> dict[str, Any]:
-    """The daily service brief sent to the CEO via WhatsApp/Email."""
+    data = list_tower_services()
+    n = int(data.get("count") or 0)
     return {
-        "type": "ceo_daily_service_brief",
-        "title_ar": "موجز الخدمات اليومي",
-        "summary_ar": [
-            "3 خدمات نشطة اليوم.",
-            "5 رسائل drafts تنتظر اعتمادك.",
-            "2 Free Diagnostic مكتمل وينتظر التسليم.",
-            "1 شريك وكالة جاهز للعرض.",
-            "0 مخاطر سمعة (الحالة صحية).",
+        "greeting_ar": "صباح الخير — موجز خدمات Dealix.",
+        "highlights_ar": [
+            f"عدد الخدمات في البرج: {n}.",
+            "٣ مسودات بانتظار موافقتك (تجريبي).",
+            "لا إرسال حي من النظام افتراضياً.",
         ],
-        "buttons_ar": ["اعرض المسودات", "موافقة جماعية", "لاحقاً"],
-        "approval_required": True,
+        "cards": [
+            _card(
+                "اعتماد مسودات",
+                "هناك مسودات جاهزة للمراجعة قبل أي تواصل خارجي.",
+                ["اعرض المسودات", "لاحقاً", "تخطي"],
+                True,
+            ),
+            _card(
+                "مخاطر قناة",
+                "قناة واحدة تحتاج تهدئة حسب سمعة الإرسال (تجريبي).",
+                ["افتح التفاصيل", "خفّض الحجم", "تجاهل"],
+                True,
+            ),
+        ],
+        "demo": True,
     }
 
 
-def build_service_approval_card(
-    service_id: str, action: str,
-) -> dict[str, Any]:
-    """Approval card for a single service action (draft send / publish / charge)."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
-    label_ar_by_action = {
-        "send_email": "إرسال إيميل",
-        "send_whatsapp": "إرسال واتساب",
-        "insert_calendar": "إدراج موعد",
-        "create_payment_link": "إنشاء رابط دفع",
-        "publish_review_reply": "نشر رد تقييم",
-        "share_diagnostic": "مشاركة Free Diagnostic",
-    }
+def build_service_approval_card(service_id: str, action: str) -> dict[str, Any]:
     return {
-        "type": "service_approval",
         "service_id": service_id,
-        "service_name_ar": s.name_ar,
         "action": action,
-        "title_ar": f"اعتماد: {label_ar_by_action.get(action, action)}",
-        "summary_ar": f"يتم تنفيذ هذا الفعل ضمن خدمة {s.name_ar}.",
-        "risk_level": s.risk_level,
-        "buttons_ar": ["اعتمد", "عدّل", "ارفض"],
-        "approval_required": True,
-        "live_send_allowed": False,
+        "card": _card(
+            f"موافقة: {service_id}",
+            f"الإجراء المقترح: {action} — لن يُنفَّذ إلا بعد اعتمادك.",
+            ["اعتمد", "عدّل", "ألغِ"],
+            True,
+        ),
+        "demo": True,
     }
 
 
 def build_risk_alert_card() -> dict[str, Any]:
-    """A risk alert card surfaced to the CEO."""
     return {
-        "type": "risk_alert",
-        "title_ar": "تنبيه مخاطر",
-        "summary_ar": (
-            "ارتفاع نسبة الـ bounce على الإيميل تجاوز الحد الآمن. "
-            "اقتراح: إيقاف الحملات الجديدة 14 يوماً + تنظيف القائمة."
+        "card": _card(
+            "تنبيه مخاطر",
+            "تم رصد أرقام بحاجة مراجعة مصدر قبل واتساب.",
+            ["راجع القائمة", "صدّر الممنوع", "لاحقاً"],
+            True,
         ),
-        "risk_level": "high",
-        "buttons_ar": ["أوقف القناة", "خفّض الحجم", "تجاهل"],
-        "approval_required": True,
+        "demo": True,
     }
 
 
 def build_end_of_day_service_report() -> dict[str, Any]:
-    """End-of-day report on services run today."""
     return {
-        "type": "end_of_day_service_report",
         "title_ar": "تقرير نهاية اليوم — الخدمات",
-        "summary_ar": [
-            "خدمات منفذة اليوم: 3.",
-            "Drafts معتمدة: 6.",
-            "ردود إيجابية: 2.",
-            "اجتماعات مجدولة: 1.",
-            "Pipeline متأثر: 24,000 ريال.",
-            "مخاطر تم منعها: 8.",
+        "lines_ar": [
+            "المسودات المعتمدة: ٢ (تجريبي).",
+            "الاجتماعات المقترحة: ١.",
+            "المخاطر التي تم منعها: ٤.",
         ],
-        "next_day_focus_ar": (
-            "غداً: تابع الردود الإيجابية، اعتمد رسائل Partner Sprint، "
-            "سلّم 2 Free Diagnostic للعملاء الجدد."
-        ),
+        "live_send": False,
+        "demo": True,
     }

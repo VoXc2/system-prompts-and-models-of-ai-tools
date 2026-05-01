@@ -1,200 +1,34 @@
-# Dealix Autonomous Revenue Company OS
+# Dealix — Autonomous Revenue Company OS
 
-> **الفئة الجديدة:** Dealix ليس CRM ولا أداة واتساب ولا AI agent ولا lead scraper.
-> هو **شركة نمو رقمية ذاتية التشغيل** تدخل أي بزنس، تفهمه، تبني خطة نمو، تشغّل الخدمات المناسبة، تطلب موافقات، تنسق القنوات، تفتح شراكات، ترتب اجتماعات، تجهز مدفوعات، وتثبت العائد.
+> **الفئة:** ليس CRM ولا بوت واتساب ولا لوحة عادية — نظام تشغيل نمو وإيرادات **عربي سعودي** يربط الإشارة بالسياق ثم الخدمة ثم سير العمل ثم المخاطر ثم المسودة ثم الموافقة ثم التصدير/التنفيذ ثم الـ Proof ثم التعلم والترقية.  
+> **التنفيذ في الريبو:** طبقات API وحزم `auto_client_acquisition` **deterministic** في MVP؛ إرسال حي وشحن واتساب بارد **غير مفعّل** افتراضياً — انظر [`SAFE_TOOL_GATEWAY_POLICY.md`](SAFE_TOOL_GATEWAY_POLICY.md) و[`PRIVATE_BETA_RUNBOOK.md`](PRIVATE_BETA_RUNBOOK.md).
 
----
+## الاثنا عشر طبقة ومواءمتها مع الكود
 
-## 1. القيم الأساسية للنظام
+| # | الطبقة | الدور | أين في الريبو (مرجع) |
+|---|--------|--------|----------------------|
+| 1 | Autonomous Service Operator | نية → خدمة → intake → مسودة → موافقة → proof | [`autonomous_service_operator/`](../auto_client_acquisition/autonomous_service_operator/)، `GET/POST /api/v1/operator/*` |
+| 2 | Service Tower | خدمات منتَجة للبيع | [`service_tower/`](../auto_client_acquisition/service_tower/)، `/api/v1/services/*` |
+| 3 | Service Excellence OS | جودة ودرجة وbacklog | [`service_excellence/`](../auto_client_acquisition/service_excellence/)، `/api/v1/service-excellence/*` |
+| 4 | Targeting & Acquisition OS | فرص آمنة، بدون scraping | [`targeting_os/`](../auto_client_acquisition/targeting_os/)، `/api/v1/targeting/*` |
+| 5 | Growth Control Tower | كروت قرار، command feed | [`innovation/command_feed`](../auto_client_acquisition/innovation/command_feed.py)، `/api/v1/innovation/command-feed/demo`، `/api/v1/platform/inbox/feed` |
+| 6 | Safe Tool Gateway | سياسة أداة قبل أي تنفيذ | [`copilot/safe_actions`](../auto_client_acquisition/copilot/safe_actions.py)، [`security_curator/`](../auto_client_acquisition/security_curator/)، [`tool_action_planner`](../auto_client_acquisition/autonomous_service_operator/tool_action_planner.py) |
+| 7 | Agent Runtime | وكلاء بحدود وأدوات | [`agents/`](../auto_client_acquisition/agents/)، [`v3`](../api/routers/v3.py)، orchestrator |
+| 8 | Durable Workflow Engine | مسارات طويلة + HITL | حالياً: حالة جلسة في الذاكرة + موافقات؛ **LangGraph** فقط بعد موافقة صريحة — [`AGENT_WORKFLOW_ARCHITECTURE.md`](AGENT_WORKFLOW_ARCHITECTURE.md) |
+| 9 | Revenue Graph | كيانات وعلاقات | [`revenue_graph/`](../auto_client_acquisition/revenue_graph/)، [`revenue_memory/`](../auto_client_acquisition/revenue_memory/) |
+| 10 | Proof Ledger | أحداث إثبات | [`innovation` proof ledger](../api/routers/innovation.py)، [`fetch_proof_ledger_weekly.py`](../scripts/fetch_proof_ledger_weekly.py) |
+| 11 | Self-Improving Layer | تقارير أسبوعية وbacklog | [`growth_curator/`](../auto_client_acquisition/growth_curator/)، [`revenue_company_os/self_improvement_loop`](../auto_client_acquisition/revenue_company_os/self_improvement_loop.py) |
+| 12 | Revenue Launch System | عروض، pipeline، دفع يدوي | [`revenue_launch/`](../auto_client_acquisition/revenue_launch/)، `/api/v1/revenue-launch/*` |
 
-```
-Signal → Context → Service Recommendation → Workflow →
-Risk Check → Draft → Approval → Execution/Export →
-Outcome → Proof → Learning → Upgrade
-```
+## Draft مقابل Live (ملخّص)
 
-كل event داخل Dealix يمر بهذه السلسلة. لا توجد فجوة بين "إشارة" و"إيراد".
+- **Draft / suggest / approval_required:** المسار الافتراضي في MVP (مسودات Gmail، روابط دفع شكلية، كروت موافقة).
+- **Live send / charge / calendar insert:** يتطلب إعدادات صريحة + موافقة بشرية؛ الكثير منها **محظور** في العروض التجريبية — راجع سياسة البوابة والاختبارات.
 
----
+## وثائق مرتبطة
 
-## 2. الطبقات الـ12
-
-| الطبقة | الموقع |
-|--------|--------|
-| Autonomous Service Operator | `auto_client_acquisition/autonomous_service_operator/` |
-| Service Tower | `auto_client_acquisition/service_tower/` |
-| Service Excellence OS | `auto_client_acquisition/service_excellence/` |
-| Targeting OS | `auto_client_acquisition/targeting_os/` |
-| Safe Tool Gateway | `auto_client_acquisition/platform_services/tool_gateway.py` |
-| Agent Runtime | كل layer يحدد الـ agents فيه |
-| Workflow Engine | `service_orchestrator + workflow_runner` |
-| Revenue Graph | `revenue_company_os/action_graph.py` |
-| Proof Ledger | `revenue_company_os/proof_ledger.py` + `platform_services/proof_ledger.py` |
-| Self-Improving Layer | `revenue_company_os/self_improvement_loop.py` + `growth_curator/` |
-| Revenue Launch System | `revenue_launch/` + `launch_ops/` |
-| Growth Memory | `revenue_company_os/growth_memory.py` |
-
----
-
-## 3. Autonomous Service Operator
-
-**16 module + 28 endpoint.** البوت المركزي:
-
-- **`intent_classifier`** — 16 intent عبر Arabic + English keywords (deterministic).
-- **`conversation_router`** — كل intent → handler + خدمة موصى بها.
-- **`session_state`** — 13 حالة جلسة + audit history.
-- **`intake_collector`** — أسئلة intake لكل intent + validation.
-- **`approval_manager`** — كروت ≤3 أزرار + decisions (approve/edit/skip/reject).
-- **`service_orchestrator`** — pipeline 11-step canonical.
-- **`workflow_runner`** — advance + completion check.
-- **`tool_action_planner`** — يحظر LinkedIn scraping/auto-DM، يطلب approval لـ high-risk، draft فقط للآمنة.
-- **`proof_pack_dispatcher`** — Proof Pack envelope per service.
-- **`upsell_engine`** — 3 verdicts (upsell_now / iterate_first / gentle_upsell).
-- **`whatsapp_renderer`** — ≤3 buttons، Arabic body.
-- **`operator_memory`** — sessions + facts + preferences + audit.
-- **`service_bundles`** — 6 bundles (Growth Starter, Data to Revenue, Executive Growth OS, Partnership Growth, Local Growth OS, Full Growth Control Tower).
-- **`executive_mode`** — CEO command center.
-- **`client_mode`** — Growth Manager dashboard.
-- **`agency_mode`** — multi-client + co-branded Proof Pack + revenue share.
-
----
-
-## 4. Revenue Company OS
-
-**10 module + 19 endpoint.** الذكاء عبر القنوات:
-
-- **`event_to_card`** — 13 event types → Arabic decision cards (≤3 buttons).
-- **`command_feed_engine`** — daily aggregation + sort by risk.
-- **`action_graph`** — 14 typed edges signal → action → outcome → proof.
-- **`revenue_work_units`** — 19 RWU types (Salesforce-inspired) + aggregation.
-- **`channel_health`** — cross-channel reputation snapshot.
-- **`opportunity_factory`** — turn signals into opportunity cards.
-- **`service_factory`** — instantiate any service for a customer.
-- **`proof_ledger`** — Revenue Proof scoreboard per customer.
-- **`growth_memory`** — cross-customer aggregates (anonymized): best message/channel/objections.
-- **`self_improvement_loop`** — weekly Arabic recommendations from real metrics.
-
----
-
-## 5. Service Bundles (6 customer-facing offerings)
-
-| Bundle | Best for | Price (SAR) |
-|--------|----------|-------------|
-| Growth Starter | أي شركة تجرب لأول مرة | 499–1,500 |
-| Data to Revenue | شركات لديها قائمة | 1,500–3,000 |
-| Executive Growth OS | CEO / Growth Manager شهرياً | 2,999 |
-| Partnership Growth | شركات تنمو عبر الشركاء | 3,000–7,500 |
-| Local Growth OS | عيادات/متاجر/فروع | 999–2,999 |
-| Full Growth Control Tower | مؤسسات 30+ يوم | 12,000–25,000 |
-
----
-
-## 6. الأمان (Critical Gates)
-
-كل tool action يمر:
-```
-Intent → Policy → Approval → Execution → Audit
-```
-
-أوضاع التنفيذ:
-- `suggest_only`
-- `draft_only`
-- `approval_required`
-- `approved_execute` (env flag مفعّل + اعتماد)
-- `blocked`
-
-**الممنوع تماماً (حتى مع env flag):**
-- LinkedIn scraping / auto-DM / auto-connect.
-- cold WhatsApp بدون opt-in.
-- Moyasar live charge من API.
-- إرسال Gmail بدون اعتماد بشري.
-
----
-
-## 7. Endpoints الجديدة
-
-### Autonomous Service Operator (28)
-```
-POST /api/v1/operator/chat/{message, decision, classify}
-POST /api/v1/operator/sessions/{new, {id}/transition, {id}/context}
-GET  /api/v1/operator/sessions/{id}
-POST /api/v1/operator/cards/{approval, whatsapp/render}
-GET  /api/v1/operator/intake/questions/{intent}
-POST /api/v1/operator/intake/validate
-POST /api/v1/operator/service/start
-POST /api/v1/operator/tools/plan
-POST /api/v1/operator/proof-pack/dispatch
-POST /api/v1/operator/upsell/{recommend, card}
-GET  /api/v1/operator/bundles
-POST /api/v1/operator/bundles/recommend
-POST /api/v1/operator/mode/{ceo, ceo/daily-brief, ceo/risks, client, agency, agency/add-client, agency/revenue-share, agency/co-branded-proof}
-GET  /api/v1/operator/whatsapp/daily-brief/demo
-GET  /api/v1/operator/proof-pack/demo
-```
-
-### Revenue Company OS (19)
-```
-GET  /api/v1/revenue-os/command-feed/demo
-POST /api/v1/revenue-os/{events/ingest, command-feed/build}
-GET  /api/v1/revenue-os/work-units/{types, demo}
-POST /api/v1/revenue-os/work-units/{build, aggregate}
-GET  /api/v1/revenue-os/proof-ledger/demo
-GET  /api/v1/revenue-os/action-graph/{edge-types, demo}
-POST /api/v1/revenue-os/channel-health/snapshot
-GET  /api/v1/revenue-os/channel-health/demo
-POST /api/v1/revenue-os/opportunity-factory
-GET  /api/v1/revenue-os/opportunity-factory/demo
-POST /api/v1/revenue-os/service-factory
-GET  /api/v1/revenue-os/service-factory/demo
-GET  /api/v1/revenue-os/growth-memory/demo
-POST /api/v1/revenue-os/self-improvement/weekly-report
-GET  /api/v1/revenue-os/self-improvement/demo
-```
-
----
-
-## 8. اختبارات
-
-`tests/unit/test_autonomous_service_operator.py` — 50 tests.
-`tests/unit/test_revenue_company_os.py` — 31 tests.
-
-تغطية:
-- Intent classification (8 intents).
-- Bundle recommendation per persona.
-- Tool planner blocks LinkedIn scrape/auto-DM.
-- Approval cards ≤3 buttons.
-- Sessions transition + audit.
-- Modes (CEO / Client / Agency) with revenue share calc.
-- Event → card with risk levels.
-- Action Graph what-works.
-- RWU aggregation + revenue total.
-- Self-improvement recommendations.
-
----
-
-## 9. الفرق الشاسع عن المنافسين
-
-| المنافس | ماذا يملك | أين Dealix يتفوق |
-|---------|-----------|-----------------|
-| CRM | بيانات وفرص | يقول ماذا تفعل اليوم |
-| WhatsApp tool | إرسال | يقرر هل ترسل، لمن، ولماذا، وبأي موافقة |
-| Email assistant | يكتب رد | يحول الإيميل إلى pipeline + meeting + Proof |
-| Agency | تنفيذ يدوي | نظام قابل للتكرار + Proof Pack |
-| Generic AI agent | ينفذ prompts | عنده خدمات + سياسات + Proof + موافقات + تحسين ذاتي |
-| HubSpot/Gong/Salesforce | منصات قوية | سعودي/عربي/SMB/Service-first/WhatsApp-aware |
-
----
-
-## 10. الخلاصة
-
-Dealix الآن **فئة جديدة**:
-- 12 طبقة معمارية متكاملة.
-- 905 اختبار ناجح.
-- 47 endpoint جديد في هذه الجولة.
-- Approval-first في كل قناة.
-- Self-improving أسبوعياً.
-- Revenue Work Units قابلة للقياس.
-- Proof Ledger يُثبت العائد.
-- 6 bundles + Service Excellence Score يحكم كل خدمة.
-
-**لا يبيع features. يبيع نتائج منظمة.**
+- [`AUTONOMOUS_SERVICE_OPERATOR.md`](AUTONOMOUS_SERVICE_OPERATOR.md) — المشغّل والنية والجلسة.
+- [`SERVICE_BUNDLES.md`](SERVICE_BUNDLES.md) — الباقات التجارية.
+- [`REVENUE_WORK_UNITS.md`](REVENUE_WORK_UNITS.md) — وحدات عمل الإيراد (RWU).
+- [`CEO_COMMAND_CENTER.md`](CEO_COMMAND_CENTER.md)، [`AGENCY_PARTNER_MODE.md`](AGENCY_PARTNER_MODE.md)، [`SAFE_TOOL_GATEWAY_POLICY.md`](SAFE_TOOL_GATEWAY_POLICY.md)، [`SELF_IMPROVING_REVENUE_LOOP.md`](SELF_IMPROVING_REVENUE_LOOP.md).
+- [`DEALIX_100_PERCENT_LAUNCH_PLAN.md`](DEALIX_100_PERCENT_LAUNCH_PLAN.md) — جاهزية الإطلاق الشاملة.

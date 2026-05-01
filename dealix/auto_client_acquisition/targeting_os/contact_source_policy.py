@@ -1,9 +1,10 @@
-"""Contact source policy — كل contact له مصدر، غرض، ومستوى مخاطرة."""
+"""Classify lead/contact sources and allowed channels — policy only, no I/O."""
 
 from __future__ import annotations
 
-# All recognized contact sources, ordered roughly safest → riskiest.
-ALL_SOURCES: tuple[str, ...] = (
+from typing import Any
+
+_SOURCE_ORDER = (
     "crm_customer",
     "inbound_lead",
     "website_form",
@@ -18,131 +19,79 @@ ALL_SOURCES: tuple[str, ...] = (
     "opt_out",
 )
 
-# Risk score per source (0..100; higher = riskier).
-_SOURCE_RISK: dict[str, int] = {
-    "crm_customer": 5,
-    "inbound_lead": 5,
-    "website_form": 10,
-    "linkedin_lead_form": 10,
-    "event_lead": 20,
-    "referral": 25,
-    "partner_intro": 25,
-    "manual_research": 50,
-    "uploaded_list": 60,
-    "unknown_source": 80,
-    "cold_list": 95,
-    "opt_out": 100,
-}
 
-
-def classify_source(source: str) -> dict[str, object]:
-    """Classify a single source string. Unknown maps to `unknown_source`."""
-    s = (source or "").lower().strip()
-    if s not in ALL_SOURCES:
-        s = "unknown_source"
-    return {"source": s, "risk_score": _SOURCE_RISK[s]}
-
-
-def allowed_channels_for_source(
-    source: str, *, opt_in_status: str = "unknown",
-) -> dict[str, object]:
-    """
-    Return which channels Dealix may attempt for this source/opt-in combo.
-
-    Each channel is "safe" / "needs_review" / "blocked".
-    """
-    s = classify_source(source)["source"]
-    opt = (opt_in_status or "unknown").lower()
-
-    if s == "opt_out":
-        return {
-            "source": s,
-            "channels": {ch: "blocked" for ch in
-                         ("whatsapp", "email", "linkedin", "phone", "social_dm")},
-            "notes_ar": "العميل سحب موافقته — كل القنوات محظورة.",
-        }
-
-    safe_inbound = s in ("crm_customer", "inbound_lead", "website_form",
-                        "linkedin_lead_form", "referral", "partner_intro")
-    is_unknown = s in ("unknown_source", "manual_research", "uploaded_list",
-                       "cold_list")
-
-    out: dict[str, str] = {}
-    # WhatsApp — strict
-    if opt == "yes" and not s == "cold_list":
-        out["whatsapp"] = "safe"
-    elif s == "inbound_lead" or s == "crm_customer":
-        out["whatsapp"] = "needs_review"
-    else:
-        out["whatsapp"] = "blocked"
-
-    # Email — looser when business context exists
-    if safe_inbound:
-        out["email"] = "safe"
-    elif is_unknown:
-        out["email"] = "needs_review"
-    else:
-        out["email"] = "needs_review"
-
-    # LinkedIn — only via lead forms / manual approved
-    if s == "linkedin_lead_form":
-        out["linkedin"] = "safe"
-    else:
-        out["linkedin"] = "needs_review"
-
-    # Phone — heavy review
-    out["phone"] = "blocked" if s in ("cold_list", "unknown_source") else "needs_review"
-
-    # Social DM — only with explicit context
-    out["social_dm"] = "blocked" if s in ("cold_list", "unknown_source") else "needs_review"
-
-    return {
-        "source": s,
-        "opt_in_status": opt,
-        "channels": out,
-        "notes_ar": (
-            "البريد افضل قناة في الغالب لمصادر العمل المعروفة. "
-            "واتساب يحتاج opt-in واضح. لينكدإن عبر Lead Forms فقط."
-        ),
-    }
-
-
-def required_review_level(source: str) -> str:
-    """Returns: 'auto_safe' | 'human_review' | 'block'."""
-    s = classify_source(source)["source"]
-    if s == "opt_out":
-        return "block"
-    if s in ("crm_customer", "inbound_lead", "website_form",
-             "linkedin_lead_form"):
-        return "auto_safe"
-    if s in ("event_lead", "referral", "partner_intro"):
-        return "human_review"
-    return "human_review"
-
-
-def retention_recommendation(source: str) -> dict[str, object]:
-    """Return PDPL-shaped retention guidance per source."""
-    s = classify_source(source)["source"]
-    if s == "crm_customer":
-        days = 365 * 3  # 3 years
-    elif s in ("inbound_lead", "website_form", "linkedin_lead_form",
-               "event_lead", "referral", "partner_intro"):
-        days = 365 * 2
-    else:
-        days = 180
-    return {
-        "source": s,
-        "retention_days": days,
-        "lawful_basis_ar": (
-            "علاقة قائمة" if s == "crm_customer"
-            else "موافقة" if s in ("website_form", "linkedin_lead_form",
-                                   "inbound_lead", "event_lead")
-            else "مصلحة مشروعة محدودة"
-        ),
-        "notes_ar": "حذف تلقائي عند تجاوز المدة أو طلب opt-out.",
-    }
+def classify_source(source: str | None) -> str:
+    s = (source or "").strip().lower().replace(" ", "_")
+    if s in ("opt_out", "optout"):
+        return "opt_out"
+    if s in _SOURCE_ORDER:
+        return s
+    if s in ("unknown", "", "none"):
+        return "unknown_source"
+    return "unknown_source"
 
 
 def source_risk_score(source: str) -> int:
-    """Return the integer risk score for the source."""
-    return int(classify_source(source)["risk_score"])
+    """0 = low risk, 100 = high risk (for sorting)."""
+    s = classify_source(source)
+    return {
+        "opt_out": 100,
+        "cold_list": 85,
+        "unknown_source": 70,
+        "uploaded_list": 55,
+        "manual_research": 40,
+        "referral": 35,
+        "partner_intro": 30,
+        "event_lead": 25,
+        "linkedin_lead_form": 20,
+        "website_form": 15,
+        "inbound_lead": 10,
+        "crm_customer": 10,
+    }.get(s, 65)
+
+
+def allowed_channels_for_source(source: str, opt_in_status: str | None) -> list[str]:
+    s = classify_source(source)
+    opt = (opt_in_status or "").lower()
+    if s == "opt_out":
+        return []
+    if s == "cold_list":
+        return ["email_draft_review"] if opt != "explicit" else ["email_draft_review", "linkedin_manual_task"]
+    if s == "unknown_source":
+        return ["email_draft_review", "internal_task"]
+    if s == "uploaded_list":
+        return ["email_draft_review", "internal_task"]
+    if s == "manual_research":
+        return ["email_draft_review", "linkedin_manual_task", "internal_task"]
+    if s in ("referral", "partner_intro"):
+        return ["email_draft_review", "whatsapp_draft_if_opt_in", "calendar_draft", "internal_task"]
+    if s in ("linkedin_lead_form", "website_form", "inbound_lead", "event_lead"):
+        return ["email_draft_review", "whatsapp_draft_if_opt_in", "calendar_draft", "internal_task"]
+    if s == "crm_customer":
+        return ["email_draft_review", "whatsapp_draft_if_opt_in", "calendar_draft", "payment_draft", "internal_task"]
+    return ["internal_task"]
+
+
+def required_review_level(source: str) -> str:
+    s = classify_source(source)
+    if s in ("opt_out", "cold_list"):
+        return "blocked"
+    if s in ("unknown_source", "uploaded_list", "manual_research"):
+        return "human_review"
+    if s in ("referral", "partner_intro"):
+        return "light_review"
+    return "auto_ok_with_approval"
+
+
+def retention_recommendation(source: str) -> dict[str, Any]:
+    s = classify_source(source)
+    days = {"opt_out": 0, "cold_list": 30, "unknown_source": 90}.get(s, 365)
+    return {
+        "source": s,
+        "suggested_retention_days": days,
+        "note_ar": "توصية MVP — راجع سياسة الاحتفاظ مع DPO قبل الإنتاج.",
+    }
+
+
+def list_sources_reference() -> dict[str, Any]:
+    return {"sources": list(_SOURCE_ORDER), "demo": True}

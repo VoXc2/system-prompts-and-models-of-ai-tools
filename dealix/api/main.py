@@ -22,7 +22,7 @@ from api.routers import (
     autonomous,
     business,
     command_center,
-    connector_catalog,
+    connector_router,
     customer_ops,
     customer_success,
     data,
@@ -46,9 +46,8 @@ from api.routers import (
     pricing,
     prospect,
     public,
-    revenue,
-    revenue_company_os,
     revenue_launch,
+    revenue,
     revenue_os,
     sales,
     sectors,
@@ -147,6 +146,7 @@ def create_app() -> FastAPI:
     app.include_router(pricing.router)
     app.include_router(prospect.router)
     app.include_router(autonomous.router)
+    app.include_router(autonomous_service_operator.router)
     app.include_router(data.router)
     app.include_router(outreach.router)
     app.include_router(revenue.router)
@@ -156,30 +156,28 @@ def create_app() -> FastAPI:
     app.include_router(dominance.router)
     app.include_router(full_os.router)
     app.include_router(customer_success.router)
+    app.include_router(customer_ops.router)
     app.include_router(ecosystem.router)
     app.include_router(command_center.router)
     app.include_router(revenue_os.router)
     app.include_router(v3.router)
     app.include_router(innovation.router)
-    app.include_router(business.router)
-    app.include_router(personal_operator.router)
-    app.include_router(growth_operator.router)
     app.include_router(platform_services.router)
     app.include_router(intelligence_layer.router)
+    app.include_router(growth_operator.router)
     app.include_router(security_curator.router)
     app.include_router(growth_curator.router)
     app.include_router(meeting_intelligence.router)
     app.include_router(model_router.router)
-    app.include_router(connector_catalog.router)
+    app.include_router(connector_router.router)
     app.include_router(agent_observability.router)
     app.include_router(targeting_os.router)
     app.include_router(service_tower.router)
     app.include_router(service_excellence.router)
     app.include_router(launch_ops.router)
     app.include_router(revenue_launch.router)
-    app.include_router(autonomous_service_operator.router)
-    app.include_router(revenue_company_os.router)
-    app.include_router(customer_ops.router)
+    app.include_router(business.router)
+    app.include_router(personal_operator.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 

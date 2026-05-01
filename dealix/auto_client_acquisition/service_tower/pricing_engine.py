@@ -1,118 +1,61 @@
-"""Pricing engine — quotes + setup + monthly + post-service plan."""
+"""Deterministic SAR quotes — hints only, not binding contracts."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from .service_catalog import get_service
+from auto_client_acquisition.service_tower.service_catalog import get_service_by_id
 
 
 def quote_service(
     service_id: str,
-    *,
-    company_size: str = "small",
+    company_size: str = "smb",
     urgency: str = "normal",
     channels_count: int = 1,
 ) -> dict[str, Any]:
-    """Quote a service with company-size + urgency + channels multipliers."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
-
-    p_min = float(s.pricing_min_sar)
-    p_max = float(s.pricing_max_sar)
-    if p_min == 0 and p_max == 0:
-        return {
-            "service_id": service_id,
-            "is_free": True,
-            "estimated_min_sar": 0,
-            "estimated_max_sar": 0,
-            "currency": "SAR",
-            "notes_ar": "خدمة مجانية. تتطلب اعتماد قبل التسليم.",
-        }
-
-    size_mult = {"micro": 0.8, "small": 1.0, "medium": 1.3, "large": 1.7}.get(
-        company_size, 1.0,
-    )
-    urgency_mult = {"normal": 1.0, "rush": 1.3, "asap": 1.5}.get(urgency, 1.0)
-    ch_mult = 1.0 + max(0, channels_count - 1) * 0.15
-
+    svc = get_service_by_id(service_id)
+    if not svc:
+        return {"ok": False, "error": "unknown_service", "demo": True}
+    pr = svc.get("pricing_range_sar") or {"min": 0, "max": 0}
+    lo = int(pr.get("min", 0))
+    hi = int(pr.get("max", lo))
+    mult = 1.0
+    if (company_size or "").lower() in ("enterprise", "large"):
+        mult *= 1.15
+    if (urgency or "").lower() == "high":
+        mult *= 1.1
+    mult += 0.05 * max(0, min(channels_count, 6) - 1)
+    lo_q = int(lo * mult)
+    hi_q = int(hi * mult)
     return {
+        "ok": True,
         "service_id": service_id,
-        "estimated_min_sar": round(p_min * size_mult * urgency_mult * ch_mult),
-        "estimated_max_sar": round(p_max * size_mult * urgency_mult * ch_mult),
-        "currency": "SAR",
-        "factors": {
-            "company_size": company_size,
-            "urgency": urgency,
-            "channels_count": channels_count,
-        },
-        "pricing_model": s.pricing_model,
+        "quoted_range_sar": {"min": lo_q, "max": hi_q},
+        "factors": {"company_size": company_size, "urgency": urgency, "channels_count": channels_count},
+        "not_binding": True,
+        "demo": True,
     }
+
+
+def recommend_plan_after_service(service_id: str, outcome: str) -> dict[str, Any]:
+    outcome_l = (outcome or "").lower()
+    svc = get_service_by_id(service_id)
+    nxt = (svc or {}).get("upgrade_path") or "growth_os"
+    if "churn" in outcome_l:
+        nxt = "executive_growth_brief"
+    return {"next_plan": nxt, "reason_ar": "مسار ترقية افتراضي حسب الكتالوج.", "demo": True}
 
 
 def calculate_setup_fee(service_id: str) -> dict[str, Any]:
-    """Suggest a setup fee for monthly services."""
-    s = get_service(service_id)
-    if s is None or s.pricing_model != "monthly":
-        return {"setup_fee_sar": 0, "currency": "SAR"}
-    base = s.pricing_min_sar
-    return {
-        "setup_fee_sar": int(base * 1.0),  # ~one month equivalent
-        "includes_ar": [
-            "ربط القنوات (واتساب/إيميل/تقويم)",
-            "استيراد القوائم وتصنيف المصادر",
-            "تدريب الفريق على Approval Center",
-            "بناء أول Proof Pack",
-        ],
-        "currency": "SAR",
-    }
+    q = quote_service(service_id, company_size="smb", urgency="normal", channels_count=1)
+    r = q.get("quoted_range_sar") or {}
+    setup = int((r.get("min", 0) + r.get("max", 0)) // 4)
+    return {"service_id": service_id, "setup_fee_hint_sar": setup, "demo": True}
 
 
 def calculate_monthly_offer(service_id: str) -> dict[str, Any]:
-    """Return monthly-pricing detail (for monthly services only)."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
-    if s.pricing_model != "monthly":
-        return {
-            "service_id": service_id,
-            "is_monthly": False,
-            "notes_ar": "هذه الخدمة ليست شهرية.",
-        }
-    return {
-        "service_id": service_id,
-        "is_monthly": True,
-        "monthly_sar": s.pricing_min_sar,
-        "annual_discount_pct": 15,
-        "annual_total_sar": int(s.pricing_min_sar * 12 * 0.85),
-        "currency": "SAR",
-    }
-
-
-def recommend_plan_after_service(
-    service_id: str,
-    *,
-    outcome: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    """After a service runs, recommend an upgrade plan."""
-    s = get_service(service_id)
-    if s is None:
-        return {"error": f"unknown service: {service_id}"}
-    outcome = outcome or {}
-
-    upgrade_targets = list(s.upgrade_path) or ["growth_os_monthly"]
-    next_id = upgrade_targets[0]
-    next_s = get_service(next_id)
-
-    return {
-        "from_service": service_id,
-        "recommended_upgrade": next_id,
-        "name_ar": next_s.name_ar if next_s else next_id,
-        "monthly_sar": next_s.pricing_min_sar if next_s else 0,
-        "reason_ar": (
-            f"بعد إثبات قيمة {s.name_ar}، الخطوة الطبيعية هي "
-            f"الاستمرار مع {next_s.name_ar if next_s else next_id} "
-            "للحصول على نتائج شهرية مستمرة."
-        ),
-    }
+    if service_id == "growth_os":
+        return {"service_id": service_id, "monthly_hint_sar": 2999, "demo": True}
+    if service_id == "self_growth_operator":
+        return {"service_id": service_id, "monthly_hint_sar": 999, "demo": True}
+    return {"service_id": service_id, "monthly_hint_sar": None, "note_ar": "خدمة مشروع/سباق — لا اشتراك افتراضي.", "demo": True}
