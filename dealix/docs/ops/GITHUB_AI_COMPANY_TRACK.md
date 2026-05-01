@@ -34,3 +34,11 @@ GitHub **لا** يشغّل workflows من `dealix/.github/workflows/` كمصدر
 ## الريبو العام
 
 [https://github.com/VoXc2/system-prompts-and-models-of-ai-tools](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools)
+
+## Railway (خطوات اللوحة)
+
+[`RAILWAY_AI_COMPANY_BIND.md`](RAILWAY_AI_COMPANY_BIND.md)
+
+## أسرار GitHub Actions
+
+[`GITHUB_ACTIONS_ENV_SETUP.md`](GITHUB_ACTIONS_ENV_SETUP.md)

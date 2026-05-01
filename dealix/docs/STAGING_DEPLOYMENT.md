@@ -1,6 +1,7 @@
 # نشر Staging — Dealix API
 
-مسار GitHub الموصى لخط «AI Company» والفرع `ai-company`: [`docs/ops/GITHUB_AI_COMPANY_TRACK.md`](ops/GITHUB_AI_COMPANY_TRACK.md).
+مسار GitHub الموصى لخط «AI Company» والفرع `ai-company`: [`docs/ops/GITHUB_AI_COMPANY_TRACK.md`](ops/GITHUB_AI_COMPANY_TRACK.md).  
+ربط Railway خطوة بخطوة: [`docs/ops/RAILWAY_AI_COMPANY_BIND.md`](ops/RAILWAY_AI_COMPANY_BIND.md).
 
 ## منصة موصى بها
 

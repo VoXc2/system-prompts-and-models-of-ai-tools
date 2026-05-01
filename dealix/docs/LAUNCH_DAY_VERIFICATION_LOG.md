@@ -6,10 +6,16 @@
 
 | الخطوة | الأمر | النتيجة | التاريخ |
 |--------|--------|---------|---------|
-| compileall | `python -m compileall api auto_client_acquisition integrations db core -q` | OK | 2026-05-01 |
+| compileall | `python -m compileall api auto_client_acquisition db` | OK | 2026-05-01 |
 | pytest | `python -m pytest -q --no-cov` | 526 passed, 6 skipped | 2026-05-01 |
 | print_routes | `python scripts/print_routes.py` | ROUTE_CHECK_OK no duplicate method+path | 2026-05-01 |
 | smoke_inprocess | `python scripts/smoke_inprocess.py` | SMOKE_INPROCESS_OK | 2026-05-01 |
+
+## Git / CI (فرع `ai-company`)
+
+| الخطوة | الإجراء | النتيجة | التاريخ |
+|--------|---------|---------|---------|
+| push | فرع `ai-company` مرفوع إلى `origin` مع `dealix/` و`.github/workflows/dealix-*.yml` | OK — راجع Actions **Dealix API CI** على GitHub | 2026-05-01 |
 
 ## Staging (يتطلب `STAGING_BASE_URL`)
 

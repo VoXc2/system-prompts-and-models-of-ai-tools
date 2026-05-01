@@ -1,6 +1,7 @@
 # Private Beta — دليل تشغيل Dealix
 
-**يوم التدشين (فهرس ساعة بساعة):** [`LAUNCH_DAY_RUNBOOK_AR.md`](LAUNCH_DAY_RUNBOOK_AR.md).
+**يوم التدشين (فهرس ساعة بساعة):** [`LAUNCH_DAY_RUNBOOK_AR.md`](LAUNCH_DAY_RUNBOOK_AR.md).  
+**قائمة بوابات موحّدة:** [`BETA_PRIVATE_GATES_CHECKLIST.md`](BETA_PRIVATE_GATES_CHECKLIST.md).
 
 ## الجمهور
 

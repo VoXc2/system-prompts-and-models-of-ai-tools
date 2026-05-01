@@ -5,7 +5,9 @@
 **بعد أي تسريب لمفتاح:** [`SECURITY_SECRET_ROTATION_CHECKLIST.md`](SECURITY_SECRET_ROTATION_CHECKLIST.md).  
 **تسجيل نتائج التشغيل:** [`LAUNCH_DAY_VERIFICATION_LOG.md`](LAUNCH_DAY_VERIFICATION_LOG.md).  
 **SOP يومي للإيراد:** [`ops/SOP_REVENUE_ENGINE_DAILY.md`](ops/SOP_REVENUE_ENGINE_DAILY.md).  
-**تتبع الإطلاق العام:** [`PUBLIC_LAUNCH_GO_NO_GO_TRACKER.md`](PUBLIC_LAUNCH_GO_NO_GO_TRACKER.md).
+**تتبع الإطلاق العام:** [`PUBLIC_LAUNCH_GO_NO_GO_TRACKER.md`](PUBLIC_LAUNCH_GO_NO_GO_TRACKER.md).  
+**بوابات البيتا (قائمة واحدة):** [`BETA_PRIVATE_GATES_CHECKLIST.md`](BETA_PRIVATE_GATES_CHECKLIST.md).  
+**أسرار Actions:** [`ops/GITHUB_ACTIONS_ENV_SETUP.md`](ops/GITHUB_ACTIONS_ENV_SETUP.md).
 
 ## 0) قبل 24–48 ساعة
 
