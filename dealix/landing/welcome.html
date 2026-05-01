@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>أهلاً بك في Dealix — أول 5 دقائق</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--purple:#8b5cf6;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--brand);line-height:1.7}
+    .wrap{max-width:920px;margin:0 auto;padding:48px 24px}
+    .header{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:18px;padding:36px 32px;margin-bottom:32px;text-align:center}
+    .header .badge{display:inline-block;background:rgba(34,211,238,0.2);color:var(--accent);padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:14px}
+    .header h1{font-size:clamp(26px,4vw,36px);margin-bottom:10px}
+    .header p{opacity:0.92;font-size:15px}
+    .checklist{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px}
+    .checklist h2{font-size:20px;margin-bottom:6px}
+    .checklist .sub{color:var(--muted);font-size:14px;margin-bottom:20px}
+    .step{display:grid;grid-template-columns:42px 1fr auto;gap:14px;padding:18px 0;border-bottom:1px solid var(--border);align-items:center}
+    .step:last-child{border:0}
+    .step-num{width:36px;height:36px;border-radius:50%;background:#f1f5f9;color:var(--brand);font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Inter','IBM Plex Sans Arabic',sans-serif}
+    .step.done .step-num{background:linear-gradient(135deg,var(--success),#047857);color:#fff}
+    .step .body h3{font-size:16px;color:var(--brand);margin-bottom:3px}
+    .step .body p{color:var(--muted);font-size:13px}
+    .step .body .meta{color:#94a3b8;font-size:11px;margin-top:4px}
+    .step .action{font-size:13px;font-weight:700;text-decoration:none;padding:8px 16px;border-radius:8px;background:var(--brand);color:#fff;white-space:nowrap;transition:transform 0.15s}
+    .step .action:hover{transform:translateY(-1px)}
+    .step.done .action{background:#10b981}
+    .progress{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 22px;margin:0 0 24px;display:flex;align-items:center;gap:14px}
+    .progress-bar{flex:1;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#22d3ee,#10b981);border-radius:4px;transition:width 0.4s}
+    .progress-text{font-size:13px;color:var(--muted)}
+    .progress-text strong{color:var(--brand)}
+    .help-bar{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #fcd34d;border-radius:14px;padding:18px 24px;margin-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+    .help-bar strong{color:#713f12}
+    .help-bar a{color:#713f12;font-weight:700;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="badge">🎉 أهلاً بك في Dealix</div>
+      <h1>أنت الآن جزء من أول Saudi B2B Revenue OS</h1>
+      <p>5 خطوات تفصلك عن أول 200 شركة سعودية مكتشفة + أول WhatsApp draft عربي مخصص.</p>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar"><div class="progress-fill" style="width:20%" id="progress-fill"></div></div>
+      <div class="progress-text"><strong id="progress-num">1</strong>/5 خطوات مكتملة · ~5 دقائق</div>
+    </div>
+
+    <div class="checklist">
+      <h2>قائمة التحقق — ابدأ من 1</h2>
+      <div class="sub">كل خطوة آلية ومدمجة. لو احتجت مساعدة، تواصل مع فريق onboarding.</div>
+
+      <div class="step done" data-step="1">
+        <div class="step-num">✓</div>
+        <div class="body">
+          <h3>اشتركت بنجاح</h3>
+          <p>تم استلام دفعتك وتفعيل حسابك.</p>
+          <div class="meta">مكتمل · الآن</div>
+        </div>
+        <span class="action" style="background:#10b981">✓ تم</span>
+      </div>
+
+      <div class="step" data-step="2">
+        <div class="step-num">2</div>
+        <div class="body">
+          <h3>حدّد الـ ICP — قطاع، مدن، حجم</h3>
+          <p>أخبرنا عن عميلك المثالي. نستخدم هذا لتدريب الـ Prospecting Agent.</p>
+          <div class="meta">~ 2 دقيقة</div>
+        </div>
+        <a href="/customer-portal.html#icp" class="action">حدّد الآن</a>
+      </div>
+
+      <div class="step" data-step="3">
+        <div class="step-num">3</div>
+        <div class="body">
+          <h3>اربط WhatsApp Business</h3>
+          <p>نفّذ موافقة OAuth — Dealix يرسل عبر رقمك مع توقيعك. آمن + PDPL محمي.</p>
+          <div class="meta">~ 1 دقيقة · WhatsApp Cloud / Green API</div>
+        </div>
+        <a href="/customer-portal.html#whatsapp" class="action">اربط</a>
+      </div>
+
+      <div class="step" data-step="4">
+        <div class="step-num">4</div>
+        <div class="body">
+          <h3>اربط Gmail (اختياري لكن موصى به)</h3>
+          <p>OAuth بصلاحية gmail.compose فقط — نولّد drafts في صندوقك، لا إرسال بدون إذنك.</p>
+          <div class="meta">~ 1 دقيقة · Gmail OAuth</div>
+        </div>
+        <a href="/customer-portal.html#gmail" class="action">اربط</a>
+      </div>
+
+      <div class="step" data-step="5">
+        <div class="step-num">5</div>
+        <div class="body">
+          <h3>شغّل أول Daily Growth Run</h3>
+          <p>Dealix يكتشف 200 شركة + يفلتر 40 + يولّد drafts بالعربي. أنت تراجع وتوافق.</p>
+          <div class="meta">~ 1 دقيقة · ينتج نتائج خلال ساعة</div>
+        </div>
+        <a href="/command-center.html" class="action">شغّل الآن</a>
+      </div>
+    </div>
+
+    <div class="help-bar">
+      <div>
+        <strong>تحتاج مساعدة شخصية؟</strong> فريق onboarding يعطيك إعداد كامل في 30 دقيقة على Zoom.
+      </div>
+      <a href="https://calendly.com/dealix/onboarding">احجز جلسة onboarding مجانية</a>
+    </div>
+  </div>
+
+  <script>
+    // Update progress based on completed steps (data-step="N" + class="done")
+    function updateProgress() {
+      const steps = document.querySelectorAll('.step');
+      const done = document.querySelectorAll('.step.done').length;
+      const pct = Math.round((done / steps.length) * 100);
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-num').textContent = done;
+    }
+    updateProgress();
+  </script>
+</body>
+</html>

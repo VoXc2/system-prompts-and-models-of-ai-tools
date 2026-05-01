@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>عذراً — حدث خطأ تقني — Dealix</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'IBM Plex Sans Arabic',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7f1d1d,#0f172a);color:#fff;text-align:center;padding:24px}
+    .wrap{max-width:580px}
+    .code{font-size:clamp(80px,18vw,180px);font-weight:800;line-height:1;color:#fbbf24;font-family:'Inter','IBM Plex Sans Arabic',sans-serif}
+    h1{font-size:clamp(22px,3vw,32px);margin:8px 0 14px}
+    p{font-size:16px;opacity:0.92;margin-bottom:18px;line-height:1.7}
+    .ref{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 14px;font-family:monospace;font-size:13px;display:inline-block;margin:14px 0}
+    .links{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+    .btn{display:inline-block;padding:11px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px}
+    .btn-primary{background:#22d3ee;color:#0f172a}
+    .btn-secondary{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.3)}
+    .helpful{margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);font-size:13px;opacity:0.85;line-height:1.7}
+    .helpful a{color:#fbbf24;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="code">500</div>
+    <h1>حدث خطأ تقني — نحن نعمل عليه</h1>
+    <p>لا يوجد ضرر على بياناتك. الفريق التقني تلقّى تنبيه آلي ويحقّق في السبب الآن. نسعى لاستعادة الخدمة خلال 15 دقيقة.</p>
+    <div class="ref">Reference: <span id="error-ref">--</span></div>
+    <div class="links">
+      <a href="/status.html" class="btn btn-primary">حالة الخدمة</a>
+      <a href="/" class="btn btn-secondary">المحاولة مرة أخرى</a>
+    </div>
+    <div class="helpful">
+      لو الخطأ يستمر أكثر من 15 دقيقة، تواصل معنا:<br>
+      📧 <a href="mailto:support@dealix.sa">support@dealix.sa</a> ·
+      📊 <a href="/status.html">صفحة الحالة الحيّة</a><br>
+      <span style="opacity:0.7">نحن ملتزمون بـ uptime 99.5% للباقات Growth وما فوق.</span>
+    </div>
+  </div>
+  <script>
+    // Generate a short reference ID for support tracking
+    document.getElementById('error-ref').textContent =
+      'ERR_' + Date.now().toString(36).toUpperCase() + '_' + Math.random().toString(36).slice(2, 6).toUpperCase();
+  </script>
+</body>
+</html>
