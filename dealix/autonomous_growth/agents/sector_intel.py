@@ -6,7 +6,7 @@ Sector Intelligence Agent — Saudi sector deep knowledge.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import StrEnum
+from core._py_compat import StrEnum
 from typing import Any
 
 from core.agents.base import BaseAgent

@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
+from core._py_compat import UTC
 from typing import Any
 
 from sqlalchemy import select

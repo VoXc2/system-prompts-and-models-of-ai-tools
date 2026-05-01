@@ -11,7 +11,8 @@ Per the blueprint, no critical output leaves the Decision Plane without:
 from __future__ import annotations
 
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime
+from core._py_compat import UTC
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator

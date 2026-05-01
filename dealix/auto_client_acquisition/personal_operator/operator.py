@@ -11,8 +11,9 @@ This module powers a Boardy-style operator for Sami, but specialized for Dealix:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timedelta
-from enum import StrEnum
+from datetime import datetime, timedelta
+from core._py_compat import UTC
+from core._py_compat import StrEnum
 from typing import Any
 from uuid import uuid4
 
