@@ -21,6 +21,8 @@ python scripts/smoke_inprocess.py
 
 **بوابة الإطلاق:** بعد الدمج، شغّل أيضاً `scripts/smoke_staging.py` على staging مع `STAGING_BASE_URL` — انظر [`LAUNCH_DAY_RUNBOOK_AR.md`](LAUNCH_DAY_RUNBOOK_AR.md).
 
+**Runbook تنفيذ كامل (GitHub → Railway → PAID_BETA_READY → أول عميل → Proof Pack):** [`PAID_BETA_FULL_RUNBOOK_AR.md`](PAID_BETA_FULL_RUNBOOK_AR.md).
+
 Optional secret-pattern scan (adapt to your environment):
 
 ```bash
@@ -44,16 +46,37 @@ rg "ghp_|github_pat_|sk_live_" --glob '!htmlcov/**' --glob '!.venv/**'
 
 ## Last recorded run (workspace snapshot)
 
+### Snapshot A — قبل الدمج (للمرجع)
+
 | Step | Result |
 |------|--------|
 | Git HEAD | `16e8ba2` on branch `ai-company` (re-run on `main` after merge) |
 | compileall | OK (`api`, `auto_client_acquisition`, `db`, `core`) |
 | pytest | `652 passed`, `6 skipped`, `0 failed` (`APP_ENV=test`, dummy LLM keys) — 2026-05-01 بعد `launch_readiness` + تكامل الواجهات؛ أعد التشغيل بعد الدمج |
+
+### Snapshot B — على default branch بعد الدمج (الأحدث · 2026-05-01 محلياً)
+
+| Step | Result |
+|------|--------|
+| Git HEAD | `41ca592` (re-run after merge on your default branch) |
+| compileall | OK (`api`, `auto_client_acquisition`, `integrations`, `db`, `core`) |
+| pytest | `791 passed`, `6 skipped`, `0 failed` (`APP_ENV=test`, `--no-cov`) — 6 skipped: E2E يحتاج سيرفر على `8001`، مزوّدون اختياريون بدون مفاتيح |
 | `print_routes.py` | `ROUTE_CHECK_OK no duplicate method+path` |
 | `smoke_inprocess.py` | `SMOKE_INPROCESS_OK` (يشمل `GET /api/v1/revenue-launch/offer` و`GET /api/v1/revenue-launch/offer?lang=en`) |
-| `launch_readiness_check.py` | `VERDICT: GO_PRIVATE_BETA`، exit `0` — يفحص محلياً: `/health`، customer-ops (checklist/sla/connectors)، `services/catalog` (حقول التسعير وProof لكل خدمة)، `launch/private-beta/offer`، `security-curator/demo`، ملفات `landing/companies|marketers|private-beta.html`، و`WHATSAPP_ALLOW_LIVE_SEND=false`. مع `--base-url` أو `STAGING_BASE_URL`: نفس المسارات عن بُعد → `PAID_BETA_READY` إذا نجحت كلها؛ وإلا `NO_GO`. اختياري: `--secrets` لفحص أنماط تسرّب شائعة. `--json` لمخرجات آلة |
+| `launch_readiness_check.py` | `VERDICT: GO_PRIVATE_BETA`، exit `0` — يفحص محلياً: `/health`، customer-ops (checklist/sla/connectors)، `services/catalog` (حقول التسعير وProof لكل خدمة)، `launch/private-beta/offer`، `security-curator/demo`، ملفات `landing/companies\|marketers\|private-beta.html`، و`WHATSAPP_ALLOW_LIVE_SEND=false`. مع `--base-url` أو `STAGING_BASE_URL`: نفس المسارات عن بُعد → `PAID_BETA_READY` إذا نجحت كلها؛ وإلا `NO_GO`. اختياري: `--secrets` لفحص أنماط تسرّب شائعة. `--json` لمخرجات آلة |
+| Secret-pattern scan | `ghp_` / `github_pat_` / `sk_live_` — التطابقات الظاهرة في الريبو هي وثائق تشغيل، أمثلة اختبار، أو regex للكشف؛ ليست بالضرورة تسريباً. راجع `docs/ops/*` دورياً |
 | `smoke_staging.py` | يتطلب `STAGING_BASE_URL` — يشمل الآن `…/revenue-launch/offer?lang=en`؛ شغّله على الاستضافة الفعلية قبل أول عميل |
 | Frontend + EN + `?lang=en` | وثّق في [`FRONTEND_AND_API_MAP.md`](FRONTEND_AND_API_MAP.md) — أعد `pytest` بعد أي تغيير على `revenue_launch` |
+
+### Verified-from-clone re-run (2026-05-01, sandbox clone of `sync/dealix-full-complete` @ `41ca592`)
+
+| Step | Result |
+|------|--------|
+| compileall (`api`, `auto_client_acquisition`, `integrations`, `db`, `core`) | OK |
+| pytest -q --no-cov (`APP_ENV=test`) | `779 passed`, `6 skipped` — يطابق Snapshot B بـ 12 اختباراً أقل؛ السبب: الـ12 المضافة تأتي من ملفات `tests/test_paid_beta_daily_scorecard.py` المحدّثة محلياً غير المرفوعة |
+| `print_routes.py` | `ROUTE_CHECK_OK no duplicate method+path` |
+| `smoke_inprocess.py` | `SMOKE_INPROCESS_OK` |
+| `launch_readiness_check.py` | `VERDICT: GO_PRIVATE_BETA` |
 
 ## CI
 

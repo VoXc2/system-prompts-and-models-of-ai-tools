@@ -1,0 +1,2335 @@
+From fa8e4fcf26570b1260a3da5c29256c8ec0a36b4d Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 1 May 2026 23:24:01 +0300
+Subject: [PATCH] =?UTF-8?q?feat(public-launch):=20Layer=2013=20=E2=80=94?=
+ =?UTF-8?q?=20gate=20+=20PDPL=20+=20Brand=20Moat=20+=20Master=20Strategic?=
+ =?UTF-8?q?=20Plan?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Closes the loop from Paid Beta to Public Launch with deterministic
+criteria and bilingual operational documentation. 797 passed (779+18).
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+---
+ dealix/api/main.py                            |   2 +
+ dealix/api/routers/public_launch.py           | 171 +++++
+ .../public_launch/__init__.py                 |  50 ++
+ .../public_launch/brand_moat.py               | 209 ++++++
+ .../public_launch/gate.py                     | 246 +++++++
+ .../public_launch/pdpl_compliance.py          | 176 +++++
+ .../public_launch/pilot_tracker.py            | 176 +++++
+ dealix/docs/MASTER_STRATEGIC_PLAN.md          | 653 ++++++++++++++++++
+ dealix/docs/POST_MERGE_VERIFICATION.md        |  23 +-
+ dealix/docs/PUBLIC_LAUNCH_READINESS.md        | 200 ++++++
+ dealix/tests/unit/test_public_launch.py       | 296 ++++++++
+ 11 files changed, 2201 insertions(+), 1 deletion(-)
+ create mode 100644 dealix/api/routers/public_launch.py
+ create mode 100644 dealix/auto_client_acquisition/public_launch/__init__.py
+ create mode 100644 dealix/auto_client_acquisition/public_launch/brand_moat.py
+ create mode 100644 dealix/auto_client_acquisition/public_launch/gate.py
+ create mode 100644 dealix/auto_client_acquisition/public_launch/pdpl_compliance.py
+ create mode 100644 dealix/auto_client_acquisition/public_launch/pilot_tracker.py
+ create mode 100644 dealix/docs/MASTER_STRATEGIC_PLAN.md
+ create mode 100644 dealix/docs/PUBLIC_LAUNCH_READINESS.md
+ create mode 100644 dealix/tests/unit/test_public_launch.py
+
+diff --git a/dealix/api/main.py b/dealix/api/main.py
+index 851b942..31d26ab 100644
+--- a/dealix/api/main.py
++++ b/dealix/api/main.py
+@@ -46,6 +46,7 @@ from api.routers import (
+     pricing,
+     prospect,
+     public,
++    public_launch,
+     revenue_launch,
+     revenue,
+     revenue_os,
+@@ -176,6 +177,7 @@ def create_app() -> FastAPI:
+     app.include_router(service_excellence.router)
+     app.include_router(launch_ops.router)
+     app.include_router(revenue_launch.router)
++    app.include_router(public_launch.router)
+     app.include_router(business.router)
+     app.include_router(personal_operator.router)
+     app.include_router(public.router)
+diff --git a/dealix/api/routers/public_launch.py b/dealix/api/routers/public_launch.py
+new file mode 100644
+index 0000000..4306964
+--- /dev/null
++++ b/dealix/api/routers/public_launch.py
+@@ -0,0 +1,171 @@
++"""Public Launch API — Layer 13 endpoints.
++
++Endpoints:
++    GET  /api/v1/public-launch/criteria
++    POST /api/v1/public-launch/gate-check
++    POST /api/v1/public-launch/pilot-tracker
++    POST /api/v1/public-launch/pdpl-compliance
++    POST /api/v1/public-launch/brand-moat
++    GET  /api/v1/public-launch/demo
++"""
++
++from __future__ import annotations
++
++from typing import Any
++
++from fastapi import APIRouter
++from pydantic import BaseModel, Field
++
++from auto_client_acquisition.public_launch import (
++    PUBLIC_LAUNCH_CRITERIA,
++    evaluate_public_launch_gate,
++    pilot_tracker_summary,
++    compute_pdpl_compliance,
++    compute_brand_moat_score,
++)
++
++
++router = APIRouter(prefix="/api/v1/public-launch", tags=["public-launch"])
++
++
++class GateCheckRequest(BaseModel):
++    state: dict[str, Any] = Field(default_factory=dict)
++
++
++class PilotTrackerRequest(BaseModel):
++    pilots: list[dict[str, Any]] = Field(default_factory=list)
++
++
++class PDPLRequest(BaseModel):
++    state: dict[str, Any] = Field(default_factory=dict)
++
++
++class BrandMoatRequest(BaseModel):
++    state: dict[str, Any] = Field(default_factory=dict)
++
++
++@router.get("/criteria")
++def list_criteria() -> dict[str, Any]:
++    """Return the 9 Public Launch criteria definitions."""
++    return {
++        "criteria": [
++            {
++                "key": c.key,
++                "name_ar": c.name_ar,
++                "threshold": c.threshold,
++                "unit": c.unit,
++                "description_ar": c.description_ar,
++            }
++            for c in PUBLIC_LAUNCH_CRITERIA
++        ],
++        "count": len(PUBLIC_LAUNCH_CRITERIA),
++    }
++
++
++@router.post("/gate-check")
++def gate_check(req: GateCheckRequest) -> dict[str, Any]:
++    verdict = evaluate_public_launch_gate(req.state)
++    return verdict.to_dict()
++
++
++@router.post("/pilot-tracker")
++def pilot_tracker(req: PilotTrackerRequest) -> dict[str, Any]:
++    summary = pilot_tracker_summary(req.pilots)
++    return summary.to_dict()
++
++
++@router.post("/pdpl-compliance")
++def pdpl_compliance(req: PDPLRequest) -> dict[str, Any]:
++    report = compute_pdpl_compliance(req.state)
++    return report.to_dict()
++
++
++@router.post("/brand-moat")
++def brand_moat(req: BrandMoatRequest) -> dict[str, Any]:
++    score = compute_brand_moat_score(req.state)
++    return score.to_dict()
++
++
++@router.get("/demo")
++def demo() -> dict[str, Any]:
++    """Combined demo response showing realistic Paid-Beta-stage data."""
++    # State: company is at Paid Beta with 2 pilots, 1 paid, etc.
++    gate_state = {
++        "pilots_completed": 2,
++        "paid_customers": 1,
++        "unsafe_sends": 0,
++        "proof_cadence_weeks": 1,
++        "support_first_response_minutes_p1": 90,
++        "funnel_visible": True,
++        "staging_uptime_days": 3,
++        "billing_webhook_verified": False,
++        "legal_complete": False,
++    }
++    pilots = [
++        {
++            "pilot_id": "p1",
++            "company": "وكالة النمو السعودي",
++            "sector": "agency",
++            "city": "الرياض",
++            "started_at": "2026-04-25",
++            "stage": "completed",
++            "paid": True,
++            "pilot_price_sar": 499,
++            "proof_pack_sent": True,
++            "proof_pack_sent_at": "2026-05-01",
++            "upgrade_outcome": "growth_os_monthly",
++            "upgrade_value_sar": 2999,
++        },
++        {
++            "pilot_id": "p2",
++            "company": "شركة تدريب الرياض",
++            "sector": "training",
++            "city": "الرياض",
++            "started_at": "2026-04-28",
++            "stage": "proof_pack_sent",
++            "paid": False,
++            "pilot_price_sar": 0,
++            "proof_pack_sent": True,
++            "proof_pack_sent_at": "2026-05-01",
++            "upgrade_outcome": "case_study",
++            "upgrade_value_sar": 0,
++        },
++    ]
++    pdpl_state = {
++        "data_residency_saudi": True,
++        "whatsapp_opt_in_audit": True,
++        "email_opt_in_audit": True,
++        "breach_notification_72h_ready": True,
++        "dpa_template_published": True,
++        "privacy_policy_bilingual": False,
++        "data_retention_policy": True,
++        "trace_redaction_active": True,
++        "action_ledger_audit": True,
++        "consent_revocation_path": False,
++    }
++    moat_state = {
++        "events_logged_count": 50,
++        "messages_per_sector_count": 10,
++        "sectors_covered_count": 4,
++        "linkedin_followers": 200,
++        "newsletter_subscribers": 30,
++        "monthly_branded_searches": 5,
++        "case_studies_published": 1,
++        "pdpl_compliance_pct": 80,
++        "iso_27001_progress_pct": 0,
++        "audit_count_last_year": 0,
++        "dpa_signed_with_customers_pct": 50,
++        "agency_partners_count": 1,
++        "active_referring_agencies_count": 0,
++        "agency_revenue_share_paid_sar": 0,
++        "certified_operators_count": 0,
++        "operators_active_last_30d": 0,
++        "operator_revenue_share_paid_sar": 0,
++    }
++
++    return {
++        "gate": evaluate_public_launch_gate(gate_state).to_dict(),
++        "pilots": pilot_tracker_summary(pilots).to_dict(),
++        "pdpl": compute_pdpl_compliance(pdpl_state).to_dict(),
++        "brand_moat": compute_brand_moat_score(moat_state).to_dict(),
++    }
+diff --git a/dealix/auto_client_acquisition/public_launch/__init__.py b/dealix/auto_client_acquisition/public_launch/__init__.py
+new file mode 100644
+index 0000000..63f4376
+--- /dev/null
++++ b/dealix/auto_client_acquisition/public_launch/__init__.py
+@@ -0,0 +1,50 @@
++"""Public Launch readiness gate — Layer 13.
++
++Closes the loop from Paid Beta to Public Launch. All criteria are
++deterministic and gated by Hard Rules (no live send, no scraping,
++PDPL-first, approval-first).
++
++Public surface:
++- evaluate_public_launch_gate(state) -> GateVerdict
++- pilot_tracker_summary(pilots) -> PilotSummary
++- compute_pdpl_compliance(state) -> PDPLReport
++- compute_brand_moat_score(state) -> BrandMoatScore
++"""
++
++from .gate import (
++    GateVerdict,
++    GateCriterion,
++    evaluate_public_launch_gate,
++    PUBLIC_LAUNCH_CRITERIA,
++)
++from .pilot_tracker import (
++    PilotRecord,
++    PilotSummary,
++    pilot_tracker_summary,
++)
++from .pdpl_compliance import (
++    PDPLReport,
++    PDPLCheck,
++    compute_pdpl_compliance,
++)
++from .brand_moat import (
++    BrandMoatScore,
++    BrandMoatDimension,
++    compute_brand_moat_score,
++)
++
++__all__ = [
++    "GateVerdict",
++    "GateCriterion",
++    "evaluate_public_launch_gate",
++    "PUBLIC_LAUNCH_CRITERIA",
++    "PilotRecord",
++    "PilotSummary",
++    "pilot_tracker_summary",
++    "PDPLReport",
++    "PDPLCheck",
++    "compute_pdpl_compliance",
++    "BrandMoatScore",
++    "BrandMoatDimension",
++    "compute_brand_moat_score",
++]
+diff --git a/dealix/auto_client_acquisition/public_launch/brand_moat.py b/dealix/auto_client_acquisition/public_launch/brand_moat.py
+new file mode 100644
+index 0000000..c884a1b
+--- /dev/null
++++ b/dealix/auto_client_acquisition/public_launch/brand_moat.py
+@@ -0,0 +1,209 @@
++"""Brand Moat Score — measure competitive defensibility.
++
++Five moat dimensions per MASTER_STRATEGIC_PLAN §6:
++  1. Data Moat (Saudi Revenue Graph)
++  2. Brand Moat (Saudi-First presence)
++  3. Compliance Moat (PDPL Native)
++  4. Network Moat (Agency Channel)
++  5. Distribution Moat (Operator Network)
++
++Each dimension is scored 0–100. A weighted total is the overall
++moat strength. This is a forward-looking metric — it does not gate
++Public Launch (PDPL + GateVerdict do that), but it's used in
++weekly Founder briefs and investor decks.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass, asdict
++from typing import Any, Mapping
++
++
++@dataclass(frozen=True)
++class BrandMoatDimension:
++    key: str
++    name_ar: str
++    weight: float       # 0.0–1.0
++    description_ar: str
++
++
++BRAND_MOAT_DIMENSIONS: tuple[BrandMoatDimension, ...] = (
++    BrandMoatDimension(
++        key="data_moat",
++        name_ar="Data Moat (Saudi Revenue Graph)",
++        weight=0.30,
++        description_ar="عمق بيانات العلاقات والإشارات السعودية",
++    ),
++    BrandMoatDimension(
++        key="brand_moat",
++        name_ar="Brand Moat (Saudi-First)",
++        weight=0.20,
++        description_ar="حضور الـ founder + المحتوى العربي + الـ brand awareness",
++    ),
++    BrandMoatDimension(
++        key="compliance_moat",
++        name_ar="Compliance Moat (PDPL Native)",
++        weight=0.20,
++        description_ar="audit trail + DPA + opt-in + ISO 27001",
++    ),
++    BrandMoatDimension(
++        key="network_moat",
++        name_ar="Network Moat (Agency Channel)",
++        weight=0.20,
++        description_ar="عدد + جودة الوكالات الشريكة + revenue share",
++    ),
++    BrandMoatDimension(
++        key="distribution_moat",
++        name_ar="Distribution Moat (Operator Network)",
++        weight=0.10,
++        description_ar="Dealix Operators المعتمدون يبيعون كـ خدمة",
++    ),
++)
++
++
++# Sub-criteria scoring (each 0–100 → averaged within a dimension)
++DATA_MOAT_SUBSCORES = {
++    "events_logged_count": (1_000, 100),       # ≥1000 events = 100
++    "messages_per_sector_count": (50, 100),    # ≥50 messages per sector = 100
++    "sectors_covered_count": (10, 100),        # ≥10 sectors = 100
++}
++
++BRAND_MOAT_SUBSCORES = {
++    "linkedin_followers": (5_000, 100),
++    "newsletter_subscribers": (1_000, 100),
++    "monthly_branded_searches": (500, 100),
++    "case_studies_published": (10, 100),
++}
++
++COMPLIANCE_MOAT_SUBSCORES = {
++    "pdpl_compliance_pct": (100, 100),  # already 0–100
++    "iso_27001_progress_pct": (100, 100),
++    "audit_count_last_year": (4, 100),
++    "dpa_signed_with_customers_pct": (100, 100),
++}
++
++NETWORK_MOAT_SUBSCORES = {
++    "agency_partners_count": (30, 100),
++    "active_referring_agencies_count": (15, 100),
++    "agency_revenue_share_paid_sar": (100_000, 100),
++}
++
++DISTRIBUTION_MOAT_SUBSCORES = {
++    "certified_operators_count": (100, 100),
++    "operators_active_last_30d": (50, 100),
++    "operator_revenue_share_paid_sar": (50_000, 100),
++}
++
++ALL_SUBSCORES = {
++    "data_moat": DATA_MOAT_SUBSCORES,
++    "brand_moat": BRAND_MOAT_SUBSCORES,
++    "compliance_moat": COMPLIANCE_MOAT_SUBSCORES,
++    "network_moat": NETWORK_MOAT_SUBSCORES,
++    "distribution_moat": DISTRIBUTION_MOAT_SUBSCORES,
++}
++
++
++@dataclass
++class BrandMoatScore:
++    overall_score: float      # 0–100
++    tier: str                 # "fragile" | "emerging" | "defensible" | "dominant"
++    dimensions: list[Mapping[str, Any]]
++    weakest_dimension: str
++    strongest_dimension: str
++    next_actions_ar: list[str]
++    summary_ar: str
++
++    def to_dict(self) -> dict[str, Any]:
++        return asdict(self)
++
++
++def _score_dimension(dim_key: str, state: Mapping[str, Any]) -> float:
++    subs = ALL_SUBSCORES.get(dim_key, {})
++    if not subs:
++        return 0.0
++    scores: list[float] = []
++    for metric, (target, max_score) in subs.items():
++        raw = state.get(metric, 0) or 0
++        try:
++            v = float(raw)
++        except (TypeError, ValueError):
++            v = 0.0
++        pct = min(v / target, 1.0) * max_score
++        scores.append(pct)
++    return round(sum(scores) / len(scores), 1)
++
++
++def _tier_for(score: float) -> str:
++    if score >= 80:
++        return "dominant"
++    if score >= 60:
++        return "defensible"
++    if score >= 35:
++        return "emerging"
++    return "fragile"
++
++
++def _tier_summary(tier: str) -> str:
++    return {
++        "dominant": "🏆 موقع مهيمن — Dealix لا يُستبدل بسهولة من المنافسين العالميين",
++        "defensible": "🛡️ موقع دفاعي — moat واضح لكن يحتاج تعميق",
++        "emerging": "🌱 موقع ناشئ — البناء قائم؛ الـ moat لم يكتمل",
++        "fragile": "⚠️ موقع هش — المنافسون يقدرون يدخلون السوق بسهولة",
++    }[tier]
++
++
++def compute_brand_moat_score(state: Mapping[str, Any]) -> BrandMoatScore:
++    """Compute weighted brand moat score across 5 dimensions.
++
++    Args:
++        state: dict with sub-metric keys (see *_SUBSCORES dicts above).
++
++    Returns:
++        BrandMoatScore with overall, per-dimension, and recommendations.
++    """
++    dimensions: list[dict[str, Any]] = []
++    weighted_total = 0.0
++
++    for dim in BRAND_MOAT_DIMENSIONS:
++        score = _score_dimension(dim.key, state)
++        weighted_total += score * dim.weight
++        dimensions.append({
++            "key": dim.key,
++            "name_ar": dim.name_ar,
++            "score": score,
++            "weight": dim.weight,
++            "tier": _tier_for(score),
++        })
++
++    overall = round(weighted_total, 1)
++    tier = _tier_for(overall)
++
++    weakest = min(dimensions, key=lambda d: d["score"])
++    strongest = max(dimensions, key=lambda d: d["score"])
++
++    actions: list[str] = []
++    if weakest["score"] < 50:
++        actions.append(
++            f"ضاعف الجهد على {weakest['name_ar']} — هذه أضعف نقطة دفاعية الآن."
++        )
++    if overall < 60:
++        actions.append("لا تنتقل لـ GCC expansion قبل أن يصبح overall ≥ 60.")
++    if overall >= 80:
++        actions.append("ابدأ Series-A pitch — عندك moat قابل للعرض.")
++
++    summary = (
++        f"Brand Moat Score: {overall}/100 ({tier}). "
++        f"الأقوى: {strongest['name_ar']}. "
++        f"الأضعف: {weakest['name_ar']}. "
++        f"{_tier_summary(tier)}."
++    )
++
++    return BrandMoatScore(
++        overall_score=overall,
++        tier=tier,
++        dimensions=dimensions,
++        weakest_dimension=weakest["key"],
++        strongest_dimension=strongest["key"],
++        next_actions_ar=actions,
++        summary_ar=summary,
++    )
+diff --git a/dealix/auto_client_acquisition/public_launch/gate.py b/dealix/auto_client_acquisition/public_launch/gate.py
+new file mode 100644
+index 0000000..8f8b283
+--- /dev/null
++++ b/dealix/auto_client_acquisition/public_launch/gate.py
+@@ -0,0 +1,246 @@
++"""Public Launch Gate — evaluates 9 deterministic criteria.
++
++The gate is the formal transition from Paid Beta to Public Launch.
++All criteria must be deterministic (no LLM, no network) so that the
++verdict is reproducible in CI and in the dashboard.
++
++Criteria (from PAID_BETA_OPERATING_PLAYBOOK §8):
++  1. ≥5 pilots completed (delivered Proof Pack within 7 days)
++  2. ≥2 paid customers (Moyasar invoice paid OR signed Growth OS)
++  3. 0 unsafe sends (no live action without approval in audit ledger)
++  4. Weekly Proof Pack cadence (≥3 weeks consecutive)
++  5. Support flow operational (avg first response < SLA)
++  6. Funnel visible (lead → demo → pilot → paid measurable)
++  7. ≥14 days staging stable (uptime ≥ 99% over 14 days)
++  8. Billing live (Moyasar webhook signed and verified)
++  9. Legal complete (Terms + Privacy + DPA published)
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass, field, asdict
++from typing import Any, Mapping, Sequence
++
++
++@dataclass(frozen=True)
++class GateCriterion:
++    """Definition of a single Public Launch criterion."""
++    key: str
++    name_ar: str
++    threshold: float | int | bool
++    unit: str
++    description_ar: str
++
++
++PUBLIC_LAUNCH_CRITERIA: tuple[GateCriterion, ...] = (
++    GateCriterion(
++        key="pilots_completed",
++        name_ar="Pilots مكتملة",
++        threshold=5,
++        unit="count",
++        description_ar="عدد Pilots التي سُلّم لها Proof Pack نهائي خلال 7 أيام",
++    ),
++    GateCriterion(
++        key="paid_customers",
++        name_ar="عملاء مدفوعون",
++        threshold=2,
++        unit="count",
++        description_ar="عملاء دفعوا فعلياً عبر Moyasar أو وقّعوا Growth OS",
++    ),
++    GateCriterion(
++        key="unsafe_sends",
++        name_ar="إرسال غير آمن",
++        threshold=0,
++        unit="count",
++        description_ar="عدد الأفعال الـ live بدون اعتماد بشري في Action Ledger (يجب = 0)",
++    ),
++    GateCriterion(
++        key="proof_cadence_weeks",
++        name_ar="استمرارية Proof Pack",
++        threshold=3,
++        unit="weeks_consecutive",
++        description_ar="عدد الأسابيع المتتالية التي صدر فيها Proof Pack",
++    ),
++    GateCriterion(
++        key="support_first_response_minutes_p1",
++        name_ar="استجابة Support P1",
++        threshold=120,
++        unit="minutes",
++        description_ar="متوسط استجابة P1 ≤ 120 دقيقة (هدف SLA)",
++    ),
++    GateCriterion(
++        key="funnel_visible",
++        name_ar="Funnel مرئي",
++        threshold=True,
++        unit="bool",
++        description_ar="lead→demo→pilot→paid قابل للقياس في Operating Board",
++    ),
++    GateCriterion(
++        key="staging_uptime_days",
++        name_ar="استقرار Staging",
++        threshold=14,
++        unit="days_uptime_99",
++        description_ar="عدد الأيام المتتالية بـ uptime ≥ 99% على staging",
++    ),
++    GateCriterion(
++        key="billing_webhook_verified",
++        name_ar="Moyasar webhook موثّق",
++        threshold=True,
++        unit="bool",
++        description_ar="Moyasar webhook signed وتم تحقق التوقيع",
++    ),
++    GateCriterion(
++        key="legal_complete",
++        name_ar="القانوني مكتمل",
++        threshold=True,
++        unit="bool",
++        description_ar="Terms of Service + Privacy Policy + DPA منشورة بالعربي والإنجليزي",
++    ),
++)
++
++
++@dataclass
++class GateVerdict:
++    """Result of evaluating Public Launch readiness."""
++    decision: str  # "GO_PUBLIC_LAUNCH" | "NO_GO" | "BLOCKED"
++    score_passed: int
++    score_total: int
++    blockers: list[Mapping[str, Any]]
++    next_actions_ar: list[str]
++    criteria_results: list[Mapping[str, Any]]
++    summary_ar: str
++
++    def to_dict(self) -> dict[str, Any]:
++        return asdict(self)
++
++
++def _check_criterion(crit: GateCriterion, value: Any) -> tuple[bool, str]:
++    """Compare actual value against threshold. Return (passed, reason_ar)."""
++    if crit.unit == "bool":
++        passed = bool(value) is bool(crit.threshold)
++        if passed:
++            return True, "متحقّق"
++        return False, f"يجب أن يكون {crit.threshold}"
++
++    if crit.key == "unsafe_sends":
++        # Unique: lower is better. Threshold = 0 means must equal 0.
++        try:
++            v = int(value)
++        except (TypeError, ValueError):
++            return False, "قيمة غير صحيحة"
++        return (v == 0, f"وُجد {v} (يجب = 0)" if v != 0 else "0 إرسال غير آمن")
++
++    if crit.key == "support_first_response_minutes_p1":
++        # Lower is better. Threshold is the maximum.
++        try:
++            v = float(value)
++        except (TypeError, ValueError):
++            return False, "قيمة غير صحيحة"
++        return (
++            v <= crit.threshold,
++            f"{v:.0f} دقيقة (الحد الأعلى {crit.threshold})",
++        )
++
++    # Default: numeric, higher is better.
++    try:
++        v = float(value)
++    except (TypeError, ValueError):
++        return False, "قيمة غير صحيحة"
++    return (
++        v >= crit.threshold,
++        f"{int(v) if v.is_integer() else v}/{crit.threshold} {crit.unit}",
++    )
++
++
++def _next_action_for(crit: GateCriterion, value: Any) -> str | None:
++    """Generate Arabic next-action when a criterion fails."""
++    if crit.key == "pilots_completed":
++        return f"شغّل {int(crit.threshold) - int(value or 0)} Pilots إضافية مع Proof Pack مكتمل."
++    if crit.key == "paid_customers":
++        return f"اقفل {int(crit.threshold) - int(value or 0)} عميل مدفوع إضافي (Moyasar أو Growth OS)."
++    if crit.key == "unsafe_sends":
++        return "راجع Action Ledger، أوقف القناة المعنية، نفّذ post-mortem فوراً."
++    if crit.key == "proof_cadence_weeks":
++        return "أصدر Proof Pack أسبوعياً متتالياً حتى تصل 3 أسابيع متتالية."
++    if crit.key == "support_first_response_minutes_p1":
++        return "حسّن SLA — قلّل first-response P1 إلى ≤120 دقيقة."
++    if crit.key == "funnel_visible":
++        return "افتح Operating Board مع كل الأعمدة الـ15 وحدّثه يومياً."
++    if crit.key == "staging_uptime_days":
++        return f"حافظ على staging stable حتى تصل {int(crit.threshold)} يوم متتالي بـ uptime ≥99%."
++    if crit.key == "billing_webhook_verified":
++        return "فعّل Moyasar webhook signature verification + اختبر بـ test payload."
++    if crit.key == "legal_complete":
++        return "انشر Terms + Privacy + DPA باللغتين العربية والإنجليزية على الموقع."
++    return None
++
++
++def evaluate_public_launch_gate(
++    state: Mapping[str, Any],
++    criteria: Sequence[GateCriterion] | None = None,
++) -> GateVerdict:
++    """Evaluate Public Launch readiness.
++
++    Args:
++        state: dict mapping criterion key → measured value.
++        criteria: optional override (defaults to PUBLIC_LAUNCH_CRITERIA).
++
++    Returns:
++        GateVerdict with decision, score, blockers, and Arabic next actions.
++    """
++    crits = criteria or PUBLIC_LAUNCH_CRITERIA
++    results: list[dict[str, Any]] = []
++    blockers: list[dict[str, Any]] = []
++    actions: list[str] = []
++    passed_count = 0
++
++    for c in crits:
++        value = state.get(c.key)
++        ok, reason = _check_criterion(c, value)
++        result = {
++            "key": c.key,
++            "name_ar": c.name_ar,
++            "passed": ok,
++            "value": value,
++            "threshold": c.threshold,
++            "unit": c.unit,
++            "reason_ar": reason,
++        }
++        results.append(result)
++        if ok:
++            passed_count += 1
++        else:
++            blockers.append(result)
++            action = _next_action_for(c, value)
++            if action:
++                actions.append(action)
++
++    total = len(crits)
++    if passed_count == total:
++        decision = "GO_PUBLIC_LAUNCH"
++        summary = (
++            f"✅ جاهز للإطلاق العام — كل المعايير الـ{total} متحققة. "
++            "ابدأ خطة Public Launch من MASTER_STRATEGIC_PLAN §3 Phase 3."
++        )
++    elif any(b["key"] == "unsafe_sends" for b in blockers):
++        decision = "BLOCKED"
++        summary = (
++            "🛑 Hard block — إرسال غير آمن مكتشف. "
++            "أوقف كل live actions الآن. شغّل incident_router SEV1."
++        )
++    else:
++        decision = "NO_GO"
++        summary = (
++            f"⏳ NO_GO — {passed_count}/{total} متحقق. "
++            f"المتبقي: {', '.join(b['name_ar'] for b in blockers)}."
++        )
++
++    return GateVerdict(
++        decision=decision,
++        score_passed=passed_count,
++        score_total=total,
++        blockers=blockers,
++        next_actions_ar=actions,
++        criteria_results=results,
++        summary_ar=summary,
++    )
+diff --git a/dealix/auto_client_acquisition/public_launch/pdpl_compliance.py b/dealix/auto_client_acquisition/public_launch/pdpl_compliance.py
+new file mode 100644
+index 0000000..92925ab
+--- /dev/null
++++ b/dealix/auto_client_acquisition/public_launch/pdpl_compliance.py
+@@ -0,0 +1,176 @@
++"""PDPL Compliance — final readiness check before Public Launch.
++
++Saudi Personal Data Protection Law (PDPL) compliance check covering:
++- Data residency
++- Opt-in audit per channel
++- Breach notification readiness (72-hour rule)
++- DPA template availability
++- Privacy policy bilingual publication
++- SDAIA registration status (if applicable)
++- Data retention policy enforcement
++
++Deterministic — no I/O, no LLM. State is passed in as dict.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass, asdict
++from typing import Any, Mapping
++
++
++@dataclass(frozen=True)
++class PDPLCheck:
++    key: str
++    name_ar: str
++    description_ar: str
++    severity: str  # "critical" | "high" | "medium"
++
++
++PDPL_CHECKS: tuple[PDPLCheck, ...] = (
++    PDPLCheck(
++        key="data_residency_saudi",
++        name_ar="إقامة البيانات في السعودية",
++        description_ar="بيانات العملاء مخزنة في region سعودي أو لدى شريك سعودي معتمد",
++        severity="critical",
++    ),
++    PDPLCheck(
++        key="whatsapp_opt_in_audit",
++        name_ar="تدقيق opt-in لـ WhatsApp",
++        description_ar="كل رقم واتساب فيه opt-in موثّق قبل الإرسال",
++        severity="critical",
++    ),
++    PDPLCheck(
++        key="email_opt_in_audit",
++        name_ar="تدقيق opt-in لـ Email",
++        description_ar="كل بريد إلكتروني فيه opt-in موثّق أو جاء عبر website form",
++        severity="high",
++    ),
++    PDPLCheck(
++        key="breach_notification_72h_ready",
++        name_ar="جاهزية إبلاغ التسريب خلال 72 ساعة",
++        description_ar="عند تسريب بيانات: إبلاغ SDAIA + العملاء المتأثرين خلال 72 ساعة",
++        severity="critical",
++    ),
++    PDPLCheck(
++        key="dpa_template_published",
++        name_ar="نشر نموذج DPA",
++        description_ar="نموذج Data Processing Agreement عربي/إنجليزي متاح للعملاء",
++        severity="high",
++    ),
++    PDPLCheck(
++        key="privacy_policy_bilingual",
++        name_ar="سياسة الخصوصية ثنائية اللغة",
++        description_ar="Privacy Policy منشورة بالعربية والإنجليزية على dealix.me",
++        severity="critical",
++    ),
++    PDPLCheck(
++        key="data_retention_policy",
++        name_ar="سياسة احتفاظ البيانات",
++        description_ar="بيانات الـ leads غير المتفاعلين تُحذف بعد 90 يوم",
++        severity="high",
++    ),
++    PDPLCheck(
++        key="trace_redaction_active",
++        name_ar="إخفاء PII من traces",
++        description_ar="Trace Redactor مفعّل ويغطي email/phone/national_id/passport",
++        severity="critical",
++    ),
++    PDPLCheck(
++        key="action_ledger_audit",
++        name_ar="سجل الأفعال (Action Ledger)",
++        description_ar="كل external action مسجّل مع who/what/when/approval_id",
++        severity="high",
++    ),
++    PDPLCheck(
++        key="consent_revocation_path",
++        name_ar="مسار إلغاء الموافقة",
++        description_ar="العميل يقدر يلغي opt-in عبر link/email/WhatsApp بدون احتكاك",
++        severity="medium",
++    ),
++)
++
++
++@dataclass
++class PDPLReport:
++    overall_status: str   # "compliant" | "needs_fixes" | "non_compliant"
++    score_passed: int
++    score_total: int
++    critical_failures: list[Mapping[str, Any]]
++    high_failures: list[Mapping[str, Any]]
++    medium_failures: list[Mapping[str, Any]]
++    check_results: list[Mapping[str, Any]]
++    summary_ar: str
++    next_actions_ar: list[str]
++
++    def to_dict(self) -> dict[str, Any]:
++        return asdict(self)
++
++
++def compute_pdpl_compliance(state: Mapping[str, Any]) -> PDPLReport:
++    """Evaluate PDPL compliance.
++
++    Args:
++        state: dict mapping check key → bool (True = compliant).
++               Keys not in state default to False (non-compliant).
++
++    Returns:
++        PDPLReport with overall status, failures by severity, next actions.
++    """
++    results: list[dict[str, Any]] = []
++    critical_failures: list[dict[str, Any]] = []
++    high_failures: list[dict[str, Any]] = []
++    medium_failures: list[dict[str, Any]] = []
++    actions: list[str] = []
++    passed = 0
++
++    for check in PDPL_CHECKS:
++        ok = bool(state.get(check.key, False))
++        result = {
++            "key": check.key,
++            "name_ar": check.name_ar,
++            "passed": ok,
++            "severity": check.severity,
++            "description_ar": check.description_ar,
++        }
++        results.append(result)
++        if ok:
++            passed += 1
++        else:
++            if check.severity == "critical":
++                critical_failures.append(result)
++                actions.append(f"🛑 [CRITICAL] {check.name_ar} — {check.description_ar}")
++            elif check.severity == "high":
++                high_failures.append(result)
++                actions.append(f"⚠️ [HIGH] {check.name_ar}")
++            else:
++                medium_failures.append(result)
++
++    total = len(PDPL_CHECKS)
++
++    if critical_failures:
++        status = "non_compliant"
++        summary = (
++            f"🛑 NON-COMPLIANT — {len(critical_failures)} مشاكل critical. "
++            "لا تنتقل لـ Public Launch قبل إصلاحها."
++        )
++    elif high_failures:
++        status = "needs_fixes"
++        summary = (
++            f"⚠️ NEEDS FIXES — {len(high_failures)} مشاكل high. "
++            f"PDPL compliance score: {passed}/{total}."
++        )
++    else:
++        status = "compliant"
++        summary = f"✅ COMPLIANT — كل {total} فحوصات PDPL متحققة."
++
++    return PDPLReport(
++        overall_status=status,
++        score_passed=passed,
++        score_total=total,
++        critical_failures=critical_failures,
++        high_failures=high_failures,
++        medium_failures=medium_failures,
++        check_results=results,
++        summary_ar=summary,
++        next_actions_ar=actions,
++    )
+diff --git a/dealix/auto_client_acquisition/public_launch/pilot_tracker.py b/dealix/auto_client_acquisition/public_launch/pilot_tracker.py
+new file mode 100644
+index 0000000..0a67507
+--- /dev/null
++++ b/dealix/auto_client_acquisition/public_launch/pilot_tracker.py
+@@ -0,0 +1,176 @@
++"""Pilot Tracker — track 5–10 active pilots toward Public Launch gate.
++
++Tracks each Pilot's lifecycle:
++    intake → diagnostic_24h → pilot_48h → proof_pack_7d → upgrade_decision
++
++Used by the Public Launch Gate to count `pilots_completed` and
++`paid_customers`. Deterministic — no I/O, no LLM.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass, asdict, field
++from datetime import datetime, timezone
++from typing import Any, Mapping, Sequence
++
++
++PILOT_STAGES = (
++    "intake",                 # T+0
++    "diagnostic_sent",        # T+24h
++    "pilot_delivered",        # T+48h
++    "proof_pack_sent",        # T+7d
++    "upgrade_decided",        # T+14d
++    "completed",              # marked done
++    "stalled",                # SLA breach
++    "lost",                   # no upgrade, no case study
++)
++
++UPGRADE_OUTCOMES = (
++    "growth_os_monthly",      # 2,999/mo subscription
++    "partnership_growth",     # 3,000–7,500 SAR
++    "case_study",             # free in exchange for case study
++    "second_pilot",           # paid 499 again, different angle
++    "no_upgrade",              # explicit decline
++    "ghost",                   # no response
++)
++
++
++@dataclass
++class PilotRecord:
++    """A single Pilot's data."""
++    pilot_id: str
++    company: str
++    sector: str
++    city: str
++    started_at: str           # ISO date
++    stage: str
++    paid: bool                # True if 499 SAR received OR signed Growth OS
++    pilot_price_sar: int
++    proof_pack_sent: bool
++    proof_pack_sent_at: str | None
++    upgrade_outcome: str | None
++    upgrade_value_sar: int = 0
++    notes: str = ""
++
++    def to_dict(self) -> dict[str, Any]:
++        return asdict(self)
++
++
++@dataclass
++class PilotSummary:
++    """Aggregate view across all pilots."""
++    total_pilots: int
++    completed_pilots: int            # reached upgrade_decided or completed
++    proof_packs_delivered: int
++    paid_pilots: int
++    paid_revenue_sar: int            # sum of pilot prices that were paid
++    upgrade_revenue_sar: int         # sum of upgrade_value_sar
++    case_studies: int                # upgrade_outcome == "case_study"
++    growth_os_subscribers: int       # upgrade_outcome == "growth_os_monthly"
++    stalled_pilots: int
++    lost_pilots: int
++    completion_rate: float           # completed / total
++    paid_conversion_rate: float      # paid / total
++    upgrade_conversion_rate: float   # any upgrade / completed
++    by_sector: dict[str, int]
++    by_city: dict[str, int]
++    average_proof_pack_days: float
++    summary_ar: str
++
++    def to_dict(self) -> dict[str, Any]:
++        return asdict(self)
++
++
++def _parse_iso(s: str) -> datetime | None:
++    if not s:
++        return None
++    try:
++        return datetime.fromisoformat(s.replace("Z", "+00:00"))
++    except ValueError:
++        return None
++
++
++def pilot_tracker_summary(pilots: Sequence[PilotRecord | Mapping[str, Any]]) -> PilotSummary:
++    """Compute aggregate summary across all pilots.
++
++    Accepts either PilotRecord instances or plain dicts (for API ingestion).
++    """
++    records: list[PilotRecord] = []
++    for p in pilots:
++        if isinstance(p, PilotRecord):
++            records.append(p)
++        else:
++            records.append(PilotRecord(
++                pilot_id=str(p.get("pilot_id", "")),
++                company=str(p.get("company", "")),
++                sector=str(p.get("sector", "unknown")),
++                city=str(p.get("city", "unknown")),
++                started_at=str(p.get("started_at", "")),
++                stage=str(p.get("stage", "intake")),
++                paid=bool(p.get("paid", False)),
++                pilot_price_sar=int(p.get("pilot_price_sar", 499)),
++                proof_pack_sent=bool(p.get("proof_pack_sent", False)),
++                proof_pack_sent_at=p.get("proof_pack_sent_at"),
++                upgrade_outcome=p.get("upgrade_outcome"),
++                upgrade_value_sar=int(p.get("upgrade_value_sar", 0)),
++                notes=str(p.get("notes", "")),
++            ))
++
++    total = len(records)
++    completed_stages = {"upgrade_decided", "completed"}
++    completed = sum(1 for r in records if r.stage in completed_stages)
++    proof_count = sum(1 for r in records if r.proof_pack_sent)
++    paid_count = sum(1 for r in records if r.paid)
++    paid_revenue = sum(r.pilot_price_sar for r in records if r.paid)
++    upgrade_revenue = sum(r.upgrade_value_sar for r in records)
++    case_studies = sum(1 for r in records if r.upgrade_outcome == "case_study")
++    gros_subs = sum(1 for r in records if r.upgrade_outcome == "growth_os_monthly")
++    stalled = sum(1 for r in records if r.stage == "stalled")
++    lost = sum(1 for r in records if r.stage == "lost")
++
++    by_sector: dict[str, int] = {}
++    by_city: dict[str, int] = {}
++    for r in records:
++        by_sector[r.sector] = by_sector.get(r.sector, 0) + 1
++        by_city[r.city] = by_city.get(r.city, 0) + 1
++
++    proof_durations: list[float] = []
++    for r in records:
++        if r.proof_pack_sent and r.proof_pack_sent_at and r.started_at:
++            start = _parse_iso(r.started_at)
++            done = _parse_iso(r.proof_pack_sent_at)
++            if start and done:
++                proof_durations.append((done - start).total_seconds() / 86400)
++    avg_proof_days = (
++        round(sum(proof_durations) / len(proof_durations), 2)
++        if proof_durations else 0.0
++    )
++
++    summary_ar = (
++        f"{total} Pilots إجمالاً، {completed} مكتمل، "
++        f"{paid_count} مدفوع، {proof_count} Proof Packs، "
++        f"{gros_subs} Growth OS، {case_studies} case studies."
++    )
++
++    return PilotSummary(
++        total_pilots=total,
++        completed_pilots=completed,
++        proof_packs_delivered=proof_count,
++        paid_pilots=paid_count,
++        paid_revenue_sar=paid_revenue,
++        upgrade_revenue_sar=upgrade_revenue,
++        case_studies=case_studies,
++        growth_os_subscribers=gros_subs,
++        stalled_pilots=stalled,
++        lost_pilots=lost,
++        completion_rate=round(completed / total, 3) if total else 0.0,
++        paid_conversion_rate=round(paid_count / total, 3) if total else 0.0,
++        upgrade_conversion_rate=(
++            round((gros_subs + case_studies) / completed, 3)
++            if completed else 0.0
++        ),
++        by_sector=by_sector,
++        by_city=by_city,
++        average_proof_pack_days=avg_proof_days,
++        summary_ar=summary_ar,
++    )
+diff --git a/dealix/docs/MASTER_STRATEGIC_PLAN.md b/dealix/docs/MASTER_STRATEGIC_PLAN.md
+new file mode 100644
+index 0000000..6651573
+--- /dev/null
++++ b/dealix/docs/MASTER_STRATEGIC_PLAN.md
+@@ -0,0 +1,653 @@
++# Dealix — Master Strategic Plan
++## من الى — من Pilot 499 إلى Saudi Revenue Execution OS الفئة المهيمنة
++
++> **القاعدة الذهبية:** Dealix لا يبيع features. يبيع **نتائج إيرادية موثّقة**.
++> كل قرار في هذه الوثيقة مبني على هذا المبدأ.
++
++---
++
++## 0. التشخيص الاستراتيجي (Where We Stand — May 2026)
++
++### نقاط القوة الحقيقية
++1. **Tech foundation عميقة**: 12 طبقة معمارية، 200+ endpoint، 791 اختبار، CI أخضر، approval-first من البنية لا من الـ wrapper.
++2. **Positioning محكم**: Saudi Revenue Execution OS — ليس CRM، ليس bot، ليس scraper. القوة في الوضوح.
++3. **Compliance built-in**: PDPL، WhatsApp opt-in، Safety Eval، Saudi Tone Eval، Trace Redactor، Patch Firewall — ميزة لا يعطيها HubSpot ولا Gong محلياً.
++4. **Service Tower productized**: 13+ خدمة، كل واحدة فيها workflow + proof + pricing + upsell.
++5. **6 service bundles** بـ pricing واضح من 499 ر.س إلى Custom.
++6. **Founder-Led Growth جاهز**: المؤسس عربي، يفهم السوق السعودي، يبيع بنفسه.
++
++### الفجوات التي لازم تُسد قبل التوسع
++1. **0 paid customers**: المنتج جاهز، السوق غير مُختبَر بعد.
++2. **0 case studies**: لا proof خارجي للمشترين.
++3. **No pricing validation**: 499/2,999/etc. أرقام منطقية لكن غير مُختبَرة بـ A/B.
++4. **No retention data**: Growth OS Monthly = اشتراك، لكن لا churn data بعد.
++5. **No partner channel**: الوكالات هي الـ wedge الأقوى لكن لا اتفاقيات.
++6. **No content moat**: لا blog، لا newsletter، لا SEO/AEO رصيد.
++7. **No data moat**: قاعدة بيانات الفرص لم تتراكم بعد — كل عميل جديد يبدأ من صفر.
++
++### الفرضية الاستراتيجية الكبرى
++> **الفائز في السوق السعودي للـ Revenue Execution هو من يبني أعمق Saudi Revenue Graph + أوسع شبكة وكالات قبل أن تقرر HubSpot/Salesforce/Gong الترجمة الفعلية للعربية.**
++>
++> النافذة الزمنية: **18–24 شهر**. بعدها، إما Dealix هو الـ default للـ B2B السعودي، أو يصبح niche tool.
++
++---
++
++## 1. النية النهائية (North Star — 36 شهراً)
++
++```
++Year 1 (2026):  Saudi Private Beta + Paid Beta + 50 paying customers + $300K ARR
++Year 2 (2027):  Saudi GA + 500 paying customers + Agency Network 30 partners + $3M ARR
++Year 3 (2028):  GCC expansion (UAE, Kuwait, Bahrain) + 2,000 customers + $15M ARR
++Year 4 (2029):  Series A + MENA + Arabic LLM moat + $50M ARR target
++```
++
++### Vision Statement (داخلي)
++> "أن يصبح Dealix الـ Operating System الذي تُدار به مبيعات وشراكات أي شركة سعودية تطمح للنمو، بحيث لا تستطيع HubSpot أو Salesforce المنافسة لأن Dealix يفهم السياق المحلي بعمق لا يستطيعون مجاراته."
++
++### Mission Statement (خارجي)
++> "نحوّل بيانات وقنوات الشركات السعودية إلى فرص مدفوعة وشراكات موثّقة، بدون scraping، بدون رسائل عشوائية، بأمان PDPL تام، وبموافقتك على كل تواصل."
++
++### الـ Anti-Mission (ما لا نفعله أبداً)
++- ❌ نضمن مبيعات.
++- ❌ نسحب بيانات LinkedIn.
++- ❌ نرسل WhatsApp بدون opt-in.
++- ❌ نخزّن credentials.
++- ❌ نسوّق على شاشات بناءً على casino-like dark patterns.
++- ❌ نشتغل بدون موافقة العميل على كل action خارجي.
++
++---
++
++## 2. Positioning Architecture (4 طبقات)
++
++### الطبقة 1 — Category Positioning
++**Category:** Saudi Revenue Execution OS
++
++**Definition:** "نظام تشغيل النمو والإيرادات للشركات السعودية، يدير الـ pipeline من اكتشاف الفرصة إلى Proof Pack، بأمان PDPL وبصوت سعودي."
++
++**ما هو ليس:**
++- CRM (HubSpot, Salesforce, Zoho) — هؤلاء قاعدة بيانات.
++- WhatsApp tool (Wati, Twilio) — هؤلاء قنوات إرسال.
++- Lead scraper (Apollo, ZoomInfo) — هؤلاء scraping.
++- AI chatbot عام (ChatGPT, Claude) — هؤلاء يولّدون نص.
++- Agency تقليدية — هؤلاء عمل يدوي.
++
++### الطبقة 2 — Audience Positioning (مَن نخدم)
++
++| Segment | الحجم | الـ pain | الميزة لـ Dealix |
++|---------|------|---------|------------------|
++| **B2B SMBs السعودية** | 50K+ شركة | لا فريق مبيعات، لا CRM، إيرادات متذبذبة | يحلّ كل ذلك بـ 2,999 ر.س/شهر |
++| **Marketing Agencies** | 2K+ وكالة | يفقدون عملاء، Proof ضعيف، Manual | Dealix = Growth OS تبيعه باسم الوكالة |
++| **Training/Consulting Firms** | 3K+ شركة | بيع طويل، فرص نادرة | First 10 Opportunities Sprint = حل سريع |
++| **B2B SaaS سعودي** | 200+ شركة | sales velocity بطيء | Growth OS Monthly = velocity engine |
++| **Logistics/Construction/F&B** | 10K+ شركة | علاقات بشركات، لا outbound | Partnership Sprint = شبكة شراكات |
++
++**ICP الحالي (Beta):** Marketing Agencies في الرياض/جدة (10–50 موظف). لماذا؟ لأنهم قناة توزيع، يفهمون قيمة Pilot، وعندهم عملاء جاهزون.
++
++### الطبقة 3 — Problem Positioning (المشكلة كما يرونها هم)
++
++**ليس:** "نحن نحتاج CRM"
++**بل:** "كل شهر نخسر فرص لأنه ما عندنا فريق نمو، والوكالة عندها claims غير مُثبتة، والـ AI tools تكتب رسائل لا تشبه السعودية، والـ WhatsApp tools تخاطر بـ ban، وما عندنا proof نريه للقيادة."
++
++**Dealix كحل واحد لـ 6 مشاكل في وقت واحد**:
++1. لا فريق نمو ✅ → Autonomous Service Operator
++2. لا proof ✅ → Proof Pack أسبوعي
++3. رسائل غير سعودية ✅ → Saudi Tone Eval
++4. WhatsApp risk ✅ → opt-in audit + draft only
++5. لا ROI mapping ✅ → Revenue Work Units
++6. لا multi-channel ✅ → 11 connectors تحت سقف واحد
++
++### الطبقة 4 — Pricing Positioning (Anchor Strategy)
++
++```
++0 ر.س   — Free Diagnostic                  (24h tease)
++499     — First 10 Opportunities Sprint    (one-time wedge)
++1,500   — Data to Revenue                  (data-rich SMB)
++2,999/mo— Executive Growth OS              (anchor — most-sold)
++3,000-7,500 — Partnership Growth          (agency upsell)
++Custom  — Full Growth Control Tower       (enterprise)
++```
++
++**القاعدة:** السعر الأساسي = **2,999 ر.س/شهر**. كل شيء آخر يُسوَّق كـ "بداية رخيصة" أو "حالة خاصة". هذا anchoring يجعل 499 يبدو هدية و2,999 يبدو معقول.
++
++---
++
++## 3. Go-To-Market Strategy (12 شهر)
++
++### Phase 1 — Paid Beta Sprint (Months 1–3)
++**الهدف:** أول 10 paying customers + 3 case studies + 3 agency partners.
++
++**القنوات (مرتبة حسب الأولوية):**
++
++#### Channel 1 — Founder-Led Outbound (60% من الجهد)
++- 25 رسالة manual يومياً (LinkedIn DM يدوي + Email + WhatsApp opt-in).
++- Founder voice: المؤسس يبيع بنفسه. لا SDR. لا automation.
++- Cadence: 3 messages/prospect over 7 days (initial → value-add → final).
++- ICP: Agencies (10/day), Training (5/day), B2B SaaS (5/day), Local services (5/day).
++- KPI: 25 messages → 5 replies → 2 demos → 1 pilot → 1 paid (الأسبوع الأول هدف Realistic).
++
++#### Channel 2 — Agency Partnership Program (25% من الجهد)
++- Pilot 1 لكل وكالة → case study → revenue share 20% on referrals.
++- Co-branded Proof Pack (الوكالة + Dealix logos).
++- Monthly partner scorecard.
++- KPI: 3 وكالات في 90 يوم → 9 sub-clients → 27% conversion to paid.
++
++#### Channel 3 — Founder Content (10% من الجهد)
++- 1 LinkedIn post/day (founder voice، باللغة العربية).
++- 1 X (Twitter) post/day (نصائح تشغيلية، arabic).
++- Weekly newsletter (10 توصية لكل وكالة سعودية، arabic).
++- Long-form: 1 article/week (arabic) عن "كيف تشغّل النمو بدون فريق".
++- KPI: 500 followers → 10 inbound leads/شهر بنهاية Phase 1.
++
++#### Channel 4 — Strategic PR (5% من الجهد)
++- Aim for: Asharq Business، Saudi Gazette، Wamda، Magnitt.
++- Story: "أول Saudi Revenue Execution OS — مؤسس سعودي يبني فئة جديدة".
++- Pitch بعد أول 5 paying customers (proof matters).
++
++### Phase 2 — Pilot Expansion (Months 4–6)
++**الهدف:** 30 paying customers + Agency network 10 partners + $50K MRR.
++
++- توسيع الـ outbound من 25/يوم إلى 50/يوم (مع SDR واحد part-time).
++- إطلاق Public landing pages بالعربية + الإنجليزية.
++- إطلاق "Dealix Academy" (محتوى تدريبي مجاني → leads).
++- بدء AEO/SEO استثمار جاد (Arabic-first).
++- إطلاق "Dealix Marketplace" (الوكالات تنشر عروضها).
++
++### Phase 3 — GA + Series-A Prep (Months 7–12)
++**الهدف:** 200 paying customers + $300K ARR + Series A pitch ready.
++
++- Self-serve onboarding (لا يحتاج demo).
++- API documentation pública.
++- Affiliate program (الوكالات تربح 30% recurring).
++- إطلاق Mobile app (PWA على الأقل).
++- Series A pitch deck + 18-month plan.
++
++---
++
++## 4. Sales Playbook (5 مراحل)
++
++### Stage 1 — Prospecting
++**القناة الأساسية:** LinkedIn Sales Navigator (يدوي) + Apollo (lookup فقط، لا scraping) + Personal Network.
++
++**ICP filters:**
++- Industry: Marketing Agency / B2B SaaS / Training / Consulting.
++- Size: 10–50 employees.
++- Location: SA (Riyadh/Jeddah/Dammam priority).
++- Title: Founder, CEO, Head of Growth, Head of Marketing, Head of Sales.
++- Signals: Hiring (growth/sales role), Series A funded, Recent product launch, LinkedIn activity.
++
++**Output:** 100 prospects/أسبوع → Operating Board.
++
++### Stage 2 — Qualification (BANT-Saudi)
++**B**udget: 499 SAR قادر؟ Pilot accessible. 2,999/mo قادر؟ Growth OS.
++**A**uthority: Founder/CEO أو Head of Growth/Sales/Marketing.
++**N**eed: محتاج فرص جديدة، أو عنده قائمة، أو يبحث عن شراكات.
++**T**iming: يدفع هذا الشهر؟ → MQL. هذا الربع؟ → Nurture.
++
++**Output:** 25% من prospects → MQL.
++
++### Stage 3 — Demo (12 دقيقة, Saudi-pace)
++**Structure (12 minutes total):**
++- 0–2: تعرّف (الاسم، الشركة، الـ pain).
++- 2–6: Show — 3 features حقيقية:
++  1. Live Free Diagnostic (يأخذ 30 ثانية).
++  2. Saudi Tone Eval على رسالة سيئة (يلوّن المشاكل).
++  3. Approval flow على رسالة WhatsApp (يُظهر approval modal).
++- 6–9: Pricing — 5 bundles → 499 anchor → 2,999 anchor.
++- 9–12: قرار — "نبدأ Pilot 499 يوم الأحد؟" أو "أرسل لك Free Diagnostic أولاً؟"
++
++**القاعدة:** لا تستخدم slides. استخدم المنتج الحي.
++
++**Output:** 50% من demos → Pilot أو Free Diagnostic.
++
++### Stage 4 — Pilot (7 أيام, $499)
++**Day 0 (T+0):** intake (15 دقيقة) → سجّل في Operating Board.
++**Day 1 (T+24):** Free Diagnostic سُلِّم (3 فرص + رسالة + مخاطرة + توصية).
++**Day 2 (T+48):** Pilot كامل (10 فرص + 10 رسائل + خطة متابعة).
++**Day 7:** Proof Pack نهائي + جلسة مراجعة 30 دقيقة + 3 upgrade paths.
++
++**Output:** 70% من Pilots → Growth OS Monthly OR Case Study.
++
++### Stage 5 — Expansion (Recurring)
++**Month 2:** Quarterly Business Review (QBR).
++**Month 3:** Cross-sell Partnership Sprint (3,000–7,500 ر.س).
++**Month 6:** Annual upgrade (Growth OS Pro, custom price).
++**Month 12:** Renewal + 15% expansion (more channels, more agents).
++
++**KPIs:**
++- Net Revenue Retention (NRR) target: 130%.
++- Logo Retention target: 90%.
++- Time to First Proof Pack: ≤ 48h.
++
++---
++
++## 5. Customer Journey Map (8 مراحل)
++
++```
++1. UNAWARE        → 2. PROBLEM-AWARE   → 3. SOLUTION-AWARE
++4. PRODUCT-AWARE  → 5. ACTIVATED       → 6. RETAINED
++7. EXPANDED       → 8. ADVOCATE
++```
++
++| Stage | Trigger | Channel | Asset | Conversion Goal |
++|-------|---------|---------|-------|-----------------|
++| 1. Unaware | LinkedIn impression | Founder content | Arabic post about pain | Click profile → 2 |
++| 2. Problem-aware | "أحتاج فرص" | Newsletter signup | Free Diagnostic CTA | Subscribe → 3 |
++| 3. Solution-aware | Visits dealix.sa | landing/companies.html | Demo video 12min | Book demo → 4 |
++| 4. Product-aware | Demo done | Live demo + landing | Pilot 499 offer | Pay 499 → 5 |
++| 5. Activated | Pilot paid | Onboarding flow | First Proof Pack | Approval rate ≥30% → 6 |
++| 6. Retained | Month 2 | QBR call | Growth OS subscription | Upgrade to 2,999/mo → 7 |
++| 7. Expanded | Month 3+ | CSM relationship | Partnership Sprint | +3,000 ر.س → 8 |
++| 8. Advocate | Month 6+ | Case study + referrals | Co-branded content | 1+ referral/quarter |
++
++---
++
++## 6. Competitive Moat Strategy (5 طبقات)
++
++### Moat 1 — Data Moat (Saudi Revenue Graph)
++**كيف يبني:**
++- كل event من كل عميل (مع الموافقة) → Revenue Graph عام.
++- بعد 100 عميل، Dealix يعرف:
++  - أي رسالة عربية تُحوِّل في قطاع X؟
++  - أي قناة الأفضل لشركة Y بحجم Z؟
++  - متى أفضل وقت للتواصل في رمضان؟
++- HubSpot/Salesforce لا يستطيعون بناء هذا — بياناتهم عالمية.
++
++**Time to build:** 12 شهر.
++
++### Moat 2 — Brand Moat (Saudi-First)
++**كيف يبني:**
++- Founder presence على LinkedIn/X بالعربية يومياً.
++- Saudi-only events (دورة "نمو السعودية" شهرية).
++- Saudi-only Customer Advisory Board.
++- اللغة، الـ examples، الـ tone — كله سعودي.
++- HubSpot/Salesforce محتواهم مترجم — Dealix محتواه مولود سعودي.
++
++**Time to build:** 6 شهر.
++
++### Moat 3 — Compliance Moat (PDPL Native)
++**كيف يبني:**
++- PDPL audit شهري.
++- DPA template جاهز لكل عميل.
++- Penetration test ربع سنوي.
++- ISO 27001 certification (Year 2).
++- HubSpot/Salesforce يجاهدون لـ GDPR — Dealix بُني لـ PDPL من اليوم الأول.
++
++**Time to build:** 9 شهر.
++
++### Moat 4 — Network Moat (Agency Channel)
++**كيف يبني:**
++- 30 وكالة شريكة بنهاية Year 2.
++- كل وكالة عندها 10–50 عميل.
++- Lock-in: الوكالة تربح 20% recurring → revenue share switching cost عالي.
++- HubSpot/Salesforce ليس عندهم agency program عربي.
++
++**Time to build:** 18 شهر.
++
++### Moat 5 — Distribution Moat (Operator Network)
++**كيف يبني:**
++- 1,000 "Dealix Operator" certified بنهاية Year 3.
++- Operators يبيعون Dealix كـ خدمة لعملائهم.
++- كل Operator يربح 30% recurring لمدة 2 سنوات.
++- يصبح Dealix "AWS لـ Saudi Sales".
++
++**Time to build:** 30 شهر.
++
++---
++
++## 7. Pricing Strategy & Unit Economics
++
++### Pricing Ladder (Final Form)
++
++| Tier | Price | Target | Conversion | LTV/CAC |
++|------|-------|--------|------------|---------|
++| Free Diagnostic | 0 | Lead magnet | 100% (free) | — |
++| First 10 Sprint | 499 | Wedge | 60% from leads | LTV=499, CAC=200 → 2.5x |
++| Data to Revenue | 1,500 | Data-rich SMB | 30% from Pilots | LTV=1500, CAC=300 → 5x |
++| Growth OS Monthly | 2,999/mo | Anchor | 40% from Pilots | LTV=36K (12mo), CAC=600 → 60x |
++| Partnership Growth | 3,000–7,500 | Cross-sell | 20% from Growth OS | LTV=15K avg, CAC=300 → 50x |
++| Full Control Tower | Custom (15K+) | Enterprise | 5% from cohort | LTV=180K, CAC=2K → 90x |
++
++### Unit Economics (Year 1 target)
++
++```
++ARPU (blended):           1,800 ر.س/شهر
++Gross Margin:             82% (مع compute optimized)
++CAC (paid + organic):     600 ر.س
++CAC Payback:              4 months
++LTV (12-month avg):       21,600 ر.س
++LTV/CAC:                  36x  (HubSpot benchmark: 5-7x)
++Churn (logo):             8%/month → 30%/year (Year 1)
++                          → target 15%/year (Year 2)
++NRR:                      130% (with cross-sell)
++```
++
++### Pricing Experimentation Plan
++- Month 1–3: Lock pricing. Measure conversion.
++- Month 4: A/B test 2,999 vs 2,499 vs 3,499 (cohort 30 each).
++- Month 7: Add annual plan (10× monthly = 16% discount → cash-flow boost).
++- Month 10: Add usage-based add-ons (extra connectors, extra agents).
++- Year 2: Move 60% to annual contracts.
++
++---
++
++## 8. Tech Roadmap (18 شهر)
++
++### Q2 2026 (Now)
++✅ Tech foundation (12 layers, 791 tests, CI green)
++✅ Paid Beta operational layer
++⏳ Staging deployment + first 5 paying customers
++⏳ First 3 case studies
++
++### Q3 2026
++- **Staging → Production**: Railway → AWS (PDPL-compliant region)
++- **Public Launch Gate module**: criteria check + automated graduation
++- **Pilot Tracker dashboard**: real-time view of all 5–10 pilots
++- **Saudi Arabic LLM tuning**: fine-tune on 1K Saudi business messages
++- **Email sequences engine**: 7-day drip per ICP
++
++### Q4 2026
++- **Self-serve onboarding**: no-demo signup flow
++- **Mobile PWA**: iOS-installable
++- **Public API**: REST + webhooks
++- **Marketplace MVP**: agencies list services
++- **Stripe + Moyasar dual billing**
++
++### Q1 2027
++- **Saudi Revenue Graph v1**: aggregated insights across all customers
++- **AI agents marketplace**: 3rd-party agents publish to Dealix
++- **GCC localization**: UAE, Kuwait, Bahrain
++- **Enterprise SSO**: Okta, Microsoft, Google
++
++### Q2-Q4 2027
++- **Series A fundraise**: $5M target
++- **Hire VP Engineering, VP Sales, VP CS**
++- **Move to multi-region**: SA + UAE
++- **ISO 27001 certification**
++
++---
++
++## 9. Hiring Plan (Year 1 → Year 2)
++
++### Month 1–6 (Founder-Led, 0 hires)
++- Founder = CEO + Sales + Engineering + Customer Success.
++- Outsource: Saudi Arabic copy editor (freelance, 1K/شهر).
++
++### Month 7–12 (First 5 hires)
++1. **SDR (Saudi)**: outbound + qualification — 8K/شهر.
++2. **Customer Success Manager**: onboarding + retention — 12K/شهر.
++3. **Senior Backend Engineer**: scale APIs — 18K/شهر.
++4. **Senior Frontend/PWA Engineer**: web app — 15K/شهر.
++5. **Content Marketer (Arabic)**: SEO/AEO — 10K/شهر.
++
++**Year 1 burn:** 250K SAR/شهر بنهاية Q4 → cash runway 18 months from $1M seed.
++
++### Year 2 (Scale to 15 hires)
++6–8: Account Executives (3) — 12K/شهر/each.
++9–10: Engineers (2) — 16K/شهر/each.
++11: VP Engineering — 30K/شهر.
++12: VP Sales — 30K/شهر.
++13: Designer — 14K/شهر.
++14: Data Analyst — 12K/شهر.
++15: Recruiter (HR) — 10K/شهر.
++
++---
++
++## 10. Compliance & Risk Roadmap
++
++### PDPL Compliance Timeline
++- Month 1: DPA template ✅
++- Month 3: Privacy policy v2 (Arabic + English)
++- Month 6: Annual PDPL audit (external)
++- Month 9: SDAIA registration (if data-sharing required)
++- Year 2: ISO 27001 certification
++- Year 3: SOC 2 Type II
++
++### Risk Matrix (Top 5)
++
++| Risk | Likelihood | Impact | Mitigation |
++|------|-----------|--------|-----------|
++| Data breach (PDPL fines up to 5M SAR) | Medium | Critical | Trace redaction + encrypted at rest + quarterly pen test |
++| WhatsApp account ban | Medium | High | opt-in audit + complaint rate < 0.3% + Meta Business verified |
++| Major customer churn (logo concentration) | Medium | High | No customer > 10% of revenue; sign 12-month contracts |
++| Founder burnout | High | Critical | Hire CSM by month 7, SDR by month 9 |
++| HubSpot/Salesforce launches Saudi-tuned product | Low | Critical | Build Saudi Revenue Graph + Agency Network = irreplaceable |
++
++---
++
++## 11. Marketing & Content Engine
++
++### Content Pillars (4)
++1. **Saudi B2B Growth Tactics** (40% من المحتوى) — practical playbooks.
++2. **PDPL/Compliance Education** (20%) — كيف تتواصل آمناً.
++3. **Customer Stories / Case Studies** (20%) — proof.
++4. **Founder Journey** (20%) — building in public.
++
++### Content Cadence
++- **Daily:** 1 LinkedIn post + 1 X post (Founder voice, Arabic).
++- **Weekly:** 1 long-form article (1,500 words, Arabic) + 1 newsletter.
++- **Bi-weekly:** 1 video (12-min demo or interview, Arabic).
++- **Monthly:** 1 case study + 1 webinar.
++- **Quarterly:** "State of Saudi Revenue" report (downloadable, lead magnet).
++
++### SEO/AEO Strategy (Arabic-First)
++- **Primary keywords:** "زيادة المبيعات السعودية"، "نمو B2B سعودي"، "أداة CRM سعودية"، "تواصل واتساب أعمال".
++- **Long-tail:** "كيف أحصل على عملاء B2B في الرياض"، "أفضل أداة Pilot للوكالات السعودية".
++- **AEO (AI Engine Optimization):** Optimize for ChatGPT/Claude/Perplexity answers — structured Q&A with attribution.
++- **Goal Year 1:** Page 1 for top 20 Arabic B2B keywords.
++
++---
++
++## 12. Brand Identity Architecture
++
++### Brand Voice
++- **Direct, not flowery.** "نطلع لك 10 فرص" not "نسعى جاهدين لتقديم".
++- **Confident, not arrogant.** "هذا ما يفعله Dealix" not "نحن الأفضل".
++- **Saudi, not Egyptian/Levantine.** "شلونك"، "تمام"، "ما يصلح".
++- **Data-led, not vague.** "499 ر.س = 10 فرص + 10 رسائل" not "حلول مخصصة".
++
++### Brand Pillars
++1. **Local Mastery** — نفهم السعودية أعمق من أي أحد.
++2. **Approval-First** — كرامة العميل قبل الـ scale.
++3. **Proof Over Promise** — Proof Pack أسبوعي، لا claims.
++4. **Open by Design** — لا lock-in، API مفتوح.
++
++### Visual Identity Direction
++- **Color:** Saudi Gold (#ffd166) + Deep Black (#0f1115) — حداثة + احترافية.
++- **Typography:** Tajawal for Arabic, Inter for English — readable + professional.
++- **Iconography:** Minimal line icons (Lucide) — لا cliché business clip-art.
++
++---
++
++## 13. Funding Strategy
++
++### Seed Round ($1M target — Q4 2026)
++**Use of funds:**
++- Hires: 60% (5 hires × 6 months)
++- Infrastructure: 15%
++- Marketing/Content: 15%
++- Compliance/Audits: 5%
++- Buffer: 5%
++
++**Investors to target:**
++- STV (Saudi Technology Ventures)
++- Wa'ed Ventures (Aramco)
++- Sanabil Investments (PIF subsidiary)
++- 500 Global MENA
++- Wamda Capital
++- Plus: angels من الـ Saudi B2B founder community.
++
++**Pitch deck core slides (12):**
++1. Title — "The Saudi Revenue Execution OS"
++2. Problem — "Saudi B2B is 10 years behind in sales tech"
++3. Why now — "$50B Saudi Vision 2030 + AI moment"
++4. Solution — Live demo (no slides for this)
++5. Product — 12 layers + 200 endpoints + 791 tests
++6. Traction — first 10 paying customers + 3 case studies
++7. Market — TAM 50K SMBs × 36K SAR/year = $480M
++8. Business model — 6 bundles + Year 1 unit economics
++9. Competition — moat analysis (Section 6)
++10. Team — Founder bio + advisors
++11. Financials — 18-month projection
++12. Ask — $1M for 18 months runway
++
++### Series A ($5M — Q4 2027)
++- Trigger: $1M ARR + 200 paying customers + 30 agency partners.
++- Use: GCC expansion + 10 more hires + Saudi Revenue Graph data infrastructure.
++
++---
++
++## 14. الـ 7-Day Sprint (الآن — اليوم 1 إلى اليوم 7)
++
++### اليوم 1 (Today — May 1, 2026)
++- **AM:** Push 4 pending files (POST_MERGE_VERIFICATION + scorecard + tests + conftest).
++- **AM:** Deploy Railway staging.
++- **AM:** Add `STAGING_BASE_URL` secret to GitHub Actions.
++- **PM:** Run `launch_readiness_check.py --staging-url $STAGING_BASE_URL` → expect `PAID_BETA_READY`.
++- **PM:** Send 25 manual outreach (10 agencies + 5 training + 5 SaaS + 5 local).
++- **EOD:** Operating Board updated with all 25 prospects.
++
++### اليوم 2
++- **AM:** Follow-up wave 1 (any replies from Day 1).
++- **AM:** Send 25 more outreach (different segments).
++- **PM:** First 1–2 demos.
++- **PM:** Send Free Diagnostic to first 1 interested prospect.
++- **EOD:** scorecard.py — expect 2+ replies, 1+ demo.
++
++### اليوم 3
++- **AM:** Deliver first Free Diagnostic (T+24h SLA).
++- **AM:** 5 follow-ups + 5 new outreach.
++- **PM:** First Pilot 499 offer to most-engaged prospect.
++
++### اليوم 4
++- **AM:** Pilot 499 sales call.
++- **AM:** Send Moyasar invoice manual.
++- **PM:** Send payment reminder + start Pilot delivery prep.
++- **EOD:** Target — 1 invoice paid OR 1 written commitment.
++
++### اليوم 5 (Pilot Day 1)
++- **AM:** Receive intake from paid customer.
++- **AM:** Run First 10 Opportunities Sprint workflow.
++- **PM:** Generate 10 opportunities + 10 Arabic messages.
++- **EOD:** Send Approval Pack to customer.
++
++### اليوم 6 (Pilot Day 2)
++- **AM:** Process customer approvals.
++- **AM:** Run follow-up sequence.
++- **PM:** First 1–2 positive replies.
++- **EOD:** ≥3 messages approved + Proof Pack v1 generated.
++
++### اليوم 7 (Proof + Upsell)
++- **AM:** Deliver final Proof Pack.
++- **AM:** 30-minute review session call.
++- **PM:** Pitch Growth OS Monthly upgrade (2,999 ر.س/شهر).
++- **EOD:** Case study OR second Pilot OR Growth OS subscription.
++
++**Week 1 Target:** 70 outreach / 15 replies / 7 demos / 3 pilots / 1–2 paid / 1 Proof Pack.
++
++---
++
++## 15. القرار النهائي — Three Numbers That Matter
++
++```
++1. أول 499 ر.س — هذا الأسبوع (T+7 days max)
++2. أول 10 paid customers — هذا الربع (T+90 days max)
++3. أول $1M ARR — هذا العام (T+12 months max)
++```
++
++كل قرار في Dealix يُقاس بهل يقرّب من هذه الأرقام أم لا.
++
++أي شيء غير ذلك = تشتيت.
++
++---
++
++## ملحق A — قواعد لا تتنازل عنها (Hard Rules)
++
++1. **لا live send بدون env flag + اعتماد بشري.**
++2. **لا scraping. لا auto-DM. لا cold WhatsApp.**
++3. **لا Moyasar API charge — invoice manual فقط حتى Year 2.**
++4. **لا claims مضمونة. كل promise معه qualifier ("ضمان استرداد 7 أيام").**
++5. **لا تشارك Operating Board مع أحد — يحتوي PII.**
++6. **لا تخفّض السعر بدون موافقة المؤسس.**
++7. **لا تتجاوز SLA — اعتذر بدل أن تتأخر.**
++8. **لا تضف feature بدون validation من 3 عملاء على الأقل.**
++9. **لا توظّف قبل أن يكون عندك CSM-load > 8 ساعات/يوم.**
++10. **لا تقبل investment بدون 18-month plan واضح.**
++
++---
++
++## ملحق B — Endpoints المهمة في كل مرحلة
++
++```
++Paid Beta:
++GET  /api/v1/launch/private-beta/offer
++POST /api/v1/launch/go-no-go
++GET  /api/v1/launch/scorecard/demo
++GET  /api/v1/operator/bundles
++POST /api/v1/operator/chat/message
++POST /api/v1/customer-ops/onboarding/checklist
++POST /api/v1/customer-ops/connectors/summary
++POST /api/v1/revenue-launch/payment/invoice-instructions
++POST /api/v1/revenue-launch/proof-pack/template
++GET  /api/v1/service-excellence/review/all
++
++Public Launch (after this Master Plan):
++GET  /api/v1/public-launch/gate-check
++GET  /api/v1/public-launch/pilot-tracker
++POST /api/v1/public-launch/graduate-pilot
++GET  /api/v1/public-launch/case-studies
++GET  /api/v1/public-launch/agency-network
++```
++
++---
++
++## ملحق C — Decision Trees
++
++### "هل نقبل هذا العميل؟"
++```
++هل ICP match؟ (agency / B2B SMB / training / SaaS)
++├─ Yes
++│  ├─ هل authority? (Founder/Head)
++│  │  ├─ Yes → Pilot 499 offer
++│  │  └─ No → ask for intro to authority
++│  └─ هل budget? (499+)
++│     ├─ Yes → Pilot 499 offer
++│     └─ No → Free Diagnostic + nurture
++└─ No → polite decline + refer to network
++```
++
++### "هل نطلق feature جديد؟"
++```
++هل عندنا 3 paying customers طلبوه؟
++├─ Yes
++│  ├─ هل service_score يرتفع به ≥80؟
++│  │  ├─ Yes → ابني (1-week sprint)
++│  │  └─ No → adjust scope حتى ≥80
++│  └─ هل يخالف Hard Rules؟
++│     ├─ Yes → reject
++│     └─ No → ابني
++└─ No → log في feature-backlog، لا تبني
++```
++
++### "هل نوظّف هذا الشخص؟"
++```
++هل عندنا CSM-load > 8 ساعات/يوم؟
++├─ Yes
++│  ├─ هل cash > 6 months runway بعد التوظيف؟
++│  │  ├─ Yes → وظّف
++│  │  └─ No → وظّف part-time أو contractor
++│  └─ هل يأخذ من المؤسس مهمة عمرها > 4h/يوم؟
++│     ├─ Yes → وظّف
++│     └─ No → أجّل
++└─ No → أجّل
++```
++
++---
++
++## الخاتمة
++
++**Dealix لا يفوز بأنه أكثر features.**
++**Dealix يفوز بأنه أعمق فهماً للسعودية + أوضح Proof + أصدق Approval-first + أعرف agency channel.**
++
++**كل شيء في هذه الوثيقة يخدم هذا.**
++
++**ابدأ الآن: ادفع 4 الملفات → نشر staging → 25 رسالة → أول 499 ر.س.**
+diff --git a/dealix/docs/POST_MERGE_VERIFICATION.md b/dealix/docs/POST_MERGE_VERIFICATION.md
+index 4cf2648..6ded0ac 100644
+--- a/dealix/docs/POST_MERGE_VERIFICATION.md
++++ b/dealix/docs/POST_MERGE_VERIFICATION.md
+@@ -44,17 +44,38 @@ rg "ghp_|github_pat_|sk_live_" --glob '!htmlcov/**' --glob '!.venv/**'
+ 
+ ## Last recorded run (workspace snapshot)
+ 
++### Snapshot A — قبل الدمج (للمرجع)
++
+ | Step | Result |
+ |------|--------|
+ | Git HEAD | `16e8ba2` on branch `ai-company` (re-run on `main` after merge) |
+ | compileall | OK (`api`, `auto_client_acquisition`, `db`, `core`) |
+ | pytest | `652 passed`, `6 skipped`, `0 failed` (`APP_ENV=test`, dummy LLM keys) — 2026-05-01 بعد `launch_readiness` + تكامل الواجهات؛ أعد التشغيل بعد الدمج |
++
++### Snapshot B — على default branch بعد الدمج (الأحدث · 2026-05-01 محلياً)
++
++| Step | Result |
++|------|--------|
++| Git HEAD | `41ca592` (re-run after merge on your default branch) |
++| compileall | OK (`api`, `auto_client_acquisition`, `integrations`, `db`, `core`) |
++| pytest | `791 passed`, `6 skipped`, `0 failed` (`APP_ENV=test`, `--no-cov`) — 6 skipped: E2E يحتاج سيرفر على `8001`، مزوّدون اختياريون بدون مفاتيح |
+ | `print_routes.py` | `ROUTE_CHECK_OK no duplicate method+path` |
+ | `smoke_inprocess.py` | `SMOKE_INPROCESS_OK` (يشمل `GET /api/v1/revenue-launch/offer` و`GET /api/v1/revenue-launch/offer?lang=en`) |
+-| `launch_readiness_check.py` | `VERDICT: GO_PRIVATE_BETA`، exit `0` — يفحص محلياً: `/health`، customer-ops (checklist/sla/connectors)، `services/catalog` (حقول التسعير وProof لكل خدمة)، `launch/private-beta/offer`، `security-curator/demo`، ملفات `landing/companies|marketers|private-beta.html`، و`WHATSAPP_ALLOW_LIVE_SEND=false`. مع `--base-url` أو `STAGING_BASE_URL`: نفس المسارات عن بُعد → `PAID_BETA_READY` إذا نجحت كلها؛ وإلا `NO_GO`. اختياري: `--secrets` لفحص أنماط تسرّب شائعة. `--json` لمخرجات آلة |
++| `launch_readiness_check.py` | `VERDICT: GO_PRIVATE_BETA`، exit `0` — يفحص محلياً: `/health`، customer-ops (checklist/sla/connectors)، `services/catalog` (حقول التسعير وProof لكل خدمة)، `launch/private-beta/offer`، `security-curator/demo`، ملفات `landing/companies\|marketers\|private-beta.html`، و`WHATSAPP_ALLOW_LIVE_SEND=false`. مع `--base-url` أو `STAGING_BASE_URL`: نفس المسارات عن بُعد → `PAID_BETA_READY` إذا نجحت كلها؛ وإلا `NO_GO`. اختياري: `--secrets` لفحص أنماط تسرّب شائعة. `--json` لمخرجات آلة |
++| Secret-pattern scan | `ghp_` / `github_pat_` / `sk_live_` — التطابقات الظاهرة في الريبو هي وثائق تشغيل، أمثلة اختبار، أو regex للكشف؛ ليست بالضرورة تسريباً. راجع `docs/ops/*` دورياً |
+ | `smoke_staging.py` | يتطلب `STAGING_BASE_URL` — يشمل الآن `…/revenue-launch/offer?lang=en`؛ شغّله على الاستضافة الفعلية قبل أول عميل |
+ | Frontend + EN + `?lang=en` | وثّق في [`FRONTEND_AND_API_MAP.md`](FRONTEND_AND_API_MAP.md) — أعد `pytest` بعد أي تغيير على `revenue_launch` |
+ 
++### Verified-from-clone re-run (2026-05-01, sandbox clone of `sync/dealix-full-complete` @ `41ca592`)
++
++| Step | Result |
++|------|--------|
++| compileall (`api`, `auto_client_acquisition`, `integrations`, `db`, `core`) | OK |
++| pytest -q --no-cov (`APP_ENV=test`) | `779 passed`, `6 skipped` — يطابق Snapshot B بـ 12 اختباراً أقل؛ السبب: الـ12 المضافة تأتي من ملفات `tests/test_paid_beta_daily_scorecard.py` المحدّثة محلياً غير المرفوعة |
++| `print_routes.py` | `ROUTE_CHECK_OK no duplicate method+path` |
++| `smoke_inprocess.py` | `SMOKE_INPROCESS_OK` |
++| `launch_readiness_check.py` | `VERDICT: GO_PRIVATE_BETA` |
++
+ ## CI
+ 
+ Confirm GitHub Actions workflow [`.github/workflows/dealix-api-ci.yml`](../../.github/workflows/dealix-api-ci.yml) is green on the merged commit (jobs: `pytest`, `smoke_inprocess`, `launch_readiness`). لإعداد **branch protection** وأسماء الـ checks: [`BRANCH_PROTECTION_AND_CI.md`](BRANCH_PROTECTION_AND_CI.md).
+diff --git a/dealix/docs/PUBLIC_LAUNCH_READINESS.md b/dealix/docs/PUBLIC_LAUNCH_READINESS.md
+new file mode 100644
+index 0000000..1dae71b
+--- /dev/null
++++ b/dealix/docs/PUBLIC_LAUNCH_READINESS.md
+@@ -0,0 +1,200 @@
++# Public Launch Readiness — Layer 13
++
++> **القاعدة:** الانتقال من Paid Beta إلى Public Launch لا يتم بناءً على رغبة المؤسس. يتم بناءً على 9 معايير deterministic، PDPL compliance، وBrand Moat Score. كل قرار قابل للتدقيق.
++
++---
++
++## 1. الـ 9 معايير
++
++| # | Key | الحد الأدنى | كيف يُقاس |
++|---|-----|------------|----------|
++| 1 | `pilots_completed` | ≥5 | عدد Pilots سُلّم لها Proof Pack نهائي خلال 7 أيام |
++| 2 | `paid_customers` | ≥2 | عملاء دفعوا Moyasar أو وقّعوا Growth OS |
++| 3 | `unsafe_sends` | =0 | live actions بدون موافقة في Action Ledger |
++| 4 | `proof_cadence_weeks` | ≥3 متتالية | أسابيع متتالية صدر فيها Proof Pack |
++| 5 | `support_first_response_minutes_p1` | ≤120 | متوسط استجابة P1 |
++| 6 | `funnel_visible` | =True | lead→demo→pilot→paid قابل للقياس |
++| 7 | `staging_uptime_days` | ≥14 | أيام متتالية بـ uptime ≥99% |
++| 8 | `billing_webhook_verified` | =True | Moyasar webhook signed وتم التحقق |
++| 9 | `legal_complete` | =True | Terms + Privacy + DPA منشورة باللغتين |
++
++---
++
++## 2. القرار الناتج
++
++```
++GO_PUBLIC_LAUNCH    — كل المعايير الـ9 متحققة → ابدأ Public Launch
++NO_GO               — معيار أو أكثر فشل (لكن ليس unsafe_sends)
++BLOCKED             — unsafe_sends > 0 (Hard block — incident SEV1 أولاً)
++```
++
++---
++
++## 3. الـ Endpoints
++
++```
++GET  /api/v1/public-launch/criteria        — قائمة الـ 9 معايير
++POST /api/v1/public-launch/gate-check      — تقييم gate من state
++POST /api/v1/public-launch/pilot-tracker   — ملخص Pilots
++POST /api/v1/public-launch/pdpl-compliance — PDPL audit
++POST /api/v1/public-launch/brand-moat      — Brand Moat Score
++GET  /api/v1/public-launch/demo            — مثال شامل
++```
++
++---
++
++## 4. مثال استدعاء `gate-check`
++
++```bash
++curl -X POST https://api.dealix.me/api/v1/public-launch/gate-check \
++  -H 'Content-Type: application/json' \
++  -d '{
++    "state": {
++      "pilots_completed": 7,
++      "paid_customers": 3,
++      "unsafe_sends": 0,
++      "proof_cadence_weeks": 4,
++      "support_first_response_minutes_p1": 60,
++      "funnel_visible": true,
++      "staging_uptime_days": 21,
++      "billing_webhook_verified": true,
++      "legal_complete": true
++    }
++  }'
++```
++
++النتيجة:
++
++```json
++{
++  "decision": "GO_PUBLIC_LAUNCH",
++  "score_passed": 9,
++  "score_total": 9,
++  "blockers": [],
++  "next_actions_ar": [],
++  "summary_ar": "✅ جاهز للإطلاق العام — كل المعايير الـ9 متحققة..."
++}
++```
++
++---
++
++## 5. PDPL Compliance Check (10 فحوصات)
++
++| Severity | Check | لماذا critical |
++|----------|-------|---------------|
++| critical | `data_residency_saudi` | PDPL يلزم بالـ Saudi region |
++| critical | `whatsapp_opt_in_audit` | عقوبات Meta + PDPL |
++| critical | `breach_notification_72h_ready` | غرامة PDPL 5M ر.س |
++| critical | `privacy_policy_bilingual` | حق العميل بالإطلاع |
++| critical | `trace_redaction_active` | منع تسريب PII في logs |
++| high | `email_opt_in_audit` | تجنب blacklist |
++| high | `dpa_template_published` | عقد DPA لكل عميل |
++| high | `data_retention_policy` | حذف 90 يوم |
++| high | `action_ledger_audit` | accountability |
++| medium | `consent_revocation_path` | حق العميل بإلغاء opt-in |
++
++أي critical فاشل → `non_compliant` → **لا انتقال إلى Public Launch**.
++
++---
++
++## 6. Brand Moat Score (5 طبقات)
++
++| Dimension | Weight | الحد الأدنى لـ "defensible" |
++|-----------|-------:|---------------------------|
++| Data Moat (Saudi Revenue Graph) | 30% | 1,000 events + 10 sectors |
++| Brand Moat (Saudi-First) | 20% | 5K LinkedIn + 1K newsletter |
++| Compliance Moat (PDPL Native) | 20% | 100% PDPL + ISO 27001 progress |
++| Network Moat (Agency Channel) | 20% | 30 agency partners |
++| Distribution Moat (Operator Network) | 10% | 100 certified operators |
++
++```
++overall ≥ 80   → dominant   (Series-A ready)
++overall ≥ 60   → defensible (GCC expansion ready)
++overall ≥ 35   → emerging   (build phase)
++overall < 35   → fragile    (focus on weakest)
++```
++
++---
++
++## 7. Pilot Tracker
++
++كل Pilot يمر بـ 8 stages:
++```
++intake → diagnostic_sent → pilot_delivered → proof_pack_sent
++       → upgrade_decided → completed | stalled | lost
++```
++
++Upgrade outcomes (6):
++```
++growth_os_monthly | partnership_growth | case_study
++| second_pilot    | no_upgrade         | ghost
++```
++
++API يحسب:
++- `total_pilots`, `completed_pilots`, `proof_packs_delivered`
++- `paid_pilots`, `paid_revenue_sar`, `upgrade_revenue_sar`
++- `case_studies`, `growth_os_subscribers`
++- `completion_rate`, `paid_conversion_rate`, `upgrade_conversion_rate`
++- `by_sector`, `by_city`
++- `average_proof_pack_days`
++
++---
++
++## 8. كيف تستخدمه عملياً
++
++### يومياً (في الـ Founder Brief)
++```bash
++curl https://api.dealix.me/api/v1/public-launch/demo
++```
++
++تشاهد:
++- Gate score الحالي
++- Pilots summary
++- PDPL status
++- Brand Moat tier
++
++### أسبوعياً (في الـ Weekly Strategic Review)
++1. حدّث state بأرقام الأسبوع.
++2. شغّل `gate-check` + `pdpl-compliance` + `brand-moat`.
++3. ركّز على أضعف dimension في Brand Moat.
++4. أصلح أي critical في PDPL.
++
++### قبل الانتقال إلى Public Launch
++1. `gate-check` يجب يرجع `GO_PUBLIC_LAUNCH`.
++2. `pdpl-compliance` يجب يرجع `compliant` (لا critical/high).
++3. `brand-moat` يجب يكون ≥ `defensible` (60+).
++4. أرسل تقرير شامل للـ founder + advisors.
++5. حضّر launch announcement.
++
++---
++
++## 9. ما لا يفعله Layer 13
++
++- ❌ لا يرسل بياناتك خارجياً.
++- ❌ لا يستدعي LLM (deterministic 100%).
++- ❌ لا يعدّل بياناتك — read-only.
++- ❌ لا يستبدل التقييم البشري — يكمّله.
++
++---
++
++## 10. التكامل مع الطبقات الأخرى
++
++| الطبقة | كيف يستفيد منها Public Launch |
++|--------|-----------------------------|
++| Customer Ops (Layer 6) | يقرأ SLA + tickets للحساب `support_first_response_minutes_p1` |
++| Service Excellence (Layer 3) | يضمن أن كل خدمة تظهر لها score ≥80 |
++| Revenue Company OS (Layer 9) | يقرأ Action Ledger للحساب `unsafe_sends` |
++| Proof Ledger (Layer 10) | يقرأ proof pack history للحساب `proof_cadence_weeks` |
++| Service Tower (Layer 2) | يحسب `paid_customers` + `pilots_completed` |
++| Targeting OS (Layer 4) | يبني funnel للحساب `funnel_visible` |
++
++---
++
++## 11. القرار التشغيلي
++
++```
++لا تنتقل إلى Public Launch بناءً على "الشعور".
++انتقل بناءً على /api/v1/public-launch/gate-check = GO_PUBLIC_LAUNCH
+++ /api/v1/public-launch/pdpl-compliance = compliant
+++ /api/v1/public-launch/brand-moat ≥ defensible.
++```
+diff --git a/dealix/tests/unit/test_public_launch.py b/dealix/tests/unit/test_public_launch.py
+new file mode 100644
+index 0000000..4ee7828
+--- /dev/null
++++ b/dealix/tests/unit/test_public_launch.py
+@@ -0,0 +1,296 @@
++"""Tests for the Public Launch Gate (Layer 13)."""
++
++from __future__ import annotations
++
++from auto_client_acquisition.public_launch import (
++    PUBLIC_LAUNCH_CRITERIA,
++    GateVerdict,
++    evaluate_public_launch_gate,
++    pilot_tracker_summary,
++    PilotRecord,
++    compute_pdpl_compliance,
++    compute_brand_moat_score,
++)
++
++
++# ===== Gate evaluation =====
++
++def test_criteria_count_is_nine():
++    assert len(PUBLIC_LAUNCH_CRITERIA) == 9
++
++
++def test_gate_all_passing_yields_go_public_launch():
++    state = {
++        "pilots_completed": 7,
++        "paid_customers": 3,
++        "unsafe_sends": 0,
++        "proof_cadence_weeks": 4,
++        "support_first_response_minutes_p1": 60,
++        "funnel_visible": True,
++        "staging_uptime_days": 21,
++        "billing_webhook_verified": True,
++        "legal_complete": True,
++    }
++    v = evaluate_public_launch_gate(state)
++    assert v.decision == "GO_PUBLIC_LAUNCH"
++    assert v.score_passed == v.score_total == 9
++    assert not v.blockers
++    assert "جاهز للإطلاق العام" in v.summary_ar
++
++
++def test_gate_unsafe_sends_triggers_blocked():
++    state = {
++        "pilots_completed": 7,
++        "paid_customers": 3,
++        "unsafe_sends": 1,  # ← hard block
++        "proof_cadence_weeks": 4,
++        "support_first_response_minutes_p1": 60,
++        "funnel_visible": True,
++        "staging_uptime_days": 21,
++        "billing_webhook_verified": True,
++        "legal_complete": True,
++    }
++    v = evaluate_public_launch_gate(state)
++    assert v.decision == "BLOCKED"
++    assert "Hard block" in v.summary_ar
++
++
++def test_gate_partial_yields_no_go_with_blockers():
++    state = {
++        "pilots_completed": 2,
++        "paid_customers": 1,
++        "unsafe_sends": 0,
++        "proof_cadence_weeks": 1,
++        "support_first_response_minutes_p1": 60,
++        "funnel_visible": True,
++        "staging_uptime_days": 5,
++        "billing_webhook_verified": False,
++        "legal_complete": False,
++    }
++    v = evaluate_public_launch_gate(state)
++    assert v.decision == "NO_GO"
++    assert v.score_passed < v.score_total
++    blocker_keys = {b["key"] for b in v.blockers}
++    assert "pilots_completed" in blocker_keys
++    assert "billing_webhook_verified" in blocker_keys
++    assert "legal_complete" in blocker_keys
++    assert v.next_actions_ar  # has Arabic actions
++
++
++def test_gate_empty_state_blocks_everything():
++    v = evaluate_public_launch_gate({})
++    assert v.decision != "GO_PUBLIC_LAUNCH"
++    assert len(v.blockers) >= 8
++
++
++def test_gate_support_response_is_max_threshold_lower_better():
++    state_good = {"support_first_response_minutes_p1": 30}
++    state_bad = {"support_first_response_minutes_p1": 200}
++    # 30 ≤ 120 → pass; 200 > 120 → fail
++    keys_good = {r["key"] for r in evaluate_public_launch_gate(state_good).criteria_results if r["passed"]}
++    keys_bad = {r["key"] for r in evaluate_public_launch_gate(state_bad).criteria_results if r["passed"]}
++    assert "support_first_response_minutes_p1" in keys_good
++    assert "support_first_response_minutes_p1" not in keys_bad
++
++
++# ===== Pilot tracker =====
++
++def test_pilot_summary_basic_aggregation():
++    pilots = [
++        {
++            "pilot_id": "p1", "company": "A", "sector": "agency", "city": "RUH",
++            "started_at": "2026-04-25", "stage": "completed",
++            "paid": True, "pilot_price_sar": 499,
++            "proof_pack_sent": True, "proof_pack_sent_at": "2026-05-01",
++            "upgrade_outcome": "growth_os_monthly", "upgrade_value_sar": 2999,
++        },
++        {
++            "pilot_id": "p2", "company": "B", "sector": "training", "city": "JED",
++            "started_at": "2026-04-20", "stage": "stalled",
++            "paid": False, "pilot_price_sar": 0,
++            "proof_pack_sent": False, "proof_pack_sent_at": None,
++            "upgrade_outcome": None,
++        },
++    ]
++    s = pilot_tracker_summary(pilots)
++    assert s.total_pilots == 2
++    assert s.completed_pilots == 1
++    assert s.proof_packs_delivered == 1
++    assert s.paid_pilots == 1
++    assert s.paid_revenue_sar == 499
++    assert s.upgrade_revenue_sar == 2999
++    assert s.growth_os_subscribers == 1
++    assert s.stalled_pilots == 1
++    assert s.by_sector == {"agency": 1, "training": 1}
++    assert s.by_city == {"RUH": 1, "JED": 1}
++
++
++def test_pilot_summary_empty_returns_zeros():
++    s = pilot_tracker_summary([])
++    assert s.total_pilots == 0
++    assert s.completion_rate == 0.0
++    assert s.paid_conversion_rate == 0.0
++    assert s.upgrade_conversion_rate == 0.0
++
++
++def test_pilot_summary_avg_proof_days_computed():
++    pilots = [
++        {
++            "pilot_id": "p1", "company": "A", "sector": "saas", "city": "RUH",
++            "started_at": "2026-04-25T00:00:00", "stage": "completed",
++            "paid": True, "pilot_price_sar": 499,
++            "proof_pack_sent": True,
++            "proof_pack_sent_at": "2026-05-02T00:00:00",
++            "upgrade_outcome": "case_study",
++        }
++    ]
++    s = pilot_tracker_summary(pilots)
++    assert s.average_proof_pack_days == 7.0
++
++
++def test_pilot_summary_accepts_pilotrecord_instances():
++    rec = PilotRecord(
++        pilot_id="p1", company="A", sector="agency", city="RUH",
++        started_at="2026-04-25", stage="completed",
++        paid=True, pilot_price_sar=499,
++        proof_pack_sent=True, proof_pack_sent_at="2026-05-01",
++        upgrade_outcome="growth_os_monthly", upgrade_value_sar=2999,
++    )
++    s = pilot_tracker_summary([rec])
++    assert s.total_pilots == 1
++    assert s.paid_pilots == 1
++
++
++# ===== PDPL compliance =====
++
++def test_pdpl_full_compliance_yields_compliant():
++    state = {
++        "data_residency_saudi": True,
++        "whatsapp_opt_in_audit": True,
++        "email_opt_in_audit": True,
++        "breach_notification_72h_ready": True,
++        "dpa_template_published": True,
++        "privacy_policy_bilingual": True,
++        "data_retention_policy": True,
++        "trace_redaction_active": True,
++        "action_ledger_audit": True,
++        "consent_revocation_path": True,
++    }
++    r = compute_pdpl_compliance(state)
++    assert r.overall_status == "compliant"
++    assert r.score_passed == r.score_total
++    assert not r.critical_failures
++
++
++def test_pdpl_critical_failure_yields_non_compliant():
++    state = {
++        "data_residency_saudi": False,  # critical
++        "whatsapp_opt_in_audit": True,
++        "email_opt_in_audit": True,
++        "breach_notification_72h_ready": True,
++        "dpa_template_published": True,
++        "privacy_policy_bilingual": True,
++        "data_retention_policy": True,
++        "trace_redaction_active": True,
++        "action_ledger_audit": True,
++        "consent_revocation_path": True,
++    }
++    r = compute_pdpl_compliance(state)
++    assert r.overall_status == "non_compliant"
++    assert any(f["key"] == "data_residency_saudi" for f in r.critical_failures)
++
++
++def test_pdpl_high_only_yields_needs_fixes():
++    state = {
++        "data_residency_saudi": True,
++        "whatsapp_opt_in_audit": True,
++        "email_opt_in_audit": False,  # high
++        "breach_notification_72h_ready": True,
++        "dpa_template_published": True,
++        "privacy_policy_bilingual": True,
++        "data_retention_policy": True,
++        "trace_redaction_active": True,
++        "action_ledger_audit": True,
++        "consent_revocation_path": True,
++    }
++    r = compute_pdpl_compliance(state)
++    assert r.overall_status == "needs_fixes"
++    assert not r.critical_failures
++    assert any(f["key"] == "email_opt_in_audit" for f in r.high_failures)
++
++
++# ===== Brand moat score =====
++
++def test_brand_moat_zero_state_yields_fragile():
++    score = compute_brand_moat_score({})
++    assert score.tier == "fragile"
++    assert score.overall_score < 35
++
++
++def test_brand_moat_high_state_yields_dominant():
++    state = {
++        "events_logged_count": 5_000,
++        "messages_per_sector_count": 200,
++        "sectors_covered_count": 15,
++        "linkedin_followers": 10_000,
++        "newsletter_subscribers": 3_000,
++        "monthly_branded_searches": 1_500,
++        "case_studies_published": 30,
++        "pdpl_compliance_pct": 100,
++        "iso_27001_progress_pct": 100,
++        "audit_count_last_year": 6,
++        "dpa_signed_with_customers_pct": 100,
++        "agency_partners_count": 50,
++        "active_referring_agencies_count": 25,
++        "agency_revenue_share_paid_sar": 200_000,
++        "certified_operators_count": 200,
++        "operators_active_last_30d": 100,
++        "operator_revenue_share_paid_sar": 100_000,
++    }
++    score = compute_brand_moat_score(state)
++    assert score.tier == "dominant"
++    assert score.overall_score >= 80
++
++
++def test_brand_moat_identifies_weakest_dimension():
++    state = {
++        # Strong everywhere except network
++        "events_logged_count": 5_000,
++        "messages_per_sector_count": 200,
++        "sectors_covered_count": 15,
++        "linkedin_followers": 10_000,
++        "newsletter_subscribers": 3_000,
++        "monthly_branded_searches": 1_500,
++        "case_studies_published": 30,
++        "pdpl_compliance_pct": 100,
++        "iso_27001_progress_pct": 100,
++        "audit_count_last_year": 6,
++        "dpa_signed_with_customers_pct": 100,
++        # network = 0
++        "agency_partners_count": 0,
++        "active_referring_agencies_count": 0,
++        "agency_revenue_share_paid_sar": 0,
++        # distribution = 0
++        "certified_operators_count": 0,
++        "operators_active_last_30d": 0,
++        "operator_revenue_share_paid_sar": 0,
++    }
++    score = compute_brand_moat_score(state)
++    assert score.weakest_dimension in ("network_moat", "distribution_moat")
++
++
++def test_brand_moat_returns_arabic_summary():
++    score = compute_brand_moat_score({})
++    assert "Brand Moat Score" in score.summary_ar
++    assert "fragile" in score.summary_ar or "هش" in score.summary_ar
++
++
++# ===== GateVerdict serialization =====
++
++def test_gate_verdict_serializes_to_dict():
++    v = evaluate_public_launch_gate({"pilots_completed": 5, "paid_customers": 2})
++    d = v.to_dict()
++    assert "decision" in d
++    assert "criteria_results" in d
++    assert "next_actions_ar" in d
++    assert isinstance(d["criteria_results"], list)
+-- 
+2.34.1
+
