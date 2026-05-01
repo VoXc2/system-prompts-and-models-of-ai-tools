@@ -148,6 +148,36 @@ OAuth Gmail/Calendar، حصص، سياسات.
 
 وعد منتجي مركزي: من مدخلات شركة/قطاع/مدينة/عرض/هدف إلى قائمة ١٠ فرص مع Why Now ومستوى مخاطرة ومسودات عربية **بانتظار الموافقة فقط** — **`POST /api/v1/innovation/opportunities/ten-in-ten`**؛ وصف المهمة في `GET /api/v1/innovation/growth-missions`؛ الاستراتيجية في [`INNOVATION_STRATEGY.md`](INNOVATION_STRATEGY.md)؛ الإطار التشغيلي بجانب `GET /api/v1/business/gtm/first-10` عند التوسع.
 
+## 32. Platform Services Layer — برج التحكم بالنمو
+
+طبقة موحدة multi-channel فوق `growth_operator` تحوّل Dealix من قناة WhatsApp إلى منصة:
+
+- **11 قناة** (`whatsapp, gmail, google_calendar, moyasar, linkedin_lead_forms, x_api, instagram_graph, google_business_profile, google_sheets, crm, website_forms`).
+- **Action Policy Engine**: block_cold_whatsapp / block_payment_no_confirm / block_secrets / external_send_needs_approval / high_value_deal_review.
+- **Tool Gateway** هو المخرج التنفيذي الوحيد — كل أداة تمر منه. Live env flags افتراضياً OFF.
+- **Unified Inbox**: 8 أنواع بطاقات، ≤3 أزرار، عربية.
+- **Action Ledger** + **Proof Ledger** (أثر فعلي مقاس بالقناة).
+- **12 خدمة قابلة للبيع** (`growth_operator_subscription`, `channel_setup_service`, `lead_intelligence_service`, `partnership_sprint`, `email_revenue_rescue`, `social_growth_os`, `local_business_growth`, `ai_visibility_aeo_sprint`, `revenue_proof_pack_service`, `customer_success_operator`, `payments_collections_operator`, `outreach_approval_service`).
+
+**Endpoints:** `/api/v1/platform/{services/catalog, channels, policy/rules, actions/evaluate, tools/invoke, events/ingest, inbox/feed, identity/resolve, ledger/summary, proof-ledger/demo}`. **التفصيل:** [`PLATFORM_SERVICES_STRATEGY.md`](PLATFORM_SERVICES_STRATEGY.md).
+
+## 33. Intelligence Layer — الشبكة العصبية للنمو
+
+طبقة فوق Platform Services تجعل Dealix يتعلم ويقترح ويحاكي:
+
+- **Growth Brain** لكل عميل + `is_ready_for_autopilot()` (≥30 signals + ≥40% accept).
+- **Command Feed**: 9 أنواع بطاقات يومية (opportunity / revenue_leak / partner_suggestion / meeting_prep / review_response / competitive_move / customer_reactivation / ai_visibility_alert / action_required).
+- **Action Graph** (10 أنواع حواف): signal → action → outcome.
+- **Mission Engine**: 7 ميشنات، **Kill Feature: `first_10_opportunities`**.
+- **Decision Memory**: تعلّم من Accept/Skip/Edit/Block.
+- **Trust Score** مركب لكل رسالة (safe ≥70 / needs_review 40-69 / blocked <40).
+- **Revenue DNA**: best_channel / best_segment / best_angle / common_objection / avg_cycle_days.
+- **Opportunity Simulator** (9 قطاعات سعودية): توقع replies/meetings/deals/pipeline_sar + risk_score.
+- **Competitive Move Detector**: 8 أنواع حركات + recommended_action_ar.
+- **Founder Shadow Board**: موجز أسبوعي (3 قرارات + 3 فرص + 3 مخاطر + علاقة + تجربة + مؤشر).
+
+**Endpoints:** `/api/v1/intelligence/{growth-brain/build, command-feed/demo, missions, missions/recommend, trust-score, revenue-dna/demo, revenue-dna, simulate-opportunity, competitive-move/analyze, board-brief/demo, decisions/record, decisions/preferences}`. **التفصيل:** [`INTELLIGENCE_LAYER_STRATEGY.md`](INTELLIGENCE_LAYER_STRATEGY.md).
+
 ---
 
 **الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً.

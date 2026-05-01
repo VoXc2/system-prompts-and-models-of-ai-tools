@@ -30,9 +30,11 @@ from api.routers import (
     growth_operator,
     health,
     innovation,
+    intelligence_layer,
     leads,
     outreach,
     personal_operator,
+    platform_services,
     pricing,
     prospect,
     public,
@@ -148,6 +150,8 @@ def create_app() -> FastAPI:
     app.include_router(business.router)
     app.include_router(personal_operator.router)
     app.include_router(growth_operator.router)
+    app.include_router(platform_services.router)
+    app.include_router(intelligence_layer.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 
