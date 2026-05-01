@@ -277,6 +277,44 @@ OAuth Gmail/Calendar، حصص، سياسات.
 - `landing/first-10-opportunities.html` — Kill Feature.
 - `landing/agency-partner.html` — برنامج الوكالة الشريكة.
 - `landing/private-beta.html` — Private Beta launch.
+- `landing/list-intelligence.html` — تحليل القوائم.
+- `landing/growth-os.html` — اشتراك Growth OS الشهري.
+
+## 40. Launch Ops — برج إطلاق الـ Private Beta
+
+5 modules + 11 endpoints + 25 اختبار. كل ما يحتاجه إطلاق Private Beta اليوم:
+
+- `private_beta`: عرض اليوم (499 ريال × 7 أيام) + safety notes + FAQ عربي.
+- `demo_flow`: 12-min Arabic demo + discovery Qs + objection bank + close script.
+- `outreach_messages`: 4 segments × 5 prospects + per-segment رسائل + 3 follow-ups + 6 reply handlers.
+- `go_no_go`: 10-gate readiness + critical gates (no_secrets / live_sends_disabled / staging_health) + verdict + concrete next-actions.
+- `launch_scorecard`: daily/weekly metrics بـ11 event types + targets (20 outreach/5 ردود/3 ديمو/1 pilot يومياً).
+
+**Endpoints:** `/api/v1/launch/{private-beta/offer, demo/flow, outreach/first-20, outreach/message, outreach/followup, go-no-go, readiness, scorecard/event, scorecard/daily, scorecard/weekly, scorecard/demo}`.
+
+## 41. Revenue Launch — تحويل Dealix إلى دخل
+
+7 modules + 18 endpoints + 31 اختبار. **التفصيل:** [`REVENUE_TODAY_PLAYBOOK.md`](REVENUE_TODAY_PLAYBOOK.md).
+
+- `offer_builder`: 4 عروض (Private Beta / 499 Pilot / Growth OS Pilot / Free Case Study) + recommend per segment.
+- `pipeline_tracker`: 8 stages (identified→contacted→replied→demo_booked→diagnostic_sent→pilot_offered→paid/lost) + Sheet schema + summarize.
+- `outreach_sequence`: re-export with revenue-tier extensions.
+- `demo_closer`: re-export single source of truth.
+- `pilot_delivery`: 24-hour delivery template + intake form (12 fields) + per-service delivery (First 10 / List Intel / Free Diagnostic).
+- `proof_pack_template`: 5-line client summary + ROI x-multiples + next-step recommendation (upsell / iterate / extend).
+- `payment_manual_flow`: Moyasar invoice instructions (halalas-correct) + payment-link message + confirmation checklist. **No API charge ever**.
+
+**Endpoints:** `/api/v1/revenue-launch/{offers, offers/recommend, outreach/first-20, outreach/followup, demo-flow, pipeline/schema, pipeline/summarize, pilot-delivery/intake-form, pilot-delivery/24h-plan, pilot-delivery/first-10, pilot-delivery/list-intelligence, pilot-delivery/free-diagnostic, payment/invoice-instructions, payment/link-message, payment/confirmation-checklist, proof-pack/template, proof-pack/client-summary, proof-pack/next-step}`.
+
+## 42. Service Tower extensions
+
+- `contract_templates.py` — re-export targeting_os contracts + new SLA outline.
+- `vertical_service_map.py` — 6 verticals (B2B SaaS, agencies, training/consulting, real estate, healthcare/local, retail/ecommerce) → recommended service stack + buyer roles + common pains.
+
+## 43. Scripts
+
+- `scripts/launch_readiness_check.py` — runs 10 gates locally + against optional staging URL; reports JSON or pretty output.
+- `scripts/smoke_staging.py` — already exists (preserved).
 
 ---
 

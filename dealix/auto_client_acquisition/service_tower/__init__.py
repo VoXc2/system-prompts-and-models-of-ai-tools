@@ -6,11 +6,21 @@
 
 from __future__ import annotations
 
+from .contract_templates import (
+    draft_sla_outline,
+    list_contract_templates,
+)
 from .deliverables import (
     build_client_report_outline,
     build_deliverables,
     build_internal_operator_checklist,
     build_proof_pack_template,
+)
+from .vertical_service_map import (
+    VERTICALS_AR,
+    list_verticals,
+    map_industry_to_vertical,
+    recommend_services_for_vertical,
 )
 from .mission_templates import (
     build_service_workflow,
@@ -79,4 +89,9 @@ __all__ = [
     # upgrade_paths
     "build_upsell_message_ar", "map_service_to_subscription",
     "recommend_upgrade",
+    # contract_templates
+    "draft_sla_outline", "list_contract_templates",
+    # vertical_service_map
+    "VERTICALS_AR", "list_verticals", "map_industry_to_vertical",
+    "recommend_services_for_vertical",
 ]

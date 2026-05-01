@@ -34,6 +34,7 @@ from api.routers import (
     health,
     innovation,
     intelligence_layer,
+    launch_ops,
     leads,
     meeting_intelligence,
     model_router,
@@ -44,6 +45,7 @@ from api.routers import (
     prospect,
     public,
     revenue,
+    revenue_launch,
     revenue_os,
     sales,
     sectors,
@@ -170,6 +172,8 @@ def create_app() -> FastAPI:
     app.include_router(targeting_os.router)
     app.include_router(service_tower.router)
     app.include_router(service_excellence.router)
+    app.include_router(launch_ops.router)
+    app.include_router(revenue_launch.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 
