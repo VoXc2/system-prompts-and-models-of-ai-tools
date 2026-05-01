@@ -8,8 +8,9 @@ action is appended as an AuditEntry. Entries are append-only.
 from __future__ import annotations
 
 import uuid
-from datetime import UTC, datetime
-from enum import StrEnum
+from datetime import datetime
+from core._py_compat import UTC
+from core._py_compat import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field

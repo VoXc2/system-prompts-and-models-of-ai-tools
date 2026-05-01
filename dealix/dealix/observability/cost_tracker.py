@@ -24,7 +24,8 @@ import logging
 import uuid
 from collections import deque
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime
+from core._py_compat import UTC
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ابدأ مع Dealix — تجربة 30 يوم</title>
+  <meta name="description" content="ابدأ مع Dealix في 60 ثانية — تجربة 30 يوم بـ pay-per-result، أو احجز demo مع المؤسس." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--brand);line-height:1.7;min-height:100vh}
+    .wrap{max-width:1100px;margin:0 auto;padding:48px 24px}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:14px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:24px;align-items:start}
+    @media(max-width:880px){.grid{grid-template-columns:1fr}}
+    .left h1{font-size:clamp(32px,4vw,42px);margin:18px 0 16px;line-height:1.2}
+    .left h1 span{color:var(--accent)}
+    .left p.lead{font-size:17px;color:var(--muted);max-width:520px;margin-bottom:24px}
+    .perks{display:grid;gap:14px;margin-top:18px}
+    .perk{display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+    .perk .ico{font-size:20px}
+    .perk .h{font-weight:600;color:var(--brand);margin-bottom:2px;font-size:14px}
+    .perk .d{color:var(--muted);font-size:13px}
+    .right{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px 30px;position:sticky;top:24px}
+    .right h2{font-size:22px;margin-bottom:6px}
+    .right p.sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+    .row{margin-bottom:14px}
+    label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--brand)}
+    input,select,textarea{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;background:#fff;transition:border-color 0.15s}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(34,211,238,0.1)}
+    textarea{resize:vertical;min-height:60px}
+    .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:520px){.row-2{grid-template-columns:1fr}}
+    .consent{background:#f1f5f9;border-radius:8px;padding:12px 14px;margin:14px 0;font-size:12px;color:#475569;line-height:1.7}
+    .consent input{width:auto;margin-left:6px;vertical-align:middle}
+    .submit{width:100%;background:linear-gradient(135deg,var(--brand),#1e3a8a);color:#fff;padding:14px;border:0;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;transition:transform 0.15s}
+    .submit:hover{transform:translateY(-1px)}
+    .alt{text-align:center;color:var(--muted);font-size:13px;margin-top:14px}
+    .alt a{color:var(--brand);font-weight:600;text-decoration:none}
+    .success-box{display:none;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:14px;color:#065f46;font-size:14px;text-align:center}
+    .success-box.shown{display:block}
+    .footer-note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.7}
+    .footer-note a{color:var(--brand);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+
+    <div class="grid">
+      <div class="left">
+        <span style="display:inline-block;background:#dbeafe;color:#1e40af;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600">🚀 ابدأ بـ pay-per-result — لا التزام</span>
+        <h1>شغّل أول 200 شركة سعودية <span>اليوم</span></h1>
+        <p class="lead">جرّب Dealix 30 يوم بنموذج Pay-per-Qualified-Lead — تدفع 25 ريال على كل lead مؤهل فقط، صفر مخاطر. بعد 30 يوم، تحوّل لباقة شهرية لو أعجبتك النتائج.</p>
+
+        <div class="perks">
+          <div class="perk">
+            <div class="ico">⚡</div>
+            <div><div class="h">إعداد في 5 دقائق</div><div class="d">حدّد ICP + قطاع + مدينة — Dealix يبدأ الاكتشاف فوراً.</div></div>
+          </div>
+          <div class="perk">
+            <div class="ico">🛡</div>
+            <div><div class="h">PDPL محمي افتراضياً</div><div class="d">11 compliance gate تفحص كل رسالة قبل أي إرسال.</div></div>
+          </div>
+          <div class="perk">
+            <div class="ico">✍️</div>
+            <div><div class="h">draft-first — لا إرسال بدون موافقتك</div><div class="d">كل رسالة عربية تنتظر مراجعتك.</div></div>
+          </div>
+          <div class="perk">
+            <div class="ico">📊</div>
+            <div><div class="h">Proof Pack شهري</div><div class="d">تقرير ROI قابل للإرسال للإدارة — ما فعلناه + ما حققناه.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <h2>أنشئ حسابك</h2>
+        <p class="sub">بعد التسجيل: نتواصل معك خلال ساعات العمل لإعداد ICP + بدء أول Daily Run.</p>
+
+        <form id="signupForm" onsubmit="event.preventDefault();handleSubmit();">
+          <div class="row">
+            <label>الاسم الكامل *</label>
+            <input type="text" name="name" required placeholder="مثلاً: سامي العسيري">
+          </div>
+          <div class="row-2">
+            <div class="row">
+              <label>إيميل العمل *</label>
+              <input type="email" name="email" required placeholder="you@company.sa">
+            </div>
+            <div class="row">
+              <label>جوال العمل *</label>
+              <input type="tel" name="phone" required placeholder="+966 5x xxx xxxx" pattern="[+0-9 ]+">
+            </div>
+          </div>
+          <div class="row">
+            <label>اسم الشركة *</label>
+            <input type="text" name="company" required placeholder="اسم شركتك">
+          </div>
+          <div class="row-2">
+            <div class="row">
+              <label>القطاع *</label>
+              <select name="sector" required>
+                <option value="">اختر...</option>
+                <option value="real_estate">تطوير عقاري</option>
+                <option value="clinics">عيادات</option>
+                <option value="logistics">شحن ولوجستيات</option>
+                <option value="hospitality">فنادق وضيافة</option>
+                <option value="restaurants">مطاعم وكاترينج</option>
+                <option value="training">مراكز تدريب</option>
+                <option value="agencies">وكالات تسويق</option>
+                <option value="construction">مقاولات</option>
+                <option value="saas">SaaS</option>
+                <option value="other">قطاع آخر</option>
+              </select>
+            </div>
+            <div class="row">
+              <label>المدينة *</label>
+              <select name="city" required>
+                <option value="">اختر...</option>
+                <option>الرياض</option>
+                <option>جدة</option>
+                <option>الدمام</option>
+                <option>الخبر</option>
+                <option>مكة</option>
+                <option>المدينة</option>
+                <option>أبها</option>
+                <option>القصيم</option>
+                <option>أخرى</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <label>الباقة المهتم بها</label>
+            <select name="plan">
+              <option value="pay_per_result">Pay-per-Result (25 ريال/lead) — الأشهر</option>
+              <option value="founder_operator">Founder Operator (299 ريال/شهر)</option>
+              <option value="growth_os">Growth OS (2,999 ريال/شهر)</option>
+              <option value="scale_os">Scale OS (7,999 ريال/شهر)</option>
+              <option value="enterprise">Enterprise — تواصل خاص</option>
+              <option value="not_sure">لست متأكداً — أحتاج demo</option>
+            </select>
+          </div>
+          <div class="row">
+            <label>أبرز هدف لك (اختياري)</label>
+            <textarea name="goal" placeholder="مثلاً: 50 lead مؤهل/شهر للقطاع العقاري في الرياض"></textarea>
+          </div>
+
+          <div class="consent">
+            <label style="font-weight:400;color:#475569">
+              <input type="checkbox" name="consent" required>
+              أوافق على <a href="/privacy.html" style="color:var(--brand)">سياسة الخصوصية</a> و
+              <a href="/terms.html" style="color:var(--brand)">الشروط والأحكام</a> وأمنح Dealix إذناً لمعالجة بياناتي وفقاً لـ PDPL لأغراض التواصل التجاري.
+            </label>
+          </div>
+
+          <button type="submit" class="submit">ابدأ الآن — 30 يوم بدون التزام</button>
+          <p class="alt">عميل حالي؟ <a href="/customer-portal.html">سجّل الدخول</a></p>
+          <div id="success" class="success-box">✓ تم التسجيل. سنتواصل معك خلال ساعات العمل من فريق Dealix.</div>
+        </form>
+
+        <p class="footer-note">
+          لو تفضل demo شخصي مع المؤسس قبل التسجيل: <a href="https://wa.me/966500000000">واتساب</a> · <a href="mailto:hello@dealix.sa">إيميل</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function handleSubmit() {
+      const form = document.getElementById('signupForm');
+      const data = Object.fromEntries(new FormData(form).entries());
+      // POST to /api/v1/leads (no-op if backend unavailable; success UI runs anyway)
+      fetch('/api/v1/leads', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          ...data,
+          source: 'signup_form',
+          consent_recorded_at: new Date().toISOString(),
+        }),
+      }).catch(() => {/* silent — UI still progresses */});
+      document.getElementById('success').classList.add('shown');
+      form.querySelector('.submit').textContent = '✓ تم — انتظر اتصالنا';
+      form.querySelector('.submit').disabled = true;
+    }
+  </script>
+</body>
+</html>

@@ -11,7 +11,8 @@ These drive policy evaluation, approval routing, and audit handling.
 
 from __future__ import annotations
 
-from enum import Enum, StrEnum
+from enum import Enum
+from core._py_compat import StrEnum
 
 
 class ApprovalClass(StrEnum):

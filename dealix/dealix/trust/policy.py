@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from enum import StrEnum
+from core._py_compat import StrEnum
 
 from dealix.classifications import (
     NEVER_AUTO_EXECUTE,

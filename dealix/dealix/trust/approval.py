@@ -11,8 +11,9 @@ from __future__ import annotations
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timedelta
-from enum import StrEnum
+from datetime import datetime, timedelta
+from core._py_compat import UTC
+from core._py_compat import StrEnum
 from typing import Any
 
 from dealix.classifications import ApprovalClass

@@ -6,7 +6,7 @@ ICP Matcher Agent — scores how well a lead fits our Ideal Customer Profile.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import StrEnum
+from core._py_compat import StrEnum
 from typing import Any
 
 from auto_client_acquisition.agents.intake import Lead

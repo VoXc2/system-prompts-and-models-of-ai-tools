@@ -5,8 +5,10 @@ from __future__ import annotations
 import hashlib
 import re
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime
 from typing import Any
+
+from core._py_compat import UTC
 
 import phonenumbers
 

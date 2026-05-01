@@ -6,7 +6,7 @@ Model routing configuration — maps tasks to the best LLM provider.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import StrEnum
+from core._py_compat import StrEnum
 
 
 class Provider(StrEnum):

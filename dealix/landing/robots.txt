@@ -1,5 +1,12 @@
 User-agent: *
 Allow: /
+Allow: /privacy.html
+Allow: /terms.html
 Disallow: /api/
+Disallow: /404.html
+Disallow: /500.html
+Disallow: /payment-success.html
+Disallow: /payment-cancelled.html
+Disallow: /welcome.html
 
 Sitemap: https://dealix.sa/sitemap.xml

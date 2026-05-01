@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import StrEnum
+from core._py_compat import StrEnum
 from typing import Any
 
 from core.agents.base import BaseAgent

@@ -28,7 +28,7 @@ import json
 import time
 import uuid
 from dataclasses import asdict, dataclass
-from enum import StrEnum
+from core._py_compat import StrEnum
 from typing import Any
 
 import redis.asyncio as redis

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تم الدفع بنجاح — Dealix</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:48px 40px;max-width:580px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.06)}
+    .check{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#10b981,#047857);margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:42px;color:#fff}
+    h1{color:var(--brand);font-size:28px;margin-bottom:10px}
+    p.lead{color:var(--muted);font-size:16px;margin-bottom:24px;line-height:1.7}
+    .receipt{background:#f8fafc;border:1px dashed var(--border);border-radius:12px;padding:20px 24px;margin:18px 0;text-align:right}
+    .receipt-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+    .receipt-row:last-child{border:0}
+    .receipt-row .k{color:var(--muted)}
+    .receipt-row .v{color:var(--brand);font-weight:600}
+    .next-steps{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid #a7f3d0;border-radius:12px;padding:20px 24px;text-align:right;margin-top:18px}
+    .next-steps h3{color:#065f46;font-size:16px;margin-bottom:10px}
+    .next-steps ol{padding-right:18px;color:#047857;font-size:14px;line-height:2}
+    .links{display:flex;gap:10px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+    .btn{display:inline-block;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;transition:transform 0.15s}
+    .btn-primary{background:var(--brand);color:#fff}
+    .btn-secondary{background:#fff;color:var(--brand);border:1px solid var(--border)}
+    .btn:hover{transform:translateY(-2px)}
+    .footer{margin-top:30px;padding-top:20px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+    .footer a{color:var(--brand);text-decoration:none;margin:0 6px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check">✓</div>
+    <h1>تم الدفع بنجاح</h1>
+    <p class="lead">شكراً لاشتراكك في Dealix! تم تأكيد دفعتك ومعالجتها بأمان عبر Moyasar. ستصلك فاتورة ZATCA على بريدك خلال دقائق.</p>
+
+    <div class="receipt">
+      <div class="receipt-row"><span class="k">رقم العملية</span><span class="v" id="txn-id">--</span></div>
+      <div class="receipt-row"><span class="k">الباقة</span><span class="v" id="plan">Growth OS</span></div>
+      <div class="receipt-row"><span class="k">المبلغ</span><span class="v" id="amount">2,999 ريال + VAT</span></div>
+      <div class="receipt-row"><span class="k">تاريخ التجديد التلقائي</span><span class="v" id="next-billing">--</span></div>
+    </div>
+
+    <div class="next-steps">
+      <h3>🚀 الخطوات التالية (5 دقائق فقط)</h3>
+      <ol>
+        <li>افتح إيميل الترحيب — فيه رابط تسجيل الدخول لـ Customer Portal.</li>
+        <li>اربط بياناتك: ICP + قطاعك + المدن المستهدفة.</li>
+        <li>وافق على أول WhatsApp Business لتفعيل الإرسال (PDPL gate).</li>
+        <li>شغّل أول Daily Growth Run — Dealix يجيب لك أول 200 شركة.</li>
+        <li>راجع الـ drafts قبل الإرسال — كلها تنتظر موافقتك.</li>
+      </ol>
+    </div>
+
+    <div class="links">
+      <a href="/customer-portal.html" class="btn btn-primary">افتح Customer Portal</a>
+      <a href="/command-center.html" class="btn btn-secondary">شاهد Command Center</a>
+    </div>
+
+    <div class="footer">
+      تحتاج مساعدة في الإعداد؟<br>
+      <a href="mailto:onboarding@dealix.sa">onboarding@dealix.sa</a> ·
+      <a href="/launch-readiness.html">دليل التهيئة</a> ·
+      <a href="mailto:billing@dealix.sa">استفسار فوترة</a>
+    </div>
+  </div>
+  <script>
+    // Pull Moyasar callback params from URL if present
+    const params = new URLSearchParams(window.location.search);
+    const txn = params.get('id') || 'pay_' + Date.now().toString(36).toUpperCase();
+    document.getElementById('txn-id').textContent = txn;
+    if (params.get('amount')) {
+      const sar = (parseInt(params.get('amount'), 10) / 100).toLocaleString('en-SA');
+      document.getElementById('amount').textContent = sar + ' ريال (شامل VAT)';
+    }
+    if (params.get('plan')) {
+      document.getElementById('plan').textContent = params.get('plan');
+    }
+    // Next billing = today + 30 days
+    const next = new Date(Date.now() + 30 * 86400000);
+    document.getElementById('next-billing').textContent =
+      next.toISOString().slice(0, 10);
+  </script>
+</body>
+</html>
