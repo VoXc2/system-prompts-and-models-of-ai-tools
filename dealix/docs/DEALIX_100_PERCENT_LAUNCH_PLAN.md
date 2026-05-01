@@ -178,6 +178,37 @@ OAuth Gmail/Calendar، حصص، سياسات.
 
 **Endpoints:** `/api/v1/intelligence/{growth-brain/build, command-feed/demo, missions, missions/recommend, trust-score, revenue-dna/demo, revenue-dna, simulate-opportunity, competitive-move/analyze, board-brief/demo, decisions/record, decisions/preferences}`. **التفصيل:** [`INTELLIGENCE_LAYER_STRATEGY.md`](INTELLIGENCE_LAYER_STRATEGY.md).
 
+## 34. Self-Improving Agent Platform (Hermes-inspired)
+
+طبقة "ذاتية التحسن" فوق Platform Services + Intelligence Layer. 6 modules جديدة + 6 routers جديدة + 76 اختبار:
+
+- **Security Curator** ([`AGENT_SECURITY_CURATOR.md`](AGENT_SECURITY_CURATOR.md)) — secret_redactor (11 نمط: GitHub/OpenAI/Anthropic/Supabase/WhatsApp/Moyasar/Sentry/Google/AWS) + patch_firewall (يحظر `.env` والـRSA keys في الـdiff) + trace_redactor (يخفي phones/emails) + tool_output_sanitizer.
+- **Growth Curator** ([`GROWTH_CURATOR_STRATEGY.md`](GROWTH_CURATOR_STRATEGY.md)) — message_curator (يقيّم الرسائل العربية، يكشف 8 عبارات محظورة) + playbook_curator (winner/promising/needs_work/archive) + mission_curator + skill_inventory (20+ skill عبر 5 طبقات) + curator_report (تقرير عربي أسبوعي).
+- **Meeting Intelligence** ([`MEETING_INTELLIGENCE.md`](MEETING_INTELLIGENCE.md)) — Pre-meeting brief (6 أقسام عربية) + transcript_parser (Google Meet entries أو نص) + objection_extractor (8 فئات) + followup_builder (email + WhatsApp drafts) + deal_risk (0..100).
+- **Model Router** ([`MODEL_PROVIDER_ROUTER.md`](MODEL_PROVIDER_ROUTER.md)) — 7 providers (Claude Sonnet/Haiku, GPT-4, GPT-4o-mini, Gemini Pro, Azure OAI KSA-region, Local Qwen) × 10 task types + cost_policy + fallback_policy (KSA-region أولاً للحالات الحساسة).
+- **Connector Catalog** ([`CONNECTOR_CATALOG.md`](CONNECTOR_CATALOG.md)) — 14 تكامل (WhatsApp Cloud, Gmail, Calendar, Meet, Moyasar, LinkedIn Lead Forms, Google Business Profile, X, Instagram, Sheets, CRM, Website Forms, Composio, MCP Gateway) كل واحد له launch_phase + risk_level + Arabic risks.
+- **Agent Observability** ([`AGENT_OBSERVABILITY_EVALS.md`](AGENT_OBSERVABILITY_EVALS.md)) — trace_events (مع hash للـuser/company IDs) + safety_eval (7 قواعد) + saudi_tone_eval (إيجابيات/سلبيات/نسبة عربية) + eval_pack (5 cases) + cost_tracker.
+
+**Endpoints جديدة:**
+- `/api/v1/security-curator/{demo, redact, inspect-diff, sanitize-output}`
+- `/api/v1/growth-curator/{skills/inventory, messages/grade, messages/improve, messages/duplicates, missions/next, report/weekly, report/demo}`
+- `/api/v1/meeting-intelligence/{brief, brief/demo, transcript/summarize, followup/draft, deal-risk}`
+- `/api/v1/model-router/{providers, tasks, route, cost-class, usage/demo}`
+- `/api/v1/connector-catalog/{catalog, summary, status, risks, {key}}`
+- `/api/v1/agent-observability/{trace/build, safety/eval, tone/eval, evals/run}`
+
+## 35. Private Beta Launch — Today
+
+راجع:
+- [`PRIVATE_BETA_LAUNCH_TODAY.md`](PRIVATE_BETA_LAUNCH_TODAY.md) — الخطة الكاملة للإطلاق.
+- [`DEMO_SCRIPT_12_MINUTES.md`](DEMO_SCRIPT_12_MINUTES.md) — السكربت المعتمد للعرض.
+- [`FIRST_20_OUTREACH_MESSAGES.md`](FIRST_20_OUTREACH_MESSAGES.md) — قوالب الرسائل العربية.
+- `landing/private-beta.html` — صفحة العرض.
+
+**العرض:** Pilot 7 أيام بـ499 ريال أو مجاني مقابل case study. Paid Pilot 30 يوم بـ1,500–3,000 ريال. Growth OS اشتراك شهري بـ2,999 ريال.
+
+**ممنوع اليوم:** live WhatsApp send, live Gmail send, live Calendar insert, payment charge, scraping social, وعود "نضمن نتائج".
+
 ---
 
-**الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً.
+**الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً. الإطلاق اليوم = Private Beta + Pilots + Proof Pack، ليس Public Launch.

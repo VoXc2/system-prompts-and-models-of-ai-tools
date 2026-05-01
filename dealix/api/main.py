@@ -15,11 +15,13 @@ from fastapi.responses import JSONResponse
 from api.middleware import RequestIDMiddleware
 from api.routers import (
     admin,
+    agent_observability,
     agents,
     automation,
     autonomous,
     business,
     command_center,
+    connector_catalog,
     customer_success,
     data,
     dominance,
@@ -27,11 +29,14 @@ from api.routers import (
     ecosystem,
     email_send,
     full_os,
+    growth_curator,
     growth_operator,
     health,
     innovation,
     intelligence_layer,
     leads,
+    meeting_intelligence,
+    model_router,
     outreach,
     personal_operator,
     platform_services,
@@ -42,6 +47,7 @@ from api.routers import (
     revenue_os,
     sales,
     sectors,
+    security_curator,
     v3,
     webhooks,
 )
@@ -152,6 +158,12 @@ def create_app() -> FastAPI:
     app.include_router(growth_operator.router)
     app.include_router(platform_services.router)
     app.include_router(intelligence_layer.router)
+    app.include_router(security_curator.router)
+    app.include_router(growth_curator.router)
+    app.include_router(meeting_intelligence.router)
+    app.include_router(model_router.router)
+    app.include_router(connector_catalog.router)
+    app.include_router(agent_observability.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 
