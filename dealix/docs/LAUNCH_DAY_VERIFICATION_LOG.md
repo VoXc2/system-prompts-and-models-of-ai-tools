@@ -15,7 +15,8 @@
 
 | الخطوة | الإجراء | النتيجة | التاريخ |
 |--------|---------|---------|---------|
-| push | فرع `ai-company` مرفوع إلى `origin` مع `dealix/` و`.github/workflows/dealix-*.yml` | OK — راجع Actions **Dealix API CI** على GitHub | 2026-05-01 |
+| push | فرع `ai-company` مرفوع إلى `origin` مع `dealix/` و`.github/workflows/dealix-*.yml` | OK | 2026-05-01 |
+| Dealix API CI | GitHub Actions workflow `dealix-api-ci.yml` على فرع `ai-company` | success (بعد إضافة `aiosqlite` في خط التثبيت) | 2026-05-01 |
 
 ## Staging (يتطلب `STAGING_BASE_URL`)
 
