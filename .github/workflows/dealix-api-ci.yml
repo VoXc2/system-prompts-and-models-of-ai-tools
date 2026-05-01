@@ -51,8 +51,7 @@ jobs:
         run: python -m compileall api auto_client_acquisition
 
       - name: Tests
-        # tests/unit expects alternate package facades; run canonical integration tests only.
-        run: pytest -q --no-cov --ignore=tests/unit
+        run: pytest -q --no-cov
 
       - name: Embeddings pipeline placeholder
         run: python scripts/embeddings_pipeline_placeholder.py
