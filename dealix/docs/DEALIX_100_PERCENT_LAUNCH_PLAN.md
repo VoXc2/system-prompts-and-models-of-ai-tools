@@ -209,6 +209,75 @@ OAuth Gmail/Calendar، حصص، سياسات.
 
 **ممنوع اليوم:** live WhatsApp send, live Gmail send, live Calendar insert, payment charge, scraping social, وعود "نضمن نتائج".
 
+## 36. Targeting & Acquisition OS — نظام الاستهداف الذكي
+
+طبقة جديدة (16 module + 20 endpoint + 47 اختبار) تجعل Dealix يستهدف بذكاء بدلاً من جمع عشوائي:
+
+- **Account-first**: `account_finder` يحدد 10-25 شركة لكل (sector, city) مع `fit_score` و`why_now_ar`.
+- **Buying Committee**: `buyer_role_mapper` بـ14 دور وخرائط حسب القطاع (training/saas/real_estate/...).
+- **Contact Source Policy**: 12 مصدر (crm_customer → opt_out) مع risk_score + retention.
+- **Contactability Matrix**: 5 action modes (suggest_only/draft_only/approval_required/approved_execute/blocked).
+- **LinkedIn Strategy**: Lead Forms + Ads + Manual فقط — `linkedin_do_not_do()` يقفل scraping/auto-DM/auto-connect.
+- **Email Strategy**: drafts + unsubscribe + pacing per domain reputation.
+- **WhatsApp Strategy**: opt-in only، rejects cold + risky phrases تلقائياً.
+- **Outreach Scheduler**: day-by-day plan + daily limits + opt-out enforcement.
+- **Reputation Guard**: bounce/complaint/opt-out thresholds → healthy/watch/pause مع recovery actions.
+- **Daily Autopilot**: Arabic brief + 7 today actions + EOD report.
+- **Self-Growth Mode**: 5 ICP focuses لـ Dealix نفسه + daily brief + weekly learning.
+- **Free Growth Diagnostic**: العرض المجاني الذي يجلب Pilots.
+- **Contract Drafts**: Pilot/DPA/Referral/Agency outlines (legal review required, PDPL-aware).
+
+**Endpoints:** `/api/v1/targeting/{accounts/recommend, buying-committee/map, contacts/evaluate, uploaded-list/analyze, outreach/plan, daily-autopilot/demo, self-growth/demo, reputation/status, linkedin/strategy, drafts/email, drafts/whatsapp, free-diagnostic, services, contracts/templates, ...}`. **التفصيل:** [`TARGETING_ACQUISITION_OS.md`](TARGETING_ACQUISITION_OS.md).
+
+## 37. Service Tower — برج الخدمات الذاتية
+
+**12 Productized Service** + Wizard + Pricing Engine + Scorecard + WhatsApp CEO Control + Upgrade Paths (8 modules + 20 endpoint + 38 اختبار):
+
+| الخدمة | السعر | النوع |
+|--------|------|------|
+| Free Growth Diagnostic | مجاني | one_time |
+| List Intelligence | 499–1,500 | one_time |
+| First 10 Opportunities Sprint | 499–1,500 | sprint |
+| Self-Growth Operator | 999/شهر | monthly |
+| Growth OS Monthly | 2,999/شهر | monthly |
+| Email Revenue Rescue | 1,500–5,000 | one_time |
+| Meeting Booking Sprint | 1,500–5,000 | sprint |
+| Partner Sprint | 3,000–7,500 | sprint |
+| Agency Partner Program | 10,000–50,000 | one_time |
+| WhatsApp Compliance Setup | 1,500–4,000 | one_time |
+| LinkedIn Lead Gen Setup | 2,000–7,500 | one_time |
+| Executive Growth Brief | 499–999/شهر | monthly |
+
+**3 أبواب للعميل:**
+1. أريد عملاء جدد.
+2. عندي بيانات وأبغى أستفيد منها.
+3. أبغى توسع وشراكات.
+
+**Endpoints:** `/api/v1/services/{catalog, recommend, {id}/start, {id}/workflow, {id}/quote, {id}/scorecard, {id}/upgrade-path, ceo/daily-brief, ceo/approval-card, ...}`. **التفصيل:** [`SERVICE_TOWER_STRATEGY.md`](SERVICE_TOWER_STRATEGY.md).
+
+## 38. Service Excellence OS — مصنع الخدمات الممتازة
+
+**8 modules + 22 endpoint + 33 اختبار** يضمنون أن كل خدمة تطلق بـ score ≥80 وتجاوز 4 quality gates، وتستمر في التحسين الأسبوعي:
+
+- **Feature Matrix** — 12 must-have لكل خدمة + advanced/premium/future.
+- **Service Scoring** — 10 أبعاد × 10 = 100 → launch_ready/beta_only/needs_work.
+- **Quality Review** — 4 gates: proof / approval / pricing / channels.
+- **Competitor Gap** — مقارنة بـ7 فئات منافسين (CRM, WA tools, email assistants, LinkedIn tools, agencies, revenue intelligence, generic AI).
+- **Proof Metrics** — ROI estimate (pipeline_x + closed_won_x).
+- **Research Lab** — brief شهري + hypotheses + experiments.
+- **Improvement Backlog** — feedback → backlog → prioritized weekly tasks.
+- **Launch Package** — landing + sales script + 12-min demo + 5-day onboarding.
+
+**Endpoints:** `/api/v1/service-excellence/{id}/{feature-matrix, score, quality-review, proof-metrics, gap-analysis, research-brief, experiments, monthly-review, backlog, launch-package, sales-script, demo-script}` + `/review/all`. **التفصيل:** [`SERVICE_EXCELLENCE_OS.md`](SERVICE_EXCELLENCE_OS.md).
+
+## 39. Landing Pages
+
+- `landing/services.html` — 3 أبواب + 12 خدمة productized.
+- `landing/free-diagnostic.html` — العرض المجاني.
+- `landing/first-10-opportunities.html` — Kill Feature.
+- `landing/agency-partner.html` — برنامج الوكالة الشريكة.
+- `landing/private-beta.html` — Private Beta launch.
+
 ---
 
 **الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً. الإطلاق اليوم = Private Beta + Pilots + Proof Pack، ليس Public Launch.

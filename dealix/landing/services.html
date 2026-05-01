@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dealix — الخدمات</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #181b22; --text: #f5f5f7;
+    --muted: #a8aab2; --brand: #ffd166; --good: #06d6a0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7; }
+  header { padding: 56px 24px 32px; text-align: center;
+    background: linear-gradient(135deg, #1a1d27 0%, #0f1115 100%); }
+  header h1 { font-size: 42px; line-height: 1.2; margin-bottom: 14px; }
+  header h1 span { color: var(--brand); }
+  header p { color: var(--muted); max-width: 640px; margin: 0 auto; font-size: 18px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+  .doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px; margin: 24px 0 36px; }
+  .door { background: var(--panel); padding: 28px; border-radius: 14px;
+    border: 1px solid #232631; }
+  .door h2 { color: var(--brand); margin-bottom: 12px; font-size: 22px; }
+  .door ul { list-style: none; padding: 0; }
+  .door ul li { padding: 6px 0; padding-right: 22px; position: relative; }
+  .door ul li:before { content: "▸"; color: var(--good); position: absolute;
+    right: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px; margin: 14px 0; }
+  .card { background: #1f232c; padding: 16px; border-radius: 10px;
+    border: 1px solid #2a2e39; }
+  .card .name { color: var(--brand); font-weight: 700; font-size: 17px; }
+  .card .price { font-size: 14px; color: var(--muted); margin-top: 6px; }
+  .card .out { font-size: 14px; margin-top: 8px; color: var(--text); }
+  .cta { display: inline-block; padding: 12px 24px; background: var(--brand);
+    color: #0f1115; border-radius: 10px; font-weight: 700; text-decoration: none;
+    font-size: 16px; margin: 6px; }
+  footer { text-align: center; padding: 24px; color: var(--muted); font-size: 14px;
+    border-top: 1px solid #232631; margin-top: 32px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>الخدمات — <span>Dealix Service Tower</span></h1>
+    <p>اختر هدفك من 3 أبواب، النظام يوصي بالخدمة الصحيحة.
+    كل خدمة productized بمواصفات + مخرجات + سعر + Proof Pack.</p>
+  </header>
+
+  <main>
+    <section class="doors">
+      <div class="door">
+        <h2>أريد عملاء جدد</h2>
+        <ul>
+          <li>First 10 Opportunities Sprint</li>
+          <li>Targeting OS</li>
+          <li>LinkedIn Lead Gen Setup</li>
+          <li>Email Outreach Drafts</li>
+          <li>Meeting Booking Sprint</li>
+          <li>Growth OS</li>
+        </ul>
+      </div>
+      <div class="door">
+        <h2>عندي بيانات وأبغى أستفيد منها</h2>
+        <ul>
+          <li>List Intelligence</li>
+          <li>WhatsApp Compliance Setup</li>
+          <li>Email Revenue Rescue</li>
+          <li>Customer Reactivation</li>
+        </ul>
+      </div>
+      <div class="door">
+        <h2>أبغى توسع واستراتيجية</h2>
+        <ul>
+          <li>Partner Sprint</li>
+          <li>Agency Partner Program</li>
+          <li>Executive Growth Brief</li>
+          <li>Self-Growth Operator</li>
+        </ul>
+      </div>
+    </section>
+
+    <h2 style="color: var(--brand); margin: 16px 0;">12 خدمة productized</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="name">Free Growth Diagnostic</div>
+        <div class="price">مجاني</div>
+        <div class="out">3 فرص + رسالة + مخاطر + خطة Pilot — خلال 24 ساعة</div>
+      </div>
+      <div class="card">
+        <div class="name">List Intelligence</div>
+        <div class="price">499–1,500 ريال</div>
+        <div class="out">تنظيف + تصنيف + أفضل 50 + رسائل عربية</div>
+      </div>
+      <div class="card">
+        <div class="name">First 10 Opportunities Sprint</div>
+        <div class="price">499–1,500 ريال</div>
+        <div class="out">10 فرص + رسائل + متابعة 7 أيام + Proof Pack</div>
+      </div>
+      <div class="card">
+        <div class="name">Self-Growth Operator</div>
+        <div class="price">999 ريال شهرياً</div>
+        <div class="out">Daily brief + drafts + متابعة + reports</div>
+      </div>
+      <div class="card">
+        <div class="name">Growth OS</div>
+        <div class="price">2,999 ريال شهرياً</div>
+        <div class="out">المنصة الكاملة: قنوات + autopilot + proof</div>
+      </div>
+      <div class="card">
+        <div class="name">Email Revenue Rescue</div>
+        <div class="price">1,500–5,000 ريال</div>
+        <div class="out">استخراج فرص ضائعة من Gmail + drafts</div>
+      </div>
+      <div class="card">
+        <div class="name">Meeting Booking Sprint</div>
+        <div class="price">1,500–5,000 ريال</div>
+        <div class="out">دعوات + briefs + follow-ups</div>
+      </div>
+      <div class="card">
+        <div class="name">Partner Sprint</div>
+        <div class="price">3,000–7,500 ريال</div>
+        <div class="out">20 شريك محتمل + 10 رسائل + 5 اجتماعات</div>
+      </div>
+      <div class="card">
+        <div class="name">Agency Partner Program</div>
+        <div class="price">10,000–50,000 ريال</div>
+        <div class="out">بيع Dealix لعملاء الوكالة + revenue share</div>
+      </div>
+      <div class="card">
+        <div class="name">WhatsApp Compliance Setup</div>
+        <div class="price">1,500–4,000 ريال</div>
+        <div class="out">audit + opt-in templates + ledger</div>
+      </div>
+      <div class="card">
+        <div class="name">LinkedIn Lead Gen Setup</div>
+        <div class="price">2,000–7,500 ريال</div>
+        <div class="out">حملة Lead Form + audiences + ربط CRM</div>
+      </div>
+      <div class="card">
+        <div class="name">Executive Growth Brief</div>
+        <div class="price">499–999 ريال شهرياً</div>
+        <div class="out">3 قرارات + 3 فرص + 3 مخاطر يومياً</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin: 32px 0;">
+      <a href="free-diagnostic.html" class="cta">ابدأ بالتشخيص المجاني</a>
+      <a href="first-10-opportunities.html" class="cta" style="background: transparent; color: var(--text); border: 1px solid #383b44;">10 فرص في 10 دقائق</a>
+    </div>
+  </main>
+
+  <footer>Dealix — Service Tower · 2026 · bassam.m.assiri@gmail.com</footer>
+</body>
+</html>

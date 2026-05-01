@@ -48,6 +48,9 @@ from api.routers import (
     sales,
     sectors,
     security_curator,
+    service_excellence,
+    service_tower,
+    targeting_os,
     v3,
     webhooks,
 )
@@ -164,6 +167,9 @@ def create_app() -> FastAPI:
     app.include_router(model_router.router)
     app.include_router(connector_catalog.router)
     app.include_router(agent_observability.router)
+    app.include_router(targeting_os.router)
+    app.include_router(service_tower.router)
+    app.include_router(service_excellence.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 
