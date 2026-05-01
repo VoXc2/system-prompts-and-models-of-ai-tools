@@ -37,6 +37,8 @@
 
 يُكمّل الجدول أعلاه ولا يستبدل `dealix_demo_script_30min.md` إذا احتجت ديمو أطول.
 
+**تنسيق العمل (Claude / Cursor):** [`../ops/DEALIX_ACTIVE_COMMAND_BOARD.md`](../ops/DEALIX_ACTIVE_COMMAND_BOARD.md)
+
 ---
 
 ## 📅 الخطة في 5 مراحل
