@@ -342,6 +342,40 @@ OAuth Gmail/Calendar، حصص، سياسات.
 
 **الفرق الشاسع:** Dealix لا يبيع features ولا AI ولا منصة. يبيع **شركة نمو رقمية ذاتية التشغيل** — نتائج منظمة + تشغيل يومي + Proof Pack شهري.
 
+## 45. Positioning Lock + Customer Ops + Companies/Marketers
+
+**8 modules + 20 endpoints + 44 tests + 2 modes + 7 docs**. التفاصيل:
+
+### Positioning Lock (3 docs)
+- [`POSITIONING_LOCK.md`](POSITIONING_LOCK.md) — category, one-liner, primary buyers (شركات + وكالات), wedge, 5 approved claims, 5 modes, 5 bundles.
+- [`PROHIBITED_CLAIMS.md`](PROHIBITED_CLAIMS.md) — 8 categories of forbidden marketing language + how they're enforced technically.
+- [`APPROVED_MARKET_MESSAGING.md`](APPROVED_MARKET_MESSAGING.md) — tagline, elevator pitch, headlines, 4 outreach segments, social posts, slogan bank.
+
+### Customer Ops (6 modules)
+- `onboarding_checklist`: 8-step Pilot onboarding with progress tracking.
+- `connector_setup_status`: 11 connectors (Gmail/Calendar/Sheets/Moyasar/WhatsApp/Forms/LinkedIn/GBP/CRM/Meet/Instagram) with state machine + ready_for_first_service gate.
+- `support_ticket_router`: 4-tier P0/P1/P2/P3 classification + Arabic first-response templates.
+- `sla_tracker`: per-priority SLA targets + breach detection + weekly health (healthy/watch/critical).
+- `customer_success_cadence`: 6 cadence types + at-risk alerts (risk_score 0..100) + per-bundle 30-day plans + QBR.
+- `incident_router`: SEV1/SEV2/SEV3 triage + auto-SEV1 on data leak / unauthorized send + canonical response plans (PDPL-aware).
+
+### Operator Modes (2 new)
+- `self_growth_mode` — Dealix uses its own OS to find pilots (re-exports targeting_os.self_growth_mode + operator-tier reminders).
+- `service_delivery_mode` — runs client services + tracks SLA + post-delivery handoff to Customer Success.
+
+### Customer-facing Pages (1 new + 1 updated)
+- `landing/companies.html` — Saudi B2B companies. Approval-first, no scraping, 4 bundles.
+- `landing/marketers.html` (updated) — agencies/marketers Agency Growth OS path.
+
+### Customer Ops Docs (5 new)
+- [`ONBOARDING_RUNBOOK.md`](ONBOARDING_RUNBOOK.md) — day-by-day kick-off → first Proof Pack.
+- [`SUPPORT_SLA.md`](SUPPORT_SLA.md) — P0..P3 + classifier keywords.
+- [`INCIDENT_RESPONSE.md`](INCIDENT_RESPONSE.md) — SEV1..SEV3 + post-mortem templates + Arabic comms.
+- [`CUSTOMER_SUCCESS_PLAYBOOK.md`](CUSTOMER_SUCCESS_PLAYBOOK.md) — weekly check-ins, at-risk detection, QBR, renewal.
+- [`CONNECTOR_SETUP_GUIDES.md`](CONNECTOR_SETUP_GUIDES.md) — 11 connectors with scopes + steps + troubleshooting.
+
+**Endpoints:** `/api/v1/customer-ops/*` (20).
+
 ---
 
-**الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً. الإطلاق اليوم = Private Beta + Pilots + Proof Pack، ليس Public Launch.
+**الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً. الإطلاق اليوم = Private Beta + Pilots + Proof Pack، ليس Public Launch. اليوم Dealix هو **Saudi Revenue Execution OS** بـ45 طبقة وثائقية، 949 اختبار ناجح، CI أخضر.

@@ -22,6 +22,14 @@ from .client_mode import (
     build_client_dashboard,
     build_client_session_summary,
 )
+from .self_growth_mode import (
+    build_operator_self_growth_brief,
+)
+from .service_delivery_mode import (
+    build_post_delivery_handoff,
+    build_service_delivery_brief,
+    build_sla_status_for_delivery,
+)
 from .conversation_router import (
     INTENT_TO_HANDLER,
     handle_message,
@@ -122,4 +130,10 @@ __all__ = [
     # agency_mode
     "add_agency_client", "build_agency_dashboard",
     "build_co_branded_proof_pack", "list_agency_revenue_share",
+    # self_growth_mode
+    "build_operator_self_growth_brief",
+    # service_delivery_mode
+    "build_post_delivery_handoff",
+    "build_service_delivery_brief",
+    "build_sla_status_for_delivery",
 ]

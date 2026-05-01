@@ -23,6 +23,7 @@ from api.routers import (
     business,
     command_center,
     connector_catalog,
+    customer_ops,
     customer_success,
     data,
     dominance,
@@ -178,6 +179,7 @@ def create_app() -> FastAPI:
     app.include_router(revenue_launch.router)
     app.include_router(autonomous_service_operator.router)
     app.include_router(revenue_company_os.router)
+    app.include_router(customer_ops.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 
