@@ -46,6 +46,7 @@ from api.routers import (
     pricing,
     prospect,
     public,
+    public_launch,
     revenue_launch,
     revenue,
     revenue_os,
@@ -176,6 +177,7 @@ def create_app() -> FastAPI:
     app.include_router(service_excellence.router)
     app.include_router(launch_ops.router)
     app.include_router(revenue_launch.router)
+    app.include_router(public_launch.router)
     app.include_router(business.router)
     app.include_router(personal_operator.router)
     app.include_router(public.router)
