@@ -98,7 +98,7 @@ Confirm GitHub Actions workflow [`.github/workflows/dealix-api-ci.yml`](../../.g
 
 ## Manual follow-ups (not automated)
 
-- **لوحة قيادة التشغيل (Claude/Cursor):** [`ops/DEALIX_ACTIVE_COMMAND_BOARD.md`](ops/DEALIX_ACTIVE_COMMAND_BOARD.md)
+- **لوحة قيادة التشغيل (Claude/Cursor):** [`ops/DEALIX_ACTIVE_COMMAND_BOARD.md`](ops/DEALIX_ACTIVE_COMMAND_BOARD.md) — دُمجت عبر PR [#32](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/pull/32) (charters + staging one-shot + قائمة إغلاق تجاري).
 - ~~Merge Layer 13/14 into `ai-company`~~ — تم عبر PR [#30](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/pull/30).
 - **Railway:** انشر من فرع `ai-company`، root `dealix`، حسب [`PAID_BETA_FULL_RUNBOOK_AR.md`](PAID_BETA_FULL_RUNBOOK_AR.md) و[`ops/RAILWAY_AI_COMPANY_BIND.md`](ops/RAILWAY_AI_COMPANY_BIND.md).
 - **Secrets + staging smoke:** أضف `STAGING_BASE_URL` في GitHub Actions ثم شغّل smoke يدوياً من الواجهة إن لم يظهر الـ workflow في `gh workflow list`.
