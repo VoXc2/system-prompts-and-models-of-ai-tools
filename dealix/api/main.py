@@ -27,6 +27,7 @@ from api.routers import (
     ecosystem,
     email_send,
     full_os,
+    growth_operator,
     health,
     innovation,
     leads,
@@ -146,6 +147,7 @@ def create_app() -> FastAPI:
     app.include_router(innovation.router)
     app.include_router(business.router)
     app.include_router(personal_operator.router)
+    app.include_router(growth_operator.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 
