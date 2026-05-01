@@ -89,7 +89,7 @@ Confirm GitHub Actions workflow [`.github/workflows/dealix-api-ci.yml`](../../.g
 | Merge PR | [#30](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/pull/30) merged into `ai-company` — merge commit `c95179e` |
 | Dealix API CI on PR | `pytest` / `smoke_inprocess` / `launch_readiness` — **pass** (run `25232625374`) |
 | Branch protection (`ai-company`) | Verified: required contexts `pytest`, `smoke_inprocess`, `launch_readiness`; PR required; no force-push |
-| Local re-run (`APP_ENV=test`, `--no-cov`) | `797 passed`, `6 skipped` on merge tip |
+| Local re-run (`APP_ENV=test`, `--no-cov`) | `797 passed`, `6 skipped` — أعيد التحقق 2026-05-02 على `fa29e29` |
 | `print_routes.py` | `ROUTE_CHECK_OK no duplicate method+path` |
 | `smoke_inprocess.py` | `SMOKE_INPROCESS_OK` |
 | `launch_readiness_check.py` (local) | `GO_PRIVATE_BETA` — لتعيين `PAID_BETA_READY` شغّل نفس السكربت مع `--base-url` على URL staging بعد Railway |
@@ -98,6 +98,7 @@ Confirm GitHub Actions workflow [`.github/workflows/dealix-api-ci.yml`](../../.g
 
 ## Manual follow-ups (not automated)
 
+- **لوحة قيادة التشغيل (Claude/Cursor):** [`ops/DEALIX_ACTIVE_COMMAND_BOARD.md`](ops/DEALIX_ACTIVE_COMMAND_BOARD.md)
 - ~~Merge Layer 13/14 into `ai-company`~~ — تم عبر PR [#30](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/pull/30).
 - **Railway:** انشر من فرع `ai-company`، root `dealix`، حسب [`PAID_BETA_FULL_RUNBOOK_AR.md`](PAID_BETA_FULL_RUNBOOK_AR.md) و[`ops/RAILWAY_AI_COMPANY_BIND.md`](ops/RAILWAY_AI_COMPANY_BIND.md).
 - **Secrets + staging smoke:** أضف `STAGING_BASE_URL` في GitHub Actions ثم شغّل smoke يدوياً من الواجهة إن لم يظهر الـ workflow في `gh workflow list`.
