@@ -27,6 +27,16 @@
 | `dealix_onepager.html` | للإرسال في LinkedIn |
 | `dealix_14day_tracker.html` | تتبع يومي |
 
+### Layer 14 — تنفيذ سريع (بريد + ديمو + منافسون)
+
+| الملف | متى تستخدمه |
+|------|-------------|
+| [`layer14_email_sequences_4x7_ar.md`](layer14_email_sequences_4x7_ar.md) | ٤ تسلسلات × ٧ رسائل = ٢٨ بريداً جاهزاً (وكالات / تدريب / SaaS / خدمات محلية) |
+| [`layer14_battlecards_6_ar.md`](layer14_battlecards_6_ar.md) | مواجهة HubSpot / Salesforce / Apollo / Wati / Clay / «AI عام» |
+| [`layer14_demo_12min_script_ar.md`](layer14_demo_12min_script_ar.md) | سكربت ١٢ دقيقة بوتيرة سعودية + اعتراضات |
+
+يُكمّل الجدول أعلاه ولا يستبدل `dealix_demo_script_30min.md` إذا احتجت ديمو أطول.
+
 ---
 
 ## 📅 الخطة في 5 مراحل

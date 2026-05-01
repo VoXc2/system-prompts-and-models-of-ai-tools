@@ -198,3 +198,15 @@ curl https://api.dealix.me/api/v1/public-launch/demo
 + /api/v1/public-launch/pdpl-compliance = compliant
 + /api/v1/public-launch/brand-moat ≥ defensible.
 ```
+
+---
+
+## 12. Layer 14 — حزمة التنفيذ الميداني (B + G + C)
+
+مواد جاهزة للتواصل والديمو (عربي، متسقة مع `POSITIONING_LOCK`):
+
+- [`sales-kit/layer14_email_sequences_4x7_ar.md`](sales-kit/layer14_email_sequences_4x7_ar.md)
+- [`sales-kit/layer14_battlecards_6_ar.md`](sales-kit/layer14_battlecards_6_ar.md)
+- [`sales-kit/layer14_demo_12min_script_ar.md`](sales-kit/layer14_demo_12min_script_ar.md)
+
+فهرس سريع: [`sales-kit/START_HERE.md`](sales-kit/START_HERE.md) → قسم Layer 14.
