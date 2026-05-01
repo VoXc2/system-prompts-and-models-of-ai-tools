@@ -21,6 +21,8 @@ python scripts/smoke_inprocess.py
 
 **بوابة الإطلاق:** بعد الدمج، شغّل أيضاً `scripts/smoke_staging.py` على staging مع `STAGING_BASE_URL` — انظر [`LAUNCH_DAY_RUNBOOK_AR.md`](LAUNCH_DAY_RUNBOOK_AR.md).
 
+**Runbook تنفيذ كامل (GitHub → Railway → PAID_BETA_READY → أول عميل → Proof Pack):** [`PAID_BETA_FULL_RUNBOOK_AR.md`](PAID_BETA_FULL_RUNBOOK_AR.md).
+
 Optional secret-pattern scan (adapt to your environment):
 
 ```bash

@@ -210,3 +210,5 @@ curl https://api.dealix.me/api/v1/public-launch/demo
 - [`sales-kit/layer14_demo_12min_script_ar.md`](sales-kit/layer14_demo_12min_script_ar.md)
 
 فهرس سريع: [`sales-kit/START_HERE.md`](sales-kit/START_HERE.md) → قسم Layer 14.
+
+**من Private Beta إلى أول Proof Pack (ترتيب العمليات كاملاً):** [`PAID_BETA_FULL_RUNBOOK_AR.md`](PAID_BETA_FULL_RUNBOOK_AR.md).
