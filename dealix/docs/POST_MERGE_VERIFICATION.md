@@ -82,7 +82,24 @@ rg "ghp_|github_pat_|sk_live_" --glob '!htmlcov/**' --glob '!.venv/**'
 
 Confirm GitHub Actions workflow [`.github/workflows/dealix-api-ci.yml`](../../.github/workflows/dealix-api-ci.yml) is green on the merged commit (jobs: `pytest`, `smoke_inprocess`, `launch_readiness`). لإعداد **branch protection** وأسماء الـ checks: [`BRANCH_PROTECTION_AND_CI.md`](BRANCH_PROTECTION_AND_CI.md).
 
+### Snapshot C — v1 closure train (2026-05-02, `ai-company` after Layer 13/14 merge)
+
+| Step | Result |
+|------|--------|
+| Merge PR | [#30](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/pull/30) merged into `ai-company` — merge commit `c95179e` |
+| Dealix API CI on PR | `pytest` / `smoke_inprocess` / `launch_readiness` — **pass** (run `25232625374`) |
+| Branch protection (`ai-company`) | Verified: required contexts `pytest`, `smoke_inprocess`, `launch_readiness`; PR required; no force-push |
+| Local re-run (`APP_ENV=test`, `--no-cov`) | `797 passed`, `6 skipped` on merge tip |
+| `print_routes.py` | `ROUTE_CHECK_OK no duplicate method+path` |
+| `smoke_inprocess.py` | `SMOKE_INPROCESS_OK` |
+| `launch_readiness_check.py` (local) | `GO_PRIVATE_BETA` — لتعيين `PAID_BETA_READY` شغّل نفس السكربت مع `--base-url` على URL staging بعد Railway |
+
+**ملاحظة workflow:** ملف [`.github/workflows/dealix-staging-smoke.yml`](../../.github/workflows/dealix-staging-smoke.yml) قد لا يظهر في `gh workflow list` إذا كان **الفرع الافتراضي للريبو** لا يحتويه؛ GitHub يحمّل تعريفات الـ workflows من الفرع الافتراضي. للـ `workflow_dispatch` من الواجهة أو الـ CLI، إمّا نقل/مزامنة الـ workflow إلى `main` أو تغيير الفرع الافتراضي مؤقتاً — راجع سياسة الفريق.
+
 ## Manual follow-ups (not automated)
 
-- Merge PR #125 on GitHub when checks pass.
+- ~~Merge Layer 13/14 into `ai-company`~~ — تم عبر PR [#30](https://github.com/VoXc2/system-prompts-and-models-of-ai-tools/pull/30).
+- **Railway:** انشر من فرع `ai-company`، root `dealix`، حسب [`PAID_BETA_FULL_RUNBOOK_AR.md`](PAID_BETA_FULL_RUNBOOK_AR.md) و[`ops/RAILWAY_AI_COMPANY_BIND.md`](ops/RAILWAY_AI_COMPANY_BIND.md).
+- **Secrets + staging smoke:** أضف `STAGING_BASE_URL` في GitHub Actions ثم شغّل smoke يدوياً من الواجهة إن لم يظهر الـ workflow في `gh workflow list`.
 - Deploy staging and run [`scripts/smoke_staging.py`](../scripts/smoke_staging.py) with `STAGING_BASE_URL` set.
+- **Moyasar + outreach + Proof Pack:** اتبع [`PAID_BETA_FULL_RUNBOOK_AR.md`](PAID_BETA_FULL_RUNBOOK_AR.md) المراحل E–J.
