@@ -1,0 +1,121 @@
+name: Deploy to Railway
+
+# Deploys Dealix backend to Railway using Railway CLI.
+#
+# Setup (one-time, by Sami):
+#   1. Go to https://railway.app/account/tokens
+#   2. Create a new token named "github-deploy"
+#   3. Copy the token
+#   4. Go to https://github.com/VoXc2/dealix/settings/secrets/actions
+#   5. Add New repository secret: RAILWAY_TOKEN = <paste token>
+#   6. Optional: Add RAILWAY_SERVICE_NAME = dealix (if service name differs)
+#
+# After setup: every push to main auto-deploys, OR trigger manually
+# via Actions tab → "Deploy to Railway" → Run workflow.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "api/**"
+      - "core/**"
+      - "dealix/**"
+      - "auto_client_acquisition/**"
+      - "autonomous_growth/**"
+      - "integrations/**"
+      - "db/**"
+      - "cli.py"
+      - "Dockerfile"
+      - "railway.json"
+      - "railway.toml"
+      - "Procfile"
+      - "requirements.txt"
+      - "pyproject.toml"
+  workflow_dispatch:
+    inputs:
+      service:
+        description: "Railway service name"
+        required: false
+        default: "dealix"
+        type: string
+
+jobs:
+  deploy:
+    name: 🚂 Deploy to Railway
+    runs-on: ubuntu-latest
+    # Only run if RAILWAY_TOKEN is configured
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for RAILWAY_TOKEN
+        id: check_token
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "::warning::RAILWAY_TOKEN secret is not configured. Skipping deploy."
+            echo "token_present=false" >> $GITHUB_OUTPUT
+            echo ""
+            echo "To enable auto-deploy:"
+            echo "1. Get token from https://railway.app/account/tokens"
+            echo "2. Add as GitHub secret: RAILWAY_TOKEN"
+            exit 0
+          fi
+          echo "token_present=true" >> $GITHUB_OUTPUT
+
+      - name: Install Railway CLI
+        if: steps.check_token.outputs.token_present == 'true'
+        run: |
+          curl -fsSL https://railway.com/install.sh | sh
+          echo "$HOME/.railway/bin" >> $GITHUB_PATH
+
+      - name: Verify Railway auth
+        if: steps.check_token.outputs.token_present == 'true'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway whoami || echo "Auth check failed — token may be invalid"
+
+      - name: Deploy to Railway
+        if: steps.check_token.outputs.token_present == 'true'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          SERVICE="${{ inputs.service || 'dealix' }}"
+          echo "Deploying to service: $SERVICE"
+          railway up --service "$SERVICE" --detach || {
+            echo "::error::Railway deploy failed. Check service name and token."
+            exit 1
+          }
+
+      - name: Wait for deployment to become active
+        if: steps.check_token.outputs.token_present == 'true'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          echo "Waiting 60 seconds for deployment to start..."
+          sleep 60
+          railway status || true
+
+      - name: Smoke test /healthz
+        if: steps.check_token.outputs.token_present == 'true'
+        run: |
+          # Railway auto-generates public domains; for now we rely on the known URL.
+          # User can set RAILWAY_PUBLIC_URL as a repo variable to test the right URL.
+          URL="${{ vars.RAILWAY_PUBLIC_URL || 'https://dealix-production-up.railway.app' }}"
+          echo "Smoke-testing: $URL/healthz"
+
+          for i in {1..12}; do
+            code=$(curl -sS -o /dev/null -w "%{http_code}" --max-time 10 "$URL/healthz" || echo "000")
+            echo "Attempt $i: $code"
+            if [ "$code" = "200" ]; then
+              echo "✅ /healthz = 200 — backend is live"
+              exit 0
+            fi
+            sleep 15
+          done
+
+          echo "::warning::/healthz did not return 200 after 3 minutes. Deployment may still be in progress."
+          echo "Check Railway dashboard: https://railway.com/project/54bb60b4-d059-4dd1-af57-bc44c702b9f0"

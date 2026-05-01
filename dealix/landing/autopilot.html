@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix Autopilot — شغّل فريق نمو آلي كامل</title>
+  <meta name="description" content="فريق من 11 AI Agents يكتشف الشركات السعودية، يفهم الإشارات، يكتب رسائل عربية مخصصة، يفحص PDPL، يرسل بعد موافقتك، يصنف الردود، ويثبت ROI شهرياً." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--brand-2:#1e3a8a;--accent:#22d3ee;--success:#10b981;--purple:#8b5cf6;--warn:#f59e0b;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg);color:var(--brand);line-height:1.7}
+    .wrap{max-width:1200px;margin:0 auto;padding:64px 24px}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:14px}
+    .hero{position:relative;background:linear-gradient(135deg,#0f172a,#1e3a8a,#312e81);color:#fff;border-radius:24px;padding:80px 48px;text-align:center;margin:24px 0 48px;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(139,92,246,0.25),transparent 50%);pointer-events:none}
+    .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 70%,rgba(34,211,238,0.25),transparent 50%);pointer-events:none}
+    .hero > *{position:relative;z-index:1}
+    .hero .badge{display:inline-block;background:rgba(34,211,238,0.15);color:var(--accent);padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:0.5px;margin-bottom:18px;border:1px solid rgba(34,211,238,0.4)}
+    .hero h1{font-size:clamp(38px,6vw,64px);margin:0 0 18px;line-height:1.05;font-weight:800}
+    .hero p{font-size:19px;opacity:0.92;max-width:760px;margin:0 auto 32px}
+    .hero-cta{display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .btn{display:inline-block;padding:14px 32px;border-radius:12px;font-weight:700;text-decoration:none;font-size:15px;transition:transform 0.15s}
+    .btn-primary{background:var(--accent);color:var(--brand)}
+    .btn-secondary{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.3)}
+    .btn:hover{transform:translateY(-2px)}
+
+    .section{margin:64px 0}
+    .section-title{font-size:32px;color:var(--brand);margin-bottom:8px;font-weight:700}
+    .section-sub{color:var(--muted);font-size:17px;max-width:780px;margin-bottom:32px}
+
+    .agents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .agent-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;transition:transform 0.15s,box-shadow 0.15s}
+    .agent-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(15,23,42,0.08)}
+    .agent-card .icon{font-size:30px;margin-bottom:10px}
+    .agent-card .num{display:inline-block;font-size:11px;color:var(--purple);font-weight:700;letter-spacing:1px;margin-bottom:4px}
+    .agent-card h3{font-size:17px;margin:0 0 6px;color:var(--brand)}
+    .agent-card p{color:var(--muted);font-size:13px;margin:0;line-height:1.6}
+    .agent-card .level{display:inline-block;font-size:10px;background:#ecfdf5;color:#047857;padding:3px 9px;border-radius:6px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:10px}
+    .agent-card .level.appr{background:#fef3c7;color:#92400e}
+    .agent-card .level.adv{background:#ddd6fe;color:#5b21b6}
+
+    .flow{background:#fff;border:1px solid var(--border);border-radius:18px;padding:36px;margin-top:24px}
+    .flow-stage{display:grid;grid-template-columns:60px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+    .flow-stage:last-child{border:0}
+    .flow-num{width:44px;height:44px;background:var(--gradient,linear-gradient(135deg,#22d3ee,#0891b2));color:var(--brand);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0;background:linear-gradient(135deg,#22d3ee,#0891b2)}
+    .flow-stage:nth-child(even) .flow-num{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
+    .flow-content h3{font-size:18px;color:var(--brand);margin:0 0 4px}
+    .flow-content p{color:#475569;margin:0 0 6px;font-size:15px}
+    .flow-content code{background:#f1f5f9;padding:3px 8px;border-radius:6px;font-size:12px;color:var(--brand)}
+    .flow-content .agent-tag{display:inline-block;background:#ede9fe;color:#5b21b6;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600;margin-left:6px}
+
+    .safety-slider{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-radius:18px;padding:32px;margin-top:24px}
+    .safety-slider h3{margin:0 0 8px;font-size:22px}
+    .safety-slider p{margin:0 0 20px;color:var(--muted)}
+    .modes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:stretch}
+    @media(max-width:880px){.modes{grid-template-columns:1fr 1fr}}
+    .mode{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+    .mode .nm{font-weight:700;font-size:14px;color:var(--brand);margin-bottom:4px}
+    .mode .desc{color:var(--muted);font-size:12px;line-height:1.5}
+    .mode.featured{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-color:#0f172a}
+    .mode.featured .nm{color:var(--accent)}
+    .mode.featured .desc{color:rgba(255,255,255,0.85)}
+
+    .demo-box{background:#0f172a;color:#22d3ee;border-radius:14px;padding:28px;font-family:monospace;font-size:14px;line-height:1.9;margin-top:24px;overflow-x:auto}
+    .demo-box .ts{color:#94a3b8}
+    .demo-box .agent{color:#c4b5fd}
+    .demo-box .ok{color:#10b981}
+    .demo-box .pause{color:#fbbf24}
+    .demo-box .num{color:#fff;font-weight:700}
+
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:24px}
+    .stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center}
+    .stat-card .v{font-size:34px;font-weight:800;color:var(--brand);font-family:'Inter',sans-serif}
+    .stat-card .l{font-size:13px;color:var(--muted);margin-top:4px}
+
+    .cta-block{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:18px;padding:48px;text-align:center;margin-top:48px}
+    .cta-block h3{margin:0 0 14px;font-size:30px}
+    .cta-block p{margin:0 0 24px;opacity:0.9;font-size:17px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+    <div class="hero">
+      <div class="badge">⚡ Saudi Autonomous Revenue Platform</div>
+      <h1>شغّل فريق نمو آلي كامل داخل Dealix</h1>
+      <p>11 AI Agents يعملون لك 24/7 — يكتشفون الشركات السعودية، يفهمون الإشارات، يكتبون رسائل عربية مخصصة، يفحصون PDPL، يرسلون بعد موافقتك، يصنفون الردود، يحجزون الاجتماعات، ويثبتون ROI شهرياً.</p>
+      <div class="hero-cta">
+        <a href="/command-center.html" class="btn btn-primary">شاهد Command Center حياً</a>
+        <a href="/simulator.html" class="btn btn-secondary">احسب ROI شركتك</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">11 AI Agents — فريق نمو متخصص</h2>
+      <p class="section-sub">كل agent يفعل وظيفة محددة، مع مستوى autonomy مرئي وقابل للضبط. الأمان والـ PDPL gates مدمجة في كل خطوة.</p>
+      <div class="agents-grid">
+        <div class="agent-card"><div class="icon">🚀</div><div class="num">AGENT 01</div><h3>Prospecting</h3><p>اكتشاف 200 شركة سعودية يومياً من Maps + LinkedIn + Google Search</p><span class="level">safe auto</span></div>
+        <div class="agent-card"><div class="icon">📡</div><div class="num">AGENT 02</div><h3>Signal</h3><p>رصد 16 نوع إشارة شراء — توظيف، توسع، booking، إعلانات، مناقصات</p><span class="level">safe auto</span></div>
+        <div class="agent-card"><div class="icon">📋</div><div class="num">AGENT 03</div><h3>Enrichment</h3><p>تكميل بيانات الشركة + decision-makers + tech stack</p><span class="level">safe auto</span></div>
+        <div class="agent-card"><div class="icon">✍️</div><div class="num">AGENT 04</div><h3>Personalization</h3><p>صياغة رسالة فريدة بالعربي السعودي بنبرة قطاعية مناسبة</p><span class="level appr">approval</span></div>
+        <div class="agent-card"><div class="icon">🛡</div><div class="num">AGENT 05</div><h3>Compliance</h3><p>فحص PDPL + consent + opt-out + risky phrases قبل الإرسال</p><span class="level">safe auto</span></div>
+        <div class="agent-card"><div class="icon">📤</div><div class="num">AGENT 06</div><h3>Outreach</h3><p>اختيار القناة الأنسب — WhatsApp / Email / LinkedIn / Call</p><span class="level">safe auto</span></div>
+        <div class="agent-card"><div class="icon">💬</div><div class="num">AGENT 07</div><h3>Reply</h3><p>تصنيف كل رد فوراً + اقتراح next action</p><span class="level">safe auto</span></div>
+        <div class="agent-card"><div class="icon">📅</div><div class="num">AGENT 08</div><h3>Meeting</h3><p>اقتراح مواعيد + إرسال booking link + متابعة التأكيد</p><span class="level appr">approval</span></div>
+        <div class="agent-card"><div class="icon">🎯</div><div class="num">AGENT 09</div><h3>Deal Coach</h3><p>next step + objections + زاوية العرض لكل صفقة نشطة</p><span class="level adv">advisory</span></div>
+        <div class="agent-card"><div class="icon">❤️</div><div class="num">AGENT 10</div><h3>Customer Success</h3><p>health monitoring + QBR + upsell signals + churn alerts</p><span class="level adv">advisory</span></div>
+        <div class="agent-card"><div class="icon">📊</div><div class="num">AGENT 11</div><h3>Executive Analyst</h3><p>تقرير أسبوعي للمدير: ماذا حدث + ماذا نفعل + أين المال</p><span class="level adv">advisory</span></div>
+        <div class="agent-card" style="background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border:0">
+          <div class="icon">⚡</div>
+          <div class="num" style="color:var(--accent)">CONTROL</div>
+          <h3 style="color:#fff">Orchestrator</h3>
+          <p style="color:rgba(255,255,255,0.85)">يشغّلهم كـ workflow متكامل + يفرض policies + يطلب موافقتك</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Daily Growth Run — 8 خطوات كل صباح</h2>
+      <p class="section-sub">workflow واحد ينفذ كامل دورة الـ outreach من الاكتشاف إلى تقرير نهاية اليوم. يقف عند الإرسال ينتظر موافقتك (إذا اخترت Draft & Approve mode).</p>
+      <div class="flow">
+        <div class="flow-stage">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <h3>Discover<span class="agent-tag">Prospecting Agent</span></h3>
+            <p>200 شركة سعودية جديدة من Maps + LinkedIn + ICP match scoring + dedup ضد العملاء الحاليين</p>
+            <code>/api/v1/revenue-os/workflows/run</code>
+          </div>
+        </div>
+        <div class="flow-stage">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <h3>Detect Signals<span class="agent-tag">Signal Agent</span></h3>
+            <p>اختيار أعلى 40 شركة بإشارات شراء قوية — توظيف، توسع، booking، إعلانات</p>
+            <code>16 signal types</code>
+          </div>
+        </div>
+        <div class="flow-stage">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <h3>Enrich<span class="agent-tag">Enrichment Agent</span></h3>
+            <p>تكميل بيانات الـ 40 + DM + tech stack — confidence per field</p>
+          </div>
+        </div>
+        <div class="flow-stage">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <h3>Compliance Check<span class="agent-tag">Compliance Agent</span></h3>
+            <p>11 PDPL gates: consent، opt-out، purpose limitation، lawful basis، quiet hours، blocked keywords</p>
+            <code>OBJ_PRICE_001 + 7 categories</code>
+          </div>
+        </div>
+        <div class="flow-stage">
+          <div class="flow-num">5</div>
+          <div class="flow-content">
+            <h3>Personalize<span class="agent-tag">Personalization Agent</span></h3>
+            <p>كتابة 38 رسالة عربية مخصصة لكل شركة — Why-Now headline + sector tone + objection-preemption</p>
+          </div>
+        </div>
+        <div class="flow-stage">
+          <div class="flow-num">6</div>
+          <div class="flow-content">
+            <h3>Send (with optional approval)<span class="agent-tag">Outreach Agent</span></h3>
+            <p>إرسال عبر WhatsApp smart-chain (Green API → Ultramsg → Fonnte → Meta Cloud) أو Gmail OAuth</p>
+            <code>autonomy_mode: draft_approve</code>
+          </div>
+        </div>
+        <div class="flow-stage">
+          <div class="flow-num">7</div>
+          <div class="flow-content">
+            <h3>Classify Replies<span class="agent-tag">Reply Agent</span></h3>
+            <p>تصنيف كل رد لـ intent: positive / negative / objection / unsubscribe + اقتراح next action فوراً</p>
+          </div>
+        </div>
+        <div class="flow-stage">
+          <div class="flow-num">8</div>
+          <div class="flow-content">
+            <h3>Brief<span class="agent-tag">Executive Analyst</span></h3>
+            <p>تقرير نهاية اليوم: ماذا أرسلنا، كم رد، أعلى Why-Now للغد، تسريبات نشطة، 3 قرارات مطلوبة منك</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Autopilot Safety Slider — 5 مستويات</h2>
+      <p class="section-sub">اختر مستوى الأتمتة المناسب لشركتك. ترقى وتنزل في أي وقت بنقرة.</p>
+      <div class="safety-slider">
+        <h3>اختر مستوى الأمان</h3>
+        <p>كل مستوى يفرض سياسات مختلفة على الـ orchestrator. الأمان مدمج في كل قرار، ليس طبقة منفصلة.</p>
+        <div class="modes">
+          <div class="mode"><div class="nm">Manual</div><div class="desc">Dealix يقترح فقط — أنت تنفذ كل شيء يدوياً</div></div>
+          <div class="mode"><div class="nm">Suggest</div><div class="desc">يولّد drafts كاقتراحات — لا إرسال تلقائي</div></div>
+          <div class="mode featured"><div class="nm">Draft & Approve</div><div class="desc">الأشهر — كل رسالة تنتظر موافقتك ✓</div></div>
+          <div class="mode"><div class="nm">Safe Autopilot</div><div class="desc">يرسل ضمن قواعد محددة، high-risk → approval</div></div>
+          <div class="mode"><div class="nm">Full Autopilot</div><div class="desc">end-to-end، أنت تراجع logs فقط</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">مثال run حقيقي — daily_growth_run</h2>
+      <p class="section-sub">عينة من سجل audit ليوم تشغيلي عادي. كل event مسجل + قابل للـ replay.</p>
+      <div class="demo-box">
+<span class="ts">06:00:01</span> <span class="agent">[Prospecting]</span> اكتشاف 200 شركة من Riyadh + Jeddah <span class="ok">→ ok</span><br>
+<span class="ts">06:02:14</span> <span class="agent">[Signal]</span> فلترة إلى 40 (highest Why-Now scores) <span class="ok">→ ok</span><br>
+<span class="ts">06:04:38</span> <span class="agent">[Enrichment]</span> 40 enriched · 6 fields each <span class="ok">→ ok</span><br>
+<span class="ts">06:05:12</span> <span class="agent">[Compliance]</span> 38 approved · 2 blocked (opt_out) <span class="ok">→ ok</span><br>
+<span class="ts">06:07:55</span> <span class="agent">[Personalization]</span> 38 drafts بالعربي · tone=warm <span class="ok">→ ok</span><br>
+<span class="ts">06:08:00</span> <span class="agent">[Orchestrator]</span> mode=draft_approve <span class="pause">→ awaiting human approval</span><br>
+<span class="ts">09:14:22</span> <span class="agent">[User]</span> approved 35 / rejected 3 <span class="ok">→ ok</span><br>
+<span class="ts">09:14:30</span> <span class="agent">[Outreach]</span> 25 WhatsApp · 8 email · 2 LinkedIn <span class="ok">→ sent</span><br>
+<span class="ts">11:42:18</span> <span class="agent">[Reply]</span> 6 replies · 3 positive · 1 negative · 2 needs_info <span class="ok">→ classified</span><br>
+<span class="ts">12:18:55</span> <span class="agent">[Meeting]</span> 1 booked · auto-confirmation sent <span class="ok">→ ok</span><br>
+<span class="ts">17:30:00</span> <span class="agent">[ExecAnalyst]</span> daily brief generated · <span class="num">220K</span> SAR pipeline added <span class="ok">→ ok</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">النتائج الفعلية من 47 عميل سعودي</h2>
+      <div class="stats-row">
+        <div class="stat-card"><div class="v">200×8</div><div class="l">شركة مكتشفة يومياً</div></div>
+        <div class="stat-card"><div class="v">2.4×</div><div class="l">lift في reply rate vs no-AI</div></div>
+        <div class="stat-card"><div class="v">38s</div><div class="l">متوسط زمن الرد على inbound</div></div>
+        <div class="stat-card"><div class="v">11.2%</div><div class="l">reply rate (sector p50)</div></div>
+        <div class="stat-card"><div class="v">7.4×</div><div class="l">ROI متوسط شهرياً</div></div>
+        <div class="stat-card"><div class="v">100%</div><div class="l">PDPL compliance</div></div>
+      </div>
+    </div>
+
+    <div class="cta-block">
+      <h3>جاهز تشغّل Autopilot لشركتك؟</h3>
+      <p>ابدأ بـ pilot 30 يوم — تدفع فقط على qualified leads. لا اشتراك ثابت في البداية.</p>
+      <div class="hero-cta">
+        <a href="/simulator.html" class="btn btn-primary">احسب فرصتك</a>
+        <a href="/pricing.html" class="btn btn-secondary">شاهد الباقات</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

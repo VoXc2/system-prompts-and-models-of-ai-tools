@@ -1,0 +1,149 @@
+# ─────────────────────────────────────────────────────────────
+# 🔒 SECRETS — NEVER COMMIT
+# ─────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.staging.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+*_secret*
+*_credentials*
+service-account*.json
+google-credentials*.json
+
+# ─────────────────────────────────────────────────────────────
+# 🐍 Python
+# ─────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+nosetests.xml
+
+# Type checkers / linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+profile_default/
+ipython_config.py
+
+# ─────────────────────────────────────────────────────────────
+# 🗄️ Databases
+# ─────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+data/
+dumps/
+
+# ─────────────────────────────────────────────────────────────
+# 📝 Logs
+# ─────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─────────────────────────────────────────────────────────────
+# 🐳 Docker
+# ─────────────────────────────────────────────────────────────
+.docker/
+docker-compose.override.yml
+
+# ─────────────────────────────────────────────────────────────
+# 💻 IDE / Editors
+# ─────────────────────────────────────────────────────────────
+.vscode/
+!.vscode/settings.json.example
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.project
+.pydevproject
+.settings/
+
+# ─────────────────────────────────────────────────────────────
+# 🏗️ Build / Dist
+# ─────────────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+.cache/
+
+# ─────────────────────────────────────────────────────────────
+# 🧪 Temporary
+# ─────────────────────────────────────────────────────────────
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+scratch/
+playground/
+
+# ─────────────────────────────────────────────────────────────
+# 📊 Analytics / Traces
+# ─────────────────────────────────────────────────────────────
+.langfuse/
+traces/
+
+# Local Dealix index output
+.dealix/

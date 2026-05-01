@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix — برنامج الشركاء والوكالات</title>
+  <meta name="description" content="3 مستويات للشراكة. تبادل خدمات. commission حتى 20%. انضم لبرنامج شركاء Dealix." />
+  <link rel="canonical" href="https://dealix.sa/partners.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .w{max-width:1100px;margin:0 auto;padding:96px 24px 64px}
+    h1{font-size:clamp(32px,5vw,56px);margin:0 0 12px;line-height:1.15;text-align:center}
+    .sub{text-align:center;color:#64748b;font-size:18px;margin-bottom:48px}
+    .tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin:32px 0}
+    .tier{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;position:relative}
+    .tier.gold{border:2px solid #0f172a}
+    .tier .tag{display:inline-block;padding:4px 10px;background:#f1f5f9;border-radius:6px;font-size:12px;font-weight:600;margin-bottom:10px}
+    .tier.gold .tag{background:#22d3ee;color:#0f172a}
+    .tier h3{margin:0 0 8px;font-size:22px}
+    .tier .commission{font-size:32px;font-weight:700;color:#0f172a;margin:8px 0}
+    .tier ul{list-style:none;padding:0;margin:16px 0}
+    .tier li{padding:6px 0;font-size:14px}
+    .tier li::before{content:"✓";color:#10b981;margin-left:6px;font-weight:700}
+    .swap{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:16px;padding:40px;margin:48px 0;text-align:center}
+    .swap h2{font-size:28px;margin:0 0 12px}
+    .swap p{opacity:.85;max-width:640px;margin:0 auto 24px}
+    .swap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:24px;text-align:right}
+    .swap-item{background:rgba(255,255,255,.05);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+    .swap-item strong{display:block;margin-bottom:6px;color:#22d3ee}
+    form.apply{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;max-width:640px;margin:48px auto 0}
+    form.apply h2{margin:0 0 8px}
+    form.apply label{display:block;margin:16px 0 6px;font-weight:600;font-size:14px}
+    form.apply input,form.apply select,form.apply textarea{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;font-size:14px;box-sizing:border-box}
+    form.apply textarea{min-height:100px;resize:vertical}
+    form.apply button{margin-top:20px;width:100%;padding:14px;background:#0f172a;color:#fff;border:0;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer}
+    form.apply button:hover{background:#1e293b}
+    .nav-back{display:inline-block;margin-bottom:24px;color:#64748b;text-decoration:none;font-size:14px}
+    .success{display:none;background:#d1fae5;border:1px solid #10b981;color:#065f46;padding:16px;border-radius:10px;margin-top:16px}
+    .success.show{display:block}
+  </style>
+  <script>
+    // Configure backend URL — points to Railway production
+    window.DEALIX_API_BASE = window.DEALIX_API_BASE || 'https://web-dealix.up.railway.app';
+  </script>
+</head>
+<body>
+  <div class="w">
+    <a href="index.html" class="nav-back">← العودة للرئيسية</a>
+    <h1>شركاء Dealix</h1>
+    <p class="sub">بِع خدماتك، نفّذ حملاتك، استلم عمولة ثابتة. 3 مستويات + نموذج تبادل خدمات.</p>
+
+    <div class="tiers">
+      <div class="tier">
+        <span class="tag">المستوى 1</span>
+        <h3>Referral Partner</h3>
+        <div class="commission">10%</div>
+        <ul>
+          <li>عمولة لمدة 12 شهر على كل عميل</li>
+          <li>30 يوم cookie tracking</li>
+          <li>Collateral pack (AR/EN)</li>
+          <li>بدون حد أدنى</li>
+          <li>دفع شهري عبر Moyasar</li>
+        </ul>
+      </div>
+
+      <div class="tier gold">
+        <span class="tag">المستوى 2 — الأكثر تفاعلاً</span>
+        <h3>Certified Partner</h3>
+        <div class="commission">15% + co-marketing</div>
+        <ul>
+          <li>كل مميزات Referral</li>
+          <li>Co-branded content + webinars</li>
+          <li>Onboarding مشترك لعملائك</li>
+          <li>Partner dashboard مخصص</li>
+          <li>يتطلب 3 عملاء مفعّلين</li>
+          <li>شارة Certified على موقعك</li>
+        </ul>
+      </div>
+
+      <div class="tier">
+        <span class="tag">المستوى 3 — 3 slots فقط</span>
+        <h3>Strategic Partner</h3>
+        <div class="commission">20% + 5% rev share</div>
+        <ul>
+          <li>كل مميزات Certified</li>
+          <li>5% revenue share سنوي</li>
+          <li>Co-product input (روادمماب)</li>
+          <li>White-label co-brand</li>
+          <li>Quarterly business review</li>
+          <li>دعوة حصرية فقط</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="swap">
+      <h2>نموذج تبادل الخدمات</h2>
+      <p>بدل commission فقط، تقدم خدماتك (حملات، SEO، CRM setup) مقابل license + onboarding. كل طرف يُسعّر خدماته ويُحتسب الفرق credits أو دفع مباشر.</p>
+      <div class="swap-grid">
+        <div class="swap-item"><strong>أنت تقدّم</strong>تنفيذ حملات، SEO، SEM، CRM setup، content، video</div>
+        <div class="swap-item"><strong>نحن نقدّم</strong>License + onboarding + تدريب + دعم مستمر</div>
+        <div class="swap-item"><strong>التسوية</strong>كل 90 يوم — credits، cash، أو mix</div>
+        <div class="swap-item"><strong>الشفافية</strong>Dashboard مشترك لرؤية كل العمليات والأرصدة</div>
+      </div>
+    </div>
+
+    <form class="apply" id="partnerForm" action="/api/v1/public/partner-application" data-api-path="/api/v1/public/partner-application" method="POST">
+      <h2>طلب انضمام</h2>
+      <p style="color:#64748b;margin:0 0 8px;font-size:14px">نراجع كل طلب خلال 48 ساعة ونرد برسالة تحدد المستوى المناسب.</p>
+
+      <label for="name">الاسم الكامل *</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="company">اسم الشركة / الوكالة *</label>
+      <input type="text" id="company" name="company" required>
+
+      <label for="email">الإيميل *</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="phone">رقم الجوال *</label>
+      <input type="tel" id="phone" name="phone" required>
+
+      <label for="type">نوع الشراكة المطلوبة</label>
+      <select id="type" name="partnership_type">
+        <option value="referral">Referral Partner (10%)</option>
+        <option value="certified">Certified Partner (15%)</option>
+        <option value="strategic">Strategic Partner (20% + rev share)</option>
+        <option value="swap">Service Swap (تبادل خدمات)</option>
+      </select>
+
+      <label for="services">الخدمات التي تقدّمها</label>
+      <textarea id="services" name="services" placeholder="مثال: حملات Meta Ads، SEO، CRM setup، تصميم landing pages..."></textarea>
+
+      <label for="clients">عدد العملاء النشطين حالياً</label>
+      <input type="number" id="clients" name="active_clients" min="0" placeholder="0">
+
+      <label for="why">لماذا تريد الشراكة مع Dealix؟</label>
+      <textarea id="why" name="why" placeholder="اشرح باختصار كيف ستقدّم قيمة مشتركة"></textarea>
+
+      <button type="submit">إرسال الطلب</button>
+
+      <div class="success" id="successMsg">
+        ✅ وصلنا طلبك. سنتواصل خلال 48 ساعة.
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // PostHog tracking
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture identify".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    if (window.POSTHOG_KEY) { posthog.init(window.POSTHOG_KEY, { api_host: 'https://app.posthog.com' }); posthog.capture('partners_viewed'); }
+
+    // Form handling with graceful fallback
+    document.getElementById('partnerForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'جاري الإرسال...';
+      const data = new FormData(form);
+      const payload = Object.fromEntries(data.entries());
+      if (window.posthog) posthog.capture('partner_application_submitted', {type: data.get('partnership_type')});
+
+      const API_BASE = (window.DEALIX_API_BASE || '').replace(/\/$/, '');
+      const apiPath = form.dataset.apiPath || '/api/v1/public/partner-application';
+      const url = API_BASE + apiPath;
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          document.getElementById('successMsg').classList.add('show');
+          form.reset();
+        } else {
+          // Fallback: open mailto if backend is unreachable
+          const body = encodeURIComponent(
+            Object.entries(payload).map(([k,v]) => `${k}: ${v}`).join('\n')
+          );
+          window.location.href = `mailto:partners@dealix.sa?subject=Partner%20Application%20-%20${encodeURIComponent(payload.company||'')}&body=${body}`;
+        }
+      } catch (err) {
+        alert('تعذر الإرسال مباشرة. سنفتح بريدك الآن لإرسال الطلب يدوياً.');
+        const body = encodeURIComponent(
+          Object.entries(payload).map(([k,v]) => `${k}: ${v}`).join('\n')
+        );
+        window.location.href = `mailto:partners@dealix.sa?subject=Partner%20Application&body=${body}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    });
+  </script>
+</body>
+</html>

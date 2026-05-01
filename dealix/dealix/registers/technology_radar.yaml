@@ -1,0 +1,229 @@
+# ═══════════════════════════════════════════════════════════════════
+# Technology Radar
+# ═══════════════════════════════════════════════════════════════════
+# Every technology Dealix depends on (or might depend on) is listed here
+# with its adoption status. Changing a technology's status requires a PR.
+#
+# Status levels:
+#   ADOPT     — in production use, required
+#   TRIAL     — in limited use, being evaluated
+#   ASSESS    — being considered, no commitment
+#   HOLD      — do not adopt without explicit review
+# ═══════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+last_reviewed: "2026-04-21"
+
+# ───────────── Languages & runtime ─────────────
+languages:
+  python:
+    version: "3.11 | 3.12"
+    status: ADOPT
+  typescript:
+    status: ASSESS
+    rationale: "Possible for executive-room frontend"
+
+# ───────────── Frameworks ─────────────
+frameworks:
+  fastapi:
+    status: ADOPT
+    role: "HTTP gateway"
+  pydantic:
+    version: "v2.9+"
+    status: ADOPT
+    role: "Contracts, validation, settings"
+  sqlalchemy:
+    version: "2.0 async"
+    status: ADOPT
+    role: "Persistence"
+
+# ───────────── LLM providers ─────────────
+llm_providers:
+  anthropic_claude:
+    status: ADOPT
+    role: "Reasoning, writing, proposals, orchestration"
+    risk_notes: "Ensure DPA; avoid S3 data unless contract permits"
+  openai:
+    status: ADOPT
+    role: "Fallback + Responses API target"
+    risk_notes: "Structured Outputs + MCP roadmap target"
+  google_gemini:
+    status: ADOPT
+    role: "Research, long context, multimodal"
+  groq:
+    status: ADOPT
+    role: "Fast classification with Llama 3.3 70B"
+  deepseek:
+    status: ADOPT
+    role: "Code generation and debug"
+    risk_notes: "Verify data residency for enterprise customers"
+  glm_zai:
+    status: ADOPT
+    role: "Arabic + bulk tasks"
+    risk_notes: "Verify data residency for enterprise customers"
+
+# ───────────── Trust Plane ─────────────
+trust_plane:
+  opa_rego:
+    status: TRIAL
+    role: "Policy engine (replaces in-process evaluator)"
+    phase: "Phase 2"
+  openfga:
+    status: TRIAL
+    role: "Fine-grained authorization for rooms, memos, data"
+    phase: "Phase 2"
+  cedar:
+    status: ASSESS
+    role: "Alternative formal policy language"
+  keycloak:
+    status: TRIAL
+    role: "Identity & SSO"
+    phase: "Phase 2"
+  hashicorp_vault:
+    status: TRIAL
+    role: "Secrets management with dynamic creds + rotation + audit"
+    phase: "Phase 2"
+
+# ───────────── Execution Plane ─────────────
+execution_plane:
+  in_process_pipeline:
+    status: ADOPT
+    role: "Phase 8 orchestration today"
+    note: "Good for Phase 0-1; replaceable via ExecutionRuntime interface"
+  langgraph:
+    status: ASSESS
+    role: "Stateful HITL + interrupts"
+    phase: "Phase 1 candidate"
+  temporal:
+    status: TRIAL
+    role: "Durable, never-fail long workflows"
+    phase: "Phase 2 spike on ONE critical workflow first"
+    note: "Do not adopt broadly until spike validates operational cost"
+
+# ───────────── Data Plane ─────────────
+data_plane:
+  postgresql:
+    version: "16"
+    status: ADOPT
+  pgvector:
+    version: ">=0.8.2"
+    status: ADOPT
+    notes: "Track CVEs (e.g. parallel HNSW CVE in Feb 2026); managed as production component"
+  redis:
+    version: "7"
+    status: ADOPT
+    role: "Cache, rate limits, queues"
+  mongodb:
+    version: "7"
+    status: ADOPT
+    role: "Unstructured documents (optional)"
+  airbyte:
+    status: ASSESS
+    role: "Connector-based ingestion"
+    phase: "Phase 2"
+  great_expectations:
+    status: ASSESS
+    role: "Data validation checkpoints"
+    phase: "Phase 2"
+  openlineage:
+    status: ASSESS
+    role: "Lineage metadata (pick one vs OpenMetadata)"
+    phase: "Phase 2"
+  dbt_semantic_layer:
+    status: ASSESS
+    role: "Business metrics as code"
+    phase: "Phase 2"
+
+# ───────────── Contracts & Standards ─────────────
+standards:
+  json_schema:
+    status: ADOPT
+  cloudevents_1_0:
+    status: ADOPT
+  asyncapi:
+    status: TRIAL
+    role: "Document event channels"
+  mcp:
+    status: TRIAL
+    role: "Tool / connector protocol"
+
+# ───────────── Observability ─────────────
+observability:
+  structlog:
+    status: ADOPT
+  opentelemetry:
+    status: TRIAL
+    role: "Traces + GenAI semantic conventions"
+    notes: "Some gen_ai.* conventions still in Development; pin internal naming"
+  langfuse:
+    status: ASSESS
+    role: "LLM-specific tracing & eval"
+
+# ───────────── CI / SDLC ─────────────
+sdlc:
+  github_actions:
+    status: ADOPT
+  github_rulesets:
+    status: ADOPT
+    role: "Branch protection + required checks"
+  oidc_to_cloud:
+    status: ADOPT
+    role: "No long-lived secrets in CI"
+  artifact_attestations:
+    status: TRIAL
+    notes: "Requires GitHub Enterprise Cloud for private repos"
+  gitleaks:
+    status: ADOPT
+  detect_secrets:
+    status: ADOPT
+  trufflehog:
+    status: ADOPT
+  bandit:
+    status: ADOPT
+  ruff:
+    status: ADOPT
+  black:
+    status: ADOPT
+  mypy:
+    status: ADOPT
+    note: "Non-blocking in CI initially"
+  pytest:
+    status: ADOPT
+
+# ───────────── Integrations ─────────────
+integrations:
+  whatsapp_cloud_api:
+    status: ADOPT
+    role: "Inbound + outbound customer comms"
+  hubspot:
+    status: ADOPT
+    role: "CRM sync"
+  resend:
+    status: ADOPT
+    role: "Transactional email (preferred)"
+  sendgrid:
+    status: ADOPT
+    role: "Transactional email (alternative)"
+  google_calendar:
+    status: ADOPT
+    role: "Event creation"
+  calendly:
+    status: ADOPT
+    role: "Scheduling link + webhooks"
+  linkedin:
+    status: HOLD
+    rationale: "ToS risk on automation; integration disabled by default"
+  n8n:
+    status: ADOPT
+    role: "External workflow orchestration via webhook"
+
+# ───────────── Explicitly on HOLD ─────────────
+hold:
+  - name: "Unconstrained agent executors with direct tool access"
+    reason: "Violates blueprint constitutional principle #1 (no agent external commitments)"
+  - name: "Arbitrary prompt injection via user input to tools"
+    reason: "OWASP LLM01 risk; must go through policy gate"
+  - name: "Custom fine-tuned models"
+    reason: "Assess only after a clear ROI + eval-gate story"
+  - name: "Advanced graph DB for knowledge"
+    reason: "Only after proof of need; Postgres + pgvector suffice today"

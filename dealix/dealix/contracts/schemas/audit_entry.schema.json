@@ -1,0 +1,219 @@
+{
+  "$defs": {
+    "ApprovalClass": {
+      "description": "Who must approve before this action executes.\n\nA0 — no approval (routine, reversible, non-sensitive)\nA1 — team / manager\nA2 — department head + legal/finance\nA3 — executive / board",
+      "enum": [
+        "A0",
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "title": "ApprovalClass",
+      "type": "string"
+    },
+    "AuditAction": {
+      "description": "The category of audited action.",
+      "enum": [
+        "decision.emitted",
+        "policy.evaluated",
+        "policy.allowed",
+        "policy.denied",
+        "policy.escalated",
+        "approval.requested",
+        "approval.granted",
+        "approval.rejected",
+        "approval.timed_out",
+        "tool.invoked",
+        "tool.verified",
+        "tool.contradicted",
+        "tool.blocked",
+        "workflow.started",
+        "workflow.completed",
+        "workflow.failed",
+        "workflow.compensated",
+        "access.granted",
+        "access.denied",
+        "data.exported"
+      ],
+      "title": "AuditAction",
+      "type": "string"
+    },
+    "ReversibilityClass": {
+      "description": "How hard it is to undo this action.\n\nR0 — auto-reversible (draft email, internal note)\nR1 — reversible with limited ops (CRM field update)\nR2 — costly to reverse (a sent proposal, an outbound call)\nR3 — irreversible / external commitment (signed NDA, price sent to regulator)",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "title": "ReversibilityClass",
+      "type": "string"
+    },
+    "SensitivityClass": {
+      "description": "Data / impact sensitivity of this action.\n\nS0 — public\nS1 — internal\nS2 — confidential / commercial\nS3 — regulated / board / personal data",
+      "enum": [
+        "S0",
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "title": "SensitivityClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A single audit log entry — append-only.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "audit_id": {
+      "title": "Audit Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "default": "default",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "action": {
+      "$ref": "#/$defs/AuditAction"
+    },
+    "actor_type": {
+      "default": "system",
+      "title": "Actor Type",
+      "type": "string"
+    },
+    "actor_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor Id"
+    },
+    "decision_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision Id"
+    },
+    "entity_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Entity Id"
+    },
+    "event_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Event Id"
+    },
+    "workflow_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workflow Id"
+    },
+    "approval_class": {
+      "$ref": "#/$defs/ApprovalClass",
+      "default": "A0"
+    },
+    "reversibility_class": {
+      "$ref": "#/$defs/ReversibilityClass",
+      "default": "R0"
+    },
+    "sensitivity_class": {
+      "$ref": "#/$defs/SensitivityClass",
+      "default": "S1"
+    },
+    "outcome": {
+      "default": "ok",
+      "title": "Outcome",
+      "type": "string"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    },
+    "details": {
+      "additionalProperties": true,
+      "title": "Details",
+      "type": "object"
+    },
+    "trace_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Trace Id"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "at": {
+      "title": "At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "action"
+  ],
+  "title": "AuditEntry",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.sa/schemas/audit_entry.schema.json"
+}

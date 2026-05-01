@@ -1,0 +1,81 @@
+# ═══════════════════════════════════════════════════════════════
+# Local development stack
+# بيئة تطوير محلية
+# ═══════════════════════════════════════════════════════════════
+
+services:
+  app:
+    build: .
+    image: dealix:latest
+    container_name: dealix-app
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      - APP_ENV=development
+      - DATABASE_URL=postgresql+asyncpg://ai_user:ai_password@postgres:5432/ai_company
+      - REDIS_URL=redis://redis:6379/0
+      - MONGODB_URI=mongodb://mongo:27017/ai_company
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongo:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - ai-company
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: dealix-postgres
+    environment:
+      POSTGRES_USER: ai_user
+      POSTGRES_PASSWORD: ai_password
+      POSTGRES_DB: ai_company
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ai_user -d ai_company"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - ai-company
+
+  redis:
+    image: redis:7-alpine
+    container_name: dealix-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - ai-company
+
+  mongo:
+    image: mongo:7
+    container_name: dealix-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    networks:
+      - ai-company
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongo_data:
+
+networks:
+  ai-company:
+    driver: bridge

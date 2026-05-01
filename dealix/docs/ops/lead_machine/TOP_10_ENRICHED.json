@@ -1,0 +1,557 @@
+{
+  "generated_at": "2026-04-24",
+  "generator": "dealix lead machine v1 — tech_detect + static scoring",
+  "count": 10,
+  "leads": [
+    {
+      "lead_id": "L-2026-0001",
+      "company": {
+        "name_ar": "فودكس",
+        "name_en": "Foodics",
+        "domain": "foodics.com",
+        "sector": "SaaS Restaurants",
+        "size_band": "200-1000"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 100,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 40,
+        "intent": 30,
+        "access": 15,
+        "revenue": 15
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Ahmad Al-Zaini (CEO)",
+      "message_angle": "Series C $170M → scale onboarding",
+      "reason": "Perfect ICP — Saudi B2B SaaS, high lead volume, confirmed hiring, DM accessible, Arabic-market fit",
+      "compliance_note": "Public business contact via LinkedIn; no bots; single personalized DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 5,
+        "detected_tools": [
+          {
+            "name": "HubSpot",
+            "category": "crm"
+          },
+          {
+            "name": "WhatsApp Widget",
+            "category": "chat_mena"
+          },
+          {
+            "name": "Google Tag Manager",
+            "category": "analytics"
+          },
+          {
+            "name": "HubSpot Forms",
+            "category": "form"
+          },
+          {
+            "name": "WordPress",
+            "category": "cms"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "CRM in use — sales process exists",
+            "weight": 5,
+            "evidence": "HubSpot"
+          },
+          {
+            "name": "WhatsApp widget — Saudi-native sales channel",
+            "weight": 8,
+            "evidence": "WhatsApp Widget"
+          },
+          {
+            "name": "analytics active — measurable funnel",
+            "weight": 2,
+            "evidence": "Google Tag Manager"
+          },
+          {
+            "name": "inbound form — lead flow evidence",
+            "weight": 5,
+            "evidence": "HubSpot Forms"
+          },
+          {
+            "name": "CMS stack identified",
+            "weight": 1,
+            "evidence": "WordPress"
+          }
+        ]
+      }
+    },
+    {
+      "lead_id": "L-2026-0002",
+      "company": {
+        "name_ar": "لوسيديا",
+        "name_en": "Lucidya",
+        "domain": "lucidya.com",
+        "sector": "SaaS CXM",
+        "size_band": "50-200"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 88,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 38,
+        "intent": 22,
+        "access": 15,
+        "revenue": 13
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Abdullah Al-Assiri (CEO)",
+      "message_angle": "Surname affinity + CXM B2B",
+      "reason": "Saudi native SaaS CEO — surname connection + clear B2B enterprise ICP",
+      "compliance_note": "Public business contact; single manual DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 4,
+        "detected_tools": [
+          {
+            "name": "HubSpot",
+            "category": "crm"
+          },
+          {
+            "name": "Google Tag Manager",
+            "category": "analytics"
+          },
+          {
+            "name": "HubSpot Forms",
+            "category": "form"
+          },
+          {
+            "name": "Webflow",
+            "category": "cms"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "CRM in use — sales process exists",
+            "weight": 5,
+            "evidence": "HubSpot"
+          },
+          {
+            "name": "analytics active — measurable funnel",
+            "weight": 2,
+            "evidence": "Google Tag Manager"
+          },
+          {
+            "name": "inbound form — lead flow evidence",
+            "weight": 5,
+            "evidence": "HubSpot Forms"
+          },
+          {
+            "name": "CMS stack identified",
+            "weight": 1,
+            "evidence": "Webflow"
+          }
+        ]
+      }
+    },
+    {
+      "lead_id": "L-2026-0003",
+      "company": {
+        "name_ar": "سلة",
+        "name_en": "Salla",
+        "domain": "salla.sa",
+        "sector": "E-commerce Platform",
+        "size_band": "200-1000"
+      },
+      "opportunity_type": "STRATEGIC_PARTNER",
+      "priority_score": 93,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 40,
+        "intent": 25,
+        "access": 13,
+        "revenue": 15
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Nawaf Hariri (CEO)",
+      "message_angle": "70K merchants distribution → add-on app",
+      "reason": "Strategic partner — if Salla accepts Dealix as app-store add-on, 70K merchant reach",
+      "compliance_note": "Public contact via LinkedIn or Twitter DM; platform partnership approach",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 5,
+        "detected_tools": [
+          {
+            "name": "HubSpot",
+            "category": "crm"
+          },
+          {
+            "name": "Salla",
+            "category": "ecom_mena"
+          },
+          {
+            "name": "Google Tag Manager",
+            "category": "analytics"
+          },
+          {
+            "name": "Google Analytics 4",
+            "category": "analytics"
+          },
+          {
+            "name": "WordPress",
+            "category": "cms"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "CRM in use — sales process exists",
+            "weight": 5,
+            "evidence": "HubSpot"
+          },
+          {
+            "name": "Salla/Zid merchant — Saudi ecom ecosystem",
+            "weight": 8,
+            "evidence": "Salla"
+          },
+          {
+            "name": "analytics active — measurable funnel",
+            "weight": 2,
+            "evidence": "Google Tag Manager; Google Analytics 4"
+          },
+          {
+            "name": "CMS stack identified",
+            "weight": 1,
+            "evidence": "WordPress"
+          }
+        ]
+      }
+    },
+    {
+      "lead_id": "L-2026-0004",
+      "company": {
+        "name_ar": "لين تكنولوجيز",
+        "name_en": "Lean Technologies",
+        "domain": "leantech.me",
+        "sector": "Fintech API",
+        "size_band": "50-200"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 91,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 38,
+        "intent": 26,
+        "access": 13,
+        "revenue": 14
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Hisham Al-Falih (CEO)",
+      "message_angle": "300+ API customers → SE bottleneck",
+      "reason": "API-first fintech with Solutions Engineering bottleneck — Dealix pre-qualifies before SE",
+      "compliance_note": "Public LinkedIn DM; single personalized",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 2,
+        "detected_tools": [
+          {
+            "name": "HubSpot",
+            "category": "crm"
+          },
+          {
+            "name": "Google Tag Manager",
+            "category": "analytics"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "CRM in use — sales process exists",
+            "weight": 5,
+            "evidence": "HubSpot"
+          },
+          {
+            "name": "analytics active — measurable funnel",
+            "weight": 2,
+            "evidence": "Google Tag Manager"
+          }
+        ]
+      }
+    },
+    {
+      "lead_id": "L-2026-0005",
+      "company": {
+        "name_ar": "بركز",
+        "name_en": "BRKZ",
+        "domain": "brkz.com",
+        "sector": "ConTech",
+        "size_band": "50-200"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 83,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 36,
+        "intent": 22,
+        "access": 13,
+        "revenue": 12
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Ibrahim Manna (Founder)",
+      "message_angle": "$30M Stride debt → construction quotes automation",
+      "reason": "ConTech w/ recent funding; quote workflow automation is strong Dealix fit",
+      "compliance_note": "Public LinkedIn DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 2,
+        "detected_tools": [
+          {
+            "name": "Google Tag Manager",
+            "category": "analytics"
+          },
+          {
+            "name": "Hotjar",
+            "category": "analytics"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "analytics active — measurable funnel",
+            "weight": 2,
+            "evidence": "Google Tag Manager; Hotjar"
+          }
+        ]
+      }
+    },
+    {
+      "lead_id": "L-2026-0006",
+      "company": {
+        "name_ar": "زد",
+        "name_en": "Zid",
+        "domain": "zid.sa",
+        "sector": "E-commerce Platform",
+        "size_band": "200-1000"
+      },
+      "opportunity_type": "STRATEGIC_PARTNER",
+      "priority_score": 84,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 36,
+        "intent": 20,
+        "access": 13,
+        "revenue": 15
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Sultan Mofarreh (Co-founder)",
+      "message_angle": "Salla competitor — distribution via 15K+ merchants",
+      "reason": "Alternative to Salla for platform partnership; similar merchant base size",
+      "compliance_note": "Public LinkedIn DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 2,
+        "detected_tools": [
+          {
+            "name": "Zid",
+            "category": "ecom_mena"
+          },
+          {
+            "name": "Google Tag Manager",
+            "category": "analytics"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "Salla/Zid merchant — Saudi ecom ecosystem",
+            "weight": 8,
+            "evidence": "Zid"
+          },
+          {
+            "name": "analytics active — measurable funnel",
+            "weight": 2,
+            "evidence": "Google Tag Manager"
+          }
+        ]
+      }
+    },
+    {
+      "lead_id": "L-2026-0007",
+      "company": {
+        "name_ar": "رتيلو",
+        "name_en": "Retailo",
+        "domain": "retailo.co",
+        "sector": "B2B Marketplace",
+        "size_band": "200-1000"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 81,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 35,
+        "intent": 20,
+        "access": 13,
+        "revenue": 13
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Talha Ansari (Co-founder)",
+      "message_angle": "MENAP retail marketplace — high lead volume",
+      "reason": "B2B marketplace with many merchant leads; qualification + booking high-value",
+      "compliance_note": "Public LinkedIn DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 0,
+        "detected_tools": [],
+        "signals_from_tech": []
+      }
+    },
+    {
+      "lead_id": "L-2026-0008",
+      "company": {
+        "name_ar": "ساري",
+        "name_en": "Sary",
+        "domain": "sary.com",
+        "sector": "B2B Marketplace",
+        "size_band": "200-1000"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 82,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 36,
+        "intent": 20,
+        "access": 13,
+        "revenue": 13
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Mohammed Aldossary (Co-founder)",
+      "message_angle": "50K+ SMB retailers — merchant success motion",
+      "reason": "B2B marketplace with SMB merchants needing lead response",
+      "compliance_note": "Public LinkedIn DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 3,
+        "detected_tools": [
+          {
+            "name": "WhatsApp Widget",
+            "category": "chat_mena"
+          },
+          {
+            "name": "Meta Pixel",
+            "category": "ads"
+          },
+          {
+            "name": "WordPress",
+            "category": "cms"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "WhatsApp widget — Saudi-native sales channel",
+            "weight": 8,
+            "evidence": "WhatsApp Widget"
+          },
+          {
+            "name": "running paid ads — active demand gen",
+            "weight": 6,
+            "evidence": "Meta Pixel"
+          },
+          {
+            "name": "CMS stack identified",
+            "weight": 1,
+            "evidence": "WordPress"
+          }
+        ]
+      }
+    },
+    {
+      "lead_id": "L-2026-0009",
+      "company": {
+        "name_ar": "موزن",
+        "name_en": "Mozn",
+        "domain": "mozn.com",
+        "sector": "AI/ML Platform",
+        "size_band": "50-200"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 80,
+      "priority_tier": "P0",
+      "risk_level": "LOW",
+      "scores": {
+        "fit": 32,
+        "intent": 22,
+        "access": 13,
+        "revenue": 13
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Mohammed Al-Rubaian (CEO)",
+      "message_angle": "AI peer company — growth sales use-case",
+      "reason": "Peer AI company in Saudi w/ B2B SaaS sales motion",
+      "compliance_note": "Public LinkedIn DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 0,
+        "detected_tools": [],
+        "signals_from_tech": []
+      }
+    },
+    {
+      "lead_id": "L-2026-0010",
+      "company": {
+        "name_ar": "تمارا",
+        "name_en": "Tamara",
+        "domain": "tamara.co",
+        "sector": "BNPL Fintech",
+        "size_band": "200-1000"
+      },
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority_score": 89,
+      "priority_tier": "P0",
+      "risk_level": "MEDIUM",
+      "scores": {
+        "fit": 34,
+        "intent": 28,
+        "access": 13,
+        "revenue": 14
+      },
+      "recommended_channel": "LINKEDIN_MANUAL",
+      "decision_maker": "Abdulmajeed Alsukhan (CEO)",
+      "message_angle": "$2.4B raised — merchant success sales",
+      "reason": "BNPL fintech with heavy merchant onboarding — strong fit for Arabic AI SDR",
+      "compliance_note": "Public LinkedIn DM",
+      "tech": {
+        "status": "ok",
+        "detected_tools_count": 3,
+        "detected_tools": [
+          {
+            "name": "WooCommerce",
+            "category": "ecom"
+          },
+          {
+            "name": "Google Tag Manager",
+            "category": "analytics"
+          },
+          {
+            "name": "Webflow",
+            "category": "cms"
+          }
+        ],
+        "signals_from_tech": [
+          {
+            "name": "e-commerce platform",
+            "weight": 4,
+            "evidence": "WooCommerce"
+          },
+          {
+            "name": "analytics active — measurable funnel",
+            "weight": 2,
+            "evidence": "Google Tag Manager"
+          },
+          {
+            "name": "CMS stack identified",
+            "weight": 1,
+            "evidence": "Webflow"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,554 @@
+{
+  "stats": {
+    "generated_at": "2026-04-24",
+    "unique_companies": 26,
+    "domains_mapped": 26,
+    "tech_detect_ok": 20,
+    "total_tools_detected": 34,
+    "total_signals_detected": 31,
+    "top_5_signals": [
+      [
+        "analytics active — measurable funnel",
+        10
+      ],
+      [
+        "CMS stack identified",
+        7
+      ],
+      [
+        "CRM in use — sales process exists",
+        5
+      ],
+      [
+        "WhatsApp widget — Saudi-native sales channel",
+        2
+      ],
+      [
+        "inbound form — lead flow evidence",
+        2
+      ]
+    ],
+    "top_5_categories": [
+      [
+        "analytics",
+        13
+      ],
+      [
+        "cms",
+        7
+      ],
+      [
+        "crm",
+        5
+      ],
+      [
+        "chat_mena",
+        2
+      ],
+      [
+        "form",
+        2
+      ]
+    ],
+    "pipeline_rows_enriched": 50
+  },
+  "tech_by_company": {
+    "BRKZ": {
+      "domain": "brkz.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        },
+        {
+          "name": "Hotjar",
+          "category": "analytics"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager; Hotjar"
+        }
+      ]
+    },
+    "Bayzat Saudi": {
+      "domain": "bayzat.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        }
+      ]
+    },
+    "Brand Lounge": {
+      "domain": "thebrandlounge.ae",
+      "status": "fetch_error",
+      "http_status": null,
+      "tools": [],
+      "signals": []
+    },
+    "Digital8": {
+      "domain": "digital8.ae",
+      "status": "fetch_error",
+      "http_status": null,
+      "tools": [],
+      "signals": []
+    },
+    "Foodics": {
+      "domain": "foodics.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm"
+        },
+        {
+          "name": "WhatsApp Widget",
+          "category": "chat_mena"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        },
+        {
+          "name": "HubSpot Forms",
+          "category": "form"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "WhatsApp widget — Saudi-native sales channel",
+          "weight": 8,
+          "evidence": "WhatsApp Widget"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        },
+        {
+          "name": "inbound form — lead flow evidence",
+          "weight": 5,
+          "evidence": "HubSpot Forms"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ]
+    },
+    "Hakbah": {
+      "domain": "hakbah.sa",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "WooCommerce",
+          "category": "ecom"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        },
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms"
+        }
+      ],
+      "signals": [
+        {
+          "name": "e-commerce platform",
+          "weight": 4,
+          "evidence": "WooCommerce"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager; Google Analytics 4"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ]
+    },
+    "Intermarkets": {
+      "domain": "intermarkets.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [],
+      "signals": []
+    },
+    "Jahez": {
+      "domain": "jahez.net",
+      "status": "ok",
+      "http_status": 403,
+      "tools": [],
+      "signals": []
+    },
+    "Lean Technologies": {
+      "domain": "leantech.me",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        }
+      ]
+    },
+    "Logexa": {
+      "domain": "logexa.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [],
+      "signals": []
+    },
+    "Lucidya": {
+      "domain": "lucidya.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        },
+        {
+          "name": "HubSpot Forms",
+          "category": "form"
+        },
+        {
+          "name": "Webflow",
+          "category": "cms"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        },
+        {
+          "name": "inbound form — lead flow evidence",
+          "weight": 5,
+          "evidence": "HubSpot Forms"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "Webflow"
+        }
+      ]
+    },
+    "MSL Saudi": {
+      "domain": "mslgroup.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Analytics 4"
+        }
+      ]
+    },
+    "Merit Incentives": {
+      "domain": "meritincentives.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "Webflow",
+          "category": "cms"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "Webflow"
+        }
+      ]
+    },
+    "Mnzil": {
+      "domain": "mnzil.co",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [],
+      "signals": []
+    },
+    "Mozn": {
+      "domain": "mozn.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [],
+      "signals": []
+    },
+    "Nana": {
+      "domain": "nana.sa",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [],
+      "signals": []
+    },
+    "Peak Content": {
+      "domain": "peakcontent.ae",
+      "status": "fetch_error",
+      "http_status": null,
+      "tools": [],
+      "signals": []
+    },
+    "Qatar Digital": {
+      "domain": "qatardigital.qa",
+      "status": "fetch_error",
+      "http_status": null,
+      "tools": [],
+      "signals": []
+    },
+    "Retailo": {
+      "domain": "retailo.co",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [],
+      "signals": []
+    },
+    "Salla": {
+      "domain": "salla.sa",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm"
+        },
+        {
+          "name": "Salla",
+          "category": "ecom_mena"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        },
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "Salla/Zid merchant — Saudi ecom ecosystem",
+          "weight": 8,
+          "evidence": "Salla"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager; Google Analytics 4"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ]
+    },
+    "Sary": {
+      "domain": "sary.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "WhatsApp Widget",
+          "category": "chat_mena"
+        },
+        {
+          "name": "Meta Pixel",
+          "category": "ads"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms"
+        }
+      ],
+      "signals": [
+        {
+          "name": "WhatsApp widget — Saudi-native sales channel",
+          "weight": 8,
+          "evidence": "WhatsApp Widget"
+        },
+        {
+          "name": "running paid ads — active demand gen",
+          "weight": 6,
+          "evidence": "Meta Pixel"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ]
+    },
+    "Serviceplan": {
+      "domain": "serviceplan.com",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [],
+      "signals": []
+    },
+    "SiFi": {
+      "domain": "sifi.co",
+      "status": "fetch_error",
+      "http_status": null,
+      "tools": [],
+      "signals": []
+    },
+    "Tamara": {
+      "domain": "tamara.co",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "WooCommerce",
+          "category": "ecom"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        },
+        {
+          "name": "Webflow",
+          "category": "cms"
+        }
+      ],
+      "signals": [
+        {
+          "name": "e-commerce platform",
+          "weight": 4,
+          "evidence": "WooCommerce"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "Webflow"
+        }
+      ]
+    },
+    "Wavy": {
+      "domain": "wavy.sa",
+      "status": "fetch_error",
+      "http_status": null,
+      "tools": [],
+      "signals": []
+    },
+    "Zid": {
+      "domain": "zid.sa",
+      "status": "ok",
+      "http_status": 200,
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm"
+        },
+        {
+          "name": "Zid",
+          "category": "ecom_mena"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "Salla/Zid merchant — Saudi ecom ecosystem",
+          "weight": 8,
+          "evidence": "Zid"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        }
+      ]
+    }
+  }
+}

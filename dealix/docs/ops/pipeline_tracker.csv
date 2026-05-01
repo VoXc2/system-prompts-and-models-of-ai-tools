@@ -1,0 +1,51 @@
+id,lead_name,company,role,segment,linkedin_url,email,phone,channel,message_version,sent_at,reply_status,next_followup,demo_booked_at,plan,payment_status,revenue_sar,notes
+1,عبدالله العسيري,Lucidya,CEO & Co-founder,SaaS CXM,https://www.linkedin.com/in/abdullahalassiri/,aasiri@lucidya.com,,LinkedIn,first_dm_v1,,pending,,,,,,قرابة الاسم — أولوية قصوى
+2,Ahmad Al-Zaini,Foodics,CEO & Co-founder,SaaS Restaurant,,ahmad@foodics.com,,LinkedIn,first_dm_v1,,pending,,,,,,Series C $170M
+3,Nawaf Hariri,Salla,CEO,E-commerce Platform,,,,Twitter DM + LinkedIn,first_dm_v1,,pending,,,,,,70K+ merchants platform
+4,Hisham Al-Falih,Lean Technologies,CEO & Co-founder,Fintech API,,,,LinkedIn,first_dm_v1,,pending,,,,,,API-first B2B 300+ customers
+5,Ibrahim Manna,BRKZ,Founder,Contech,,,,LinkedIn,first_dm_v1,,pending,,,,,,$30M debt from Stride
+6,Sultan Mofarreh,Zid,Co-founder,E-commerce Platform,,,,LinkedIn,first_dm_v1,,pending,,,,,,Competitor to Salla
+7,Mohammed Aldossary,Sary,Co-founder,B2B Marketplace,,,,LinkedIn,first_dm_v1,,pending,,,,,,50K+ SMB retailers
+8,Talha Ansari,Retailo,Co-founder,B2B Marketplace,,,,LinkedIn,first_dm_v1,,pending,,,,,,MENAP retail
+9,Abdullah Asiri (CTO),Lucidya,CTO,SaaS CXM,,,,LinkedIn,first_dm_v1,,pending,,,,,,Technical angle
+10,Hatem Kameli,Lucidya,Co-founder,SaaS CXM,,,,LinkedIn,first_dm_v1,,pending,,,,,,Pitch to co-founder
+11,Mosab Alothmani,Foodics,Co-founder,SaaS Restaurant,,,,LinkedIn,first_dm_v1,,pending,,,,,,Co-founder angle
+12,CEO Tamara,Tamara,CEO,BNPL fintech,,,,LinkedIn,first_dm_v1,,pending,,,,,,$2.4B raised
+13,CEO Mozn,Mozn,CEO,AI/ML platform,,,,LinkedIn,first_dm_v1,,pending,,,,,,Peer AI company
+14,Founder Mnzil,Mnzil,Founder,Proptech,,,,LinkedIn,first_dm_v1,,pending,,,,,,$11.7M Series A
+15,Founder Logexa,Logexa,Founder,Logistics,,,,LinkedIn,first_dm_v1,,pending,,,,,,$2M pre-Series A
+16,Founder Nana,Nana,Founder,Grocery Delivery,,,,LinkedIn,first_dm_v1,,pending,,,,,,B2B supplier pipeline
+17,Founder Jahez,Jahez,Founder,Food Delivery,,,,LinkedIn,first_dm_v1,,pending,,,,,,Restaurant onboarding
+18,Merit Incentives CEO,Merit Incentives,CEO,HR Tech,,,,LinkedIn,first_dm_v1,,pending,,,,,,B2B HR sales
+19,Bayzat CEO,Bayzat Saudi,Regional lead,HR SaaS,,,,LinkedIn,first_dm_v1,,pending,,,,,,KSA expansion needs
+20,SiFi CEO,SiFi,CEO,Corporate Fintech,,,,LinkedIn,first_dm_v1,,pending,,,,,,B2B corporate banking
+21,Hakbah CEO,Hakbah,CEO,Fintech,,,,LinkedIn,first_dm_v1,,pending,,,,,,B2B partnerships
+22,Peak Content CEO,Peak Content,Founder,Marketing Agency,,,,LinkedIn,partner_dm_v1,,pending,,,,,,Service exchange target
+23,Digital8 CEO,Digital8,Founder,Marketing Agency,,,,LinkedIn,partner_dm_v1,,pending,,,,,,Full-service agency
+24,Brand Lounge CEO,Brand Lounge,Founder,Branding Agency,,,,LinkedIn,partner_dm_v1,,pending,,,,,,Referral partner
+25,Qatar Digital Lead,Qatar Digital,Founder,Digital Agency,,,,LinkedIn,partner_dm_v1,,pending,,,,,,KSA/UAE
+26,Wavy Saudi,Wavy,Founder,Digital Marketing,,,,LinkedIn,partner_dm_v1,,pending,,,,,,White-label candidate
+27,Serviceplan Saudi,Serviceplan,Lead,Integrated Marketing,,,,LinkedIn,partner_dm_v1,,pending,,,,,,Enterprise clients
+28,Intermarkets Saudi,Intermarkets,Lead,B2B Marketing,,,,LinkedIn,partner_dm_v1,,pending,,,,,,SaaS clients
+29,MSL Saudi,MSL Saudi,Lead,PR + Marketing,,,,LinkedIn,partner_dm_v1,,pending,,,,,,Enterprise PR
+30,Saudi tech founder #1,TBD,Founder,Tech,,,,LinkedIn,first_dm_v1,,pending,,,,,,Identify via search
+31,Saudi tech founder #2,TBD,Founder,Tech,,,,LinkedIn,first_dm_v1,,pending,,,,,,Identify via search
+32,Recruitment agency #1,TBD,Founder,Recruitment,,,,LinkedIn,first_dm_v1,,pending,,,,,,B2B staffing
+33,Recruitment agency #2,TBD,Founder,Recruitment,,,,LinkedIn,first_dm_v1,,pending,,,,,,Talent pipeline
+34,EdTech founder #1,TBD,Founder,EdTech,,,,LinkedIn,first_dm_v1,,pending,,,,,,Course sales funnel
+35,EdTech founder #2,TBD,Founder,EdTech,,,,LinkedIn,first_dm_v1,,pending,,,,,,Coaching business
+36,Real estate sales director #1,TBD,Director,Real Estate,,,,LinkedIn,first_dm_v1,,pending,,,,,,Lead team heavy
+37,Real estate sales director #2,TBD,Director,Real Estate,,,,LinkedIn,first_dm_v1,,pending,,,,,,Lead team heavy
+38,Medical clinic owner #1,TBD,Owner,Healthcare,,,,LinkedIn,first_dm_v1,,pending,,,,,,WhatsApp leads
+39,Medical clinic owner #2,TBD,Owner,Healthcare,,,,LinkedIn,first_dm_v1,,pending,,,,,,WhatsApp leads
+40,Car dealership manager #1,TBD,Manager,Automotive,,,,LinkedIn,first_dm_v1,,pending,,,,,,High-ticket leads
+41,Insurance broker #1,TBD,Director,Insurance,,,,LinkedIn,first_dm_v1,,pending,,,,,,Quote flow
+42,Insurance broker #2,TBD,Director,Insurance,,,,LinkedIn,first_dm_v1,,pending,,,,,,Quote flow
+43,B2B distributor #1,TBD,Owner,Distribution,,,,LinkedIn,first_dm_v1,,pending,,,,,,Wholesale orders
+44,B2B distributor #2,TBD,Owner,Distribution,,,,LinkedIn,first_dm_v1,,pending,,,,,,Wholesale orders
+45,Construction services #1,TBD,GM,Construction,,,,LinkedIn,first_dm_v1,,pending,,,,,,Quote flow
+46,Event management #1,TBD,Founder,Events,,,,LinkedIn,first_dm_v1,,pending,,,,,,Proposal cycle
+47,Corporate training #1,TBD,Founder,Training,,,,LinkedIn,first_dm_v1,,pending,,,,,,B2B programs
+48,Corporate training #2,TBD,Founder,Training,,,,LinkedIn,first_dm_v1,,pending,,,,,,B2B programs
+49,Beauty salon chain #1,TBD,Owner,Services,,,,LinkedIn,first_dm_v1,,pending,,,,,,Booking heavy
+50,Gym chain #1,TBD,Owner,Fitness,,,,LinkedIn,first_dm_v1,,pending,,,,,,Membership funnel

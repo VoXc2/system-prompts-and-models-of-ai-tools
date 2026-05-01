@@ -1,0 +1,214 @@
+{
+  "$defs": {
+    "ApprovalClass": {
+      "description": "Who must approve before this action executes.\n\nA0 — no approval (routine, reversible, non-sensitive)\nA1 — team / manager\nA2 — department head + legal/finance\nA3 — executive / board",
+      "enum": [
+        "A0",
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "title": "ApprovalClass",
+      "type": "string"
+    },
+    "ReversibilityClass": {
+      "description": "How hard it is to undo this action.\n\nR0 — auto-reversible (draft email, internal note)\nR1 — reversible with limited ops (CRM field update)\nR2 — costly to reverse (a sent proposal, an outbound call)\nR3 — irreversible / external commitment (signed NDA, price sent to regulator)",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "title": "ReversibilityClass",
+      "type": "string"
+    },
+    "SensitivityClass": {
+      "description": "Data / impact sensitivity of this action.\n\nS0 — public\nS1 — internal\nS2 — confidential / commercial\nS3 — regulated / board / personal data",
+      "enum": [
+        "S0",
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "title": "SensitivityClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "description": "CloudEvents 1.0-compatible envelope with Dealix extensions.\n\nCloudEvents required attributes (`id`, `source`, `specversion`, `type`)\nare kept as their CloudEvents names in the serialized JSON.",
+  "properties": {
+    "specversion": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Specversion",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "source": {
+      "description": "e.g. 'dealix/phase8/intake'",
+      "title": "Source",
+      "type": "string"
+    },
+    "type": {
+      "description": "e.g. 'dealix.lead.intaken'",
+      "title": "Type",
+      "type": "string"
+    },
+    "datacontenttype": {
+      "default": "application/json",
+      "title": "Datacontenttype",
+      "type": "string"
+    },
+    "dataschema": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "URI of the JSON Schema for `data`",
+      "title": "Dataschema"
+    },
+    "time": {
+      "title": "Time",
+      "type": "string"
+    },
+    "subject": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Subject within the source (e.g. lead_id)",
+      "title": "Subject"
+    },
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tenant_id": {
+      "default": "default",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "entity_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Entity Id"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "causation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Causation Id"
+    },
+    "actor_type": {
+      "default": "system",
+      "enum": [
+        "system",
+        "agent",
+        "human",
+        "workflow"
+      ],
+      "title": "Actor Type",
+      "type": "string"
+    },
+    "actor_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor Id"
+    },
+    "approval_class": {
+      "$ref": "#/$defs/ApprovalClass",
+      "default": "A0"
+    },
+    "reversibility_class": {
+      "$ref": "#/$defs/ReversibilityClass",
+      "default": "R0"
+    },
+    "sensitivity_class": {
+      "$ref": "#/$defs/SensitivityClass",
+      "default": "S1"
+    },
+    "trace_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Trace Id"
+    },
+    "span_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Span Id"
+    },
+    "data": {
+      "additionalProperties": true,
+      "title": "Data",
+      "type": "object"
+    }
+  },
+  "required": [
+    "source",
+    "type"
+  ],
+  "title": "EventEnvelope",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.sa/schemas/event_envelope.schema.json"
+}

@@ -1,0 +1,12 @@
+# Repository-wide default owners
+# Update the usernames below to reflect your team
+
+* @your-github-username
+
+# Security-critical paths — require reviews from security-aware maintainers
+/.github/                @your-github-username
+/core/config/            @your-github-username
+/.env.example            @your-github-username
+/.gitleaks.toml          @your-github-username
+/.pre-commit-config.yaml @your-github-username
+/SECURITY.md             @your-github-username

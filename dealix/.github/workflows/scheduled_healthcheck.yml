@@ -1,0 +1,89 @@
+name: Scheduled Health Check
+
+# Fallback monitoring — runs every 15 minutes against production.
+# Creates a GitHub Issue if any critical endpoint fails.
+# Acts as UptimeRobot replacement until Sami configures that service.
+
+on:
+  schedule:
+    # Every 15 minutes
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  health:
+    name: Production Health Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check /healthz
+        id: healthz
+        run: |
+          set +e
+          URL="https://web-dealix.up.railway.app"
+          code=$(curl -sS -o /tmp/body -w "%{http_code}" --max-time 15 "$URL/healthz")
+          echo "status=$code" >> $GITHUB_OUTPUT
+          echo "body=$(cat /tmp/body | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          if [ "$code" = "200" ]; then
+            echo "✅ /healthz = 200"
+            exit 0
+          else
+            echo "❌ /healthz = $code"
+            echo "failed=true" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Check /api/v1/pricing/plans
+        id: pricing
+        if: success() || failure()
+        run: |
+          set +e
+          URL="https://web-dealix.up.railway.app"
+          code=$(curl -sS -o /tmp/body -w "%{http_code}" --max-time 15 "$URL/api/v1/pricing/plans")
+          echo "status=$code" >> $GITHUB_OUTPUT
+          if [ "$code" = "200" ]; then
+            echo "✅ /api/v1/pricing/plans = 200"
+          else
+            echo "❌ /api/v1/pricing/plans = $code"
+            echo "failed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check demo-request POST
+        id: demo
+        if: success() || failure()
+        run: |
+          set +e
+          URL="https://web-dealix.up.railway.app"
+          code=$(curl -sS -o /tmp/body -w "%{http_code}" -X POST --max-time 15 \
+            -H "Content-Type: application/json" \
+            -d '{"name":"Healthcheck","company":"Dealix","email":"healthcheck@dealix.sa","phone":"+966500000000","consent":true}' \
+            "$URL/api/v1/public/demo-request")
+          if [ "$code" = "200" ]; then
+            echo "✅ demo-request = 200"
+          else
+            echo "❌ demo-request = $code"
+            echo "failed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: File issue on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'production-down',
+              state: 'open'
+            });
+            if (existing.data.length > 0) {
+              core.info('Production-down issue already open — skipping duplicate');
+              return;
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Production unhealthy — ${new Date().toISOString()}`,
+              body: `Automated health check detected production failure.\n\nEndpoint: /healthz or /api/v1/pricing/plans\nRun: ${context.runId}\n\nCheck Railway dashboard:\nhttps://railway.com/project/54bb60b4-d059-4dd1-af57-bc44c702b9f0`,
+              labels: ['production-down', 'P0', 'auto']
+            });

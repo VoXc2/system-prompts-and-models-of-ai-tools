@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Dealix 14-Day Revenue Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; background: #0a0e27; color: #fff; padding: 24px; min-height: 100vh; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .header { margin-bottom: 32px; }
+  h1 { font-size: 2rem; background: linear-gradient(135deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+  .subtitle { color: #94a3b8; }
+  .goals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .goal-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; text-align: center; }
+  .goal-number { font-size: 2rem; font-weight: 700; color: #3b82f6; }
+  .goal-current { font-size: 1rem; color: #10b981; margin-top: 4px; }
+  .goal-label { font-size: 0.85rem; color: #94a3b8; margin-top: 6px; }
+  .progress-bar { background: rgba(255,255,255,0.08); height: 6px; border-radius: 3px; overflow: hidden; margin-top: 12px; }
+  .progress-fill { background: linear-gradient(90deg, #3b82f6, #10b981); height: 100%; transition: width 0.3s; }
+  table { width: 100%; background: rgba(255,255,255,0.04); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  th, td { padding: 12px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  th { background: rgba(59,130,246,0.1); font-weight: 600; font-size: 0.9rem; color: #cbd5e1; }
+  td { font-size: 0.9rem; }
+  tr:hover { background: rgba(255,255,255,0.03); }
+  input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+  input[type="text"], input[type="number"] { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; width: 100%; }
+  input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: #3b82f6; }
+  .day-header { background: rgba(16,185,129,0.1); font-weight: 600; color: #10b981; padding: 12px; border-radius: 8px; margin: 20px 0 12px; }
+  .tab-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+  .tab.active { background: linear-gradient(135deg, #3b82f6, #10b981); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; }
+  .status-sent { background: rgba(59,130,246,0.2); color: #60a5fa; }
+  .status-replied { background: rgba(250,204,21,0.2); color: #fbbf24; }
+  .status-demo { background: rgba(168,85,247,0.2); color: #c084fc; }
+  .status-paid { background: rgba(16,185,129,0.2); color: #34d399; }
+  .export-btn { background: linear-gradient(135deg, #3b82f6, #10b981); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; margin-left: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🎯 Dealix — 14 Day Revenue Tracker</h1>
+    <p class="subtitle">من الإرسال لأول 999 ريال. حدّث كل مساء.</p>
+  </div>
+
+  <div class="goals">
+    <div class="goal-card">
+      <div class="goal-number" id="goal-messages">0/20</div>
+      <div class="goal-label">رسائل مرسلة</div>
+      <div class="progress-bar"><div class="progress-fill" id="p-msg" style="width:0%"></div></div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-number" id="goal-replies">0/5</div>
+      <div class="goal-label">ردود إيجابية</div>
+      <div class="progress-bar"><div class="progress-fill" id="p-rep" style="width:0%"></div></div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-number" id="goal-demos">0/3</div>
+      <div class="goal-label">Demos مكتملة</div>
+      <div class="progress-bar"><div class="progress-fill" id="p-dem" style="width:0%"></div></div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-number" id="goal-paid">0/1</div>
+      <div class="goal-current" id="goal-revenue">0 ريال</div>
+      <div class="goal-label">عميل مدفوع</div>
+      <div class="progress-bar"><div class="progress-fill" id="p-paid" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab active" onclick="showTab('pipeline')">Pipeline</div>
+    <div class="tab" onclick="showTab('daily')">Daily Log</div>
+    <div class="tab" onclick="showTab('notes')">Notes</div>
+    <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
+  </div>
+
+  <div id="pipeline" class="panel active">
+    <table id="pipeline-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>الشركة</th>
+          <th>الاسم</th>
+          <th>القناة</th>
+          <th>أُرسل</th>
+          <th>رد؟</th>
+          <th>Demo؟</th>
+          <th>Pilot؟</th>
+          <th>دفع؟</th>
+          <th>الحالة</th>
+          <th>ملاحظات</th>
+        </tr>
+      </thead>
+      <tbody id="pipeline-body"></tbody>
+    </table>
+  </div>
+
+  <div id="daily" class="panel">
+    <div id="daily-log"></div>
+  </div>
+
+  <div id="notes" class="panel">
+    <textarea id="notes-text" style="width:100%; min-height:400px; background:rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px; font-family:inherit; font-size:0.95rem;" placeholder="تعلمات من هذا الأسبوع...&#10;&#10;- ما شفت يشتغل:&#10;- ما ما يشتغل:&#10;- تحسينات للأسبوع القادم:"></textarea>
+  </div>
+</div>
+
+<script>
+const leads = [
+  {co:'Lucidya', name:'عبدالله العسيري', ch:'LinkedIn', tier:'A'},
+  {co:'Foodics', name:'Ahmad Al-Zaini', ch:'LinkedIn', tier:'A'},
+  {co:'Salla', name:'Nawaf Hariri', ch:'Twitter', tier:'A'},
+  {co:'Lean Tech', name:'Hisham Al-Falih', ch:'LinkedIn', tier:'A'},
+  {co:'BRKZ', name:'Ibrahim Manna', ch:'LinkedIn', tier:'A'},
+  {co:'Zid', name:'Sultan Mofarreh', ch:'LinkedIn', tier:'B'},
+  {co:'Sary', name:'Mohammed Aldossary', ch:'LinkedIn', tier:'B'},
+  {co:'Retailo', name:'Talha Ansari', ch:'LinkedIn', tier:'B'},
+  {co:'Rekaz', name:'TBD', ch:'LinkedIn', tier:'B'},
+  {co:'Glamera', name:'TBD', ch:'LinkedIn', tier:'B'},
+  {co:'Mozn', name:'TBD', ch:'LinkedIn', tier:'B'},
+  {co:'Mnzil', name:'TBD', ch:'LinkedIn', tier:'B'},
+  {co:'Logexa', name:'TBD', ch:'LinkedIn', tier:'B'},
+  {co:'Tamara', name:'TBD', ch:'LinkedIn', tier:'C'},
+  {co:'Nana', name:'TBD', ch:'LinkedIn', tier:'C'},
+  {co:'Jahez', name:'TBD', ch:'LinkedIn', tier:'C'},
+  {co:'Merit Incentives', name:'TBD', ch:'LinkedIn', tier:'C'},
+  {co:'Bayzat', name:'TBD', ch:'LinkedIn', tier:'C'},
+  {co:'SiFi', name:'TBD', ch:'LinkedIn', tier:'C'},
+  {co:'Hakbah', name:'TBD', ch:'LinkedIn', tier:'C'}
+];
+
+let state = JSON.parse(localStorage.getItem('dealix_tracker') || '{}');
+
+function save(){ localStorage.setItem('dealix_tracker', JSON.stringify(state)); updateGoals(); }
+
+function getField(idx, field){
+  const key = idx + '_' + field;
+  return state[key] || '';
+}
+
+function setField(idx, field, val){
+  state[idx + '_' + field] = val;
+  save();
+}
+
+function getStatus(idx){
+  if (getField(idx, 'paid')) return {label:'💰 مدفوع', cls:'status-paid'};
+  if (getField(idx, 'pilot')) return {label:'🎯 Pilot', cls:'status-demo'};
+  if (getField(idx, 'demo')) return {label:'📞 Demo', cls:'status-demo'};
+  if (getField(idx, 'reply')) return {label:'✉️ رد', cls:'status-replied'};
+  if (getField(idx, 'sent')) return {label:'📤 أُرسل', cls:'status-sent'};
+  return {label:'⚪ جديد', cls:''};
+}
+
+function render(){
+  const body = document.getElementById('pipeline-body');
+  body.innerHTML = leads.map((l, i) => {
+    const s = getStatus(i);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><strong>${l.co}</strong> <small style="color:#64748b">[${l.tier}]</small></td>
+      <td>${l.name}</td>
+      <td>${l.ch}</td>
+      <td><input type="checkbox" ${getField(i,'sent')?'checked':''} onchange="setField(${i},'sent',this.checked); render();"></td>
+      <td><input type="checkbox" ${getField(i,'reply')?'checked':''} onchange="setField(${i},'reply',this.checked); render();"></td>
+      <td><input type="checkbox" ${getField(i,'demo')?'checked':''} onchange="setField(${i},'demo',this.checked); render();"></td>
+      <td><input type="checkbox" ${getField(i,'pilot')?'checked':''} onchange="setField(${i},'pilot',this.checked); render();"></td>
+      <td><input type="checkbox" ${getField(i,'paid')?'checked':''} onchange="setField(${i},'paid',this.checked); render();"></td>
+      <td><span class="status-badge ${s.cls}">${s.label}</span></td>
+      <td><input type="text" value="${getField(i,'notes')}" onchange="setField(${i},'notes',this.value)" placeholder="ملاحظات..."></td>
+    </tr>`;
+  }).join('');
+}
+
+function updateGoals(){
+  let sent=0, replied=0, demo=0, paid=0;
+  for(let i=0;i<leads.length;i++){
+    if(getField(i,'sent')) sent++;
+    if(getField(i,'reply')) replied++;
+    if(getField(i,'demo')) demo++;
+    if(getField(i,'paid')) paid++;
+  }
+  document.getElementById('goal-messages').textContent = sent + '/20';
+  document.getElementById('goal-replies').textContent = replied + '/5';
+  document.getElementById('goal-demos').textContent = demo + '/3';
+  document.getElementById('goal-paid').textContent = paid + '/1';
+  document.getElementById('goal-revenue').textContent = (paid*999).toLocaleString('ar') + ' ريال';
+
+  document.getElementById('p-msg').style.width = Math.min(100, (sent/20)*100) + '%';
+  document.getElementById('p-rep').style.width = Math.min(100, (replied/5)*100) + '%';
+  document.getElementById('p-dem').style.width = Math.min(100, (demo/3)*100) + '%';
+  document.getElementById('p-paid').style.width = paid>0 ? 100 : 0 + '%';
+}
+
+function renderDaily(){
+  const log = document.getElementById('daily-log');
+  let html = '';
+  for(let d=1; d<=14; d++){
+    const key = 'day'+d;
+    html += `<div class="day-header">اليوم ${d}</div>
+    <table style="margin-bottom:16px;">
+      <tr><td style="width:150px;">رسائل مرسلة:</td><td><input type="number" min="0" max="10" value="${state[key+'_sent']||''}" onchange="state['${key}_sent']=this.value; save();"></td></tr>
+      <tr><td>ردود:</td><td><input type="number" min="0" value="${state[key+'_rep']||''}" onchange="state['${key}_rep']=this.value; save();"></td></tr>
+      <tr><td>Demos محجوزة:</td><td><input type="number" min="0" value="${state[key+'_demo']||''}" onchange="state['${key}_demo']=this.value; save();"></td></tr>
+      <tr><td>تعلمات اليوم:</td><td><input type="text" value="${state[key+'_learn']||''}" onchange="state['${key}_learn']=this.value; save();" placeholder="ما تعلمت..."></td></tr>
+    </table>`;
+  }
+  log.innerHTML = html;
+}
+
+function showTab(t){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(t).classList.add('active');
+  if(t==='daily') renderDaily();
+}
+
+function exportCSV(){
+  let csv = 'Company,Name,Channel,Tier,Sent,Replied,Demo,Pilot,Paid,Notes\n';
+  leads.forEach((l, i) => {
+    csv += `"${l.co}","${l.name}","${l.ch}","${l.tier}",${getField(i,'sent')?'Y':'N'},${getField(i,'reply')?'Y':'N'},${getField(i,'demo')?'Y':'N'},${getField(i,'pilot')?'Y':'N'},${getField(i,'paid')?'Y':'N'},"${getField(i,'notes').replace(/"/g,'""')}"\n`;
+  });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dealix_pipeline_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+// Notes persistence
+const notesEl = document.getElementById('notes-text');
+notesEl.value = state.notes || '';
+notesEl.addEventListener('input', e => { state.notes = e.target.value; save(); });
+
+render();
+updateGoals();
+</script>
+</body>
+</html>

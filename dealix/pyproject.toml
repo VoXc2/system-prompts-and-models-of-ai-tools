@@ -1,0 +1,206 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dealix"
+version = "3.0.0"
+description = "Multi-agent AI system for the Saudi Arabian market | نظام متعدد الوكلاء للسوق السعودي"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "AI Company Saudi", email = "hello@ai-company.sa" }]
+keywords = ["ai", "agents", "saudi-arabia", "llm", "multi-agent", "fastapi"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Natural Language :: Arabic",
+    "Natural Language :: English",
+]
+
+dependencies = [
+    # Core framework
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+
+    # HTTP
+    "httpx>=0.27.0",
+    "aiohttp>=3.10.0",
+    "tenacity>=9.0.0",
+
+    # LLM SDKs
+    "anthropic>=0.40.0",
+    "openai>=1.54.0",
+    "google-generativeai>=0.8.0",
+
+    # Data
+    "sqlalchemy[asyncio]>=2.0.35",
+    "asyncpg>=0.30.0",
+    "alembic>=1.13.0",
+    "redis>=5.1.0",
+    "motor>=3.6.0",
+
+    # CLI / UX
+    "typer>=0.13.0",
+    "rich>=13.9.0",
+    "click>=8.1.0",
+
+    # Utilities
+    "python-dotenv>=1.0.1",
+    "python-multipart>=0.0.17",
+    "email-validator>=2.2.0",
+    "phonenumbers>=8.13.0",
+    "python-dateutil>=2.9.0",
+    "tzdata>=2025.1",
+
+    # Observability
+    "structlog>=24.4.0",
+    "langfuse>=2.50.0",
+
+    # Integrations
+    "hubspot-api-client>=11.0.0",
+    "google-api-python-client>=2.150.0",
+    "google-auth-httplib2>=0.2.0",
+    "google-auth-oauthlib>=1.2.0",
+    "resend>=2.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "aiosqlite>=0.20.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "httpx>=0.27.0",
+    "ruff>=0.7.0",
+    "black>=24.10.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+    "detect-secrets>=1.5.0",
+    "bandit[toml]>=1.7.0",
+    "ipython>=8.29.0",
+]
+
+[project.scripts]
+ai-company = "cli:app"
+
+[project.urls]
+Homepage = "https://ai-company.sa"
+Repository = "https://github.com/VoXc2/dealix"
+Documentation = "https://github.com/VoXc2/dealix/tree/main/docs"
+Issues = "https://github.com/VoXc2/dealix/issues"
+
+# ─────────────────────────────────────────────────────────────
+# Tool configurations
+# ─────────────────────────────────────────────────────────────
+
+[tool.setuptools.packages.find]
+include = ["core*", "auto_client_acquisition*", "autonomous_growth*", "integrations*", "api*", "dashboard*", "db*"]
+exclude = ["tests*", "docs*", "scripts*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "venv", "build", "dist", "migrations"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "S",    # flake8-bandit (security)
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "E501",   # line too long (black handles)
+    "S101",   # assert used (ok in tests)
+    "B008",   # function call in default (FastAPI Depends)
+    "RUF001", # ambiguous unicode in strings (Arabic-first codebase; expected)
+    "RUF002", # ambiguous unicode in docstrings (Arabic-first codebase; expected)
+    "RUF003", # ambiguous unicode in comments  (Arabic-first codebase; expected)
+    "E702",   # multiple statements on one line (used in lead_scorer one-liners)
+    "S110",   # try-except-pass (best-effort code with docstring justification)
+    "SIM102", # collapsible if (readability preferred in some gates)
+    "SIM105", # suppressible exception
+    "RUF012", # mutable default in class (dataclasses handle this)
+    "S301",   # pickle (used with trusted internal data only)
+    "B904",   # raise from e (legacy CLI paths; low risk)
+    "F401",   # unused import (optional-import patterns with try/except)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S106", "S311"]
+"scripts/**/*.py" = ["S101"]
+
+[tool.bandit]
+# B104 hardcoded 0.0.0.0 bind — intentional for containerized deploy (documented in settings.py)
+# B110 try/except/pass — already ignored in ruff (best-effort paths)
+skips = ["B104", "B110"]
+exclude_dirs = ["tests", ".venv", "venv", "migrations", "build", "dist"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311", "py312"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+exclude = ["venv", "build", "dist", "migrations"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=core",
+    "--cov=auto_client_acquisition",
+    "--cov=autonomous_growth",
+    "--cov=integrations",
+    "--cov=api",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+markers = [
+    "unit: unit tests",
+    "integration: integration tests",
+    "slow: slow tests",
+    "llm: tests that call real LLMs",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["core", "auto_client_acquisition", "autonomous_growth", "integrations", "api"]
+omit = ["*/tests/*", "*/migrations/*", "*/__init__.py"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

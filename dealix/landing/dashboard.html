@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix — لوحة المعلومات العامة</title>
+  <meta name="description" content="حالة النظام ومؤشرات التشغيل الحية لـ Dealix." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .dash-hero {
+      padding: clamp(32px, 6vw, 64px) 0 clamp(20px, 4vw, 40px);
+    }
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .dash-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .dash-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    .dash-card .value {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0;
+    }
+    .dash-card .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 6px 0 0 0;
+    }
+    .dash-card--ok .value { color: #1b8a2c; }
+    .dash-card--warn .value { color: #a86616; }
+    .dash-card--err .value { color: #a91e1e; }
+    .dash-section {
+      margin-top: 32px;
+    }
+    .dash-section h2 {
+      font-size: 18px;
+      margin: 0 0 14px 0;
+    }
+    .dash-status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 14px;
+    }
+    .dash-status-row:last-child { border-bottom: none; }
+    .dash-status-label { color: var(--muted); }
+    .dash-status-value {
+      font-weight: 700;
+    }
+    .dash-status-value.ok { color: #1b8a2c; }
+    .dash-status-value.warn { color: #a86616; }
+    .dash-status-value.err { color: #a91e1e; }
+    .dash-loading { color: var(--muted); font-size: 13px; }
+    .dash-foot {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border);
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="/" class="site-header__brand">
+        <strong>Dealix</strong>
+        <span class="site-header__tag">لوحة المعلومات</span>
+      </a>
+      <nav class="site-header__nav">
+        <a href="/">الرئيسية</a>
+        <a href="/pricing.html">الأسعار</a>
+        <a href="/partners.html">الشركاء</a>
+        <a href="/dashboard.html" aria-current="page">اللوحة</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="dash-hero">
+      <div class="container">
+        <span class="kicker">شفافية تشغيلية</span>
+        <h1>لوحة المعلومات العامة</h1>
+        <p>حالة النظام والأرقام الحية — محدّثة تلقائياً كل 30 ثانية.</p>
+
+        <div class="dash-grid" id="dash-cards">
+          <div class="dash-card" id="card-backend">
+            <h3>الخلفية (API)</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">uptime Railway</p>
+          </div>
+          <div class="dash-card" id="card-landing">
+            <h3>الواجهة (Landing)</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">GitHub Pages</p>
+          </div>
+          <div class="dash-card" id="card-pricing">
+            <h3>API الأسعار</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">/api/v1/pricing/plans</p>
+          </div>
+          <div class="dash-card" id="card-prospector">
+            <h3>ماكينة البحث</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">/api/v1/prospect/demo</p>
+          </div>
+          <div class="dash-card" id="card-local-engine">
+            <h3>محرك العقاريين والعيادات المحلي</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">/api/v1/leads/discover/local-industries</p>
+          </div>
+          <div class="dash-card" id="card-data-sources">
+            <h3>دليل مصادر البيانات</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">/api/v1/data/sources/catalog</p>
+          </div>
+          <div class="dash-card" id="card-tier-readiness">
+            <h3>جاهزية المفاتيح</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">/api/v1/prospect/search-diag</p>
+          </div>
+          <div class="dash-card" id="card-dashboard-metrics">
+            <h3>مؤشرات Lead Graph</h3>
+            <p class="value dash-loading">...</p>
+            <p class="subtitle">/api/v1/dashboard/metrics</p>
+          </div>
+        </div>
+
+        <div class="dash-section" id="local-engine-demo">
+          <h2>تجربة المحرك المحلي السعودي</h2>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; align-items:center">
+            <select id="local-industry" style="padding:8px 12px; border-radius:8px; border:1px solid var(--border); font-family:inherit">
+              <option value="dental_clinic">عيادات أسنان</option>
+              <option value="real_estate" selected>مكاتب عقار</option>
+              <option value="real_estate_developer">تطوير عقاري</option>
+              <option value="training_center">مراكز تدريب</option>
+              <option value="marketing_agency">وكالات تسويق</option>
+              <option value="restaurant">مطاعم</option>
+              <option value="fitness_gym">صالات رياضية</option>
+              <option value="law_firm">مكاتب محاماة</option>
+              <option value="logistics">شحن ولوجستيات</option>
+            </select>
+            <select id="local-city" style="padding:8px 12px; border-radius:8px; border:1px solid var(--border); font-family:inherit">
+              <option value="riyadh" selected>الرياض</option>
+              <option value="jeddah">جدة</option>
+              <option value="dammam">الدمام</option>
+              <option value="khobar">الخبر</option>
+              <option value="mecca">مكة</option>
+              <option value="medina">المدينة</option>
+            </select>
+            <button id="local-run" type="button" style="padding:8px 18px; border-radius:8px; border:0; background:var(--brand,#1a73e8); color:white; font-weight:700; cursor:pointer">جرب الآن</button>
+          </div>
+          <div id="local-result" class="dash-loading">اختر القطاع والمدينة ثم اضغط «جرب الآن»</div>
+        </div>
+
+        <div class="dash-section">
+          <h2>تفاصيل المكوّنات</h2>
+          <div id="dash-rows">
+            <div class="dash-loading">جارٍ التحميل...</div>
+          </div>
+        </div>
+
+        <div class="dash-section">
+          <h2>روابط سريعة</h2>
+          <ul>
+            <li><a href="https://web-dealix.up.railway.app/healthz" target="_blank" rel="noopener">healthz مباشر</a></li>
+            <li><a href="https://web-dealix.up.railway.app/docs" target="_blank" rel="noopener">API docs (Swagger)</a></li>
+            <li><a href="https://github.com/VoXc2/dealix" target="_blank" rel="noopener">المستودع على GitHub</a></li>
+            <li><a href="/">صفحة Dealix الرئيسية</a></li>
+          </ul>
+        </div>
+
+        <div class="dash-foot">
+          <div>آخر تحديث: <span id="dash-updated">—</span></div>
+          <div>الروابط:
+            <a href="https://dealix.me" target="_blank" rel="noopener">dealix.me</a> ·
+            <a href="https://api.dealix.me" target="_blank" rel="noopener">api.dealix.me</a> ·
+            <a href="https://web-dealix.up.railway.app" target="_blank" rel="noopener">Railway fallback</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <span>© <span id="year"></span> Dealix</span>
+      <nav><a href="/">الرئيسية</a> · <a href="/pricing.html">الأسعار</a> · <a href="/partners.html">الشركاء</a></nav>
+    </div>
+  </footer>
+
+  <script>
+    const API_BASES = [
+      'https://api.dealix.me',
+      'https://web-dealix.up.railway.app'
+    ];
+
+    const ENDPOINTS = [
+      { key: 'backend',    label: 'Backend /healthz',                  url: '/healthz',                                  base: 'api' },
+      { key: 'pricing',    label: 'Pricing /api/v1/pricing/plans',     url: '/api/v1/pricing/plans',                     base: 'api' },
+      { key: 'prospector', label: 'Prospector demo',                   url: '/api/v1/prospect/demo',                     base: 'api', method: 'POST' },
+      { key: 'deep',       label: 'Deep health /health/deep',          url: '/health/deep',                              base: 'api' },
+      { key: 'local-engine',     label: 'Local industries catalog',    url: '/api/v1/leads/discover/local-industries',  base: 'api' },
+      { key: 'data-sources',     label: 'Saudi data source catalog',   url: '/api/v1/data/sources/catalog',              base: 'api' },
+      { key: 'tier-readiness',   label: 'Provider tier readiness',     url: '/api/v1/prospect/search-diag',              base: 'api' },
+      { key: 'dashboard-metrics',label: 'Lead Graph metrics',          url: '/api/v1/dashboard/metrics',                 base: 'api' },
+      { key: 'landing',    label: 'Landing /',                         url: '/',                                          base: 'landing' },
+      { key: 'pricing_html',label:'Landing /pricing.html',             url: '/pricing.html',                              base: 'landing' }
+    ];
+
+    async function probe(ep) {
+      const bases = ep.base === 'landing' ? ['https://dealix.me'] : API_BASES;
+      for (const base of bases) {
+        try {
+          const t0 = performance.now();
+          const r = await fetch(base + ep.url, {
+            method: ep.method || 'GET',
+            headers: ep.method === 'POST' ? { 'Content-Type': 'application/json' } : undefined,
+            body: ep.method === 'POST' ? '{}' : undefined,
+            cache: 'no-store'
+          });
+          const dt = (performance.now() - t0).toFixed(0);
+          return { ok: r.ok, status: r.status, base, latency: dt };
+        } catch (e) { /* try next */ }
+      }
+      return { ok: false, status: 0, base: null, latency: null };
+    }
+
+    function setCard(id, val, kind, sub) {
+      const card = document.getElementById('card-' + id);
+      if (!card) return;
+      const v = card.querySelector('.value');
+      const s = card.querySelector('.subtitle');
+      v.textContent = val;
+      v.classList.remove('dash-loading');
+      card.classList.remove('dash-card--ok', 'dash-card--warn', 'dash-card--err');
+      if (kind) card.classList.add('dash-card--' + kind);
+      if (sub) s.textContent = sub;
+    }
+
+    async function refresh() {
+      const results = await Promise.all(ENDPOINTS.map(probe));
+      const byKey = {};
+      ENDPOINTS.forEach((ep, i) => byKey[ep.key] = { ep, res: results[i] });
+
+      // Cards
+      const bk = byKey.backend.res;
+      setCard('backend', bk.ok ? 'شغال' : 'متوقف', bk.ok ? 'ok' : 'err', bk.latency ? (bk.latency + 'ms · ' + (bk.base||'')) : '—');
+      const ld = byKey.landing.res;
+      setCard('landing', ld.ok ? 'شغال' : 'متوقف', ld.ok ? 'ok' : 'err', ld.latency ? (ld.latency + 'ms') : '—');
+      const pr = byKey.pricing.res;
+      setCard('pricing', pr.ok ? 'متاح' : 'فشل', pr.ok ? 'ok' : 'err', pr.latency ? (pr.latency + 'ms') : '—');
+      const pp = byKey.prospector.res;
+      setCard('prospector', pp.ok ? 'متاح' : 'فشل', pp.ok ? 'ok' : 'warn', pp.latency ? (pp.latency + 'ms') : '—');
+
+      // Detailed rows
+      const rows = ENDPOINTS.map((ep, i) => {
+        const { ok, status, latency, base } = results[i];
+        const cls = ok ? 'ok' : (status >= 500 || status === 0 ? 'err' : 'warn');
+        const text = ok ? `200 · ${latency}ms${base ? ' · ' + new URL(base).host : ''}` : `HTTP ${status || 'X'}`;
+        return `<div class="dash-status-row">
+          <span class="dash-status-label">${ep.label}</span>
+          <span class="dash-status-value ${cls}">${text}</span>
+        </div>`;
+      }).join('');
+      document.getElementById('dash-rows').innerHTML = rows;
+
+      document.getElementById('dash-updated').textContent = new Date().toLocaleString('ar-SA');
+    }
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    refresh();
+    setInterval(refresh, 30000);
+
+    // ── Local Saudi Lead Engine demo widget ──────────────────────
+    document.getElementById('local-run')?.addEventListener('click', async () => {
+      const industry = document.getElementById('local-industry').value;
+      const city = document.getElementById('local-city').value;
+      const result = document.getElementById('local-result');
+      result.textContent = 'جاري البحث في Google Places...';
+      result.className = 'dash-loading';
+      let res, data, base;
+      for (const b of API_BASES) {
+        try {
+          res = await fetch(b + '/api/v1/leads/discover/local', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ industry, city, max_results: 10, hydrate_details: true }),
+          });
+          if (res.ok) { data = await res.json(); base = b; break; }
+        } catch (e) { /* try next */ }
+      }
+      if (!data) {
+        result.innerHTML = '<span class="dash-status-value err">⚠️ لم يتمكن من الاتصال بالخادم. تأكد أن الـ deploy مكتمل.</span>';
+        return;
+      }
+      const status = (data.data && data.data.status) || data.status || '';
+      if (status === 'no_key' || (data.data && data.data.status === 'no_key')) {
+        result.innerHTML = '<span class="dash-status-value warn">⚠️ المفتاح GOOGLE_MAPS_API_KEY غير مهيّأ في Railway. أضفه ثم Review → Deploy.</span>';
+        return;
+      }
+      const inner = data.data || data;
+      const results = inner.results || [];
+      if (!results.length) {
+        result.innerHTML = `<span class="dash-status-value warn">لم نجد نتائج لـ ${industry} في ${city}. جرب قطاعاً آخر.</span>`;
+        return;
+      }
+      const rows = results.slice(0, 10).map((r, i) => `
+        <div class="dash-status-row">
+          <span class="dash-status-label">${i + 1}. ${r.name || ''}</span>
+          <span class="dash-status-value">${r.phone || '—'} · ⭐ ${r.rating || '—'}</span>
+        </div>`).join('');
+      const chain = (data.chain || []).filter(c => c.available).map(c => c.name).join(' → ') || 'static';
+      result.innerHTML = `
+        <div style="margin-bottom:8px; font-size:13px; color:var(--muted)">
+          ${results.length} نتيجة عبر provider chain: <strong>${chain}</strong>
+        </div>
+        ${rows}`;
+      result.className = '';
+    });
+  </script>
+</body>
+</html>

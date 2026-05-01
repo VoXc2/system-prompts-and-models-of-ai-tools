@@ -1,0 +1,225 @@
+# ═══════════════════════════════════════════════════════════════════
+# 90-Day Strategic Execution Matrix
+# المصفوفة التنفيذية الاستراتيجية لـ ٩٠ يوماً
+# ═══════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+start_date: "2026-04-21"
+review_cadence: "Weekly"
+
+# ═══════════════════════════════════════════════════════════════════
+# Phase 0 — Days 0-30: CONTROL PLANE FIRST
+# المرحلة صفر — التحكّم أولاً
+# ═══════════════════════════════════════════════════════════════════
+phase_0:
+  name: "Control plane first"
+  theme: "Lock the foundation before building more features."
+  outcomes:
+    - "Every critical agent output validated as a DecisionOutput"
+    - "Every event wraps in a CloudEvents envelope with trace IDs"
+    - "Policy evaluator live on the Phase 8 pipeline"
+    - "No-overclaim register enforced by CI"
+    - "GitHub rulesets + OIDC active"
+    - "Saudi compliance register in place"
+    - "OTel baseline emitting for every HTTP request"
+    - "Executive room wireframe approved"
+
+  week_1:
+    - id: P0-W1-01
+      task: "Adopt blueprint as source of truth"
+      status: DONE
+      owner: "Architecture"
+      evidence: "docs/blueprint/master-architecture.md"
+    - id: P0-W1-02
+      task: "Publish no-overclaim register"
+      status: DONE
+      owner: "Architecture"
+      evidence: "dealix/registers/no_overclaim.yaml"
+    - id: P0-W1-03
+      task: "Publish contracts (DecisionOutput, EventEnvelope, EvidencePack, AuditEntry)"
+      status: DONE
+      owner: "Architecture"
+      evidence: "dealix/contracts/"
+    - id: P0-W1-04
+      task: "Publish action classifications (A/R/S) + NEVER_AUTO_EXECUTE"
+      status: DONE
+      owner: "Architecture"
+      evidence: "dealix/classifications/"
+
+  week_2:
+    - id: P0-W2-01
+      task: "Wire PolicyEvaluator into AcquisitionPipeline"
+      status: IN_PROGRESS
+      owner: "Phase 8"
+    - id: P0-W2-02
+      task: "Wrap every Phase 8 agent to emit a DecisionOutput"
+      status: PLANNED
+      owner: "Phase 8"
+    - id: P0-W2-03
+      task: "Unified event emitter with CloudEvents envelope"
+      status: PLANNED
+      owner: "Platform"
+    - id: P0-W2-04
+      task: "CI gate on no-overclaim register (no new README claim without entry)"
+      status: PLANNED
+      owner: "DevEx"
+
+  week_3:
+    - id: P0-W3-01
+      task: "GitHub rulesets: required reviews, status checks, linear history, CODEOWNERS"
+      status: PLANNED
+      owner: "DevEx"
+      notes: "Requires GitHub repo setup"
+    - id: P0-W3-02
+      task: "OIDC to cloud configured for Actions"
+      status: PLANNED
+      owner: "DevEx"
+    - id: P0-W3-03
+      task: "OTel SDK wired in FastAPI middleware"
+      status: PLANNED
+      owner: "Platform"
+    - id: P0-W3-04
+      task: "gen_ai.* spans emitted from LLM router"
+      status: PLANNED
+      owner: "Platform"
+
+  week_4:
+    - id: P0-W4-01
+      task: "Saudi compliance register complete with DPO decision"
+      status: DONE
+      owner: "Trust"
+      evidence: "dealix/registers/compliance_saudi.yaml"
+    - id: P0-W4-02
+      task: "Executive Room wireframe (Overview, Approvals, Audit)"
+      status: PLANNED
+      owner: "Product"
+    - id: P0-W4-03
+      task: "Phase 0 retro + Phase 1 kickoff brief"
+      status: PLANNED
+      owner: "Architecture"
+
+# ═══════════════════════════════════════════════════════════════════
+# Phase 1 — Days 31-60: REVENUE + PARTNERSHIP CONTROLLED MVP
+# المرحلة الأولى — MVP للعملاء والشركاء تحت الحوكمة
+# ═══════════════════════════════════════════════════════════════════
+phase_1:
+  name: "Revenue + Partnership controlled MVP"
+  theme: "First customer-facing surface, fully gated."
+  outcomes:
+    - "Qualification/triage runs end-to-end with evidence packs"
+    - "Approval center live with real notifications"
+    - "Connector facade v1 in front of HubSpot + WhatsApp + Email"
+    - "Alerts & Approvals screen in the executive room"
+    - "Semantic KPI definitions for 5 core metrics"
+    - "Forecast vs actual board"
+    - "Data validation checkpoints on lead ingress"
+
+  tasks:
+    - id: P1-01
+      task: "Qualification agent emits DecisionOutput with evidence"
+      status: PLANNED
+      owner: "Phase 8"
+    - id: P1-02
+      task: "Evidence Pack v1 — bilingual memo + sources + tool ledger"
+      status: PLANNED
+      owner: "Trust"
+    - id: P1-03
+      task: "Approval Center v1 persisted in Postgres"
+      status: PLANNED
+      owner: "Trust"
+    - id: P1-04
+      task: "Approval notifications via email + WhatsApp template"
+      status: PLANNED
+      owner: "Trust"
+    - id: P1-05
+      task: "Connector facade wrapping HubSpot, WhatsApp, Email, Calendar"
+      status: PLANNED
+      owner: "Data"
+    - id: P1-06
+      task: "Alerts & Approvals UI (read-only initially)"
+      status: PLANNED
+      owner: "Product"
+    - id: P1-07
+      task: "Semantic KPI defs: leads_total, fit_tier_distribution, pipeline_sar, conversion_rate, approval_lag"
+      status: PLANNED
+      owner: "Data"
+    - id: P1-08
+      task: "Forecast vs actual board"
+      status: PLANNED
+      owner: "Data + Product"
+    - id: P1-09
+      task: "Data validation: required fields, phone/email format, duplicate detection via Postgres"
+      status: PLANNED
+      owner: "Data"
+    - id: P1-10
+      task: "Incident + rollback runbook (first draft)"
+      status: PLANNED
+      owner: "Ops"
+
+# ═══════════════════════════════════════════════════════════════════
+# Phase 2 — Days 61-90: ENTERPRISE READINESS LIFT
+# المرحلة الثانية — رفع مستوى الجاهزية للشركات
+# ═══════════════════════════════════════════════════════════════════
+phase_2:
+  name: "Enterprise readiness lift"
+  theme: "Productionize the Trust Plane and prove durable execution."
+  outcomes:
+    - "OpenFGA pilot in front of a subset of rooms/memos"
+    - "Vault for secrets (rotation + dynamic creds)"
+    - "Artifact attestations on every release"
+    - "Integration health center (green/red per connector)"
+    - "Incident + rollback runbooks for all P0/P1 paths"
+    - "Policy coverage expanded (per-tenant rules)"
+    - "Eval harness running in CI on every agent"
+    - "Temporal spike on proposal-send workflow (one high-risk path)"
+
+  tasks:
+    - id: P2-01
+      task: "OpenFGA pilot — fine-grained auth for Evidence Pack Viewer"
+      status: PLANNED
+      owner: "Trust"
+    - id: P2-02
+      task: "HashiCorp Vault for secrets + rotation policies"
+      status: PLANNED
+      owner: "Security"
+    - id: P2-03
+      task: "Attestations on Docker images + release artifacts"
+      status: PLANNED
+      owner: "DevEx"
+    - id: P2-04
+      task: "Integration Health Center page (per connector SLO)"
+      status: PLANNED
+      owner: "Platform"
+    - id: P2-05
+      task: "P0/P1 incident runbooks: LLM outage, Postgres down, HubSpot 429, WhatsApp webhook failure"
+      status: PLANNED
+      owner: "Ops"
+    - id: P2-06
+      task: "Per-tenant policy rules via OPA"
+      status: PLANNED
+      owner: "Trust"
+    - id: P2-07
+      task: "Eval harness: golden tests for ICP match, Pain extract, Qualification, Proposal"
+      status: PLANNED
+      owner: "Quality"
+    - id: P2-08
+      task: "Temporal spike — proposal-send as a durable workflow"
+      status: PLANNED
+      owner: "Execution"
+      note: "Single spike — do not expand until validated"
+
+# ═══════════════════════════════════════════════════════════════════
+# Definition of Done for the 90 days
+# ═══════════════════════════════════════════════════════════════════
+done_criteria:
+  - "Every claim in README + deck traced to the no-overclaim register"
+  - "Every critical flow has owner + SLA + rollback"
+  - "Every integration in the connector facade"
+  - "Every critical output is a validated DecisionOutput"
+  - "Every approval path documented + auditable"
+  - "Every release has provenance"
+  - "Every secret rotatable"
+  - "Every trace links decision → execution"
+  - "Every data class has retention + visibility + export rules"
+  - "Every P0/P1 incident path has a runbook"
+  - "No feature in production without its row in the no-overclaim register"

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix Academy — أول أكاديمية مبيعات B2B عربية بشهادات معتمدة</title>
+  <meta name="description" content="أكاديمية Dealix — تدريب عربي عملي على مبيعات B2B السعودي. شهادات معتمدة، مسارات قطاعية، playbooks جاهزة، ومجتمع مغلق لخريجي البرنامج. مجاني للمشتركين." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{--brand:#0f172a;--accent:#22d3ee;--gold:#f59e0b;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg);margin:0}
+    .wrap{max-width:1200px;margin:0 auto;padding:64px 24px}
+    .nav-back{display:inline-block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:12px}
+    .nav-back:hover{color:var(--brand)}
+    .hero{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:24px;padding:64px 48px;text-align:center;margin-bottom:48px;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(34,211,238,0.2),transparent 50%);pointer-events:none}
+    .hero .badge{display:inline-block;background:rgba(34,211,238,0.2);color:var(--accent);padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:0.5px;margin-bottom:18px;border:1px solid rgba(34,211,238,0.4);position:relative;z-index:1}
+    .hero h1{font-size:clamp(36px,6vw,60px);margin:0 0 18px;line-height:1.1;position:relative;z-index:1}
+    .hero p{font-size:19px;line-height:1.7;max-width:760px;margin:0 auto 28px;opacity:0.92;position:relative;z-index:1}
+    .hero-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:24px;position:relative;z-index:1}
+    .hero-stat{text-align:center}
+    .hero-stat .num{font-size:32px;font-weight:700;color:var(--accent)}
+    .hero-stat .lbl{font-size:13px;opacity:0.85;margin-top:2px}
+
+    .section-title{font-size:28px;color:var(--brand);margin:48px 0 8px;font-weight:700}
+    .section-sub{color:var(--muted);font-size:16px;margin:0 0 28px}
+
+    .tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+    .track{background:#fff;border:1px solid var(--border);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:14px;position:relative;transition:transform 0.2s,box-shadow 0.2s}
+    .track:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(15,23,42,0.08)}
+    .track .level{display:inline-block;background:#ecfdf5;color:#047857;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;align-self:flex-start}
+    .track .level.intermediate{background:#fef3c7;color:#92400e}
+    .track .level.advanced{background:#fee2e2;color:#991b1b}
+    .track h3{margin:0;color:var(--brand);font-size:20px;display:flex;align-items:center;gap:8px}
+    .track .duration{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:6px}
+    .track .modules{list-style:none;padding:0;margin:0;font-size:14px;color:#334155;line-height:1.9}
+    .track .modules li::before{content:"▪ ";color:var(--accent);font-weight:700}
+    .track .cert{background:#fffbeb;border-right:3px solid var(--gold);padding:8px 12px;font-size:13px;color:#92400e;font-weight:600;border-radius:6px}
+    .track .price{font-size:18px;font-weight:700;color:var(--brand);margin-top:4px}
+    .track .price.free{color:var(--success)}
+    .track .price.free::after{content:" (مجاناً للمشتركين)";font-size:13px;font-weight:500;color:var(--muted)}
+
+    .features{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;margin-top:48px}
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-top:18px}
+    .feature{display:flex;gap:14px;align-items:flex-start}
+    .feature-icon{flex-shrink:0;width:42px;height:42px;background:linear-gradient(135deg,var(--accent),#0891b2);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700}
+    .feature h4{margin:0 0 6px;color:var(--brand);font-size:16px}
+    .feature p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+
+    .cert-showcase{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:18px;padding:32px;margin-top:48px}
+    .cert-showcase h3{color:#713f12;font-size:24px;margin:0 0 8px;display:flex;align-items:center;gap:10px}
+    .cert-showcase p{color:#92400e;font-size:15px;line-height:1.7;margin:0 0 14px}
+    .cert-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+    .cert-item{background:#fff;border:1px solid #fcd34d;border-radius:10px;padding:14px;color:#713f12;font-size:14px;font-weight:600}
+    .cert-item small{display:block;color:#a16207;font-weight:400;font-size:12px;margin-top:3px}
+
+    .timeline{margin-top:48px;background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px}
+    .timeline h3{margin:0 0 24px;color:var(--brand);font-size:22px}
+    .timeline-row{display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+    .timeline-row:last-child{border-bottom:0}
+    .timeline-week{flex-shrink:0;width:80px;background:var(--brand);color:#fff;text-align:center;padding:8px;border-radius:8px;font-weight:700;font-size:13px}
+    .timeline-content{flex:1}
+    .timeline-content h4{margin:0 0 4px;color:var(--brand);font-size:16px}
+    .timeline-content p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+
+    .testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:24px}
+    .testimonial{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px}
+    .testimonial p{margin:0 0 14px;color:#334155;font-size:14px;line-height:1.7;font-style:italic}
+    .testimonial p::before{content:"”";color:var(--accent);font-size:36px;line-height:0;margin-left:6px}
+    .testimonial .meta{display:flex;align-items:center;gap:10px}
+    .testimonial .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#1e40af);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .testimonial .name{font-weight:600;color:var(--brand);font-size:14px}
+    .testimonial .role{color:var(--muted);font-size:12px}
+
+    .cta-block{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:18px;padding:40px;text-align:center;margin-top:48px}
+    .cta-block h3{margin:0 0 12px;font-size:26px}
+    .cta-block p{margin:0 0 22px;opacity:0.9;font-size:16px}
+    .cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-block;padding:13px 28px;border-radius:10px;font-weight:700;text-decoration:none;font-size:15px;transition:transform 0.15s}
+    .btn-primary{background:var(--accent);color:var(--brand)}
+    .btn-secondary{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.3)}
+    .btn:hover{transform:translateY(-2px)}
+
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-top:32px}
+    .stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center}
+    .stat-card .v{font-size:34px;font-weight:700;color:var(--brand)}
+    .stat-card .l{font-size:13px;color:var(--muted);margin-top:4px}
+
+    .faq{margin-top:48px}
+    .faq details{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:10px;cursor:pointer}
+    .faq summary{font-weight:600;color:var(--brand);font-size:16px;outline:none}
+    .faq details[open]{border-color:var(--accent);box-shadow:0 4px 12px rgba(34,211,238,0.1)}
+    .faq p{color:#334155;font-size:14px;line-height:1.7;margin:12px 0 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+
+    <div class="hero">
+      <div class="badge">🎓 أول أكاديمية B2B عربية معتمدة</div>
+      <h1>Dealix Academy</h1>
+      <p>تدريب عملي بالعربي على مبيعات B2B السعودي — من التأهيل إلى الإغلاق. شهادات معتمدة، playbooks قطاعية، ومجتمع خريجين مغلق. مبني على بيانات حقيقية من 47+ شركة سعودية.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">8</div><div class="lbl">مسارات تدريبية</div></div>
+        <div class="hero-stat"><div class="num">47+</div><div class="lbl">دراسة حالة سعودية</div></div>
+        <div class="hero-stat"><div class="num">12</div><div class="lbl">شهادة معتمدة</div></div>
+        <div class="hero-stat"><div class="num">100%</div><div class="lbl">عربي · عملي · سعودي</div></div>
+      </div>
+    </div>
+
+    <h2 class="section-title">المسارات التدريبية</h2>
+    <p class="section-sub">8 مسارات منظمة — من المبتدئ حتى المتقدم. كل مسار يأتي بـ playbook قابل للتطبيق فوراً.</p>
+
+    <div class="tracks">
+      <div class="track">
+        <span class="level">مبتدئ</span>
+        <h3>🚀 مبادئ B2B السعودي</h3>
+        <div class="duration">⏱ 6 ساعات · 4 أسابيع</div>
+        <ul class="modules">
+          <li>هيكل سوق B2B في السعودية</li>
+          <li>الفرق بين B2B السعودي و B2B الغربي</li>
+          <li>دورة الشراء — من ZATCA حتى التوقيع</li>
+          <li>قراءة LinkedIn للديسجن مايكر السعودي</li>
+        </ul>
+        <div class="cert">🏅 شهادة "أساسيات B2B السعودي"</div>
+        <div class="price free">499 ريال</div>
+      </div>
+
+      <div class="track">
+        <span class="level">مبتدئ</span>
+        <h3>📨 الإيميل البارد بالعربي</h3>
+        <div class="duration">⏱ 4 ساعات · 3 أسابيع</div>
+        <ul class="modules">
+          <li>هيكل الإيميل العربي الذي يفتح</li>
+          <li>الـ subject line: 7 صيغ مجربة</li>
+          <li>الشخصنة بدون "أتمنى أن تكون بخير"</li>
+          <li>متى تتحول للإنجليزي ولماذا</li>
+        </ul>
+        <div class="cert">🏅 شهادة "Cold Email Pro — Saudi"</div>
+        <div class="price free">399 ريال</div>
+      </div>
+
+      <div class="track">
+        <span class="level intermediate">متوسط</span>
+        <h3>📞 المكالمة الباردة سعودياً</h3>
+        <div class="duration">⏱ 8 ساعات · 5 أسابيع</div>
+        <ul class="modules">
+          <li>الافتتاحية الـ 7 ثوان الأولى</li>
+          <li>التعامل مع السكرتارية والـ gatekeepers</li>
+          <li>scripts لكل قطاع — 8 قوالب جاهزة</li>
+          <li>تحويل الرفض لمعلومة استخباراتية</li>
+        </ul>
+        <div class="cert">🏅 شهادة "Saudi Cold Caller Certified"</div>
+        <div class="price free">699 ريال</div>
+      </div>
+
+      <div class="track">
+        <span class="level intermediate">متوسط</span>
+        <h3>🤝 LinkedIn سعودياً</h3>
+        <div class="duration">⏱ 6 ساعات · 4 أسابيع</div>
+        <ul class="modules">
+          <li>بناء البروفايل الذي يجلب RFPs</li>
+          <li>InMail vs الرسالة المباشرة</li>
+          <li>المحتوى الذي ينتشر في B2B السعودي</li>
+          <li>الـ Sales Navigator — استخدامه الذكي</li>
+        </ul>
+        <div class="cert">🏅 شهادة "LinkedIn B2B Saudi Specialist"</div>
+        <div class="price free">599 ريال</div>
+      </div>
+
+      <div class="track">
+        <span class="level intermediate">متوسط</span>
+        <h3>💬 WhatsApp Business B2B</h3>
+        <div class="duration">⏱ 5 ساعات · 3 أسابيع</div>
+        <ul class="modules">
+          <li>الفرق بين الـ B2C والـ B2B في WhatsApp</li>
+          <li>الـ tone الرسمي بدون جمود</li>
+          <li>أتمتة الردود — Greenapi · Ultramsg · Meta Cloud</li>
+          <li>متى تنقل من WhatsApp لإيميل رسمي</li>
+        </ul>
+        <div class="cert">🏅 شهادة "WhatsApp B2B Operator"</div>
+        <div class="price free">499 ريال</div>
+      </div>
+
+      <div class="track">
+        <span class="level advanced">متقدم</span>
+        <h3>🏢 المبيعات للقطاع الحكومي</h3>
+        <div class="duration">⏱ 12 ساعات · 8 أسابيع</div>
+        <ul class="modules">
+          <li>منظومة اعتماد · إتمام · قوائم منشآت</li>
+          <li>نظام الترسية والمناقصات الإلكترونية</li>
+          <li>التسعير لجهات حكومية — هامش الربح المحلي</li>
+          <li>دورة الدفع الحكومية — 90/120/180 يوم</li>
+        </ul>
+        <div class="cert">🏅 شهادة "Saudi Gov B2B Sales Pro"</div>
+        <div class="price">1,499 ريال</div>
+      </div>
+
+      <div class="track">
+        <span class="level advanced">متقدم</span>
+        <h3>📊 إغلاق الصفقات الكبيرة</h3>
+        <div class="duration">⏱ 10 ساعات · 6 أسابيع</div>
+        <ul class="modules">
+          <li>الـ MEDDPICC تكييفه للسوق السعودي</li>
+          <li>التفاوض مع رؤوس الأموال السعودية</li>
+          <li>صفقات +500K ريال — الـ multi-thread</li>
+          <li>عقود MSA · DPA · NDA — قوالب تحت ZATCA</li>
+        </ul>
+        <div class="cert">🏅 شهادة "Enterprise Closer — KSA"</div>
+        <div class="price">1,999 ريال</div>
+      </div>
+
+      <div class="track">
+        <span class="level advanced">متقدم</span>
+        <h3>🧠 بناء فريق مبيعات سعودي</h3>
+        <div class="duration">⏱ 14 ساعة · 10 أسابيع</div>
+        <ul class="modules">
+          <li>توظيف SDR/AE في السعودية — متى مواطن متى مقيم</li>
+          <li>هيكل العمولات والحوافز — تحت قانون العمل</li>
+          <li>QBR · Forecast · Pipeline review عربي</li>
+          <li>ترقية SDR إلى AE — مسار 18 شهر</li>
+        </ul>
+        <div class="cert">🏅 شهادة "Sales Leader — KSA"</div>
+        <div class="price">2,499 ريال</div>
+      </div>
+    </div>
+
+    <div class="cert-showcase">
+      <h3>🏆 الشهادات المعتمدة (12 شهادة)</h3>
+      <p>كل شهادة تأتي مع: <strong>QR للتحقق</strong> · <strong>profile public على dealix.sa/cert/[id]</strong> · <strong>badge للـ LinkedIn</strong> · <strong>مراجعة سنوية للحفاظ عليها</strong>.</p>
+      <div class="cert-list">
+        <div class="cert-item">🎯 Saudi B2B Foundations<small>المستوى الأساسي</small></div>
+        <div class="cert-item">📨 Cold Email Pro — Saudi<small>إيميل بارد عربي</small></div>
+        <div class="cert-item">📞 Saudi Cold Caller<small>مكالمات باردة</small></div>
+        <div class="cert-item">🤝 LinkedIn B2B Saudi<small>منصة LinkedIn</small></div>
+        <div class="cert-item">💬 WhatsApp B2B Operator<small>WhatsApp Business</small></div>
+        <div class="cert-item">🏢 Saudi Gov B2B Pro<small>القطاع الحكومي</small></div>
+        <div class="cert-item">💼 Enterprise Closer — KSA<small>صفقات كبيرة</small></div>
+        <div class="cert-item">🧠 Sales Leader — KSA<small>قيادة فرق</small></div>
+        <div class="cert-item">🏗 Real Estate B2B Specialist<small>عقار تطويري</small></div>
+        <div class="cert-item">🏥 Healthcare B2B Specialist<small>عيادات ومستشفيات</small></div>
+        <div class="cert-item">🚚 Logistics B2B Specialist<small>شحن ولوجستيات</small></div>
+        <div class="cert-item">🎨 Agency Sales Specialist<small>وكالات تسويق</small></div>
+      </div>
+    </div>
+
+    <div class="features">
+      <h2 style="margin:0 0 8px;color:var(--brand);font-size:24px">🔥 ما الذي يجعلنا مختلفين</h2>
+      <p style="color:var(--muted);margin:0 0 18px">الفرق بين Dealix Academy وأي تدريب آخر:</p>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">١</div>
+          <div><h4>عربي 100%</h4><p>كل المحتوى مكتوب أصلاً بالعربي — لا ترجمة. القواعد سعودية، الأمثلة سعودية، الـ scripts سعودية.</p></div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">٢</div>
+          <div><h4>بيانات حقيقية</h4><p>كل دراسة حالة من شركة سعودية فعلية اشتركت في Dealix. لا أمثلة من Salesforce أو HubSpot blogs.</p></div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">٣</div>
+          <div><h4>Playbooks قابلة للتنفيذ</h4><p>كل مسار يأتي بـ Notion templates + Google Sheets + WhatsApp scripts جاهزة للنسخ والتطبيق فوراً.</p></div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">٤</div>
+          <div><h4>مجتمع الخريجين</h4><p>WhatsApp مغلق + لقاء افتراضي شهري + AMA مع 5+ founders سعوديين شهرياً.</p></div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">٥</div>
+          <div><h4>مراجعة سنوية</h4><p>المحتوى يتحدث كل ربع سنة بناءً على بيانات Pulse الجديدة. شهادتك تظل valid.</p></div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">٦</div>
+          <div><h4>توظيف مباشر</h4><p>الخريجون يدخلون قاعدة بيانات Dealix. الشركات السعودية المشتركة تبحث فيها أولاً عند التوظيف.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <h3>📅 رحلة المتدرب — مثال 8 أسابيع</h3>
+      <div class="timeline-row">
+        <div class="timeline-week">أسبوع 1</div>
+        <div class="timeline-content">
+          <h4>التشخيص + الـ baseline</h4>
+          <p>اختبار قبلي 30 سؤال + تحليل أدائك الحالي إذا كنت مشترك في Dealix (معدل ردك، CTR إيميلاتك). يولّد لك مسار مخصص.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week">أسبوع 2-3</div>
+        <div class="timeline-content">
+          <h4>المحتوى التأسيسي</h4>
+          <p>فيديوهات قصيرة (10-15 دقيقة) + قراءات موجهة + اختبارات قصيرة بعد كل وحدة.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week">أسبوع 4-5</div>
+        <div class="timeline-content">
+          <h4>التطبيق العملي</h4>
+          <p>تكتب 20 إيميل / تجري 10 مكالمات تجريبية / تبني playbook لقطاعك. مراجعة من خبير سعودي.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week">أسبوع 6-7</div>
+        <div class="timeline-content">
+          <h4>المشروع النهائي</h4>
+          <p>تطبق ما تعلمته على عميل حقيقي (إذا مشترك Dealix) أو case study مقدم. تقديم شفهي عبر Zoom.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week">أسبوع 8</div>
+        <div class="timeline-content">
+          <h4>الامتحان النهائي + الشهادة</h4>
+          <p>اختبار 60 سؤال (نظري + عملي). 70%+ = شهادة معتمدة + دخول مجتمع الخريجين.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">شهادات الخريجين</h2>
+    <p class="section-sub">من الـ 47 شركة المشتركة، أكثر من 80 موظف مبيعات حصلوا على شهادات.</p>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p>قبل Dealix Academy كنت أرسل إيميلات بالإنجليزي مترجمة من قوالب Salesforce. بعد المسار الأول، معدل ردي ارتفع من 4% إلى 11%. الفرق ليس في الأدوات — الفرق في فهم السوق السعودي.</p>
+        <div class="meta"><div class="avatar">س</div><div><div class="name">سعد ع.</div><div class="role">SDR · شركة عقارية بالرياض</div></div></div>
+      </div>
+      <div class="testimonial">
+        <p>المسار الحكومي وحده وفّر علي 6 شهور من المحاولات الفاشلة. كنت أحاول أبيع لجهة حكومية بطريقة قطاع خاص — اتعلمت الفرق بالضبط في 12 ساعة.</p>
+        <div class="meta"><div class="avatar">ر</div><div><div class="name">ريم م.</div><div class="role">AE · شركة SaaS بجدة</div></div></div>
+      </div>
+      <div class="testimonial">
+        <p>وظفت 3 من خريجي الأكاديمية — كلهم بدأوا production في أول 30 يوم. الـ ramp-up time انخفض من 90 يوم إلى 21 يوم.</p>
+        <div class="meta"><div class="avatar">ف</div><div><div class="name">فهد ح.</div><div class="role">VP Sales · لوجستيات الدمام</div></div></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="v">11.2%</div><div class="l">متوسط معدل الرد بعد التخرج (vs 4.7% قبل)</div></div>
+      <div class="stat-card"><div class="v">21 يوم</div><div class="l">متوسط ramp-up للموظف الجديد</div></div>
+      <div class="stat-card"><div class="v">82%</div><div class="l">نسبة من حصلوا على ترقية خلال 12 شهر</div></div>
+      <div class="stat-card"><div class="v">3.4×</div><div class="l">زيادة pipeline value للخريجين</div></div>
+    </div>
+
+    <div class="faq">
+      <h2 class="section-title">أسئلة متكررة</h2>
+      <details>
+        <summary>هل الأكاديمية متاحة لغير المشتركين في Dealix؟</summary>
+        <p>نعم — كل المسارات متاحة للجميع بأسعارها المعلنة. لكن المشتركين في Pro ($299/شهر فأعلى) يحصلون على جميع المسارات مجاناً + المسارات المتقدمة بنسبة 50% خصم.</p>
+      </details>
+      <details>
+        <summary>كم مدة صلاحية الشهادة؟</summary>
+        <p>سنة واحدة من تاريخ الإصدار. التجديد يتطلب مسار قصير 2-ساعة (مجاني للمشتركين) عن آخر تحديثات السوق.</p>
+      </details>
+      <details>
+        <summary>هل الشهادة معترف بها خارج السعودية؟</summary>
+        <p>الشهادات معتمدة من Dealix كأول جهة سعودية متخصصة في B2B. حالياً نعمل على شراكات اعتماد مع جامعات سعودية محلية. خارجياً، الـ LinkedIn badge يظهر على بروفايلك مع QR للتحقق.</p>
+      </details>
+      <details>
+        <summary>هل يوجد محتوى للـ founders والمدراء التنفيذيين؟</summary>
+        <p>نعم — مسار "بناء فريق مبيعات سعودي" + ورش شهرية مع founders آخرين + AMA ربع سنوي مع رؤوس الأموال السعودية للمشتركين Scale tier فأعلى.</p>
+      </details>
+      <details>
+        <summary>هل يمكن للشركة شراء الأكاديمية لكامل فريقها؟</summary>
+        <p>نعم — Team plan: 10 مقاعد بـ 7,999 ريال/سنة شامل كل المسارات + 3 ورش حضورية بمقر الشركة. تواصل مع <a href="mailto:academy@dealix.sa">academy@dealix.sa</a></p>
+      </details>
+    </div>
+
+    <div class="cta-block">
+      <h3>ابدأ مسارك اليوم — مجاناً مع Dealix Pro</h3>
+      <p>اشترك في Pro واحصل على كل المسارات + الشهادات + المجتمع المغلق بدون رسوم إضافية.</p>
+      <div class="cta-buttons">
+        <a href="/pricing.html" class="btn btn-primary">اشترك في Pro</a>
+        <a href="mailto:academy@dealix.sa" class="btn btn-secondary">تواصل مع الفريق</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

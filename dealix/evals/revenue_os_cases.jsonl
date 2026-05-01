@@ -1,0 +1,2 @@
+{"id":"v3_command_snapshot_shape","endpoint_hint":"/api/v1/v3/command-center/snapshot","expect_keys":["today_decisions","agents"],"forbid_substrings":["password=","api_key="]}
+{"id":"business_pricing_tiers","endpoint_hint":"/api/v1/business/pricing","expect_keys":["currency","tiers"],"min_tiers":1}

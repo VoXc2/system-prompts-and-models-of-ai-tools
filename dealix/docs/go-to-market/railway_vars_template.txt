@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════
+# Dealix Railway — Variables Template (TEMPLATE — لا تدفع مفاتيح حقيقية هنا)
+# ═══════════════════════════════════════════════════════════════
+# الاستخدام: Railway Dashboard → Service → Variables → Raw Editor → الصق + عبّي CHANGE_ME
+# المفاتيح الحقيقية تُسلّم منفصلة (dealix_railway_vars.txt في الـ workspace).
+
+# ── Application Core ───────────────────────────────────────────
+APP_ENV=production
+APP_NAME=Dealix
+APP_VERSION=3.0.0
+APP_SECRET_KEY=CHANGE_ME_64_byte_hex
+APP_LOG_LEVEL=INFO
+APP_DEFAULT_LOCALE=ar
+APP_DEFAULT_CURRENCY=SAR
+APP_TIMEZONE=Asia/Riyadh
+ENVIRONMENT=production
+
+# ── CORS ───────────────────────────────────────────────────────
+CORS_ORIGINS=https://dealix.sa,https://www.dealix.sa,http://localhost:3000
+
+# ── Database & Cache (Railway auto-injects) ────────────────────
+# DATABASE_URL is auto-provided by Railway Postgres service
+# REDIS_URL is auto-provided by Railway Redis service
+
+# ── Moyasar Payments ───────────────────────────────────────────
+MOYASAR_SECRET_KEY=sk_live_CHANGE_ME
+MOYASAR_WEBHOOK_SECRET=CHANGE_ME_shared_with_dashboard
+
+# ── PostHog Analytics ──────────────────────────────────────────
+POSTHOG_API_KEY=phc_CHANGE_ME
+POSTHOG_HOST=https://us.i.posthog.com
+
+# ── Calendly ───────────────────────────────────────────────────
+CALENDLY_URL=https://calendly.com/sami-assiri11/dealix-demo
+CALENDLY_WEBHOOK_SECRET=CHANGE_ME
+
+# ── WhatsApp (Meta) ────────────────────────────────────────────
+WHATSAPP_VERIFY_TOKEN=CHANGE_ME
+WHATSAPP_APP_SECRET=CHANGE_ME
+WHATSAPP_ACCESS_TOKEN=CHANGE_ME
+
+# ── Landing callback URL ───────────────────────────────────────
+APP_URL=https://dealix.sa
+
+# ── Optional: API key protection ───────────────────────────────
+API_KEYS=CHANGE_ME_comma_separated_if_you_want_admin_protection
+
+# ── Optional: Sentry ───────────────────────────────────────────
+SENTRY_DSN=

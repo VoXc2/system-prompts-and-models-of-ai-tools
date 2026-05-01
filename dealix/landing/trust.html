@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix — الأمان والثقة</title>
+  <meta name="description" content="حماية بياناتكم — PDPL aligned، Saudi data residency، RFC 8058 List-Unsubscribe، 11 compliance gates، audit log كامل." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg)}
+    .wrap{max-width:1100px;margin:0 auto;padding:64px 24px}
+    .hero{text-align:center;margin-bottom:48px}
+    .hero h1{font-size:clamp(28px,4.5vw,48px);margin:0 0 12px;color:var(--brand)}
+    .hero p{color:var(--muted);font-size:17px;max-width:640px;margin:0 auto;line-height:1.7}
+    .badges{display:flex;justify-content:center;gap:14px;margin-top:24px;flex-wrap:wrap}
+    .badge{background:#fff;border:1px solid var(--border);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+    .badge .check{color:var(--success);font-weight:700}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:32px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px}
+    .card h3{margin:0 0 8px;font-size:17px;color:var(--brand)}
+    .card p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+    .card .icon{font-size:24px;margin-bottom:10px}
+    .panel{background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;margin-top:32px}
+    .panel h2{margin:0 0 16px;font-size:22px;color:var(--brand)}
+    .gates-table{width:100%;border-collapse:collapse;font-size:14px}
+    .gates-table th,.gates-table td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:right}
+    .gates-table th{background:#f8fafc;font-weight:700}
+    .nav-back{display:inline-block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:12px}
+    .nav-back:hover{color:var(--brand)}
+    .pill{background:var(--success);color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+    <div class="hero">
+      <h1>🛡️ ثقتكم بياناتكم — مهمتنا الأولى</h1>
+      <p>Dealix مبني من اليوم الأول على PDPL السعودي + معايير Gmail/RFC bulk-sender + audit log كامل. نُريك بالضبط أين بياناتكم، من يصلها، وكيف نحميها.</p>
+      <div class="badges">
+        <span class="badge"><span class="check">✓</span> PDPL aligned</span>
+        <span class="badge"><span class="check">✓</span> Saudi data residency</span>
+        <span class="badge"><span class="check">✓</span> RFC 8058 List-Unsubscribe</span>
+        <span class="badge"><span class="check">✓</span> 11 compliance gates</span>
+        <span class="badge"><span class="check">✓</span> Audit log كامل</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="icon">🇸🇦</div>
+        <h3>Data Residency في السعودية</h3>
+        <p>كل بيانات leadsكم في PostgreSQL مستضاف داخل KSA — لا نرسلها لخارج المملكة. التشفير at-rest + in-transit بـ TLS 1.2+.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📜</div>
+        <h3>PDPL Compliant</h3>
+        <p>كل سجل lead فيه: <code>source_url</code>, <code>allowed_use</code>, <code>consent_status</code>, <code>opt_out</code>, <code>risk_level</code>. مسار قانوني واضح من البيانات للرسالة.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🚫</div>
+        <h3>Suppression List فورية</h3>
+        <p>أي رد بـ STOP أو إيقاف → تلقائياً يدخل suppression list. الـ Compliance Gate يفحصها قبل أي إرسال جديد.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📨</div>
+        <h3>Gmail Bulk-Sender Rules</h3>
+        <p>كل إيميل يحمل <code>List-Unsubscribe</code> header (RFC 8058 one-click). يتوافق مع Gmail/Yahoo bulk-sender 2024+ requirements.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔐</div>
+        <h3>OAuth بدلاً من كلمات مرور</h3>
+        <p>Gmail integration عبر OAuth refresh-token فقط. لا نطلب أو نُخزّن كلمة مرور Gmail. الـ scope محدود (gmail.compose).</p>
+      </div>
+      <div class="card">
+        <div class="icon">📊</div>
+        <h3>Audit Log كامل</h3>
+        <p>كل send/draft/reply/classification محفوظ في <code>email_send_log</code> + <code>data_source_provenance</code>. تستطيعون استرجاع أي حدث بأي وقت.</p>
+      </div>
+      <div class="card">
+        <div class="icon">⚖️</div>
+        <h3>ZATCA Phase 2 Ready</h3>
+        <p>إصدار الفواتير عبر Moyasar Invoices API. عند وصولكم لحد فوترة ZATCA الإلزامي، نوفّر مسار e-invoice مباشر بدون توقف.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🚧</div>
+        <h3>Approval-Required أول 30 يوم</h3>
+        <p>لأول 30 يوماً من الاشتراك، كل رسالة خارجة تحتاج موافقتكم اليدوية. حماية لسمعتكم + سُمعة Gmail.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🚫</div>
+        <h3>لا scraping أبداً</h3>
+        <p>لا نسحب بيانات من LinkedIn أو منصات محمية. مصادر البيانات: directories عامة + Google Search API + Google Maps + ما ترفعونه أنتم.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>🛡️ الـ 11 Compliance Gates</h2>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 16px">كل send/draft يمر عبر 11 فحص. لو أي واحد فشل → النظام يحذف الإرسال + يسجل السبب.</p>
+      <table class="gates-table">
+        <thead><tr><th>#</th><th>Gate</th><th>سبب الإيقاف</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><code>opt_out=true</code></td><td>contact رفض التواصل سابقاً</td></tr>
+          <tr><td>2</td><td>email في suppression list</td><td>STOP/إيقاف سابق</td></tr>
+          <tr><td>3</td><td>domain في suppression</td><td>كامل الشركة طلبت إيقاف</td></tr>
+          <tr><td>4</td><td>phone في suppression</td><td>رقم محظور سابقاً</td></tr>
+          <tr><td>5</td><td><code>risk_score &gt; 50</code></td><td>بيانات مشكوك فيها</td></tr>
+          <tr><td>6</td><td><code>allowed_use missing</code></td><td>مصدر بدون تصريح</td></tr>
+          <tr><td>7</td><td>email format invalid</td><td>regex فشل</td></tr>
+          <tr><td>8</td><td>bounced before</td><td>email رد bounce سابقاً</td></tr>
+          <tr><td>9</td><td>daily limit (50/يوم)</td><td>حماية sender reputation</td></tr>
+          <tr><td>10</td><td>batch size (10)</td><td>تجنب rate-limit</td></tr>
+          <tr><td>11</td><td>cooldown (90 دقيقة)</td><td>زمن آمن بين batches</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;font-size:13px;color:var(--muted)"><span class="pill">Bonus</span> personal email (gmail/hotmail/yahoo) → demoted تلقائياً للمراجعة اليدوية.</p>
+    </div>
+
+    <div class="panel">
+      <h2>🔑 ما الذي تتحكمون به؟</h2>
+      <div class="grid" style="margin-top:0">
+        <div>
+          <h3 style="font-size:15px;margin:0 0 6px;color:var(--brand)">✓ مصادر البيانات</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">ترفعون CSV/Excel لـ Dealix. نحن لا نشتري أو نسحب من سواكم.</p>
+        </div>
+        <div>
+          <h3 style="font-size:15px;margin:0 0 6px;color:var(--brand)">✓ القنوات</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">تختارون: WhatsApp فقط، أو + Email، أو + LinkedIn manual.</p>
+        </div>
+        <div>
+          <h3 style="font-size:15px;margin:0 0 6px;color:var(--brand)">✓ Approval Mode</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">draft-only أول 30 يوم → autopilot للـ low-risk بعدها (يُفعّل أنتم).</p>
+        </div>
+        <div>
+          <h3 style="font-size:15px;margin:0 0 6px;color:var(--brand)">✓ Data Export</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">تستطيعون تصدير كل بياناتكم CSV بأي وقت. لا lock-in.</p>
+        </div>
+        <div>
+          <h3 style="font-size:15px;margin:0 0 6px;color:var(--brand)">✓ Account Deletion</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">حسابكم → حذف كامل خلال 7 أيام عمل (PDPL right-to-erasure).</p>
+        </div>
+        <div>
+          <h3 style="font-size:15px;margin:0 0 6px;color:var(--brand)">✓ Subprocessors</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">شفافية كاملة بـ <a href="/subprocessors.html" style="color:var(--brand)">قائمة subprocessors</a> — Railway / Google / Sentry / Moyasar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>📞 للأسئلة الأمنية</h2>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 12px">للأسئلة المتعلقة بـ PDPL، DPA (Data Processing Agreement)، أو security review:</p>
+      <p style="margin:0">
+        <a href="mailto:security@dealix.me" style="color:var(--brand);font-weight:600;text-decoration:none">security@dealix.me</a>
+        — رد خلال 48 ساعة.
+      </p>
+    </div>
+
+    <div style="text-align:center;margin-top:48px">
+      <a href="/pricing.html" style="background:var(--brand);color:#fff;padding:13px 24px;border-radius:10px;text-decoration:none;font-weight:700">العودة للأسعار →</a>
+    </div>
+  </div>
+</body>
+</html>

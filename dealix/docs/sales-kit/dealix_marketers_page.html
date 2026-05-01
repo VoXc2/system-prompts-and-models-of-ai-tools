@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dealix للمسوقين والوكالات — 3 مسارات للدخل</title>
+<meta name="description" content="استخدم Dealix كأداة، أو قدّم خدمات مع Dealix كفريلانسر، أو اشترك كشريك وكالة. 3 مسارات لبناء دخل مع Dealix.">
+<meta property="og:title" content="Dealix للمسوقين والوكالات">
+<meta property="og:description" content="منصة + برنامج شراكات + خدمات مُدارة = 3 طرق للدخل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Inter:wght@400;500;700;900&display=swap">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0a0e27;--bg-2:#0f1435;--bg-3:#141a47;
+    --blue:#3b82f6;--green:#10b981;--purple:#8b5cf6;--orange:#f59e0b;
+    --text:#fff;--text-dim:#94a3b8;--text-muted:#64748b;
+    --border:rgba(255,255,255,0.1);--card:rgba(255,255,255,0.04);
+    --card-hover:rgba(255,255,255,0.07);
+    --gradient:linear-gradient(135deg,#3b82f6 0%,#10b981 100%);
+    --gradient-purple:linear-gradient(135deg,#8b5cf6,#ec4899);
+    --gradient-orange:linear-gradient(135deg,#f59e0b,#ef4444);
+  }
+  body{font-family:'Tajawal','Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+  .container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,39,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+  .nav-inner{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding:0 24px;gap:24px}
+  .logo{font-weight:900;font-size:1.6rem;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.02em}
+  .nav-links{display:flex;gap:28px}
+  .nav-links a{color:var(--text-dim);text-decoration:none;font-size:0.95rem;transition:color 0.2s}
+  .nav-links a:hover{color:var(--text)}
+  @media(max-width:768px){.nav-links{display:none}}
+
+  .btn{background:var(--gradient);color:#fff;padding:12px 28px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block;transition:all 0.2s;border:none;cursor:pointer;font-size:0.95rem;font-family:inherit}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(59,130,246,0.35)}
+  .btn-lg{padding:18px 44px;font-size:1.05rem}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+  .btn-purple{background:var(--gradient-purple)}
+  .btn-orange{background:var(--gradient-orange)}
+
+  /* HERO */
+  .hero{padding:140px 0 80px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(59,130,246,0.2),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(16,185,129,0.15),transparent 60%);pointer-events:none}
+  .hero-content{text-align:center;max-width:900px;margin:0 auto;position:relative}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);border-radius:100px;color:#a78bfa;font-size:0.9rem;margin-bottom:24px;font-weight:500}
+  .hero-badge::before{content:'◆';color:#8b5cf6}
+  .hero h1{font-size:clamp(2.2rem,6vw,5rem);font-weight:900;line-height:1.1;margin-bottom:24px;letter-spacing:-0.02em}
+  .hero h1 .gradient{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--text-dim);margin-bottom:40px;max-width:720px;margin-left:auto;margin-right:auto}
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+  /* 3 PATHS */
+  .section{padding:90px 0}
+  .section-title{text-align:center;margin-bottom:60px}
+  .section-title .eyebrow{color:var(--green);font-size:0.9rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px}
+  .section-title h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;margin-bottom:16px;letter-spacing:-0.02em}
+  .section-title p{color:var(--text-dim);font-size:1.1rem;max-width:640px;margin:0 auto}
+
+  .paths-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:960px){.paths-grid{grid-template-columns:1fr}}
+  .path-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;transition:all 0.3s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .path-card:hover{background:var(--card-hover);transform:translateY(-6px);border-color:rgba(255,255,255,0.15)}
+  .path-card .icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:20px}
+  .path-a .icon{background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(59,130,246,0.05));color:#60a5fa}
+  .path-b .icon{background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(139,92,246,0.05));color:#a78bfa}
+  .path-c .icon{background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(245,158,11,0.05));color:#fbbf24}
+  .path-label{font-size:0.85rem;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+  .path-card h3{font-size:1.5rem;font-weight:900;margin-bottom:14px}
+  .path-card .who{color:var(--text-dim);font-size:0.95rem;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+  .path-card ul{list-style:none;margin-bottom:28px;flex:1}
+  .path-card li{padding:7px 0;color:var(--text-dim);font-size:0.95rem;padding-right:24px;position:relative}
+  .path-card li::before{content:'→';position:absolute;right:0;color:#10b981;font-weight:700}
+  .path-card .revenue-box{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:14px 16px;margin-bottom:20px}
+  .revenue-box strong{color:#10b981;display:block;font-size:1.1rem;margin-bottom:2px}
+  .revenue-box span{color:var(--text-dim);font-size:0.85rem}
+
+  /* WORKFLOWS */
+  .workflows-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .workflow{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;transition:all 0.2s}
+  .workflow:hover{background:var(--card-hover)}
+  .workflow .num{font-size:1.3rem;font-weight:900;color:var(--green);margin-bottom:8px;font-family:'Inter',monospace}
+  .workflow h4{font-size:1.05rem;margin-bottom:8px}
+  .workflow p{color:var(--text-dim);font-size:0.88rem}
+
+  /* PACKAGES */
+  .packages{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+  @media(max-width:960px){.packages{grid-template-columns:1fr}}
+  .package{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;transition:all 0.3s;position:relative}
+  .package:hover{transform:translateY(-4px)}
+  .package.featured{border-color:var(--green);background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(59,130,246,0.05))}
+  .package-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gradient);color:#fff;padding:5px 14px;border-radius:100px;font-size:0.8rem;font-weight:700}
+  .package-name{font-size:0.9rem;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+  .package-price{font-size:2.4rem;font-weight:900;margin-bottom:4px}
+  .package-price span{font-size:0.9rem;color:var(--text-dim);font-weight:400}
+  .package-commission{color:var(--green);font-size:0.9rem;margin-bottom:24px;font-weight:600}
+  .package ul{list-style:none;margin-bottom:24px}
+  .package li{padding:8px 0;color:var(--text-dim);font-size:0.92rem;padding-right:24px;position:relative}
+  .package li::before{content:'✓';position:absolute;right:0;color:#10b981;font-weight:900}
+
+  /* WHO IS THIS FOR */
+  .audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:40px}
+  @media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+  .audience-col{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px}
+  .audience-col h3{font-size:1.3rem;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .audience-col.yes h3{color:#10b981}
+  .audience-col.no h3{color:#ef4444}
+  .audience-col ul{list-style:none}
+  .audience-col li{padding:10px 0;color:var(--text-dim);padding-right:28px;position:relative;border-bottom:1px solid rgba(255,255,255,0.05)}
+  .audience-col li:last-child{border-bottom:none}
+  .audience-col.yes li::before{content:'✓';position:absolute;right:0;color:#10b981;font-weight:900}
+  .audience-col.no li::before{content:'✗';position:absolute;right:0;color:#ef4444;font-weight:900}
+
+  /* PROOF */
+  .proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:32px}
+  .proof-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px}
+  .proof-icon{font-size:1.5rem;color:var(--green);flex-shrink:0}
+  .proof-text{font-size:0.88rem;color:var(--text-dim)}
+  .proof-text strong{color:var(--text);display:block;margin-bottom:2px}
+
+  /* FAQ */
+  .faq-item{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .faq-question{padding:20px 24px;cursor:pointer;font-weight:700;display:flex;justify-content:space-between;align-items:center;font-size:1rem}
+  .faq-answer{padding:0 24px;max-height:0;overflow:hidden;transition:all 0.3s;color:var(--text-dim);font-size:0.95rem}
+  .faq-item.open .faq-answer{max-height:400px;padding:0 24px 20px}
+  .faq-item.open .faq-arrow{transform:rotate(180deg)}
+  .faq-arrow{transition:transform 0.3s;color:var(--green);font-size:0.9rem}
+
+  /* APPLICATION FORM */
+  .apply-section{background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(16,185,129,0.08));border:1px solid rgba(16,185,129,0.2);border-radius:24px;padding:48px;margin:0 24px;text-align:center}
+  @media(max-width:640px){.apply-section{padding:32px 24px}}
+  .apply-section h2{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;margin-bottom:16px}
+  .apply-section p{color:var(--text-dim);margin-bottom:32px;max-width:540px;margin-left:auto;margin-right:auto}
+  .apply-form{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:12px;text-align:right}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.form-row{grid-template-columns:1fr}}
+  .form-group label{display:block;font-size:0.85rem;color:var(--text-dim);margin-bottom:6px}
+  .form-group input,.form-group select{width:100%;padding:12px 14px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:10px;color:#fff;font-family:inherit;font-size:0.95rem}
+  .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--green)}
+  .form-group input::placeholder{color:var(--text-muted)}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);padding:50px 0 30px;margin-top:80px}
+  .footer-inner{text-align:center}
+  .footer-inner .logo{margin-bottom:12px}
+  .footer-inner p{color:var(--text-dim);font-size:0.9rem;margin-bottom:16px}
+  .footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+  .footer-links a{color:var(--text-dim);text-decoration:none;font-size:0.9rem}
+  .footer-bottom{padding-top:24px;border-top:1px solid var(--border);color:var(--text-muted);font-size:0.85rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Dealix</div>
+    <div class="nav-links">
+      <a href="#paths">3 مسارات</a>
+      <a href="#workflows">سير العمل</a>
+      <a href="#packages">الباقات</a>
+      <a href="#faq">الأسئلة</a>
+      <a href="/">الصفحة الرئيسية</a>
+    </div>
+    <a href="#apply" class="btn">سجّل كشريك</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">للمسوقين، الفريلانسرز، والوكالات</div>
+      <h1>اربح مع Dealix —<br>ليس فقط <span class="gradient">استخدمه</span></h1>
+      <p>Dealix ليس مجرد أداة. هو منصة + برنامج شراكات + خدمات مُدارة. ثلاثة مسارات تبني فيها دخل حقيقي من السوق السعودي الناطق بالعربي.</p>
+      <div class="hero-cta">
+        <a href="#paths" class="btn btn-lg">اعرض الـ 3 مسارات</a>
+        <a href="#apply" class="btn btn-lg btn-ghost">سجّل الآن</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="paths">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">3 Paths · 3 مسارات</div>
+      <h2>اختر كيف تبنى دخلك مع Dealix</h2>
+      <p>سواء كنت مسوق داخلي، فريلانسر، أو وكالة — في مسار يناسبك</p>
+    </div>
+
+    <div class="paths-grid">
+      <div class="path-card path-a">
+        <div class="icon">🎯</div>
+        <div class="path-label">Path A · استخدم مباشرة</div>
+        <h3>استخدم Dealix لشركتك</h3>
+        <div class="who">للمسوقين الداخليين في شركات B2B السعودية</div>
+        <ul>
+          <li>أتمت استقبال leads</li>
+          <li>تأهيل تلقائي بالعربي الخليجي</li>
+          <li>حجز demos مع فريقك</li>
+          <li>استبدل 2-3 BDRs بـ AI</li>
+          <li>Setup خلال 48 ساعة</li>
+        </ul>
+        <div class="revenue-box">
+          <strong>توفير: 15-45K ريال/شهر</strong>
+          <span>بدل توظيف فريق BDRs</span>
+        </div>
+        <a href="/#pricing" class="btn">جرّب pilot بـ 1 ريال</a>
+      </div>
+
+      <div class="path-card path-b">
+        <div class="icon">🛠️</div>
+        <div class="path-label">Path B · قدّم خدمات</div>
+        <h3>اكسب كفريلانسر / مستشار</h3>
+        <div class="who">للمسوقين المستقلين، Growth Consultants، CRM specialists</div>
+        <ul>
+          <li>استخدم Dealix كمحرك لعملائك</li>
+          <li>بع "Sales Automation Setup" كخدمة</li>
+          <li>احتفظ بعلاقتك مع العميل</li>
+          <li>احصل على 20% من MRR دائمة</li>
+          <li>دعم تقني من Dealix مباشرة</li>
+        </ul>
+        <div class="revenue-box">
+          <strong>5K-15K ريال + 20% MRR</strong>
+          <span>لكل عميل setup</span>
+        </div>
+        <a href="#apply" class="btn btn-purple">سجّل كـ Service Provider</a>
+      </div>
+
+      <div class="path-card path-c">
+        <div class="icon">🏢</div>
+        <div class="path-label">Path C · شراكة وكالة</div>
+        <h3>اشترك كـ Agency Partner</h3>
+        <div class="who">لوكالات تسويق (15-200 موظف) وشركات استشارات</div>
+        <ul>
+          <li>White-label أو Co-brand</li>
+          <li>خدمة مُدارة لعملائك</li>
+          <li>25-40% عمولة MRR</li>
+          <li>Slack خاص + دعم ذو أولوية</li>
+          <li>تبادل خدمات أو Revenue Share</li>
+        </ul>
+        <div class="revenue-box">
+          <strong>25-40% من MRR</strong>
+          <span>+ service delivery fees</span>
+        </div>
+        <a href="#apply" class="btn btn-orange">احجز Partner Meeting</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="workflows">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Workflows · سير العمل</div>
+      <h2>10 خدمات قابلة للبيع على Dealix</h2>
+      <p>كل واحدة منها = deliverable جاهز للبيع لعملائك</p>
+    </div>
+    <div class="workflows-grid">
+      <div class="workflow"><div class="num">01</div><h4>Lead Capture Setup</h4><p>Forms + Dealix chat على موقع العميل</p></div>
+      <div class="workflow"><div class="num">02</div><h4>Qualification Scripting</h4><p>BANT مخصّص حسب قطاع العميل</p></div>
+      <div class="workflow"><div class="num">03</div><h4>Calendar Integration</h4><p>Calendly / Google / Outlook booking</p></div>
+      <div class="workflow"><div class="num">04</div><h4>CRM Sync</h4><p>HubSpot / Zoho / Salesforce</p></div>
+      <div class="workflow"><div class="num">05</div><h4>WhatsApp Automation</h4><p>WhatsApp Business API + templates</p></div>
+      <div class="workflow"><div class="num">06</div><h4>Email Nurture</h4><p>7-email sequences لـ 21 يوم</p></div>
+      <div class="workflow"><div class="num">07</div><h4>Proposal Routing</h4><p>Quote → Proposal → Contract flow</p></div>
+      <div class="workflow"><div class="num">08</div><h4>ROI Reporting</h4><p>Dashboard شهري للعميل النهائي</p></div>
+      <div class="workflow"><div class="num">09</div><h4>A/B Testing</h4><p>Optimize BANT questions + flows</p></div>
+      <div class="workflow"><div class="num">10</div><h4>Multi-channel Attribution</h4><p>تتبّع الـ funnel كامل</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="packages">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Service Packages · باقات الخدمات</div>
+      <h2>باقات مقترحة للبيع لعملائك</h2>
+      <p>أسعار guide — عدّلها حسب سوقك</p>
+    </div>
+    <div class="packages">
+      <div class="package">
+        <div class="package-name">Starter Service</div>
+        <div class="package-price">3,000<span> ريال</span></div>
+        <div class="package-commission">+ 20% من MRR العميل</div>
+        <ul>
+          <li>Setup Dealix لعميل واحد</li>
+          <li>1 qualification flow</li>
+          <li>1 CRM integration</li>
+          <li>60-min handoff training</li>
+          <li>30-day support</li>
+        </ul>
+      </div>
+      <div class="package featured">
+        <div class="package-badge">الأكثر طلباً</div>
+        <div class="package-name">Growth Service</div>
+        <div class="package-price">8,000<span> ريال</span></div>
+        <div class="package-commission">+ 25% من MRR العميل</div>
+        <ul>
+          <li>كل Starter</li>
+          <li>Custom BANT scripting</li>
+          <li>WhatsApp + Email integration</li>
+          <li>A/B testing framework</li>
+          <li>90-day optimization</li>
+        </ul>
+      </div>
+      <div class="package">
+        <div class="package-name">Scale Service</div>
+        <div class="package-price">25,000<span> ريال</span></div>
+        <div class="package-commission">+ 30% من MRR العميل</div>
+        <ul>
+          <li>كل Growth</li>
+          <li>Multi-language (عربي + إنجليزي)</li>
+          <li>Advanced dashboards</li>
+          <li>Dedicated agency manager</li>
+          <li>Ongoing monthly optimization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Who · لمن</div>
+      <h2>هذا لك — وهذا ليس لك</h2>
+      <p>الصراحة تحمي الطرفين من الوقت المهدور</p>
+    </div>
+    <div class="audience-grid">
+      <div class="audience-col yes">
+        <h3>✓ مناسب لك إذا كنت:</h3>
+        <ul>
+          <li>وكالة تسويق (10-200 موظف)</li>
+          <li>مستشار Growth يخدم 3+ عملاء</li>
+          <li>فريلانسر مخصص في CRM/Automation</li>
+          <li>In-house marketer في شركة B2B</li>
+          <li>تخدم السوق العربي (السعودي تحديداً)</li>
+          <li>تستقبل 50+ lead/أسبوع لعملائك</li>
+        </ul>
+      </div>
+      <div class="audience-col no">
+        <h3>✗ ليس مناسب لك إذا:</h3>
+        <ul>
+          <li>تخدم B2C فقط</li>
+          <li>عملاؤك خارج السوق العربي</li>
+          <li>غير مستعد لتعلم منتج جديد</li>
+          <li>تبحث عن passive income بدون جهد</li>
+          <li>عملاؤك أقل من 3</li>
+          <li>ترفض استثمار أسبوع للـ onboarding</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">Trust · لماذا تثق بنا</div>
+      <h2>نقاط proof للمسوقين</h2>
+    </div>
+    <div class="proof-grid">
+      <div class="proof-item"><div class="proof-icon">⚡</div><div class="proof-text"><strong>Code-complete</strong>72+ PRs على GitHub</div></div>
+      <div class="proof-item"><div class="proof-icon">🇸🇦</div><div class="proof-text"><strong>مبني في الرياض</strong>للسوق السعودي</div></div>
+      <div class="proof-item"><div class="proof-icon">🔒</div><div class="proof-text"><strong>PDPL + GDPR</strong>Compliant</div></div>
+      <div class="proof-item"><div class="proof-icon">💳</div><div class="proof-text"><strong>Moyasar</strong>Integrated</div></div>
+      <div class="proof-item"><div class="proof-icon">🧠</div><div class="proof-text"><strong>Claude 4.7</strong>AI Engine</div></div>
+      <div class="proof-item"><div class="proof-icon">📞</div><div class="proof-text"><strong>Founder Access</strong>تواصل مباشر مع CEO</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container" style="max-width:800px">
+    <div class="section-title">
+      <div class="eyebrow">FAQ</div>
+      <h2>الأسئلة الشائعة للشركاء</h2>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)"><span>كم أقدر أكسب كـ partner؟</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">يعتمد على مسارك. Path A: توفير 15-45K/شهر. Path B: 5K-15K لكل عميل + 20% MRR دائم. Path C: 25-40% MRR لكل عميل في شبكتك. Partners ناشطين يصلون لـ 20K+ ريال/شهر خلال 6 شهور.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)"><span>كم وقت setup العميل؟</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">Setup كامل = 48 ساعة من التوقيع. اليوم 1: integration + BANT. اليوم 2: test leads + training. اليوم 3-7: go-live + monitoring.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)"><span>هل عندكم white-label؟</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">نعم، متوفر في Path C (Agency Partner Scale tier). تقدر تبيع Dealix تحت brand وكالتك مع custom domain. الشروط والأسعار تُناقش في partner meeting.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)"><span>هل تدعمون اللهجات الأخرى؟</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">حالياً: سعودي خليجي (Core). قريباً (Q3 2026): إماراتي، كويتي. Q4: مصري، شامي. Scale partners يحصلون على dialect customization مبكراً.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)"><span>ما الفرق بين Service Provider و Agency Partner؟</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">Service Provider (Path B): فرد أو فريق 1-5. Commission 20%. ذاتي الخدمة. Agency Partner (Path C): وكالة 15+ موظف. Commission 25-40%. دعم مخصص + white-label option.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)"><span>كيف تُدفع العمولات؟</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">شهرياً عبر bank transfer أو Moyasar. Partner dashboard يظهر الـ pipeline + commissions. الدفعة الأولى بعد 60 يوم من تحويل العميل (لتجنب chargebacks).</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)"><span>ما الدعم المقدّم لي كـ partner؟</span><span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">Training (videos + docs), sales enablement (slides + battle cards), marketing co-op (ذكرك على directory), priority support (< 4 ساعات), dedicated success manager (Path C).</div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="apply-section" id="apply">
+    <h2>ابدأ رحلتك مع Dealix اليوم</h2>
+    <p>املأ النموذج — نرد خلال 24 ساعة بـ Calendly لـ partner call 30 دقيقة. إذا ما ناسب، نقول لك مباشرة.</p>
+
+    <form class="apply-form" action="#" method="post">
+      <div class="form-row">
+        <div class="form-group">
+          <label>الاسم الكامل</label>
+          <input type="text" name="name" placeholder="محمد العسيري" required>
+        </div>
+        <div class="form-group">
+          <label>الشركة / Freelance</label>
+          <input type="text" name="company" placeholder="اسم الشركة" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>الدور / المنصب</label>
+          <input type="text" name="role" placeholder="Marketing Director" required>
+        </div>
+        <div class="form-group">
+          <label>المسار المهتم به</label>
+          <select name="path" required>
+            <option value="">اختر المسار</option>
+            <option value="A">Path A — استخدم Dealix</option>
+            <option value="B">Path B — Service Provider</option>
+            <option value="C">Path C — Agency Partner</option>
+            <option value="referral">Referral Partner فقط</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>عدد العملاء الحالي</label>
+          <select name="clients" required>
+            <option value="">اختر</option>
+            <option value="0">لا يوجد بعد</option>
+            <option value="1-3">1-3 عملاء</option>
+            <option value="4-10">4-10 عملاء</option>
+            <option value="10+">+10 عملاء</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>الـ Email</label>
+          <input type="email" name="email" placeholder="you@agency.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>WhatsApp (مع رمز الدولة)</label>
+        <input type="tel" name="phone" placeholder="+966 50 000 0000" required>
+      </div>
+      <button type="submit" class="btn btn-lg" style="margin-top:8px">أرسل الطلب</button>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-top:12px">نرد خلال 24 ساعة. بياناتك محمية بـ PDPL.</p>
+    </form>
+  </section>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="logo">Dealix</div>
+      <p>مندوب مبيعات AI بالعربي الخليجي — مبني في الرياض للسوق السعودي</p>
+      <div class="footer-links">
+        <a href="/">الرئيسية</a>
+        <a href="/for-marketers">للمسوقين</a>
+        <a href="/privacy">الخصوصية</a>
+        <a href="/terms">الشروط</a>
+        <a href="mailto:sami.assiri11@gmail.com">تواصل</a>
+        <a href="https://github.com/VoXc2/dealix">GitHub</a>
+      </div>
+      <div class="footer-bottom">© 2026 Dealix. كل الحقوق محفوظة.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(el){el.parentElement.classList.toggle('open')}
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth'})}
+  });
+});
+</script>
+</body>
+</html>

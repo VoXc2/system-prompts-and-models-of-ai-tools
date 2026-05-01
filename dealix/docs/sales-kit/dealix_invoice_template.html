@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>فاتورة — Dealix</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Tahoma', 'Arial', sans-serif; font-size: 11pt; color: #333; background: #fff; }
+
+  .page { width: 210mm; min-height: 297mm; padding: 20mm; }
+
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #0a0e27; }
+  .logo { font-size: 28pt; font-weight: 900; color: #0a0e27; }
+  .logo span { color: #10b981; }
+  .invoice-title { text-align: left; }
+  .invoice-title h1 { font-size: 22pt; color: #0a0e27; margin-bottom: 8px; }
+  .invoice-title .number { font-size: 11pt; color: #64748b; }
+
+  .info-row { display: flex; justify-content: space-between; margin-bottom: 30px; }
+  .info-block { flex: 1; padding: 16px; background: #f8fafc; border-radius: 8px; margin: 0 8px; }
+  .info-block:first-child { margin-right: 0; }
+  .info-block:last-child { margin-left: 0; }
+  .info-block h3 { font-size: 10pt; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
+  .info-block p { font-size: 11pt; line-height: 1.6; }
+  .info-block .company { font-weight: bold; color: #0a0e27; font-size: 12pt; }
+
+  .meta-table { width: 100%; margin-bottom: 30px; border-collapse: collapse; }
+  .meta-table td { padding: 8px 12px; border: 1px solid #e2e8f0; }
+  .meta-table td:first-child { background: #f1f5f9; font-weight: bold; width: 30%; color: #64748b; }
+
+  table.items { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+  table.items thead { background: #0a0e27; color: #fff; }
+  table.items th { padding: 12px 10px; text-align: right; font-size: 10pt; }
+  table.items th:first-child { text-align: center; width: 50px; }
+  table.items th:last-child { text-align: left; }
+  table.items td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11pt; }
+  table.items td:first-child { text-align: center; color: #64748b; }
+  table.items td:last-child { text-align: left; font-weight: bold; }
+  table.items .desc { font-size: 9pt; color: #64748b; margin-top: 4px; }
+
+  .totals { margin-top: 20px; margin-left: auto; width: 50%; }
+  .totals table { width: 100%; }
+  .totals td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; font-size: 11pt; }
+  .totals td:last-child { text-align: left; font-weight: bold; }
+  .totals .grand { background: #0a0e27; color: #fff; font-size: 14pt; }
+  .totals .grand td { border: none; padding: 12px; }
+
+  .payment-info { margin-top: 40px; padding: 20px; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 8px; }
+  .payment-info h3 { color: #0a0e27; margin-bottom: 10px; font-size: 12pt; }
+  .payment-info p { font-size: 10pt; line-height: 1.8; }
+
+  .footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 9pt; color: #94a3b8; }
+  .footer .thanks { color: #0a0e27; font-weight: bold; font-size: 11pt; margin-bottom: 8px; }
+
+  .qr-box { margin-top: 20px; text-align: center; padding: 20px; background: #fafafa; border-radius: 8px; }
+  .qr-placeholder { display: inline-block; width: 120px; height: 120px; background: #fff; border: 2px solid #e2e8f0; border-radius: 8px; line-height: 120px; color: #94a3b8; font-size: 9pt; }
+  .qr-note { margin-top: 10px; font-size: 9pt; color: #64748b; }
+
+  @media print {
+    body { font-size: 10pt; }
+    .page { padding: 15mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">Deal<span>ix</span></div>
+    <div class="invoice-title">
+      <h1>فاتورة ضريبية</h1>
+      <div class="number">TAX INVOICE</div>
+    </div>
+  </div>
+
+  <!-- From & To -->
+  <div class="info-row">
+    <div class="info-block">
+      <h3>من (Provider)</h3>
+      <p class="company">Dealix</p>
+      <p>سامي العسيري — Founder</p>
+      <p>الرياض، المملكة العربية السعودية</p>
+      <p>sami.assiri11@gmail.com</p>
+      <p>ترخيص عمل حر: [_______________]</p>
+      <p>TRN (VAT): [_______________]</p>
+    </div>
+    <div class="info-block">
+      <h3>إلى (Client)</h3>
+      <p class="company">[اسم الشركة]</p>
+      <p>[الاسم الكامل للمسؤول]</p>
+      <p>[العنوان الكامل]</p>
+      <p>[البريد الإلكتروني]</p>
+      <p>السجل التجاري: [_______________]</p>
+      <p>TRN (VAT): [_______________]</p>
+    </div>
+  </div>
+
+  <!-- Invoice Meta -->
+  <table class="meta-table">
+    <tr>
+      <td>رقم الفاتورة</td>
+      <td>DLX-2026-001</td>
+      <td>تاريخ الإصدار</td>
+      <td>[DD/MM/YYYY]</td>
+    </tr>
+    <tr>
+      <td>فترة الخدمة</td>
+      <td>[1/1/2026 - 31/1/2026]</td>
+      <td>تاريخ الاستحقاق</td>
+      <td>[DD/MM/YYYY]</td>
+    </tr>
+    <tr>
+      <td>العملة</td>
+      <td>ريال سعودي (SAR)</td>
+      <td>طريقة الدفع</td>
+      <td>Moyasar / حوالة بنكية</td>
+    </tr>
+  </table>
+
+  <!-- Line Items -->
+  <table class="items">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>الوصف</th>
+        <th style="width: 80px;">الكمية</th>
+        <th style="width: 120px;">السعر</th>
+        <th style="width: 120px;">المجموع</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>
+          <strong>Dealix — باقة Growth</strong>
+          <div class="desc">اشتراك شهري · AI sales rep · 10,000 lead/شهر · كامل المميزات</div>
+        </td>
+        <td>1</td>
+        <td>2,999.00</td>
+        <td>2,999.00</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>
+          <strong>Setup + Training (one-time)</strong>
+          <div class="desc">تركيب النظام · تكامل CRM · تدريب الفريق (60 دقيقة)</div>
+        </td>
+        <td>1</td>
+        <td>1,000.00</td>
+        <td>1,000.00</td>
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+
+  <!-- Totals -->
+  <div class="totals">
+    <table>
+      <tr>
+        <td>المجموع الفرعي (Subtotal)</td>
+        <td>3,999.00 ريال</td>
+      </tr>
+      <tr>
+        <td>خصم (Discount) — 10%</td>
+        <td>-399.90 ريال</td>
+      </tr>
+      <tr>
+        <td>المجموع بعد الخصم</td>
+        <td>3,599.10 ريال</td>
+      </tr>
+      <tr>
+        <td>ضريبة القيمة المضافة (VAT) 15%</td>
+        <td>539.87 ريال</td>
+      </tr>
+      <tr class="grand">
+        <td>الإجمالي (Total Due)</td>
+        <td>4,138.97 ريال</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Payment Info -->
+  <div class="payment-info">
+    <h3>طرق الدفع (Payment Methods)</h3>
+    <p><strong>1. حوالة بنكية (Bank Transfer):</strong></p>
+    <p>البنك: [اسم البنك] · IBAN: SA00 0000 0000 0000 0000 0000 · اسم المستفيد: سامي العسيري</p>
+    <p><strong>2. Moyasar (بطاقة ائتمان / مدى):</strong></p>
+    <p>رابط الدفع: https://dealix.ai/pay/DLX-2026-001</p>
+    <p><strong>3. STC Pay:</strong> 966500000000</p>
+    <p><strong>ملاحظة:</strong> الرجاء ذكر رقم الفاتورة (DLX-2026-001) في التحويل.</p>
+  </div>
+
+  <!-- QR Code (for ZATCA e-invoicing compliance) -->
+  <div class="qr-box">
+    <div class="qr-placeholder">[QR Code<br/>ZATCA]</div>
+    <p class="qr-note">QR Code للامتثال مع هيئة الزكاة والضريبة والجمارك (ZATCA)</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="thanks">شكراً لثقتكم في Dealix 🙏</div>
+    <p>هذه الفاتورة صادرة إلكترونياً ولا تحتاج لتوقيع.</p>
+    <p>للاستفسارات: sami.assiri11@gmail.com · +966 500 000 000</p>
+    <p>© 2026 Dealix. All rights reserved.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

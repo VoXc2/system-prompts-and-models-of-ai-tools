@@ -1,0 +1,342 @@
+{
+  "$defs": {
+    "ApprovalClass": {
+      "description": "Who must approve before this action executes.\n\nA0 — no approval (routine, reversible, non-sensitive)\nA1 — team / manager\nA2 — department head + legal/finance\nA3 — executive / board",
+      "enum": [
+        "A0",
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "title": "ApprovalClass",
+      "type": "string"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "description": "A single piece of evidence backing a decision.\n\nEvidence MUST identify the source, carry a retrievable URI where possible,\ninclude a short verbatim excerpt, and a content hash for provenance.",
+      "properties": {
+        "source": {
+          "description": "Named source (e.g. 'hubspot.contact', 'web:nytimes')",
+          "title": "Source",
+          "type": "string"
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Retrievable URI or internal reference",
+          "title": "Uri"
+        },
+        "excerpt": {
+          "description": "Short verbatim excerpt",
+          "maxLength": 2000,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "content_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "SHA-256 of the full source content",
+          "title": "Content Hash"
+        },
+        "retrieved_at": {
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "confidence": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "source",
+        "excerpt"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "NextAction": {
+      "additionalProperties": false,
+      "description": "A proposed next action with its classification.\n\nNextActions are NEVER auto-executed from a decision — they are proposals\nthat the Execution Plane picks up after Trust Plane clearance.",
+      "properties": {
+        "action_type": {
+          "description": "e.g. 'booking_schedule', 'proposal_send'",
+          "title": "Action Type",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "approval_class": {
+          "$ref": "#/$defs/ApprovalClass"
+        },
+        "reversibility_class": {
+          "$ref": "#/$defs/ReversibilityClass"
+        },
+        "sensitivity_class": {
+          "$ref": "#/$defs/SensitivityClass"
+        },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        },
+        "policy_requirements": {
+          "items": {
+            "$ref": "#/$defs/PolicyRequirement"
+          },
+          "title": "Policy Requirements",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action_type",
+        "description",
+        "approval_class",
+        "reversibility_class",
+        "sensitivity_class"
+      ],
+      "title": "NextAction",
+      "type": "object"
+    },
+    "PolicyRequirement": {
+      "additionalProperties": false,
+      "description": "A requirement the Trust Plane must satisfy before this decision executes.",
+      "properties": {
+        "policy_name": {
+          "title": "Policy Name",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "policy_name",
+        "description"
+      ],
+      "title": "PolicyRequirement",
+      "type": "object"
+    },
+    "ReversibilityClass": {
+      "description": "How hard it is to undo this action.\n\nR0 — auto-reversible (draft email, internal note)\nR1 — reversible with limited ops (CRM field update)\nR2 — costly to reverse (a sent proposal, an outbound call)\nR3 — irreversible / external commitment (signed NDA, price sent to regulator)",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "title": "ReversibilityClass",
+      "type": "string"
+    },
+    "SensitivityClass": {
+      "description": "Data / impact sensitivity of this action.\n\nS0 — public\nS1 — internal\nS2 — confidential / commercial\nS3 — regulated / board / personal data",
+      "enum": [
+        "S0",
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "title": "SensitivityClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The canonical output of any critical agent decision.\n\nThis matches the JSON Schema in `dealix/contracts/schemas/decision_output.schema.json`.",
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "decision_id": {
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "default": "default",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "entity_id": {
+      "description": "Business entity (lead_id, deal_id, partner_id...)",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "objective": {
+      "description": "What decision is being made, e.g. 'qualify_lead', 'recommend_proposal'",
+      "title": "Objective",
+      "type": "string"
+    },
+    "agent_name": {
+      "title": "Agent Name",
+      "type": "string"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model"
+    },
+    "model_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Version"
+    },
+    "recommendation": {
+      "additionalProperties": true,
+      "description": "Structured recommendation",
+      "title": "Recommendation",
+      "type": "object"
+    },
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "rationale": {
+      "maxLength": 5000,
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "freshness_window_hours": {
+      "default": 24,
+      "minimum": 0,
+      "title": "Freshness Window Hours",
+      "type": "integer"
+    },
+    "approval_class": {
+      "$ref": "#/$defs/ApprovalClass"
+    },
+    "reversibility_class": {
+      "$ref": "#/$defs/ReversibilityClass"
+    },
+    "sensitivity_class": {
+      "$ref": "#/$defs/SensitivityClass"
+    },
+    "next_actions": {
+      "items": {
+        "$ref": "#/$defs/NextAction"
+      },
+      "title": "Next Actions",
+      "type": "array"
+    },
+    "policy_requirements": {
+      "items": {
+        "$ref": "#/$defs/PolicyRequirement"
+      },
+      "title": "Policy Requirements",
+      "type": "array"
+    },
+    "trace_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Trace Id"
+    },
+    "span_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Span Id"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "locale": {
+      "default": "ar",
+      "enum": [
+        "ar",
+        "en"
+      ],
+      "title": "Locale",
+      "type": "string"
+    }
+  },
+  "required": [
+    "entity_id",
+    "objective",
+    "agent_name",
+    "recommendation",
+    "confidence",
+    "rationale",
+    "approval_class",
+    "reversibility_class",
+    "sensitivity_class"
+  ],
+  "title": "DecisionOutput",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.sa/schemas/decision_output.schema.json"
+}

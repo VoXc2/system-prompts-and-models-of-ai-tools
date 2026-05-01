@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix Revenue Command Center — لوحة قيادة الإيرادات السعودية</title>
+  <meta name="description" content="لوحة قيادة واحدة لكل B2B السعودي — Growth Radar، Why-Now، Pipeline Autopilot، AI Agents، Revenue Leak Detector، Proof Pack، Compliance، Forecast." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --brand:#0f172a;--brand-2:#1e3a8a;--accent:#22d3ee;--accent-2:#06b6d4;
+      --success:#10b981;--warning:#f59e0b;--danger:#dc2626;
+      --muted:#64748b;--border:#e2e8f0;--bg:#f1f5f9;--card:#fff;
+      --gradient-primary:linear-gradient(135deg,#0f172a,#1e3a8a);
+      --gradient-accent:linear-gradient(135deg,#22d3ee,#0891b2);
+      --gradient-purple:linear-gradient(135deg,#8b5cf6,#6d28d9);
+    }
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg);color:var(--brand);line-height:1.6;min-height:100vh}
+    .topbar{background:var(--gradient-primary);color:#fff;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(15,23,42,0.15);position:sticky;top:0;z-index:100}
+    .topbar-left{display:flex;align-items:center;gap:14px}
+    .logo{width:36px;height:36px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:var(--accent)}
+    .topbar h1{font-size:18px;font-weight:700;margin:0}
+    .topbar-stats{display:flex;gap:24px;font-size:13px}
+    .topbar-stat{display:flex;flex-direction:column;align-items:flex-start}
+    .topbar-stat .v{font-weight:700;color:var(--accent);font-size:16px}
+    .topbar-stat .l{opacity:0.85;font-size:11px}
+    .back{color:rgba(255,255,255,0.85);text-decoration:none;font-size:13px}
+    .back:hover{color:#fff}
+
+    .wrap{max-width:1500px;margin:0 auto;padding:24px}
+    .hero-strip{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px 28px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+    .hero-strip h2{font-size:22px;color:var(--brand);margin:0 0 4px}
+    .hero-strip p{color:var(--muted);font-size:14px;margin:0}
+    .hero-strip .day{background:var(--gradient-primary);color:#fff;padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;transition:transform 0.2s,box-shadow 0.2s}
+    .card:hover{box-shadow:0 8px 24px rgba(15,23,42,0.06)}
+    .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+    .card-title{display:flex;align-items:center;gap:10px}
+    .card-icon{width:38px;height:38px;border-radius:10px;background:var(--gradient-accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:700;flex-shrink:0}
+    .card-icon.purple{background:var(--gradient-purple)}
+    .card-icon.danger{background:linear-gradient(135deg,#ef4444,#b91c1c)}
+    .card-icon.warn{background:linear-gradient(135deg,#f59e0b,#b45309)}
+    .card-icon.success{background:linear-gradient(135deg,#10b981,#047857)}
+    .card-title h3{font-size:16px;font-weight:600;color:var(--brand);margin:0}
+    .card-tag{font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px}
+    .tag-live{background:#ecfdf5;color:#047857}
+    .tag-new{background:#dbeafe;color:#1e40af}
+    .tag-hot{background:#fee2e2;color:#991b1b}
+
+    /* layout helpers */
+    .col-12{grid-column:span 12}
+    .col-8{grid-column:span 8}
+    .col-6{grid-column:span 6}
+    .col-4{grid-column:span 4}
+    .col-3{grid-column:span 3}
+    @media(max-width:1100px){
+      .col-8,.col-6,.col-4,.col-3{grid-column:span 12}
+    }
+
+    /* Growth Radar */
+    .radar-list{display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto}
+    .radar-item{display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:12px;background:#f8fafc;border-radius:10px;align-items:center;border-right:3px solid var(--accent)}
+    .radar-item.high{border-color:var(--danger)}
+    .radar-item.medium{border-color:var(--warning)}
+    .radar-rank{font-weight:700;font-size:18px;color:var(--brand);width:32px;text-align:center}
+    .radar-body .name{font-weight:600;font-size:14px;color:var(--brand)}
+    .radar-body .why{font-size:12px;color:var(--muted);margin-top:2px}
+    .radar-score{text-align:center}
+    .radar-score .num{font-size:18px;font-weight:700;color:var(--brand)}
+    .radar-score .lbl{font-size:10px;color:var(--muted);text-transform:uppercase}
+
+    /* KPI strip */
+    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+    .kpi{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+    .kpi .v{font-size:30px;font-weight:700;color:var(--brand)}
+    .kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px}
+    .kpi .delta{font-size:12px;font-weight:600;margin-top:4px}
+    .kpi .delta.up{color:var(--success)}
+    .kpi .delta.down{color:var(--danger)}
+
+    /* Pipeline stages */
+    .pipeline{display:grid;grid-template-columns:repeat(11,1fr);gap:6px;align-items:end}
+    .stage{padding:10px 6px;background:#f8fafc;border-radius:8px;text-align:center;border-bottom:3px solid var(--accent)}
+    .stage .n{font-size:18px;font-weight:700;color:var(--brand)}
+    .stage .l{font-size:10px;color:var(--muted);margin-top:2px}
+    @media(max-width:900px){
+      .pipeline{grid-template-columns:repeat(4,1fr)}
+    }
+
+    /* Agents */
+    .agents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .agent{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px}
+    .agent .ico{font-size:22px;margin-bottom:6px}
+    .agent .nm{font-weight:700;font-size:13px;color:var(--brand)}
+    .agent .rl{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+    .agent .badge{display:inline-block;font-size:9px;background:var(--accent);color:var(--brand);padding:2px 6px;border-radius:4px;margin-top:6px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
+    .agent .badge.adv{background:#fef3c7;color:#92400e}
+    .agent .badge.appr{background:#ddd6fe;color:#5b21b6}
+
+    /* Leak detector */
+    .leak{display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;margin-bottom:10px;align-items:center}
+    .leak.medium{background:#fffbeb;border-color:#fde68a}
+    .leak.low{background:#f1f5f9;border-color:var(--border)}
+    .leak-sev{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase}
+    .leak-sev.critical{background:var(--danger);color:#fff}
+    .leak-sev.high{background:#dc2626;color:#fff}
+    .leak-sev.medium{background:#f59e0b;color:#fff}
+    .leak-sev.low{background:#64748b;color:#fff}
+    .leak-body .h{font-weight:600;font-size:14px;color:var(--brand)}
+    .leak-body .d{font-size:12px;color:#7f1d1d;margin-top:2px}
+    .leak-impact{text-align:center;color:var(--danger);font-weight:700;font-size:14px}
+
+    /* WhatsApp performance */
+    .wa-providers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .wa-provider{padding:12px 8px;background:#f8fafc;border:1px solid var(--border);border-radius:10px;text-align:center}
+    .wa-provider .nm{font-weight:600;font-size:13px;color:var(--brand)}
+    .wa-provider .st{font-size:11px;margin-top:4px}
+    .wa-provider.healthy .st{color:var(--success)}
+    .wa-provider.degraded .st{color:var(--warning)}
+    .wa-provider.down .st{color:var(--danger)}
+    .wa-bar{margin-top:6px;height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+    .wa-bar-fill{height:100%;background:var(--success);border-radius:2px}
+
+    /* Saudi map heatmap */
+    .map{background:linear-gradient(135deg,#0f172a,#1e3a8a);border-radius:14px;padding:20px;color:#fff;min-height:200px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .city{padding:14px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:10px;text-align:center;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden}
+    .city:hover{background:rgba(255,255,255,0.1);transform:translateY(-2px)}
+    .city .nm{font-weight:600;font-size:13px;margin-bottom:4px}
+    .city .vl{font-size:18px;font-weight:700;color:var(--accent)}
+    .city .lvl{font-size:10px;opacity:0.7;margin-top:2px}
+    .city.hot::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(220,38,38,0.25),transparent 60%);pointer-events:none}
+    .city.warm::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(245,158,11,0.2),transparent 60%);pointer-events:none}
+
+    /* Forecast */
+    .forecast-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)}
+    .forecast-row:last-child{border-bottom:0}
+    .forecast-deal{flex:1}
+    .forecast-deal .n{font-weight:600;color:var(--brand);font-size:14px}
+    .forecast-deal .m{font-size:11px;color:var(--muted)}
+    .forecast-prob{width:80px;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+    .forecast-prob-fill{height:100%;background:var(--gradient-accent);border-radius:4px}
+    .forecast-val{font-weight:700;color:var(--brand);font-size:14px;width:90px;text-align:left}
+
+    /* Health gauge */
+    .gauge{position:relative;width:160px;height:80px;margin:0 auto 12px;overflow:hidden}
+    .gauge svg{width:100%;display:block}
+    .gauge-val{position:absolute;bottom:0;left:50%;transform:translateX(-50%);text-align:center}
+    .gauge-val .v{font-size:32px;font-weight:700;color:var(--brand)}
+    .gauge-val .l{font-size:11px;color:var(--muted);margin-top:-4px}
+
+    /* Compliance gates */
+    .gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+    .gate{padding:10px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;font-size:12px;color:#047857;text-align:center;font-weight:600}
+    .gate.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+
+    /* Action ribbon */
+    .actions-ribbon{background:var(--gradient-primary);color:#fff;border-radius:16px;padding:24px;margin-top:20px}
+    .actions-ribbon h3{margin:0 0 14px;font-size:18px}
+    .actions-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .action-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:14px}
+    .action-card .num{display:inline-block;width:24px;height:24px;background:var(--accent);color:var(--brand);border-radius:50%;text-align:center;line-height:24px;font-weight:700;font-size:12px;margin-bottom:6px}
+    .action-card .h{font-weight:600;font-size:14px}
+    .action-card .d{font-size:12px;opacity:0.85;margin-top:3px}
+    @media(max-width:900px){.actions-list{grid-template-columns:1fr}}
+
+    /* Disclaimer */
+    .disclaimer{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:16px;margin-top:20px;font-size:13px;color:#92400e;line-height:1.7}
+    .disclaimer strong{color:#713f12}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo">D</div>
+      <div>
+        <h1>Dealix Revenue Command Center</h1>
+        <div style="font-size:12px;opacity:0.85">شركة المثال للتطوير العقاري · الرياض</div>
+      </div>
+    </div>
+    <div class="topbar-stats">
+      <div class="topbar-stat"><span class="v">1.2M ريال</span><span class="l">Pipeline هذا الشهر</span></div>
+      <div class="topbar-stat"><span class="v">14</span><span class="l">اجتماع محجوز</span></div>
+      <div class="topbar-stat"><span class="v">7.4×</span><span class="l">عائد على Dealix</span></div>
+      <a href="/" class="back">← العودة للموقع</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero-strip">
+      <div>
+        <h2>صباح الخير سامي 👋</h2>
+        <p>3 قرارات تنتظرك اليوم. 8 leads ذات priority عالي. 1 تسريب يحتاج تدخل خلال 24 ساعة.</p>
+      </div>
+      <div class="day">الثلاثاء · 28 إبريل 2026</div>
+    </div>
+
+    <!-- ROW 1: Founder/CEO View + Why Now -->
+    <div class="grid">
+      <div class="card col-8">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon">📊</div>
+            <h3>Founder View — كم ريال جبتلك Dealix هذا الشهر</h3>
+          </div>
+          <span class="card-tag tag-live">● Live</span>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="v">1.24M</div><div class="l">Pipeline ريال</div><div class="delta up">↑ +32% MoM</div></div>
+          <div class="kpi"><div class="v">14</div><div class="l">اجتماعات</div><div class="delta up">↑ +4 vs target</div></div>
+          <div class="kpi"><div class="v">SAR 89</div><div class="l">تكلفة كل lead مؤهل</div><div class="delta up">↓ -22%</div></div>
+          <div class="kpi"><div class="v">7.4×</div><div class="l">ROI من Dealix</div><div class="delta up">↑ vs 5.1× في مارس</div></div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:#fef3c7;border-radius:10px;font-size:13px;color:#713f12">
+          💡 <strong>القرار الأهم اليوم:</strong> 3 صفقات بقيمة 480K ريال جامدة منذ 14+ يوم — بحاجة لتدخلك المباشر.
+        </div>
+      </div>
+
+      <div class="card col-4">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon warn">🎯</div>
+            <h3>Why Now? — الأولوية اليوم</h3>
+          </div>
+          <span class="card-tag tag-hot">8 شركات</span>
+        </div>
+        <div class="radar-list">
+          <div class="radar-item high">
+            <div class="radar-rank">1</div>
+            <div class="radar-body">
+              <div class="name">شركة العقار الذهبي</div>
+              <div class="why">يوظفون SDR منذ 3 أيام · افتتحوا فرع جديد</div>
+            </div>
+            <div class="radar-score"><div class="num">94</div><div class="lbl">score</div></div>
+          </div>
+          <div class="radar-item high">
+            <div class="radar-rank">2</div>
+            <div class="radar-body">
+              <div class="name">عمار المدينة للتطوير</div>
+              <div class="why">نشروا مناقصة بـ 8M ريال · تنتهي 12 يوم</div>
+            </div>
+            <div class="radar-score"><div class="num">91</div><div class="lbl">score</div></div>
+          </div>
+          <div class="radar-item medium">
+            <div class="radar-rank">3</div>
+            <div class="radar-body">
+              <div class="name">رؤى المستقبل</div>
+              <div class="why">أضافوا booking page · زادوا إعلاناتهم 60%</div>
+            </div>
+            <div class="radar-score"><div class="num">82</div><div class="lbl">score</div></div>
+          </div>
+          <div class="radar-item medium">
+            <div class="radar-rank">4</div>
+            <div class="radar-body">
+              <div class="name">إعمار البلاد</div>
+              <div class="why">leadership change قبل 8 أيام</div>
+            </div>
+            <div class="radar-score"><div class="num">76</div><div class="lbl">score</div></div>
+          </div>
+          <div class="radar-item">
+            <div class="radar-rank">5</div>
+            <div class="radar-body">
+              <div class="name">عقارات الخليج</div>
+              <div class="why">funding round 12M ريال قبل أسبوعين</div>
+            </div>
+            <div class="radar-score"><div class="num">71</div><div class="lbl">score</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: Pipeline Autopilot -->
+    <div class="grid" style="margin-top:18px">
+      <div class="card col-12">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon purple">⚙️</div>
+            <h3>Pipeline Autopilot — كل صفقة في مرحلتها</h3>
+          </div>
+          <span class="card-tag tag-live">● 11 stages</span>
+        </div>
+        <div class="pipeline">
+          <div class="stage"><div class="n">142</div><div class="l">New Signal</div></div>
+          <div class="stage"><div class="n">98</div><div class="l">Enriched</div></div>
+          <div class="stage"><div class="n">76</div><div class="l">Drafted</div></div>
+          <div class="stage"><div class="n">62</div><div class="l">Approved</div></div>
+          <div class="stage"><div class="n">58</div><div class="l">Sent</div></div>
+          <div class="stage"><div class="n">21</div><div class="l">Replied</div></div>
+          <div class="stage"><div class="n">14</div><div class="l">Meeting</div></div>
+          <div class="stage"><div class="n">9</div><div class="l">Demo</div></div>
+          <div class="stage"><div class="n">6</div><div class="l">Proposal</div></div>
+          <div class="stage"><div class="n">3</div><div class="l">Won</div></div>
+          <div class="stage" style="border-color:var(--danger)"><div class="n">2</div><div class="l">At Risk</div></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;color:var(--muted)">↗</span>
+          <span style="font-size:12px;color:var(--muted)">conversion rates: signal→meeting <strong style="color:var(--brand)">9.8%</strong> · meeting→won <strong style="color:var(--brand)">21.4%</strong> · cycle <strong style="color:var(--brand)">38 يوم</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: Saudi Map + Forecast -->
+    <div class="grid" style="margin-top:18px">
+      <div class="card col-6">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon">🗺</div>
+            <h3>Saudi Buying Intent Map</h3>
+          </div>
+          <span class="card-tag tag-new">9 قطاعات</span>
+        </div>
+        <div class="map">
+          <div class="city hot"><div class="nm">الرياض</div><div class="vl">87</div><div class="lvl">heat: ساخن</div></div>
+          <div class="city hot"><div class="nm">جدة</div><div class="vl">71</div><div class="lvl">heat: ساخن</div></div>
+          <div class="city warm"><div class="nm">الدمام</div><div class="vl">52</div><div class="lvl">heat: دافئ</div></div>
+          <div class="city warm"><div class="nm">الخبر</div><div class="vl">48</div><div class="lvl">heat: دافئ</div></div>
+          <div class="city warm"><div class="nm">مكة</div><div class="vl">34</div><div class="lvl">heat: دافئ</div></div>
+          <div class="city"><div class="nm">المدينة</div><div class="vl">22</div><div class="lvl">heat: عادي</div></div>
+          <div class="city"><div class="nm">القصيم</div><div class="vl">18</div><div class="lvl">heat: عادي</div></div>
+          <div class="city"><div class="nm">أبها</div><div class="vl">14</div><div class="lvl">heat: عادي</div></div>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+          💡 <strong style="color:var(--brand)">القطاع الأنشط هذا الأسبوع:</strong> تطوير عقاري في الرياض — 32 شركة تظهر إشارات شراء.
+        </div>
+      </div>
+
+      <div class="card col-6">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon success">📈</div>
+            <h3>Sales Forecast — هذا الشهر</h3>
+          </div>
+          <span class="card-tag tag-live">● Live</span>
+        </div>
+        <div class="forecast-row">
+          <div class="forecast-deal">
+            <div class="n">شركة العقار الذهبي</div>
+            <div class="m">demo held · proposal sent</div>
+          </div>
+          <div class="forecast-prob"><div class="forecast-prob-fill" style="width:78%"></div></div>
+          <div class="forecast-val">340K ريال</div>
+        </div>
+        <div class="forecast-row">
+          <div class="forecast-deal">
+            <div class="n">عمار المدينة</div>
+            <div class="m">meeting booked · prep stage</div>
+          </div>
+          <div class="forecast-prob"><div class="forecast-prob-fill" style="width:62%"></div></div>
+          <div class="forecast-val">280K ريال</div>
+        </div>
+        <div class="forecast-row">
+          <div class="forecast-deal">
+            <div class="n">رؤى المستقبل</div>
+            <div class="m">positive reply · scheduling</div>
+          </div>
+          <div class="forecast-prob"><div class="forecast-prob-fill" style="width:48%"></div></div>
+          <div class="forecast-val">175K ريال</div>
+        </div>
+        <div class="forecast-row">
+          <div class="forecast-deal">
+            <div class="n">إعمار البلاد</div>
+            <div class="m">stalled — 16 يوم</div>
+          </div>
+          <div class="forecast-prob"><div class="forecast-prob-fill" style="width:18%;background:var(--warning)"></div></div>
+          <div class="forecast-val">220K ريال</div>
+        </div>
+        <div style="margin-top:14px;padding:10px;background:#f0fdf4;border-radius:8px;font-size:13px;color:#166534">
+          <strong>Best case:</strong> 1.01M ريال · <strong>Likely:</strong> 615K ريال · <strong>Worst:</strong> 280K ريال
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 4: AI Agents -->
+    <div class="grid" style="margin-top:18px">
+      <div class="card col-12">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon purple">🤖</div>
+            <h3>11 AI Agents — فريق نمو آلي يعمل لك 24/7</h3>
+          </div>
+          <span class="card-tag tag-live">● 7 active</span>
+        </div>
+        <div class="agents-grid">
+          <div class="agent"><div class="ico">🚀</div><div class="nm">Prospecting Agent</div><div class="rl">يكتشف 50+ شركة جديدة يومياً</div><span class="badge">safe auto</span></div>
+          <div class="agent"><div class="ico">📡</div><div class="nm">Signal Agent</div><div class="rl">يرصد إشارات الشراء كل ساعة</div><span class="badge">safe auto</span></div>
+          <div class="agent"><div class="ico">📋</div><div class="nm">Enrichment Agent</div><div class="rl">يكمّل بيانات الشركات + DMs</div><span class="badge">safe auto</span></div>
+          <div class="agent"><div class="ico">✍️</div><div class="nm">Personalization</div><div class="rl">يكتب رسالة فريدة لكل lead</div><span class="badge appr">approval</span></div>
+          <div class="agent"><div class="ico">🛡</div><div class="nm">Compliance Agent</div><div class="rl">يفحص PDPL + consent قبل الإرسال</div><span class="badge">safe auto</span></div>
+          <div class="agent"><div class="ico">📤</div><div class="nm">Outreach Agent</div><div class="rl">يرسل عبر القناة المثلى</div><span class="badge">safe auto</span></div>
+          <div class="agent"><div class="ico">💬</div><div class="nm">Reply Agent</div><div class="rl">يصنف كل رد فوراً</div><span class="badge">safe auto</span></div>
+          <div class="agent"><div class="ico">📅</div><div class="nm">Meeting Agent</div><div class="rl">يحجز اجتماعات تلقائياً</div><span class="badge appr">approval</span></div>
+          <div class="agent"><div class="ico">🎯</div><div class="nm">Deal Coach</div><div class="rl">next step + objections لكل صفقة</div><span class="badge adv">advisory</span></div>
+          <div class="agent"><div class="ico">❤️</div><div class="nm">Customer Success</div><div class="rl">health · QBR · upsell · churn</div><span class="badge adv">advisory</span></div>
+          <div class="agent"><div class="ico">📊</div><div class="nm">Executive Analyst</div><div class="rl">تقرير أسبوعي للـ CEO</div><span class="badge adv">advisory</span></div>
+          <div class="agent" style="background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border:0">
+            <div class="ico">⚡</div>
+            <div class="nm" style="color:var(--accent)">إجمالي</div>
+            <div class="rl" style="color:rgba(255,255,255,0.85)">11 agent · 7 safe-auto · 2 approval · 3 advisory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 5: Revenue Leak Detector -->
+    <div class="grid" style="margin-top:18px">
+      <div class="card col-8">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon danger">🚨</div>
+            <h3>Revenue Leak Detector — أين المال يتسرب</h3>
+          </div>
+          <span class="card-tag tag-hot">3 leaks</span>
+        </div>
+        <div class="leak">
+          <div class="leak-sev critical">Critical</div>
+          <div class="leak-body">
+            <div class="h">صفقة "إعمار البلاد" — جامدة منذ 16 يوم</div>
+            <div class="d">آخر نشاط 12 إبريل. عند 21+ يوم، احتمال الإغلاق ينخفض من 38% إلى 11%. يحتاج multi-thread.</div>
+          </div>
+          <div class="leak-impact">220K ريال<br><span style="font-size:11px;font-weight:400">معرّض للخطر</span></div>
+        </div>
+        <div class="leak medium">
+          <div class="leak-sev medium">Medium</div>
+          <div class="leak-body">
+            <div class="h">حملة "Q2 Real Estate" — يفتحون لكن لا يردّون</div>
+            <div class="d">معدل الفتح 47% (ممتاز) ومعدل الرد 1.2% (ضعيف). المشكلة في الـ CTA.</div>
+          </div>
+          <div class="leak-impact">~5K ريال<br><span style="font-size:11px;font-weight:400">إعادة كتابة</span></div>
+        </div>
+        <div class="leak low">
+          <div class="leak-sev low">Low</div>
+          <div class="leak-body">
+            <div class="h">المندوب أحمد — وقت الرد الوسطي 4 ساعات</div>
+            <div class="d">المعيار 60 دقيقة. كل ساعة تأخير = 14% انخفاض احتمال الحجز.</div>
+          </div>
+          <div class="leak-impact">~12K ريال<br><span style="font-size:11px;font-weight:400">شهرياً</span></div>
+        </div>
+        <div style="margin-top:14px;padding:12px;background:#fee2e2;border-radius:10px;font-size:13px;color:#991b1b">
+          💸 <strong>إجمالي المال المعرّض للخطر:</strong> 237K ريال — قابل للاسترداد بـ 3 إجراءات هذا الأسبوع.
+        </div>
+      </div>
+
+      <div class="card col-4">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon success">❤️</div>
+            <h3>Customer Health Score</h3>
+          </div>
+          <span class="card-tag tag-live">3 أبعاد</span>
+        </div>
+        <div class="gauge">
+          <svg viewBox="0 0 200 110">
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="14" stroke-linecap="round"/>
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#g)" stroke-width="14" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="50"/>
+            <defs>
+              <linearGradient id="g">
+                <stop offset="0" stop-color="#dc2626"/><stop offset="0.5" stop-color="#f59e0b"/><stop offset="1" stop-color="#10b981"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="gauge-val"><div class="v">82</div><div class="l">/ 100</div></div>
+        </div>
+        <div style="text-align:center;color:var(--success);font-weight:600;font-size:14px;margin-bottom:14px">healthy · upsell candidate</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:10px 0;border-top:1px solid var(--border)">
+          <span>Engagement</span><strong style="color:var(--brand)">88</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:10px 0;border-top:1px solid var(--border)">
+          <span>Outcomes</span><strong style="color:var(--brand)">79</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:10px 0;border-top:1px solid var(--border)">
+          <span>Adoption</span><strong style="color:var(--brand)">76</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:10px 0;border-top:1px solid var(--border)">
+          <span>Sentiment</span><strong style="color:var(--brand)">85</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 6: WhatsApp Performance + Compliance -->
+    <div class="grid" style="margin-top:18px">
+      <div class="card col-6">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon">💬</div>
+            <h3>WhatsApp Smart-Chain Performance</h3>
+          </div>
+          <span class="card-tag tag-live">4 providers</span>
+        </div>
+        <div class="kpi-row" style="margin-bottom:14px">
+          <div class="kpi"><div class="v">94.2%</div><div class="l">Delivery rate</div></div>
+          <div class="kpi"><div class="v">71%</div><div class="l">Read rate</div></div>
+          <div class="kpi"><div class="v">11.4%</div><div class="l">Reply rate</div></div>
+          <div class="kpi"><div class="v">38s</div><div class="l">متوسط وقت الرد</div></div>
+        </div>
+        <div class="wa-providers">
+          <div class="wa-provider healthy">
+            <div class="nm">Green API</div>
+            <div class="st">● Healthy</div>
+            <div class="wa-bar"><div class="wa-bar-fill" style="width:98%"></div></div>
+          </div>
+          <div class="wa-provider healthy">
+            <div class="nm">Ultramsg</div>
+            <div class="st">● Healthy</div>
+            <div class="wa-bar"><div class="wa-bar-fill" style="width:96%"></div></div>
+          </div>
+          <div class="wa-provider degraded">
+            <div class="nm">Fonnte</div>
+            <div class="st">⚠ Slow</div>
+            <div class="wa-bar"><div class="wa-bar-fill" style="width:71%;background:var(--warning)"></div></div>
+          </div>
+          <div class="wa-provider healthy">
+            <div class="nm">Meta Cloud</div>
+            <div class="st">● Healthy</div>
+            <div class="wa-bar"><div class="wa-bar-fill" style="width:100%"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px;background:#f0fdf4;border-radius:8px;font-size:12px;color:#166534">
+          ✅ Smart-chain يحوّل تلقائياً عند فشل أي provider — لا انقطاع للعميل.
+        </div>
+      </div>
+
+      <div class="card col-6">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon">🛡</div>
+            <h3>Compliance & Trust Center — PDPL</h3>
+          </div>
+          <span class="card-tag tag-live">11 gates</span>
+        </div>
+        <div class="gates">
+          <div class="gate">✓ Consent ledger</div>
+          <div class="gate">✓ Opt-out tracking</div>
+          <div class="gate">✓ List-Unsubscribe</div>
+          <div class="gate">✓ Purpose limitation</div>
+          <div class="gate">✓ Data minimization</div>
+          <div class="gate">✓ Audit log</div>
+          <div class="gate">✓ Retention policy</div>
+          <div class="gate">✓ RoPA documented</div>
+          <div class="gate">✓ DPA template</div>
+          <div class="gate">✓ Breach response</div>
+          <div class="gate warn">⚠ DPO assigned</div>
+        </div>
+        <div style="margin-top:14px;padding:12px;background:#f1f5f9;border-radius:10px;font-size:12px;color:var(--muted);line-height:1.7">
+          <strong style="color:var(--brand)">آخر فحص:</strong> اليوم · <strong style="color:var(--brand)">PDPL risk score:</strong> 12/100 (منخفض)<br>
+          <strong style="color:var(--brand)">Records of Processing:</strong> 47 نشاط موثق · <strong style="color:var(--brand)">Data subjects requests:</strong> 0 معلقة
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 7: Today's Decisions -->
+    <div class="actions-ribbon">
+      <h3>🎯 3 قرارات يجب اتخاذها اليوم</h3>
+      <div class="actions-list">
+        <div class="action-card">
+          <div class="num">1</div>
+          <div class="h">تدخل في صفقة "إعمار البلاد"</div>
+          <div class="d">220K ريال جامدة 16 يوم. اتصل بالـ CEO مباشرة + multi-thread إلى VP Operations.</div>
+        </div>
+        <div class="action-card">
+          <div class="num">2</div>
+          <div class="h">أعد كتابة CTA حملة Q2 Real Estate</div>
+          <div class="d">people open but don't reply. اختبر "هل تريد رؤية 5 leads مؤهلة من قطاعك؟" بدلاً من الـ CTA الحالي.</div>
+        </div>
+        <div class="action-card">
+          <div class="num">3</div>
+          <div class="h">ابدأ التواصل مع شركة العقار الذهبي</div>
+          <div class="d">Why-Now score 94. السبب: SDR hire + new branch. ✍️ Personalization Agent جهز draft — راجع وأرسل.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <strong>📌 ملاحظة:</strong> هذا preview للوحة Dealix — البيانات في هذه النسخة العامة افتراضية لأغراض العرض. عند الاشتراك،
+      اللوحة تُربط مباشرة بـ Saudi Revenue Graph الخاص بشركتك وتُحدّث في الوقت الحقيقي عبر <code>/api/v1/command-center/snapshot</code>.
+      كل التوصيات مبنية على Pulse القطاعي + بيانات شركتك التراكمية + 11 AI Agents يعملون 24/7.
+    </div>
+  </div>
+</body>
+</html>

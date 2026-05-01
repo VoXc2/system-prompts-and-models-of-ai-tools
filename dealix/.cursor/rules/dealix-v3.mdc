@@ -1,0 +1,64 @@
+---
+description: Dealix v3 Saudi Revenue OS architecture and implementation rules
+globs:
+  - "**/*.py"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.html"
+  - "**/*.sql"
+  - "**/*.md"
+alwaysApply: true
+---
+
+# Dealix v3 Rules
+
+Dealix is a Saudi B2B Revenue OS, not a generic CRM.
+
+## Core product direction
+
+- Arabic-first Personal Strategic Operator for Sami and later customers.
+- Revenue Memory as the event-sourced business memory.
+- Supabase/Postgres/pgvector as project + strategic + revenue memory.
+- Safe Agent Runtime with approval gates.
+- Saudi Market Radar for why-now opportunities.
+- Compliance OS for PDPL/contactability.
+- Revenue Science for forecasting, impact, churn, and launch-readiness.
+- Project Intelligence to understand the codebase and docs.
+- Command Center and Personal Operator UI.
+
+## Non-negotiable safety
+
+- Never auto-send cold WhatsApp.
+- Never auto-send LinkedIn DMs.
+- Never send Gmail externally without explicit approval.
+- Never create calendar events externally without explicit approval.
+- All external actions must be draft/approval-first.
+- Every AI action must be traceable, auditable, and explainable.
+
+## Coding rules
+
+- Keep code deterministic and import-safe.
+- Prefer small modules with clear dataclasses and Pydantic schemas where appropriate.
+- Add tests for all new core logic.
+- Do not add heavy dependencies unless justified.
+- Keep external integrations behind interfaces/mocks until credentials exist.
+- Use Arabic text for user-facing copy where the feature is intended for Sami or Saudi users.
+- Use English for code symbols.
+
+## Testing rules
+
+- Run Python import checks.
+- Run pytest where possible.
+- Add smoke tests for API routers.
+- If tests fail because of existing unrelated issues, document them clearly and isolate new-code tests.
+
+## Launch goal
+
+Reach a private-beta-ready product foundation:
+
+- v3 endpoints work.
+- Personal Operator endpoints work.
+- Supabase migration exists.
+- Project Intelligence works locally.
+- Launch readiness report generated.
+- Next external integrations are clearly specified.

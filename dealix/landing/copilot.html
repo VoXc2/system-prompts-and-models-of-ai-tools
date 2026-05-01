@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix Copilot — اسأل بالعربي، احصل على إجابة + قرار</title>
+  <meta name="description" content="Copilot عربي يفهم 15 نوع سؤال، يعطيك إجابة مشتقة من بياناتك مع citations، ويقترح إجراءات آمنة بنقرة." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--accent:#22d3ee;--purple:#8b5cf6;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--brand);line-height:1.7}
+    .wrap{max-width:1100px;margin:0 auto;padding:64px 24px}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:14px}
+    .hero{background:linear-gradient(135deg,#312e81,#1e3a8a);color:#fff;border-radius:24px;padding:60px 40px;text-align:center;margin:24px 0 48px;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(139,92,246,0.3),transparent 60%);pointer-events:none}
+    .hero > *{position:relative;z-index:1}
+    .hero h1{font-size:clamp(34px,5vw,52px);margin:0 0 14px}
+    .hero p{font-size:18px;opacity:0.9;max-width:680px;margin:0 auto}
+    .badge{background:rgba(139,92,246,0.25);color:#c4b5fd;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;display:inline-block;margin-bottom:18px;border:1px solid rgba(139,92,246,0.4)}
+
+    .demo{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;margin-top:32px}
+    .conv{display:flex;flex-direction:column;gap:18px}
+    .msg{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:flex-start}
+    .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+    .avatar.user{background:#dbeafe;color:#1e40af}
+    .avatar.bot{background:linear-gradient(135deg,#22d3ee,#0891b2);color:#fff}
+    .bubble{background:#f8fafc;border-radius:14px;padding:14px 18px;border:1px solid var(--border);max-width:85%}
+    .msg.user .bubble{background:#1e3a8a;color:#fff;border-color:#1e3a8a}
+    .citations{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-family:monospace}
+    .citations span{display:inline-block;background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:4px;margin-left:6px}
+    .conf{display:inline-block;background:#ecfdf5;color:#047857;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-right:6px}
+    .actions-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .action{background:#0f172a;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;text-decoration:none;font-weight:600}
+    .action.ro{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
+    .action.appr{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+    .action.auto{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+
+    .intents{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:24px}
+    .intent{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
+    .intent .id{font-family:monospace;font-size:11px;color:var(--muted);margin-bottom:4px}
+    .intent .desc{font-size:14px;color:#475569}
+
+    .section{margin:48px 0}
+    .section h2{font-size:26px;margin-bottom:8px}
+    .section .sub{color:var(--muted);font-size:16px;margin-bottom:24px}
+
+    .api-block{background:#0f172a;color:#22d3ee;border-radius:12px;padding:20px;font-family:monospace;font-size:13px;line-height:1.8;overflow-x:auto;margin-top:20px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+    <div class="hero">
+      <div class="badge">🤖 15 intents · 9 safe actions · 100% Arabic</div>
+      <h1>Dealix Copilot</h1>
+      <p>اسأل بالعربي. احصل على إجابة مشتقة من بياناتك الحقيقية مع citations لكل رقم. الـ Copilot يقترح إجراءات آمنة بنقرة — لكن لن ينفذ شيئاً بدون موافقتك.</p>
+    </div>
+
+    <div class="demo">
+      <h2 style="font-size:20px;margin-bottom:18px">💬 محادثة حقيقية</h2>
+      <div class="conv">
+
+        <div class="msg user">
+          <div class="avatar user">س</div>
+          <div class="bubble">وش أسوي اليوم؟</div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar bot">D</div>
+          <div class="bubble">
+            <strong>اليوم 8 شركة priority عالي ينتظرونك.</strong> عندك 3 تسريبات في الـ pipeline أكبرها 220,000 ريال.
+            <div style="margin-top:10px">أهم 3 قرارات:</div>
+            <ol style="margin:6px 18px;padding:0">
+              <li>تدخل في الصفقات الجامدة (مكالمة CEO + multi-thread)</li>
+              <li>راجع drafts اليوم وأرسلها — Personalization Agent جاهز</li>
+              <li>ابدأ التواصل مع أعلى Why-Now score</li>
+            </ol>
+            <div class="citations">
+              <span class="conf">conf 0.9</span>
+              <span>revenue_graph.why_now</span>
+              <span>leak_detector</span>
+            </div>
+            <div class="actions-row">
+              <a href="#" class="action appr">🚀 شغّل Daily Run · approval</a>
+              <a href="#" class="action ro">📊 أعرض الصفقات المعرضة · read-only</a>
+              <a href="#" class="action ro">📡 افتح Market Radar · read-only</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg user">
+          <div class="avatar user">س</div>
+          <div class="bubble">لماذا حُظرت الحملة بسبب PDPL؟</div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar bot">D</div>
+          <div class="bubble">
+            <strong>حُظرت 18 رسالة.</strong> السبب الرئيسي: لم يسجل المتلقي موافقة صريحة (no_consent).
+            هذا حماية لك من غرامات PDPL ولسمعة شركتك. كل عملية حظر مسجلة في Trust Center للمراجعة.
+            <div class="citations">
+              <span class="conf">conf 0.95</span>
+              <span>compliance.consent_ledger</span>
+              <span>risk_engine</span>
+            </div>
+            <div class="actions-row">
+              <a href="#" class="action ro">📋 أعرض القائمة الكاملة · read-only</a>
+              <a href="#" class="action appr">⚙️ كيف أحصل على lawful basis · approval</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg user">
+          <div class="avatar user">س</div>
+          <div class="bubble">كم متوقع pipeline في 30 يوم القادمة؟</div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar bot">D</div>
+          <div class="bubble">
+            توقعات 30 يوم القادمة:
+            <ul style="margin:6px 18px;padding:0">
+              <li>✨ <strong>أفضل حالة:</strong> 1,010,000 ريال</li>
+              <li>📊 <strong>الأرجح:</strong> 615,000 ريال</li>
+              <li>⚠️ <strong>أسوأ حالة:</strong> 280,000 ريال</li>
+            </ul>
+            الفرق بين الأفضل والأرجح يعتمد على إغلاق صفقتين معلقتين هذا الأسبوع.
+            <div class="citations">
+              <span class="conf">conf 0.78</span>
+              <span>revenue_science.forecast</span>
+            </div>
+            <div class="actions-row">
+              <a href="#" class="action ro">📈 أعرض Forecast كامل · read-only</a>
+              <a href="#" class="action ro">🎯 ما الصفقات المؤثرة؟ · read-only</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg user">
+          <div class="avatar user">س</div>
+          <div class="bubble">أوقف autopilot</div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar bot">D</div>
+          <div class="bubble">
+            تأكيد: إيقاف Autopilot سيلغي كل tasks الآلية المعلقة + لن يحصل تواصل خارجي حتى تعيد تشغيله يدوياً.
+            <div class="actions-row">
+              <a href="#" class="action auto">⏸ نعم، أوقف Autopilot · autonomous action</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>15 intents يفهمها الـ Copilot</h2>
+      <div class="sub">classifier deterministic بدون LLM — يعطيك ثقة في فهمك للسؤال</div>
+      <div class="intents">
+        <div class="intent"><div class="id">what_to_do_today</div><div class="desc">ماذا أفعل اليوم — الأولويات + القرارات</div></div>
+        <div class="intent"><div class="id">explain_metric</div><div class="desc">اشرح رقم/مقياس في اللوحة</div></div>
+        <div class="intent"><div class="id">show_pipeline</div><div class="desc">عرض pipeline الصفقات الحالية</div></div>
+        <div class="intent"><div class="id">show_at_risk_deals</div><div class="desc">صفقات معرضة للخطر</div></div>
+        <div class="intent"><div class="id">show_revenue_leaks</div><div class="desc">أين المال يتسرب</div></div>
+        <div class="intent"><div class="id">compare_sectors</div><div class="desc">مقارنة بين قطاعات</div></div>
+        <div class="intent"><div class="id">find_lookalikes</div><div class="desc">شركات تشبه أفضل عملائنا</div></div>
+        <div class="intent"><div class="id">draft_outreach</div><div class="desc">كتابة رسالة مخصصة</div></div>
+        <div class="intent"><div class="id">generate_qbr</div><div class="desc">توليد QBR ربعي/شهري</div></div>
+        <div class="intent"><div class="id">generate_proof_pack</div><div class="desc">توليد Proof Pack شهري</div></div>
+        <div class="intent"><div class="id">explain_compliance_block</div><div class="desc">لماذا حُظر هذا التواصل</div></div>
+        <div class="intent"><div class="id">show_market_radar</div><div class="desc">حالة السوق والإشارات الجديدة</div></div>
+        <div class="intent"><div class="id">forecast_revenue</div><div class="desc">توقعات 30/60/90 يوم</div></div>
+        <div class="intent"><div class="id">stop_or_disable</div><div class="desc">إيقاف autopilot أو حملة</div></div>
+        <div class="intent"><div class="id">general_help</div><div class="desc">مساعدة عامة</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>9 إجراءات آمنة (Safe Actions)</h2>
+      <div class="sub">كل إجراء له safety class — read_only / draft_only / write_with_approval / autonomous. Copilot لا ينفذ شيئاً بدون أن يمر عبر نفس الـ Orchestrator policies.</div>
+      <div class="api-block">
+SafeAction.run_daily_growth      <span style="color:#fde68a">[write_with_approval]</span>  شغّل Autopilot Daily Run<br>
+SafeAction.show_at_risk          <span style="color:#a7f3d0">[read_only]</span>             أعرض الصفقات المعرضة<br>
+SafeAction.generate_proof_pack   <span style="color:#a7f3d0">[read_only]</span>             ولّد Proof Pack هذا الشهر<br>
+SafeAction.draft_multi_thread    <span style="color:#fde68a">[draft_only]</span>            اكتب multi-thread للجامدة<br>
+SafeAction.show_market_radar     <span style="color:#a7f3d0">[read_only]</span>             افتح Market Radar<br>
+SafeAction.explain_block         <span style="color:#a7f3d0">[read_only]</span>             اشرح PDPL block<br>
+SafeAction.forecast_30d          <span style="color:#a7f3d0">[read_only]</span>             توقعات 30 يوم<br>
+SafeAction.pause_autopilot       <span style="color:#fecaca">[autonomous]</span>            أوقف Autopilot<br>
+SafeAction.find_lookalikes       <span style="color:#a7f3d0">[read_only]</span>             ابحث عن lookalikes
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🔌 API: استخدم Copilot في تطبيقاتك</h2>
+      <div class="api-block">
+POST <span style="color:#fbbf24">/api/v1/revenue-os/copilot/ask</span><br>
+&nbsp;&nbsp;{ "question_ar": "وش أسوي اليوم؟", "customer_id": "c1", "context": {...} }<br>
+&nbsp;&nbsp;<span style="color:#94a3b8">→ { intent, answer_ar, citations, confidence,</span><br>
+&nbsp;&nbsp;<span style="color:#94a3b8">    follow_up_questions, proposed_actions }</span><br>
+<br>
+GET  <span style="color:#fbbf24">/api/v1/revenue-os/copilot/intents</span>     <span style="color:#94a3b8">// 15 intents catalog</span><br>
+GET  <span style="color:#fbbf24">/api/v1/revenue-os/copilot/actions</span>     <span style="color:#94a3b8">// 9 safe actions</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

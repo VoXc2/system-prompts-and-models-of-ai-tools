@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Client Acquisition Simulator — احسب فرصتك في السوق السعودي</title>
+  <meta name="description" content="أدخل قطاعك، مدينتك، حجم صفقتك، وهدف إيرادك — Dealix يحسب لك كم lead تحتاج، كم اجتماع، كم شهر، وأي باقة تناسبك." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg);color:var(--brand);line-height:1.7}
+    .wrap{max-width:1100px;margin:0 auto;padding:48px 24px}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:14px}
+    .hero{text-align:center;margin:24px 0 40px}
+    .hero h1{font-size:clamp(32px,5vw,48px);margin:8px 0 12px;line-height:1.15}
+    .hero p{font-size:17px;color:var(--muted);max-width:640px;margin:0 auto}
+    .hero .badge{display:inline-block;background:#dbeafe;color:#1e40af;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:8px}
+
+    .grid{display:grid;grid-template-columns:1fr 1.3fr;gap:24px}
+    @media(max-width:880px){.grid{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px}
+    .card h2{font-size:20px;margin-bottom:18px}
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    @media(max-width:520px){.row{grid-template-columns:1fr}}
+    label{display:block;font-size:13px;font-weight:600;color:var(--brand);margin-bottom:6px}
+    input,select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-family:inherit;font-size:15px;background:#fff;transition:border-color 0.15s}
+    input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(34,211,238,0.1)}
+    .help{font-size:12px;color:var(--muted);margin-top:4px}
+
+    .calc-btn{width:100%;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:14px;border:0;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;transition:transform 0.15s;margin-top:12px}
+    .calc-btn:hover{transform:translateY(-1px)}
+
+    .result{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:18px;padding:28px;display:none}
+    .result.shown{display:block}
+    .result h2{color:var(--accent)}
+    .result-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+    .result-kpi .k{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:14px;text-align:center}
+    .result-kpi .v{font-size:24px;font-weight:700;color:var(--accent)}
+    .result-kpi .l{font-size:11px;opacity:0.8;text-transform:uppercase;margin-top:4px}
+
+    .funnel-cmp{margin-top:18px}
+    .funnel-row{display:grid;grid-template-columns:1fr auto auto;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1);font-size:14px;align-items:center}
+    .funnel-row:last-child{border:0}
+    .funnel-row .baseline{color:rgba(255,255,255,0.6);text-decoration:line-through}
+    .funnel-row .with-dx{color:var(--accent);font-weight:700}
+
+    .plan-rec{background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.3);border-radius:12px;padding:18px;margin-top:18px}
+    .plan-rec .pname{font-size:18px;font-weight:700;color:var(--accent);margin-bottom:4px}
+    .plan-rec .pprice{font-size:14px;opacity:0.85}
+    .plan-rec .why{font-size:13px;line-height:1.7;margin-top:8px;opacity:0.9}
+
+    .roi-banner{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);border-radius:10px;padding:14px;margin-top:14px;text-align:center}
+    .roi-banner .x{font-size:28px;font-weight:800;color:var(--success);font-family:'Inter',sans-serif}
+    .roi-banner .l{font-size:13px;opacity:0.85;margin-top:2px}
+
+    .risks{margin-top:18px}
+    .risks li{font-size:13px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);opacity:0.9}
+    .risks li:last-child{border:0}
+    .risks li::before{content:"⚠ ";color:#fbbf24}
+
+    .assumptions{font-size:11px;opacity:0.7;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.6}
+
+    .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+    .empty .ico{font-size:48px;margin-bottom:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+    <div class="hero">
+      <div class="badge">🎯 محاكاة دقيقة بناءً على Pulse القطاعي</div>
+      <h1>Client Acquisition Simulator</h1>
+      <p>أدخل أرقام عملك — Dealix يحسب لك بدقة كم lead، كم اجتماع، كم شهر للوصول لهدفك، وأي باقة فعلاً تناسبك.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>🧮 أرقامك</h2>
+        <div class="row">
+          <div>
+            <label>القطاع</label>
+            <select id="sector">
+              <option value="real_estate">تطوير عقاري</option>
+              <option value="clinics">عيادات طبية</option>
+              <option value="logistics">شحن ولوجستيات</option>
+              <option value="hospitality">فنادق وضيافة</option>
+              <option value="restaurants">مطاعم/كاترينج</option>
+              <option value="training">مراكز تدريب</option>
+              <option value="agencies">وكالات تسويق</option>
+              <option value="construction">مقاولات</option>
+              <option value="saas">SaaS</option>
+              <option value="events">حفلات/قاعات</option>
+            </select>
+          </div>
+          <div>
+            <label>المدينة</label>
+            <select id="city">
+              <option>الرياض</option><option>جدة</option><option>الدمام</option>
+              <option>الخبر</option><option>مكة</option><option>المدينة</option>
+              <option>أبها</option><option>القصيم</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>متوسط قيمة الصفقة (ريال)</label>
+            <input id="avg_deal" type="number" value="50000" min="500" step="1000">
+            <div class="help">صفقتك المتوسطة — قبل الضريبة</div>
+          </div>
+          <div>
+            <label>هدف الإيراد (ريال)</label>
+            <input id="target_revenue" type="number" value="500000" min="10000" step="10000">
+            <div class="help">المبلغ اللي تبيه</div>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>الفترة (أيام)</label>
+            <input id="period" type="number" value="90" min="30" max="365">
+            <div class="help">90 يوم = ربع سنة</div>
+          </div>
+          <div>
+            <label>close rate الحالي (اختياري)</label>
+            <input id="close_rate" type="number" placeholder="مثلاً 0.20" step="0.01" min="0" max="1">
+            <div class="help">إذا تعرفه — وإلا سنستخدم متوسط القطاع</div>
+          </div>
+        </div>
+        <button class="calc-btn" onclick="run()">احسب فرصتي →</button>
+        <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px">لا حساب · لا email · مجاني · النتيجة فورية</p>
+      </div>
+
+      <div class="card" style="padding:0">
+        <div id="empty" class="empty">
+          <div class="ico">📊</div>
+          <h2 style="font-size:18px;color:var(--brand)">جاهز لرؤية أرقامك؟</h2>
+          <p>املأ النموذج ↑ — النتيجة فورية بناءً على بيانات Pulse الفعلية لقطاعك.</p>
+        </div>
+        <div id="result" class="result" style="margin:0">
+          <h2>📈 النتيجة لقطاعك</h2>
+          <p style="font-size:14px;opacity:0.9;margin-top:4px" id="result-sub">—</p>
+          <div class="result-kpi" id="kpis"></div>
+          <h3 style="font-size:14px;color:var(--accent);margin-top:18px">⚖️ بدون Dealix vs مع Dealix</h3>
+          <div class="funnel-cmp" id="funnel"></div>
+          <div class="plan-rec" id="plan-rec"></div>
+          <div class="roi-banner" id="roi"></div>
+          <h3 style="font-size:13px;color:var(--accent);margin-top:14px">⚠️ مخاطر يجب اعتبارها</h3>
+          <ul class="risks" id="risks"></ul>
+          <div class="assumptions" id="assumptions"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SECTOR_BENCH = {
+      real_estate: {reply:0.074, meeting:0.32, win:0.18, cycle:45},
+      clinics: {reply:0.138, meeting:0.40, win:0.28, cycle:28},
+      logistics: {reply:0.068, meeting:0.30, win:0.22, cycle:35},
+      hospitality: {reply:0.124, meeting:0.38, win:0.24, cycle:30},
+      restaurants: {reply:0.115, meeting:0.42, win:0.30, cycle:21},
+      training: {reply:0.112, meeting:0.36, win:0.25, cycle:35},
+      agencies: {reply:0.059, meeting:0.28, win:0.20, cycle:45},
+      construction: {reply:0.032, meeting:0.25, win:0.15, cycle:90},
+      saas: {reply:0.047, meeting:0.30, win:0.20, cycle:60},
+      events: {reply:0.153, meeting:0.45, win:0.35, cycle:18}
+    };
+    const LIFT = {reply:2.4, meeting:1.4, win:1.2};
+
+    function fmt(n){return Math.round(n).toLocaleString('en-US')}
+
+    function run(){
+      const sector = document.getElementById('sector').value;
+      const city = document.getElementById('city').value;
+      const dealVal = parseFloat(document.getElementById('avg_deal').value);
+      const targetRev = parseFloat(document.getElementById('target_revenue').value);
+      const period = parseInt(document.getElementById('period').value);
+      const customClose = parseFloat(document.getElementById('close_rate').value);
+
+      const bench = {...SECTOR_BENCH[sector]};
+      if(customClose && !isNaN(customClose)) bench.win = customClose;
+
+      function funnel(withDx){
+        const reply = bench.reply * (withDx ? LIFT.reply : 1);
+        const meet = bench.meeting * (withDx ? LIFT.meeting : 1);
+        const win = bench.win * (withDx ? LIFT.win : 1);
+        const deals = Math.max(1, Math.round(targetRev / dealVal));
+        const props = Math.round(deals / Math.max(0.05, win));
+        const meets = Math.round(props / Math.max(0.10, meet));
+        const replies = Math.round(meets * 1.6);
+        const leads = Math.round(replies / Math.max(0.005, reply));
+        return {leads, replies, meets, props, deals, cycle: bench.cycle * (withDx ? 0.8 : 1)};
+      }
+
+      const baseline = funnel(false);
+      const withDx = funnel(true);
+
+      // Plan
+      let plan;
+      if(dealVal < 5000 || withDx.leads < 200) plan = {name:'Starter', price:999, why:'حجم صفقتك يناسب Starter — تبدأ بسرعة + ترفّع لاحقاً.'};
+      else if(dealVal < 50000 || withDx.leads < 1000) plan = {name:'Growth', price:2999, why:'الباقة الأنسب — autopilot + WhatsApp chain + AI personalization.'};
+      else plan = {name:'Scale', price:7999, why:'صفقات كبيرة + multi-sector + integrations + customer success.'};
+
+      const months = Math.max(1, period/30);
+      const cost = plan.price * months;
+      const incrRev = (withDx.deals - baseline.deals) * dealVal;
+      const roi = (incrRev / cost).toFixed(1);
+
+      document.getElementById('empty').style.display = 'none';
+      document.getElementById('result').classList.add('shown');
+      document.getElementById('result-sub').textContent =
+        `${city} · ${sector} · هدف ${fmt(targetRev)} ريال خلال ${period} يوم`;
+
+      document.getElementById('kpis').innerHTML = `
+        <div class="k"><div class="v">${fmt(withDx.leads)}</div><div class="l">leads مطلوبة</div></div>
+        <div class="k"><div class="v">${fmt(withDx.meets)}</div><div class="l">اجتماع</div></div>
+        <div class="k"><div class="v">${fmt(withDx.deals)}</div><div class="l">صفقة</div></div>
+      `;
+
+      document.getElementById('funnel').innerHTML = `
+        <div class="funnel-row"><span>leads مكتشفة</span><span class="baseline">${fmt(baseline.leads)}</span><span class="with-dx">${fmt(withDx.leads)}</span></div>
+        <div class="funnel-row"><span>ردود متوقعة</span><span class="baseline">${fmt(baseline.replies)}</span><span class="with-dx">${fmt(withDx.replies)}</span></div>
+        <div class="funnel-row"><span>اجتماعات</span><span class="baseline">${fmt(baseline.meets)}</span><span class="with-dx">${fmt(withDx.meets)}</span></div>
+        <div class="funnel-row"><span>عروض</span><span class="baseline">${fmt(baseline.props)}</span><span class="with-dx">${fmt(withDx.props)}</span></div>
+        <div class="funnel-row"><span>صفقات</span><span class="baseline">${fmt(baseline.deals)}</span><span class="with-dx">${fmt(withDx.deals)}</span></div>
+        <div class="funnel-row"><span>متوسط الدورة (يوم)</span><span class="baseline">${fmt(baseline.cycle)}</span><span class="with-dx">${fmt(withDx.cycle)}</span></div>
+      `;
+
+      document.getElementById('plan-rec').innerHTML = `
+        <div class="pname">${plan.name} · ${plan.price.toLocaleString()} ريال/شهر</div>
+        <div class="pprice">إجمالي ${fmt(cost)} ريال على ${months.toFixed(1)} شهر</div>
+        <div class="why">${plan.why}</div>
+      `;
+
+      document.getElementById('roi').innerHTML = `
+        <div class="x">${roi}×</div>
+        <div class="l">العائد المتوقع — ${fmt(incrRev)} ريال إيراد إضافي مقابل ${fmt(cost)} ريال تكلفة</div>
+      `;
+
+      const risks = [];
+      if(period < 30) risks.push('الفترة قصيرة (<30 يوم) — توقع رؤية النتائج بعد 45-60 يوم.');
+      if(dealVal < 1000) risks.push('صفقة <1000 ريال — تأكد من unit economics قبل الاستثمار.');
+      if(withDx.leads > 5000) risks.push(`${fmt(withDx.leads)} lead — ابني capacity الفريق أولاً.`);
+      if(!risks.length) risks.push('الأرقام معقولة لقطاعك — جاهز للبدء.');
+      document.getElementById('risks').innerHTML = risks.map(r=>`<li>${r}</li>`).join('');
+
+      document.getElementById('assumptions').innerHTML =
+        `<strong>افتراضات:</strong> Dealix lift 2.4× في reply rate (مبني على pilot data من 47 شركة سعودية). ` +
+        `benchmarks القطاع من Saudi B2B Pulse — يُحدَّث ربع سنوي. الأرقام indicative، ليست ضماناً قانونياً.`;
+
+      // Smooth scroll on mobile
+      if(window.innerWidth < 880) document.getElementById('result').scrollIntoView({behavior:'smooth'});
+    }
+  </script>
+</body>
+</html>

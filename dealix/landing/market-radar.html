@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saudi Market Radar — رصد السوق B2B السعودي حياً</title>
+  <meta name="description" content="رادار السوق السعودي — يرصد 16 إشارة شراء، يبني pulse للقطاعات، heatmap للمدن، ويرتب الفرص حسب Why-Now score." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--warn:#f59e0b;--danger:#dc2626;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--brand);line-height:1.7}
+    .wrap{max-width:1200px;margin:0 auto;padding:64px 24px}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:14px}
+    .hero{background:linear-gradient(135deg,#1e1b4b,#312e81,#1e3a8a);color:#fff;border-radius:24px;padding:60px 40px;text-align:center;margin:24px 0 48px;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(34,211,238,0.3),transparent 60%);pointer-events:none}
+    .hero > *{position:relative;z-index:1}
+    .hero .badge{background:rgba(34,211,238,0.2);color:var(--accent);padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;display:inline-block;margin-bottom:18px;border:1px solid rgba(34,211,238,0.4)}
+    .hero h1{font-size:clamp(34px,5vw,52px);margin:0 0 14px}
+    .hero p{font-size:18px;opacity:0.92;max-width:680px;margin:0 auto}
+
+    .section{margin:48px 0}
+    .section h2{font-size:26px;margin-bottom:8px}
+    .section .sub{color:var(--muted);font-size:16px;margin-bottom:24px}
+
+    .signals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .signal-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px}
+    .signal-card .ico{font-size:24px;margin-bottom:8px}
+    .signal-card .nm{font-weight:700;color:var(--brand);font-size:14px}
+    .signal-card .desc{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.6}
+    .signal-card .weight{display:inline-block;font-size:10px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-weight:700;margin-top:8px;letter-spacing:0.5px}
+
+    .map-wrap{background:linear-gradient(135deg,#0f172a,#1e3a8a);border-radius:18px;padding:32px;color:#fff}
+    .cities{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    @media(max-width:760px){.cities{grid-template-columns:repeat(2,1fr)}}
+    .city{padding:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:12px;text-align:center;position:relative;overflow:hidden}
+    .city .nm{font-weight:700;font-size:15px}
+    .city .vl{font-size:30px;font-weight:800;color:var(--accent);margin-top:4px}
+    .city .lvl{font-size:11px;opacity:0.75;margin-top:2px}
+    .city.blazing::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(220,38,38,0.3),transparent 70%);pointer-events:none}
+    .city.hot::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(245,158,11,0.25),transparent 70%);pointer-events:none}
+    .city.warm::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(34,211,238,0.15),transparent 70%);pointer-events:none}
+
+    .opp-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+    .opp-table th,.opp-table td{padding:14px 16px;text-align:right;border-bottom:1px solid var(--border)}
+    .opp-table th{background:#f8fafc;font-weight:700;font-size:13px;color:var(--brand);text-transform:uppercase;letter-spacing:0.5px}
+    .opp-table tbody tr:last-child td{border-bottom:0}
+    .opp-table .score{font-weight:700;color:var(--brand)}
+    .opp-table .score.hot{color:var(--danger)}
+    .opp-table .channel{display:inline-block;background:#ecfdf5;color:#047857;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+    .opp-table .channel.email{background:#dbeafe;color:#1e40af}
+    .opp-table .channel.linkedin{background:#ddd6fe;color:#5b21b6}
+
+    .pulse-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+    .pulse-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+    .pulse-card .nm{font-weight:700;color:var(--brand);font-size:15px}
+    .pulse-card .trend{font-size:13px;font-weight:700;margin-top:4px}
+    .pulse-card .trend.rising{color:var(--success)}
+    .pulse-card .trend.cooling{color:var(--danger)}
+    .pulse-card .trend.steady{color:var(--muted)}
+    .pulse-card .stats{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+    .pulse-card .angle{font-size:12px;color:#475569;margin-top:6px;line-height:1.6;font-style:italic}
+
+    .api-block{background:#0f172a;color:#22d3ee;border-radius:12px;padding:20px;font-family:monospace;font-size:13px;line-height:1.8;margin-top:20px;overflow-x:auto}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+    <div class="hero">
+      <div class="badge">📡 Live · Saudi-First</div>
+      <h1>Saudi Market Radar</h1>
+      <p>يرصد 16 نوع إشارة شراء عبر السوق السعودي، يبني pulse للقطاعات، heatmap للمدن، ويرتب الفرص حسب Why-Now score — كل ساعة.</p>
+    </div>
+
+    <div class="section">
+      <h2>16 إشارة شراء يلتقطها الرادار</h2>
+      <div class="sub">من LinkedIn jobs، مناقصات حكومية، web diffs، إعلانات، تمويل، فعاليات، ومراجعات.</div>
+      <div class="signals-grid">
+        <div class="signal-card"><div class="ico">💼</div><div class="nm">hiring_sales_rep</div><div class="desc">يوظفون SDR/AE — جاهزون لأدوات</div><span class="weight">weight 9.0</span></div>
+        <div class="signal-card"><div class="ico">📢</div><div class="nm">hiring_marketing</div><div class="desc">يبنون فريق تسويق</div><span class="weight">weight 7.0</span></div>
+        <div class="signal-card"><div class="ico">🏢</div><div class="nm">new_branch_opened</div><div class="desc">افتتاح فرع جديد — urgency 60-90 يوم</div><span class="weight">weight 8.5</span></div>
+        <div class="signal-card"><div class="ico">🎉</div><div class="nm">new_service_launched</div><div class="desc">go-to-market لخدمة جديدة</div><span class="weight">weight 7.5</span></div>
+        <div class="signal-card"><div class="ico">📅</div><div class="nm">booking_page_added</div><div class="desc">جاهزون لاستقبال leads</div><span class="weight">weight 7.0</span></div>
+        <div class="signal-card"><div class="ico">💬</div><div class="nm">whatsapp_business_added</div><div class="desc">قناة WhatsApp مفتوحة</div><span class="weight">weight 6.5</span></div>
+        <div class="signal-card"><div class="ico">📈</div><div class="nm">ads_volume_increased</div><div class="desc">+40% إعلانات → نمو</div><span class="weight">weight 6.5</span></div>
+        <div class="signal-card"><div class="ico">🎨</div><div class="nm">website_redesigned</div><div class="desc">إعادة تصميم — استثمار جديد</div><span class="weight">weight 5.5</span></div>
+        <div class="signal-card"><div class="ico">🎪</div><div class="nm">exhibition_participation</div><div class="desc">في معرض — pipeline موسمي</div><span class="weight">weight 7.5</span></div>
+        <div class="signal-card"><div class="ico">📋</div><div class="nm">tender_published</div><div class="desc">مناقصة حكومية — buying intent مؤكد</div><span class="weight">weight 9.5</span></div>
+        <div class="signal-card"><div class="ico">👤</div><div class="nm">leadership_change</div><div class="desc">قائد جديد — quick wins</div><span class="weight">weight 6.0</span></div>
+        <div class="signal-card"><div class="ico">💰</div><div class="nm">funding_round</div><div class="desc">جولة تمويل — ميزانية متاحة</div><span class="weight">weight 8.0</span></div>
+        <div class="signal-card"><div class="ico">📉</div><div class="nm">negative_review_spike</div><div class="desc">مشاكل خدمة — pain</div><span class="weight">weight 5.0</span></div>
+        <div class="signal-card"><div class="ico">📊</div><div class="nm">sector_pulse_rising</div><div class="desc">القطاع صاعد في Pulse</div><span class="weight">weight 4.5</span></div>
+        <div class="signal-card"><div class="ico">🇸🇦</div><div class="nm">vision2030_alignment</div><div class="desc">متوائم مع رؤية 2030</div><span class="weight">weight 5.5</span></div>
+        <div class="signal-card"><div class="ico">⚙️</div><div class="nm">hiring_engineering</div><div class="desc">يوظفون مطورين — منتج جديد</div><span class="weight">weight 5.0</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🗺 Saudi Buying Intent Map</h2>
+      <div class="sub">أعلى المدن نشاطاً هذا الأسبوع — heat = volume × diversity من القطاعات</div>
+      <div class="map-wrap">
+        <div class="cities">
+          <div class="city blazing"><div class="nm">الرياض</div><div class="vl">87</div><div class="lvl">🔥 blazing · top: real_estate</div></div>
+          <div class="city hot"><div class="nm">جدة</div><div class="vl">71</div><div class="lvl">🔥 hot · top: hospitality</div></div>
+          <div class="city hot"><div class="nm">الدمام</div><div class="vl">52</div><div class="lvl">🔥 hot · top: logistics</div></div>
+          <div class="city warm"><div class="nm">الخبر</div><div class="vl">48</div><div class="lvl">🌤 warm · top: clinics</div></div>
+          <div class="city warm"><div class="nm">مكة</div><div class="vl">34</div><div class="lvl">🌤 warm · top: hospitality</div></div>
+          <div class="city"><div class="nm">المدينة</div><div class="vl">22</div><div class="lvl">cool · top: hospitality</div></div>
+          <div class="city"><div class="nm">القصيم</div><div class="vl">18</div><div class="lvl">cool · top: agriculture</div></div>
+          <div class="city"><div class="nm">أبها</div><div class="vl">14</div><div class="lvl">cool · top: tourism</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>📊 Sector Pulse — هذا الأسبوع</h2>
+      <div class="sub">9 قطاعات نشطة. كل بطاقة تعرض signals + trend + recommended Saudi sales angle.</div>
+      <div class="pulse-grid">
+        <div class="pulse-card">
+          <div class="nm">تطوير عقاري</div>
+          <div class="trend rising">↑ rising · +28% MoM</div>
+          <div class="stats">32 شركة · 64 إشارة · top: hiring_sales_rep</div>
+          <div class="angle">"تسليم 50 lead مؤهل في 60 يوم — قبل ramp-up الموظف الجديد."</div>
+        </div>
+        <div class="pulse-card">
+          <div class="nm">عيادات</div>
+          <div class="trend rising">↑ rising · +18% MoM</div>
+          <div class="stats">14 عيادة · 28 إشارة · top: whatsapp_business_added</div>
+          <div class="angle">"نقطّع no-show 40% + نزيد الحجوزات 2× عبر WhatsApp تلقائي."</div>
+        </div>
+        <div class="pulse-card">
+          <div class="nm">شحن ولوجستيات</div>
+          <div class="trend steady">→ steady</div>
+          <div class="stats">18 شركة · 24 إشارة · top: tender_published</div>
+          <div class="angle">"نسلم pre-qualification + 5 موردين بدائل قبل deadline المناقصة."</div>
+        </div>
+        <div class="pulse-card">
+          <div class="nm">فنادق وضيافة</div>
+          <div class="trend rising">↑ rising · +12% MoM</div>
+          <div class="stats">11 فندق · 17 إشارة · top: ads_volume_increased</div>
+          <div class="angle">"corporate / MICE pipeline يضيف 30%+ من الإيراد المباشر."</div>
+        </div>
+        <div class="pulse-card">
+          <div class="nm">مقاولات</div>
+          <div class="trend cooling">↓ cooling · -8% MoM</div>
+          <div class="stats">9 شركات · 11 إشارة</div>
+          <div class="angle">"تعقّب RFPs + 10 مناقصات خاصة شهرياً قبل أن تخرج للسوق."</div>
+        </div>
+        <div class="pulse-card">
+          <div class="nm">SaaS سعودي</div>
+          <div class="trend rising">↑ rising · +35% MoM</div>
+          <div class="stats">7 شركات · 22 إشارة · top: funding_round</div>
+          <div class="angle">"30 يوم لإثبات pipeline 5×. تقرير ROI جاهز للـ board."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🎯 Top Opportunities Today</h2>
+      <div class="sub">أعلى الفرص حسب Why-Now score — مرتبة + قابلة للاستهداف فوراً</div>
+      <table class="opp-table">
+        <thead>
+          <tr>
+            <th>الشركة</th>
+            <th>القطاع</th>
+            <th>المدينة</th>
+            <th>Why Now</th>
+            <th>Score</th>
+            <th>Channel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>شركة العقار الذهبي</td>
+            <td>real_estate</td>
+            <td>الرياض</td>
+            <td>SDR hire + new branch</td>
+            <td><span class="score hot">94</span></td>
+            <td><span class="channel">whatsapp</span></td>
+          </tr>
+          <tr>
+            <td>عمار المدينة للتطوير</td>
+            <td>real_estate</td>
+            <td>المدينة</td>
+            <td>tender 8M ريال · 12 يوم</td>
+            <td><span class="score hot">91</span></td>
+            <td><span class="channel email">email</span></td>
+          </tr>
+          <tr>
+            <td>عيادة الزهور التجميلية</td>
+            <td>clinics</td>
+            <td>جدة</td>
+            <td>booking page + WhatsApp Business</td>
+            <td><span class="score">82</span></td>
+            <td><span class="channel">whatsapp</span></td>
+          </tr>
+          <tr>
+            <td>تكنولوجيا اللوجستيات</td>
+            <td>logistics</td>
+            <td>الدمام</td>
+            <td>funding round 12M ريال</td>
+            <td><span class="score">76</span></td>
+            <td><span class="channel email">email</span></td>
+          </tr>
+          <tr>
+            <td>مركز التدريب الذكي</td>
+            <td>training</td>
+            <td>الرياض</td>
+            <td>hiring marketing + new service</td>
+            <td><span class="score">71</span></td>
+            <td><span class="channel linkedin">linkedin</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>🔌 API: استخدم Market Radar في تطبيقاتك</h2>
+      <div class="sub">كل البيانات متاحة عبر REST endpoints — مع HMAC webhooks للأحداث الفورية.</div>
+      <div class="api-block">
+GET <span style="color:#fbbf24">/api/v1/revenue-os/market-radar/signal-types</span><br>
+&nbsp;&nbsp;<span style="color:#94a3b8">→ list of 16 signal types Dealix tracks</span><br>
+<br>
+POST <span style="color:#fbbf24">/api/v1/revenue-os/market-radar/sectors/clinics/pulse</span><br>
+&nbsp;&nbsp;{ signals_this_week, signals_prior_week }<br>
+&nbsp;&nbsp;<span style="color:#94a3b8">→ {trend, n_companies, recommended_angle_ar}</span><br>
+<br>
+POST <span style="color:#fbbf24">/api/v1/revenue-os/market-radar/opportunities</span><br>
+&nbsp;&nbsp;{ signals, company_metadata, sector_trends, top_n }<br>
+&nbsp;&nbsp;<span style="color:#94a3b8">→ ranked opportunities with Why-Now + suggested channel</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

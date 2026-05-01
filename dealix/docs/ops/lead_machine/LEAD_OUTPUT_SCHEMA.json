@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dealix Lead Output Schema v1",
+  "description": "Canonical shape of every lead record produced by the Lead Intelligence Router. Every consumer (API, CSV export, CRM sync, landing UI) reads/writes this shape.",
+  "type": "object",
+  "required": [
+    "lead_id",
+    "company",
+    "opportunity_type",
+    "fit_score",
+    "intent_score",
+    "access_score",
+    "revenue_score",
+    "priority_score",
+    "priority_tier",
+    "risk_level",
+    "recommended_channel",
+    "next_action",
+    "compliance_note",
+    "source",
+    "source_type",
+    "reason"
+  ],
+  "properties": {
+    "lead_id": {
+      "type": "string",
+      "description": "Unique ID. Format: L-YYYY-NNNN (sequential). Example: L-2026-0042."
+    },
+    "company": {
+      "type": "object",
+      "required": ["name_en"],
+      "properties": {
+        "name_ar": { "type": ["string", "null"] },
+        "name_en": { "type": "string" },
+        "domain":  { "type": ["string", "null"], "format": "hostname" },
+        "sector":  { "type": ["string", "null"] },
+        "size_band": { "type": ["string", "null"], "enum": ["1-10", "10-50", "50-200", "200-1000", "1000+", null] },
+        "country": { "type": ["string", "null"] },
+        "city":    { "type": ["string", "null"] }
+      }
+    },
+    "opportunity_type": {
+      "type": "string",
+      "enum": [
+        "DIRECT_CUSTOMER",
+        "AGENCY_PARTNER",
+        "IMPLEMENTATION_PARTNER",
+        "REFERRAL_PARTNER",
+        "STRATEGIC_PARTNER",
+        "CONTENT_COLLABORATION",
+        "INVESTOR_OR_ADVISOR",
+        "SUPPLIER_OR_INTEGRATION",
+        "B2C_AUDIENCE"
+      ]
+    },
+    "decision_maker": {
+      "type": ["object", "null"],
+      "properties": {
+        "name":     { "type": "string" },
+        "role":     { "type": "string" },
+        "linkedin": { "type": ["string", "null"], "format": "uri" },
+        "email":    { "type": ["string", "null"] },
+        "source":   { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "weight", "evidence"],
+        "properties": {
+          "name":       { "type": "string" },
+          "weight":     { "type": "integer", "minimum": 0, "maximum": 15 },
+          "evidence":   { "type": "string" },
+          "source_url": { "type": ["string", "null"], "format": "uri" },
+          "collected_at": { "type": ["string", "null"], "format": "date-time" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "fit_score":      { "type": "integer", "minimum": 0, "maximum": 40 },
+    "intent_score":   { "type": "integer", "minimum": 0, "maximum": 30 },
+    "access_score":   { "type": "integer", "minimum": 0, "maximum": 15 },
+    "revenue_score":  { "type": "integer", "minimum": 0, "maximum": 15 },
+    "priority_score": { "type": "integer", "minimum": 0, "maximum": 100, "description": "fit + intent + access + revenue, weighted by opportunity_type" },
+    "priority_tier":  { "type": "string", "enum": ["P0", "P1", "P2", "BACKLOG"] },
+    "risk_level":     { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "BLOCKED"] },
+    "recommended_channel": {
+      "type": "string",
+      "enum": [
+        "LINKEDIN_MANUAL",
+        "EMAIL",
+        "WHATSAPP_WARM_ONLY",
+        "PARTNER_INTRO",
+        "PHONE",
+        "CONTENT_MENTION",
+        "IN_PERSON_EVENT",
+        "HOLD_FOR_APPROVAL"
+      ]
+    },
+    "message_angle": { "type": ["string", "null"], "maxLength": 280 },
+    "outreach_opening": { "type": ["string", "null"], "maxLength": 280 },
+    "follow_up_plan": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^\\+(\\d+)d$" },
+      "default": ["+2d", "+5d", "+10d"]
+    },
+    "next_action": {
+      "type": "string",
+      "enum": [
+        "RESEARCH_MORE",
+        "ENRICH_ACCOUNT",
+        "SCORE_LEAD",
+        "PREPARE_DM",
+        "PREPARE_EMAIL",
+        "PREPARE_WHATSAPP",
+        "PREPARE_PARTNER_PITCH",
+        "PREPARE_INVESTOR_NOTE",
+        "PREPARE_DEMO_FLOW",
+        "PREPARE_NEGOTIATION_RESPONSE",
+        "SEND_IF_AUTHORIZED",
+        "ASK_HUMAN_FINAL_SEND",
+        "BOOK_DEMO",
+        "REQUEST_PAYMENT",
+        "ROUTE_TO_MANUAL_PAYMENT",
+        "ONBOARD_CUSTOMER",
+        "FOLLOW_UP",
+        "STOP_CONTACT",
+        "DISQUALIFY"
+      ]
+    },
+    "reason": { "type": "string", "description": "1-line reason this lead is being targeted." },
+    "source": { "type": "string", "description": "Where the lead was discovered — url, platform, or 'llm_knowledge'." },
+    "source_type": { "type": "string", "enum": ["website", "api", "public_page", "manual", "customer_csv", "llm_knowledge"] },
+    "compliance_note": { "type": "string", "description": "Short string stating legal basis for outreach." },
+    "consent_status": { "type": "string", "enum": ["NOT_REQUIRED", "OPT_IN_NEEDED", "OPT_IN_CONFIRMED", "OPT_OUT"] },
+    "opt_out_status": { "type": "string", "enum": ["ACTIVE", "OPTED_OUT"] },
+
+    "sent_at":        { "type": ["string", "null"], "format": "date-time" },
+    "replied_at":     { "type": ["string", "null"], "format": "date-time" },
+    "reply_sentiment": { "type": ["string", "null"], "enum": ["POSITIVE", "NEUTRAL", "NEGATIVE", "OBJECTION", null] },
+    "demo_booked_at": { "type": ["string", "null"], "format": "date-time" },
+    "paid_at":        { "type": ["string", "null"], "format": "date-time" },
+    "revenue_sar":    { "type": ["number", "null"] },
+    "lost_reason":    { "type": ["string", "null"] },
+
+    "notes": { "type": ["string", "null"] }
+  }
+}

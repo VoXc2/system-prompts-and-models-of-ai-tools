@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix — حاسبة العائد ROI</title>
+  <meta name="description" content="احسب العائد المتوقع من Dealix على leads العربية في أسبوع واحد. أرقام قابلة للقياس، بدون وعود فارغة." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{--brand:#0f172a;--brand-2:#1e293b;--accent:#22d3ee;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--surface:#fff;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg)}
+    .roi-wrap{max-width:1100px;margin:0 auto;padding:64px 24px}
+    .roi-head{text-align:center;margin-bottom:40px}
+    .roi-head h1{font-size:clamp(28px,4.5vw,48px);margin:0 0 12px;color:var(--brand)}
+    .roi-head p{color:var(--muted);font-size:17px;max-width:640px;margin:0 auto;line-height:1.7}
+    .roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px}
+    @media(max-width:840px){.roi-grid{grid-template-columns:1fr}}
+    .roi-form,.roi-result{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px}
+    .roi-form h2,.roi-result h2{margin:0 0 20px;font-size:20px;color:var(--brand)}
+    .field{margin-bottom:18px}
+    .field label{display:block;font-weight:600;margin-bottom:6px;font-size:14px;color:var(--brand-2)}
+    .field input,.field select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-family:inherit;font-size:15px;background:#fff;box-sizing:border-box}
+    .field input:focus,.field select:focus{outline:0;border-color:var(--brand);box-shadow:0 0 0 3px rgba(15,23,42,.08)}
+    .field .hint{font-size:12px;color:var(--muted);margin-top:4px}
+    .metric-card{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-radius:14px;padding:18px;margin-bottom:14px}
+    .metric-card .label{color:var(--muted);font-size:13px;font-weight:500}
+    .metric-card .value{font-size:26px;font-weight:700;color:var(--brand);margin-top:4px}
+    .metric-card.highlight{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff}
+    .metric-card.highlight .label{color:#cbd5e1}
+    .metric-card.highlight .value{color:#fff;font-size:32px}
+    .metric-card .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .metric-card.highlight .sub{color:#cbd5e1}
+    .cta-row{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+    .btn{padding:13px 22px;border-radius:10px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-size:15px}
+    .btn-primary{background:var(--brand);color:#fff}
+    .btn-primary:hover{background:var(--brand-2)}
+    .btn-ghost{background:#fff;color:var(--brand);border:1px solid var(--border)}
+    .disclosure{background:#fef9c3;border:1px solid #fde68a;padding:14px 16px;border-radius:10px;font-size:13px;color:#713f12;margin-top:24px;line-height:1.6}
+    .nav{padding:18px 24px;background:#fff;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto}
+    .nav a{color:var(--brand);text-decoration:none;font-weight:600;font-size:14px}
+    .nav a:hover{color:var(--brand-2)}
+    .compare-table{margin-top:24px;width:100%;border-collapse:collapse;font-size:14px}
+    .compare-table th,.compare-table td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:right}
+    .compare-table th{background:#f8fafc;font-weight:700;color:var(--brand)}
+    .compare-table td:first-child{font-weight:600;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/">← Dealix</a>
+    <span style="display:flex;gap:18px">
+      <a href="/pricing.html">الأسعار</a>
+      <a href="/partners.html">شركاء</a>
+      <a href="/dashboard.html">حالة النظام</a>
+    </span>
+  </nav>
+
+  <div class="roi-wrap">
+    <div class="roi-head">
+      <h1>كم يستحق Pilot Dealix بأرقامكم؟</h1>
+      <p>أدخل بياناتك التشغيلية، نحسب لك التوقع المعقول للعائد خلال 7 أيام Pilot. لا وعود مضمونة — فقط منطق رياضي مبني على متوسطات السوق السعودي.</p>
+    </div>
+
+    <div class="roi-grid">
+      <div class="roi-form">
+        <h2>📥 بيانات شركتك</h2>
+
+        <div class="field">
+          <label>القطاع</label>
+          <select id="sector">
+            <option value="real_estate" data-conv="0.04" data-deal="50000">تطوير عقاري</option>
+            <option value="construction" data-conv="0.06" data-deal="30000">مقاولات</option>
+            <option value="hospitality" data-conv="0.10" data-deal="8000">فنادق / قاعات</option>
+            <option value="events" data-conv="0.15" data-deal="20000">قاعات حفلات / تأجير</option>
+            <option value="logistics" data-conv="0.08" data-deal="3000">شحن / لوجستيات</option>
+            <option value="restaurant" data-conv="0.05" data-deal="2500">مطاعم / تموين</option>
+            <option value="clinic" data-conv="0.20" data-deal="1500">عيادات</option>
+            <option value="training_center" data-conv="0.18" data-deal="2000">مراكز تدريب</option>
+            <option value="saas" data-conv="0.06" data-deal="12000">SaaS سعودي</option>
+            <option value="agency" data-conv="0.10" data-deal="6000">وكالة تسويق (شريك)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>عدد leads الشهرية الإنبوند (تقدير)</label>
+          <input type="number" id="monthly_leads" value="100" min="10" max="5000" />
+          <div class="hint">leads من website / WhatsApp / Google Ads / إعلانات</div>
+        </div>
+
+        <div class="field">
+          <label>متوسط وقت الرد الحالي (دقائق)</label>
+          <input type="number" id="response_time" value="120" min="1" max="2880" />
+          <div class="hint">من وصول الاستفسار إلى أول رد بشري</div>
+        </div>
+
+        <div class="field">
+          <label>نسبة leads المهملة بسبب التأخر (%)</label>
+          <input type="number" id="lost_pct" value="35" min="0" max="80" />
+          <div class="hint">عملاء كانوا جادين لكن سرعة الرد فقدتهم</div>
+        </div>
+
+        <div class="field">
+          <label>متوسط قيمة الصفقة (ريال)</label>
+          <input type="number" id="deal_value" value="50000" min="500" max="2000000" />
+          <div class="hint">يُحدّث تلقائياً حسب القطاع — عدّله إن كان مختلفاً</div>
+        </div>
+      </div>
+
+      <div class="roi-result">
+        <h2>📊 التوقع المعقول</h2>
+
+        <div class="metric-card">
+          <div class="label">leads إضافية تُنقذ خلال 7 أيام Pilot</div>
+          <div class="value" id="m_recovered">—</div>
+          <div class="sub">من تحسين زمن الرد فقط</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="label">demos إضافية محتملة</div>
+          <div class="value" id="m_demos">—</div>
+          <div class="sub">بناءً على معدل تحويل القطاع</div>
+        </div>
+
+        <div class="metric-card highlight">
+          <div class="label">قيمة الـ pipeline المُسترجَع</div>
+          <div class="value" id="m_pipeline">—</div>
+          <div class="sub">تقدير محافظ — نقيس الفعلي يومياً</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="label">تكلفة Pilot</div>
+          <div class="value">499 ريال</div>
+          <div class="sub">استرجاع 100% لو لم نرد على lead واحد</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="label">ROI متوقع</div>
+          <div class="value" id="m_roi">—</div>
+          <div class="sub">pipeline مُسترجَع ÷ 499</div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://calendly.com/sami-assiri11/dealix-demo">احجز Pilot 499 ريال →</a>
+          <a class="btn btn-ghost" href="/pricing.html">قارن الخطط</a>
+        </div>
+
+        <div class="disclosure">
+          <strong>شرط مهم:</strong> هذه أرقام تقديرية قائمة على متوسطات صناعة B2B السعودية. الـ Pilot يقيس الأرقام الفعلية بشركتك خلال 7 أيام. لا نضمن مبالغ معينة — نضمن استرجاع 100% لو لم نرد على lead عربي واحد.
+        </div>
+      </div>
+    </div>
+
+    <h2 style="text-align:center;margin-top:64px;font-size:24px;color:var(--brand)">مقارنة سريعة: Dealix vs الموظف البشري vs DIY</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th><th>Dealix Pilot</th><th>موظف رد جديد</th><th>DIY (أنت تشتغل)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>التكلفة الشهرية</td><td>999 ريال (Starter)</td><td>4,000-7,000 ريال + تأمينات</td><td>وقتك (8-15 ساعة/أسبوع)</td></tr>
+        <tr><td>زمن الرد</td><td>45 ثانية بالعربي</td><td>دقائق-ساعات (يحتاج راحة)</td><td>متغير</td></tr>
+        <tr><td>التشغيل</td><td>24/7</td><td>ساعات محددة</td><td>محدود</td></tr>
+        <tr><td>التأهيل والفرز</td><td>تلقائي 100%</td><td>يعتمد التدريب</td><td>يدوي</td></tr>
+        <tr><td>تقرير يومي</td><td>تلقائي</td><td>يحتاج طلب</td><td>غير موجود</td></tr>
+        <tr><td>التكامل مع CRM</td><td>HubSpot/Salesforce/Zoho/Bitrix</td><td>إدخال يدوي</td><td>غير موجود</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const sectorSelect = document.getElementById('sector');
+    const monthlyLeads = document.getElementById('monthly_leads');
+    const responseTime = document.getElementById('response_time');
+    const lostPct = document.getElementById('lost_pct');
+    const dealValue = document.getElementById('deal_value');
+
+    function fmt(n){return new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n)}
+    function fmtSAR(n){return new Intl.NumberFormat('ar-SA',{style:'currency',currency:'SAR',maximumFractionDigits:0}).format(n)}
+
+    function recompute(){
+      const conv = parseFloat(sectorSelect.options[sectorSelect.selectedIndex].dataset.conv) || 0.05;
+      const ml = Math.max(0, parseFloat(monthlyLeads.value) || 0);
+      const lost = Math.max(0, Math.min(80, parseFloat(lostPct.value) || 0)) / 100;
+      const dv = Math.max(0, parseFloat(dealValue.value) || 0);
+
+      // 7-day Pilot scaling
+      const weekLeads = ml * (7/30);
+      // Recovered = lost-by-slow-response × 70% recovery rate (Dealix replies in <60s)
+      const recovered = Math.round(weekLeads * lost * 0.70);
+      const demos = Math.round(recovered * conv);
+      const pipeline = demos * dv;
+      const roi = pipeline / 499;
+
+      document.getElementById('m_recovered').textContent = recovered;
+      document.getElementById('m_demos').textContent = demos;
+      document.getElementById('m_pipeline').textContent = fmtSAR(pipeline);
+      document.getElementById('m_roi').textContent = roi >= 1 ? `${roi.toFixed(1)}x` : '—';
+    }
+
+    // When sector changes, update default deal value
+    sectorSelect.addEventListener('change', () => {
+      const newDeal = parseFloat(sectorSelect.options[sectorSelect.selectedIndex].dataset.deal);
+      if (newDeal) dealValue.value = newDeal;
+      recompute();
+    });
+    [monthlyLeads, responseTime, lostPct, dealValue].forEach(el => {
+      el.addEventListener('input', recompute);
+    });
+    recompute();
+  </script>
+</body>
+</html>

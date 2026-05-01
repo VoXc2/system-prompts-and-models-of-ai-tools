@@ -1,0 +1,323 @@
+{
+  "$defs": {
+    "BilingualMemo": {
+      "additionalProperties": false,
+      "description": "The board-grade memo shipped with the pack.",
+      "properties": {
+        "title_ar": {
+          "title": "Title Ar",
+          "type": "string"
+        },
+        "title_en": {
+          "title": "Title En",
+          "type": "string"
+        },
+        "body_ar": {
+          "title": "Body Ar",
+          "type": "string"
+        },
+        "body_en": {
+          "title": "Body En",
+          "type": "string"
+        },
+        "executive_summary_ar": {
+          "title": "Executive Summary Ar",
+          "type": "string"
+        },
+        "executive_summary_en": {
+          "title": "Executive Summary En",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title_ar",
+        "title_en",
+        "body_ar",
+        "body_en",
+        "executive_summary_ar",
+        "executive_summary_en"
+      ],
+      "title": "BilingualMemo",
+      "type": "object"
+    },
+    "EvidenceSource": {
+      "additionalProperties": false,
+      "description": "An external or internal source consulted during the decision.",
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uri"
+        },
+        "excerpt": {
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "content_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Hash"
+        },
+        "retrieved_at": {
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "freshness_window_hours": {
+          "default": 24,
+          "title": "Freshness Window Hours",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "source",
+        "excerpt"
+      ],
+      "title": "EvidenceSource",
+      "type": "object"
+    },
+    "PromptRecord": {
+      "additionalProperties": false,
+      "description": "Record of a prompt template used during the decision.",
+      "properties": {
+        "template_name": {
+          "title": "Template Name",
+          "type": "string"
+        },
+        "template_version": {
+          "default": "1.0",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "rendered_length": {
+          "default": 0,
+          "title": "Rendered Length",
+          "type": "integer"
+        },
+        "system_prompt_present": {
+          "default": false,
+          "title": "System Prompt Present",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "template_name"
+      ],
+      "title": "PromptRecord",
+      "type": "object"
+    },
+    "ToolCallRecord": {
+      "additionalProperties": false,
+      "description": "Record of a tool invocation during the decision process.\n\nCritically, we distinguish `intended_action` (what the agent said it would do)\nfrom `actual_action` (what actually happened) — this drives the tool verification\nledger in the Trust Plane.",
+      "properties": {
+        "tool_name": {
+          "title": "Tool Name",
+          "type": "string"
+        },
+        "intended_action": {
+          "title": "Intended Action",
+          "type": "string"
+        },
+        "actual_action": {
+          "title": "Actual Action",
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": true,
+          "title": "Inputs",
+          "type": "object"
+        },
+        "outputs": {
+          "additionalProperties": true,
+          "title": "Outputs",
+          "type": "object"
+        },
+        "side_effects": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Side Effects",
+          "type": "array"
+        },
+        "verification_status": {
+          "default": "pending",
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "contradiction_flag": {
+          "default": false,
+          "title": "Contradiction Flag",
+          "type": "boolean"
+        },
+        "invoked_at": {
+          "title": "Invoked At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool_name",
+        "intended_action",
+        "actual_action"
+      ],
+      "title": "ToolCallRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The full evidence pack.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "pack_id": {
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "decision_id": {
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "default": "default",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "entity_id": {
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "agent_name": {
+      "title": "Agent Name",
+      "type": "string"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model"
+    },
+    "model_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Version"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/EvidenceSource"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "tool_calls": {
+      "items": {
+        "$ref": "#/$defs/ToolCallRecord"
+      },
+      "title": "Tool Calls",
+      "type": "array"
+    },
+    "prompts": {
+      "items": {
+        "$ref": "#/$defs/PromptRecord"
+      },
+      "title": "Prompts",
+      "type": "array"
+    },
+    "data_freshness_window_hours": {
+      "default": 24,
+      "title": "Data Freshness Window Hours",
+      "type": "integer"
+    },
+    "reviewer_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewer Id"
+    },
+    "reviewed_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewed At"
+    },
+    "memo": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BilingualMemo"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "trace_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Trace Id"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_id",
+    "entity_id",
+    "agent_name"
+  ],
+  "title": "EvidencePack",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dealix.sa/schemas/evidence_pack.schema.json"
+}

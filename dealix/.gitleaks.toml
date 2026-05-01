@@ -1,0 +1,64 @@
+# ═══════════════════════════════════════════════════════════════
+# Gitleaks configuration
+# Extends default rules with project-specific patterns
+# ═══════════════════════════════════════════════════════════════
+
+title = "AI Company Saudi — Gitleaks Config"
+
+[extend]
+# Extend default rules
+useDefault = true
+
+[[rules]]
+id = "anthropic-api-key"
+description = "Anthropic API key"
+regex = '''sk-ant-api\d{2}-[A-Za-z0-9_-]{80,}'''
+tags = ["key", "anthropic"]
+
+[[rules]]
+id = "deepseek-api-key"
+description = "DeepSeek API key"
+regex = '''sk-[a-f0-9]{32}'''
+tags = ["key", "deepseek"]
+
+[[rules]]
+id = "groq-api-key"
+description = "Groq API key"
+regex = '''gsk_[A-Za-z0-9]{40,}'''
+tags = ["key", "groq"]
+
+[[rules]]
+id = "google-api-key"
+description = "Google API key"
+regex = '''AIza[0-9A-Za-z_-]{35}'''
+tags = ["key", "google"]
+
+[[rules]]
+id = "glm-zai-key"
+description = "GLM (Z.ai) API key"
+regex = '''[a-f0-9]{32}\.[A-Za-z0-9]{16}'''
+tags = ["key", "glm"]
+
+[[rules]]
+id = "hubspot-access-token"
+description = "HubSpot Access Token"
+regex = '''pat-[a-z0-9]{2,4}-[a-f0-9-]{36}'''
+tags = ["key", "hubspot"]
+
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''\.env\.example$''',
+    '''\.gitleaks\.toml$''',
+    '''\.secrets\.baseline$''',
+    '''tests/fixtures/.*''',
+    '''docs/.*\.md$''',
+    '''scripts/infra/setup_uptimerobot\.sh$''',
+]
+
+regexes = [
+    '''sk-placeholder''',
+    '''your-.*-key''',
+    '''change-me''',
+    '''example-.*''',
+]

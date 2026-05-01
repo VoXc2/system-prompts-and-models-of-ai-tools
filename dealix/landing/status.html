@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>حالة خدمات Dealix — Service Readiness Matrix</title>
+  <meta name="description" content="صفحة الحالة العامة لـ Dealix: كل خدمة، حالتها الحقيقية (Live / Partial / Pilot / Target)، الوصف، وآخر تحديث. شفافية مُطلقة حول ما نشغّله فعلياً." />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:title" content="Dealix — حالة الخدمات المباشرة" />
+  <meta property="og:description" content="شفافية مطلقة حول كل خدمة في Dealix — حيّة أم قيد التطوير أم في خارطة الطريق." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="3" y="3" width="26" height="26" rx="7" fill="%230f172a"/><path d="M10 10h7a6 6 0 0 1 0 12h-7z" fill="none" stroke="%2322d3ee" stroke-width="2.5" stroke-linejoin="round"/><circle cx="23" cy="22" r="2" fill="%2322d3ee"/></svg>' />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a href="#main" class="sr-only skip-link">تخطَّ إلى المحتوى الرئيسي</a>
+
+  <header class="nav" role="banner">
+    <div class="container nav__inner">
+      <a href="/" class="nav__brand" aria-label="Dealix — الصفحة الرئيسية">
+        <svg class="nav__logo" viewBox="0 0 40 40" aria-hidden="true" fill="none">
+          <rect x="2" y="2" width="36" height="36" rx="9" fill="currentColor" opacity="0.08"/>
+          <path d="M12 12h10a8 8 0 0 1 0 16H12z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="28" cy="28" r="2.5" fill="currentColor"/>
+        </svg>
+        <span class="nav__wordmark">Dealix</span>
+      </a>
+      <nav class="nav__links" aria-label="القائمة الرئيسية">
+        <a href="/#pillars">لماذا Dealix</a>
+        <a href="/#sectors">القطاعات</a>
+        <a href="/#how">كيف يعمل</a>
+        <a href="/#trust">الثقة</a>
+        <a href="/status.html" class="nav__status-link is-active"><span class="pulse pulse--small" aria-hidden="true"></span>الحالة</a>
+      </nav>
+      <div class="nav__actions">
+        <button class="icon-btn" data-theme-toggle aria-label="تبديل الوضع"></button>
+        <a href="/#pilot" class="btn btn--primary btn--sm">احجز تجربة</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="status-hero">
+      <div class="container">
+        <span class="kicker">Service Readiness Matrix</span>
+        <h1 class="status-hero__title">حالة خدمات Dealix — مباشرة</h1>
+        <p class="status-hero__lede">نؤمن أن الشفافية تبني الثقة. هذه قائمة كاملة بكل خدمة في النظام، حالتها الحقيقية، وآخر تحديث. خدمة لا يمكن أن تُسوَّق كـ "Live" إلا إذا اجتازت جميع بوابات الجودة الثمانية (عقد، workflow، مقاومة إساءة، telemetry، approval، evidence، executive visibility).</p>
+
+        <div class="status-summary">
+          <div class="status-sum-card status-sum-card--live"><div class="status-sum-card__num">0</div><div class="status-sum-card__label">Live · اجتاز كل البوابات</div></div>
+          <div class="status-sum-card status-sum-card--partial"><div class="status-sum-card__num">7</div><div class="status-sum-card__label">Partial · قيد الاستكمال</div></div>
+          <div class="status-sum-card status-sum-card--partial"><div class="status-sum-card__num">1</div><div class="status-sum-card__label">Pilot · في اختبار مع الشركاء</div></div>
+          <div class="status-sum-card status-sum-card--target"><div class="status-sum-card__num">24</div><div class="status-sum-card__label">Target · في خارطة الطريق</div></div>
+          <div class="status-sum-card"><div class="status-sum-card__num">32</div><div class="status-sum-card__label">إجمالي الخدمات</div></div>
+        </div>
+
+        <p class="status-hero__lede" style="margin-top: 24px; font-size: 13.5px;">
+          آخر تحديث: <strong>2026-04-18</strong> · المصدر: <code>docs/registry/SERVICE_READINESS_MATRIX.yaml</code> · المالك: Sami Assiri
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+
+        <!-- Revenue OS -->
+        <div class="status-cat">
+          <h2>Revenue OS</h2>
+          <div class="status-list">
+            <div class="status-row"><div class="status-row__name">Lead Intake — WhatsApp</div><span class="status-pill status-pill--partial">Partial</span><div class="status-row__desc">WhatsApp inbound → Groq reply → DB store. (يحتاج OTel واختبار إساءة الحد)</div></div>
+            <div class="status-row"><div class="status-row__name">Lead Intake — Email</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">ردود البريد → parse → lead. يحتاج SendGrid inbound webhook + threading.</div></div>
+            <div class="status-row"><div class="status-row__name">Lead Intake — LinkedIn</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">LinkedIn reply via Unipile → lead. يحتاج اشتراك Unipile.</div></div>
+            <div class="status-row"><div class="status-row__name">Enrichment</div><span class="status-pill status-pill--partial">Partial</span><div class="status-row__desc">6 مصادر متكاملة كـ stubs + بيانات شركات سعودية. يحتاج مفاتيح API حقيقية.</div></div>
+            <div class="status-row"><div class="status-row__name">Qualification</div><span class="status-pill status-pill--pilot">Pilot</span><div class="status-row__desc">BANT/MEDDPICC عبر Groq في محادثات WhatsApp. happy path فقط حالياً.</div></div>
+            <div class="status-row"><div class="status-row__name">Routing</div><span class="status-pill status-pill--partial">Partial</span><div class="status-row__desc">اختيار قناة مبني على playbook (ecommerce/agency/real_estate).</div></div>
+            <div class="status-row"><div class="status-row__name">Outreach</div><span class="status-pill status-pill--partial">Partial</span><div class="status-row__desc">WhatsApp outbound مُجرَّب. Email/LinkedIn stubs. يحتاج quiet hours + opt-out.</div></div>
+            <div class="status-row"><div class="status-row__name">Proposal</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">توليد PDF quotation تلقائياً. يحتاج template + price approval flow.</div></div>
+            <div class="status-row"><div class="status-row__name">Approval</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">Multi-step approval مع timeout + escalation. يحتاج workflow engine.</div></div>
+            <div class="status-row"><div class="status-row__name">Close</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">E-signature + payment link عبر Moyasar. يحتاج تسجيل Moyasar.</div></div>
+            <div class="status-row"><div class="status-row__name">Onboarding Handoff</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">Won deal → CS agent trigger. يحتاج مواصفات CS agent.</div></div>
+          </div>
+        </div>
+
+        <!-- Partnership OS -->
+        <div class="status-cat">
+          <h2>Partnership OS</h2>
+          <div class="status-list">
+            <div class="status-row"><div class="status-row__name">Scout</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">اكتشاف الشركاء المحتملين عبر مصادر بيانات.</div></div>
+            <div class="status-row"><div class="status-row__name">Fit Score</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">Partner fit score (تقني + تجاري + استراتيجي).</div></div>
+            <div class="status-row"><div class="status-row__name">Economics</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">نموذج Revenue-share / referral / white-label.</div></div>
+            <div class="status-row"><div class="status-row__name">Activation</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">تفعيل الشريك onboarded.</div></div>
+            <div class="status-row"><div class="status-row__name">Scorecard</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">بطاقة تقييم الشريك الحيّة.</div></div>
+          </div>
+        </div>
+
+        <!-- Executive OS -->
+        <div class="status-cat">
+          <h2>Executive OS</h2>
+          <div class="status-list">
+            <div class="status-row"><div class="status-row__name">Weekly Executive Pack</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">حزمة أسبوعية تنفيذية مولّدة تلقائياً.</div></div>
+            <div class="status-row"><div class="status-row__name">Pending Decisions</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">عرض القرارات المعلقة للقيادة.</div></div>
+            <div class="status-row"><div class="status-row__name">Blockers View</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">لوحة العوائق الحالية.</div></div>
+            <div class="status-row"><div class="status-row__name">Risks View</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">لوحة المخاطر الحالية.</div></div>
+            <div class="status-row"><div class="status-row__name">Actual vs Forecast</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">مقارنة الفعلي مقابل التوقع. يحتاج نموذج forecast.</div></div>
+            <div class="status-row"><div class="status-row__name">Evidence Drilldown</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">اضغط على أي مقياس لرؤية مصدره.</div></div>
+          </div>
+        </div>
+
+        <!-- Compliance -->
+        <div class="status-cat">
+          <h2>Compliance / PDPL</h2>
+          <div class="status-list">
+            <div class="status-row"><div class="status-row__name">Consent Required Send</div><span class="status-pill status-pill--partial">Partial</span><div class="status-row__desc">تحقق opt-in قبل WhatsApp outbound. يحتاج schema لسجل consent.</div></div>
+            <div class="status-row"><div class="status-row__name">Revoke Consent</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">endpoint للإلغاء + propagation عبر كل القنوات.</div></div>
+            <div class="status-row"><div class="status-row__name">Right to Export</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">حق تصدير البيانات الشخصية.</div></div>
+            <div class="status-row"><div class="status-row__name">Right to Delete</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">حق حذف البيانات الشخصية.</div></div>
+            <div class="status-row"><div class="status-row__name">Audit Trail</div><span class="status-pill status-pill--partial">Partial</span><div class="status-row__desc">الرسائل محفوظة. audit كامل يحتاج correlation_id على كل إجراء.</div></div>
+            <div class="status-row"><div class="status-row__name">Cross-border Restriction</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">بيانات عملاء KSA لا تغادر KSA دون ترخيص. يحتاج KSA-resident infra.</div></div>
+          </div>
+        </div>
+
+        <!-- Infra -->
+        <div class="status-cat">
+          <h2>Infra / Foundations</h2>
+          <div class="status-list">
+            <div class="status-row"><div class="status-row__name">Multi-tenant RLS</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">Postgres RLS على كل جدول tenant-scoped. يحتاج ترحيل من SQLite.</div></div>
+            <div class="status-row"><div class="status-row__name">Durable Execution</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">Workflow engine مع checkpoints + idempotency (Temporal / LangGraph).</div></div>
+            <div class="status-row"><div class="status-row__name">Observability</div><span class="status-pill status-pill--target">Target</span><div class="status-row__desc">OpenTelemetry traces + structured logs. يحتاج Tempo/Jaeger instance.</div></div>
+            <div class="status-row"><div class="status-row__name">Release Gate</div><span class="status-pill status-pill--partial">Partial</span><div class="status-row__desc">CI يُشغّل الاختبارات. يحتاج OIDC + attestations + readiness validator.</div></div>
+          </div>
+        </div>
+
+        <div class="trust-note" style="margin-top: 40px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
+          <p>لا ندّعي شهادات SOC 2 أو ISO 27001 أو GDPR certified. نتبع ممارسات أمنية موثّقة والشهادات الرسمية في خارطة الطريق. للحصول على وثيقة التصميم التقني الكاملة، <a href="/#pilot">تواصل معنا</a>.</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__bottom" style="margin-top:0; border-top:0;">
+      <p>© <span id="year">2026</span> Dealix. جميع الحقوق محفوظة.</p>
+      <p class="footer__note"><a href="/">← العودة للصفحة الرئيسية</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Light theme sync + year (in-memory state — iframe blocks storage APIs)
+    (function(){
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = window.__dlxTheme || (prefersDark ? 'dark' : 'light');
+      window.__dlxTheme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      const t = document.querySelector('[data-theme-toggle]');
+      const sun = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+      const moon= '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      function render(){ t.innerHTML = document.documentElement.getAttribute('data-theme')==='dark'?sun:moon; }
+      if (t) { render(); t.addEventListener('click', function(){ const cur = document.documentElement.getAttribute('data-theme'); const nt = cur==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme', nt); window.__dlxTheme = nt; render(); }); }
+      const y = document.getElementById('year'); if (y) y.textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>

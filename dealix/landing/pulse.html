@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saudi B2B Pulse — Dealix</title>
+  <meta name="description" content="تقرير شهري مجاني عن أداء B2B السعودي — معدلات الرد، أوقات الاستجابة، أفضل القطاعات. مبني على بيانات مجهولة من مشتركي Dealix." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg);margin:0}
+    .wrap{max-width:1100px;margin:0 auto;padding:64px 24px}
+    .hero{text-align:center;margin-bottom:48px}
+    .hero .label{color:var(--accent);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+    .hero h1{font-size:clamp(32px,5vw,52px);margin:0 0 16px;color:var(--brand);line-height:1.15}
+    .hero p{color:var(--muted);font-size:18px;line-height:1.7;max-width:680px;margin:0 auto}
+    .signup{display:flex;gap:8px;max-width:480px;margin:32px auto 0}
+    .signup input{flex:1;padding:13px 16px;border:1px solid var(--border);border-radius:10px;font-family:inherit;font-size:15px}
+    .signup button{padding:13px 24px;background:var(--brand);color:#fff;border:0;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer}
+    .latest{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;margin-top:48px}
+    .latest h2{font-size:24px;margin:0 0 18px;color:var(--brand)}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:24px 0}
+    .stat{background:#f8fafc;border-radius:12px;padding:18px}
+    .stat .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+    .stat .value{font-size:30px;font-weight:700;color:var(--brand);margin-top:4px}
+    .stat .delta{font-size:13px;color:var(--success);margin-top:4px;font-weight:600}
+    .stat .delta.down{color:#dc2626}
+    .table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px}
+    .table th,.table td{padding:11px 12px;border-bottom:1px solid var(--border);text-align:right}
+    .table th{background:#f8fafc;font-weight:700;color:var(--brand)}
+    .table .leader{background:#ecfdf5;font-weight:600}
+    .insights{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:14px;padding:22px;margin-top:24px;border-right:4px solid #f59e0b}
+    .insights h3{margin:0 0 10px;color:#713f12;font-size:18px}
+    .insights p{margin:0 0 8px;color:#92400e;line-height:1.7;font-size:15px}
+    .insights p:last-child{margin-bottom:0}
+    .archive-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:18px}
+    .archive-card{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:18px;text-decoration:none}
+    .archive-card .month{color:var(--accent);font-weight:700;font-size:13px;text-transform:uppercase}
+    .archive-card .title{color:var(--brand);font-weight:600;font-size:15px;margin-top:4px}
+    .archive-card:hover{border-color:var(--brand)}
+    .privacy{background:#f1f5f9;border-radius:14px;padding:20px;margin-top:32px;font-size:13px;color:var(--muted);line-height:1.7}
+    .privacy strong{color:var(--brand)}
+    .nav-back{display:inline-block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:12px}
+    .nav-back:hover{color:var(--brand)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+
+    <div class="hero">
+      <div class="label">📊 شهرياً · مجاناً · بدون إعلانات</div>
+      <h1>Saudi B2B Pulse</h1>
+      <p>أول تقرير شهري عن أداء المبيعات B2B في السعودية — معدلات الرد بالعربي، أزمنة الاستجابة، أفضل القطاعات أداءً، وأسوأها. مبني على بيانات مجهولة من مشتركي Dealix.</p>
+
+      <form class="signup" onsubmit="event.preventDefault();alert('سيصلكم Pulse الشهري على الإيميل قريباً.')">
+        <input type="email" placeholder="إيميل الشركة" required>
+        <button>اشترك مجاناً</button>
+      </form>
+    </div>
+
+    <div class="latest">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+        <h2>إصدار إبريل 2026</h2>
+        <span style="background:var(--accent);color:var(--brand);padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700">جديد</span>
+      </div>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 18px">ملخص أبرز ما حدث في B2B السعودي هذا الشهر — مستخلص من 47 شركة مشتركة عبر 9 قطاعات.</p>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="label">الشركات المشمولة</div><div class="value">47</div><div class="delta">↑ من 38 الشهر الماضي</div></div>
+        <div class="stat"><div class="label">القطاعات النشطة</div><div class="value">9</div><div class="delta">من 12 مقصودة</div></div>
+        <div class="stat"><div class="label">معدل الرد العام</div><div class="value">8.2%</div><div class="delta">↑ +1.4% MoM</div></div>
+        <div class="stat"><div class="label">متوسط زمن الرد</div><div class="value">38 ثانية</div><div class="delta">↓ من 47 ثانية</div></div>
+      </div>
+
+      <h3 style="margin-top:32px;color:var(--brand);font-size:18px">🏆 ترتيب القطاعات بمعدل الرد</h3>
+      <table class="table">
+        <thead>
+          <tr><th>القطاع</th><th>عدد المشتركين</th><th>معدل الرد (P50)</th><th>أعلى أداء (P90)</th><th>الاتجاه</th></tr>
+        </thead>
+        <tbody>
+          <tr class="leader"><td>قاعات حفلات + تأجير</td><td>5</td><td>15.3%</td><td>22.7%</td><td>↑↑</td></tr>
+          <tr class="leader"><td>عيادات</td><td>6</td><td>13.8%</td><td>19.4%</td><td>↑</td></tr>
+          <tr><td>مراكز تدريب</td><td>5</td><td>11.2%</td><td>17.1%</td><td>→</td></tr>
+          <tr><td>فنادق</td><td>5</td><td>9.6%</td><td>14.8%</td><td>↑</td></tr>
+          <tr><td>تطوير عقاري</td><td>8</td><td>7.4%</td><td>12.9%</td><td>↑</td></tr>
+          <tr><td>شحن ولوجستيات</td><td>6</td><td>6.8%</td><td>11.5%</td><td>→</td></tr>
+          <tr><td>وكالات تسويق</td><td>5</td><td>5.9%</td><td>10.2%</td><td>↓</td></tr>
+          <tr><td>SaaS سعودي</td><td>5</td><td>4.7%</td><td>8.6%</td><td>→</td></tr>
+          <tr><td>مقاولات</td><td>5</td><td>3.2%</td><td>6.8%</td><td>↓</td></tr>
+        </tbody>
+      </table>
+
+      <div class="insights">
+        <h3>💡 رؤى الشهر</h3>
+        <p><strong>قاعات الحفلات تتصدر للشهر الثاني</strong> — موسم زفاف الصيف بدأ مبكراً هذا العام. الـ leads زادت 32% MoM والرد السريع يُحوِّل بنسبة 22.7% للأداء الأعلى.</p>
+        <p><strong>المقاولات تتراجع</strong> — الـ RFQs تأتي عبر إيميلات طويلة بدون رد سريع. الفرصة: من يضع flow تأهيل أوتوماتيكي يأخذ السوق.</p>
+        <p><strong>SaaS سعودي ينمو لكن ببطء</strong> — معدل الرد 4.7% منخفض، لكن قيمة الصفقة العالية تعوّض. توصية: ركّز على demos لا volume.</p>
+        <p><strong>الإثنين والثلاثاء</strong> أفضل أيام للرد العربي. الأحد ضعيف. الجمعة بطيء كما متوقع.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:48px">
+      <h2 style="font-size:20px;color:var(--brand);margin:0 0 14px">📚 الأرشيف</h2>
+      <div class="archive-grid">
+        <a class="archive-card" href="#">
+          <div class="month">مارس 2026</div>
+          <div class="title">3 قطاعات صاعدة + رمضان effect</div>
+        </a>
+        <a class="archive-card" href="#">
+          <div class="month">فبراير 2026</div>
+          <div class="title">عقار الرياض يقود السوق</div>
+        </a>
+        <a class="archive-card" href="#">
+          <div class="month">يناير 2026</div>
+          <div class="title">إطلاق Pulse — أرقام Q4</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="privacy">
+      <strong>🛡️ خصوصيتكم محمية:</strong> لا نكشف بيانات أي شركة فردياً. الإصدار يجمع 5+ شركات في كل قطاع كحد أدنى — منخفض بأقل = لا ينشر. الأرقام تأتي من <code>/api/v1/customer-success/saudi-b2b-pulse</code> ومعتمدة على linear-interpolated percentiles. كل المشتركين يستفيدون، لا أحد يُكشف.
+    </div>
+  </div>
+</body>
+</html>

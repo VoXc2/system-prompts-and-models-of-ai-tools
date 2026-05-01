@@ -1,0 +1,31 @@
+User-agent: *
+Allow: /
+Allow: /marketers
+Allow: /pricing
+Allow: /partners
+Allow: /privacy
+Allow: /terms
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /internal/
+Disallow: /*.json$
+
+# Dealix — مندوب مبيعات AI بالعربي الخليجي
+Sitemap: https://dealix.ai/sitemap.xml
+
+# Crawl-delay for aggressive bots
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10

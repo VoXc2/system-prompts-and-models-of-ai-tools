@@ -1,0 +1,2 @@
+{"id":"po_daily_brief_has_greeting","endpoint_hint":"/api/v1/personal-operator/daily-brief","expect_keys":["generated_at","greeting","top_decisions","opportunities"],"forbid_substrings":["ghp_","BEGIN PRIVATE KEY","sk_live_"]}
+{"id":"po_launch_report_has_score","endpoint_hint":"/api/v1/personal-operator/launch-report","expect_keys":["generated_at","overall_score","areas"],"max_overall_score":100,"min_overall_score":0}

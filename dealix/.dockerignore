@@ -1,0 +1,90 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Python build artifacts
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist/
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.whl
+
+# Virtualenvs (we build our own in Docker)
+.venv
+venv
+env
+ENV
+
+# Testing / type checking
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+
+# Editors / IDE
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# Local env files (secrets stay out of images)
+.env
+.env.local
+.env.*.local
+
+# Docs and deliverables (not needed at runtime — huge)
+docs/
+deliverables/
+tool_calls/
+*.md
+!README.md
+
+# Heavy frontend sources — API image doesn't need them
+dashboard/node_modules/
+frontend/node_modules/
+web/node_modules/
+node_modules/
+
+# Tests (not shipped to production)
+tests/
+
+# Logs and caches
+*.log
+logs/
+.cache/
+
+# Notebooks and research output
+*.ipynb
+.ipynb_checkpoints/
+
+# CI and tooling config we don't need at runtime
+.github/
+.pre-commit-config.yaml
+Makefile
+
+# Deployment bundles (for ops only)
+deploy_bundle*/
+*.tar.gz
+*.zip

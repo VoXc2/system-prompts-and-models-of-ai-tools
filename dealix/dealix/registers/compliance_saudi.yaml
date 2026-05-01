@@ -1,0 +1,238 @@
+# ═══════════════════════════════════════════════════════════════════
+# Saudi Compliance Register
+# السجل الرسمي للامتثال السعودي
+# ═══════════════════════════════════════════════════════════════════
+# This register is the single source of truth for Dealix's Saudi
+# compliance posture. Every control below is either:
+#   IMPLEMENTED — enforced in code / infra
+#   PLANNED     — scheduled for a named phase
+#   NOT_APPLICABLE — documented rationale required
+# ═══════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+last_reviewed: "2026-04-21"
+jurisdiction: "Kingdom of Saudi Arabia"
+applicable_frameworks:
+  - PDPL
+  - SDAIA Controller/Processor Guide
+  - NCA ECC 2-2024
+  - NCA DCC-1:2022
+  - NCA CCC 2:2024
+  - NIST AI RMF 1.0
+  - OWASP Top 10 for LLM Applications
+
+# ═══════════════════════════════════════════════════════════════════
+# PDPL — Personal Data Protection Law
+# ═══════════════════════════════════════════════════════════════════
+pdpl:
+  data_inventory:
+    status: PLANNED
+    phase: "Phase 0 (Day 0-30)"
+    description: "Catalog all personal data processed, by type and source"
+    owner: "Privacy & Trust Plane"
+    evidence: []
+
+  lawful_basis_register:
+    status: PLANNED
+    phase: "Phase 0"
+    description: "For every processing purpose, declare lawful basis: consent | contract | legal obligation | legitimate interest"
+    owner: "Privacy & Trust Plane"
+    note: "Sensitivity S3 actions REQUIRE a lawful basis entry — enforced by policy rule s3_requires_pdpl_check"
+
+  purpose_register:
+    status: PLANNED
+    phase: "Phase 0"
+    description: "Named purposes per data class; no secondary use without re-justification"
+    owner: "Privacy & Trust Plane"
+
+  retention_schedule:
+    status: PARTIAL
+    phase: "Phase 1"
+    description: "Per-data-class retention periods with automated deletion"
+    evidence:
+      - "dealix/classifications/__init__.py::SensitivityClass"
+    gaps:
+      - "Retention NOT YET enforced in DB — requires Alembic migration + scheduled job"
+    target_defaults:
+      leads_S1_inactive: "24 months"
+      leads_S2_disqualified: "12 months"
+      leads_S3_personal: "per purpose + lawful basis"
+      proposals_S2: "7 years (commercial record retention)"
+      audit_logs: "7 years"
+      evidence_packs: "7 years (linked to decisions)"
+
+  breach_response:
+    status: PLANNED
+    phase: "Phase 1"
+    description: "Breach detection → triage → 72-hour SDAIA notification per PDPL"
+    owner: "Security + Legal"
+    linked_runbook: "dealix/masters/incident_rollback_runbook.md"
+
+  consent_and_notice:
+    status: PARTIAL
+    description: "Consent capture + transparent notice where lawful basis is consent"
+    evidence:
+      - "api/routers/leads.py accepts intake payload only via explicit opt-in source"
+    gaps:
+      - "Consent receipt emission not yet implemented"
+      - "Privacy notice template not yet embedded in intake flows"
+
+  controller_processor_map:
+    status: PLANNED
+    phase: "Phase 1"
+    description: "For each integration, classify Dealix as controller, joint controller, or processor"
+    known_relationships:
+      hubspot: "Dealix = controller; HubSpot = processor"
+      whatsapp_meta: "Dealix = controller; Meta = independent controller for platform data"
+      resend_sendgrid: "Dealix = controller; provider = processor"
+      google_calendar: "Dealix = controller; Google = processor"
+      calendly: "Dealix = controller; Calendly = processor"
+      openai_anthropic_google_groq_glm: "LLM providers — depends on DPA + data residency; S3 data MUST NOT be sent until DPA is in place per provider"
+
+  dpo_assessment:
+    status: PLANNED
+    phase: "Phase 0"
+    description: "Determine if DPO appointment is mandatory based on SDAIA triggers"
+    triggers_checked:
+      - "Public entity? — no (commercial)"
+      - "Core activity = large-scale S3 processing? — likely YES once customer data at scale"
+      - "Core activity = large-scale sensitive data monitoring? — depends on deployment"
+    decision: "Appoint a named DPO before first production customer with S3 data"
+
+  sdaia_platform_registration:
+    status: PLANNED
+    phase: "Phase 1"
+    description: "Register on SDAIA platform if triggered (public entity, core processing, sensitive data)"
+    decision: "Assess at first production-scale customer onboarding"
+
+  data_subject_rights:
+    status: PLANNED
+    phase: "Phase 1"
+    description: "Access / correction / deletion / portability endpoints"
+    target_endpoints:
+      - "POST /api/v1/privacy/data-subject-request"
+      - "GET /api/v1/privacy/my-data (for authenticated subject)"
+
+  cross_border_transfers:
+    status: PARTIAL
+    description: "LLM providers are outside KSA — requires assessment per PDPL Article 29"
+    current_controls:
+      - "S3 data is NOT sent to external LLMs by default — enforced at pipeline level (TO BE VERIFIED)"
+      - "LLM routing prefers GLM for Arabic; cross-border posture documented per provider"
+    gaps:
+      - "Formal adequacy / contract / approval per PDPL executive regulations"
+
+# ═══════════════════════════════════════════════════════════════════
+# NCA — National Cybersecurity Authority
+# ═══════════════════════════════════════════════════════════════════
+nca_ecc_2024:
+  scope: "Essential Cybersecurity Controls — baseline for all Saudi entities"
+  posture: "Self-assessed; gap analysis planned Phase 1"
+  implemented:
+    - control: "2-1 Cybersecurity strategy and policy"
+      evidence: "docs/blueprint/master-architecture.md + SECURITY.md"
+    - control: "2-3 Cybersecurity governance in SDLC"
+      evidence: ".github/workflows/ci.yml security job"
+    - control: "2-5 Asset management"
+      evidence: "dealix/registers/technology_radar.yaml"
+    - control: "2-6 Identity & access management (partial — .env secrets)"
+      evidence: "core/config/settings.py (SecretStr)"
+    - control: "2-10 Logging & monitoring"
+      evidence: "core/logging.py (structlog) + api/middleware.py (RequestIDMiddleware)"
+    - control: "2-12 Secure configuration"
+      evidence: "Dockerfile (non-root, multi-stage)"
+  planned:
+    - "2-7 Cryptography standards alignment"
+    - "2-8 Secure systems development lifecycle (formal mapping)"
+    - "2-9 Network security controls (once deployed)"
+    - "2-11 Incident response (runbook Phase 1)"
+    - "2-14 Third-party cybersecurity"
+
+nca_dcc_2022:
+  scope: "Data Cybersecurity Controls — extension of ECC for data lifecycle"
+  posture: "Designed to align; formal mapping Phase 2"
+  implemented:
+    - control: "Classification (DCC-1-1)"
+      evidence: "dealix/classifications (S0-S3)"
+    - control: "Secure design (DCC-1-3)"
+      evidence: "dealix/contracts/evidence_pack.py (intended vs actual tool calls)"
+  planned:
+    - "Encryption at rest for S2/S3 data"
+    - "Encryption in transit with modern TLS only"
+    - "Key management (Vault in Phase 2)"
+    - "Data masking/tokenization for logs containing S2/S3"
+
+nca_ccc_2024:
+  scope: "Cloud Cybersecurity Controls — CSP + CST requirements"
+  posture: "Platform is cloud-ready; full mapping before first cloud tenancy"
+  implemented:
+    - "Non-root container"
+    - "Healthchecks"
+    - "OIDC for CI to cloud"
+  planned:
+    - "Data localization posture (tenancy choice per customer)"
+    - "Network segmentation (VPC design)"
+    - "Customer data boundary enforcement"
+    - "Shared responsibility model documented per deployment"
+
+# ═══════════════════════════════════════════════════════════════════
+# AI Governance
+# ═══════════════════════════════════════════════════════════════════
+ai_governance:
+  nist_ai_rmf:
+    govern:
+      - "AI roles & responsibilities defined (blueprint §4)"
+      - "Risk tolerance explicit per action classification"
+      - "Third-party AI (LLM providers) governed via technology_radar"
+    map:
+      - "Each agent's context, use-case, and impact documented in docs/agents.md"
+      - "Sensitivity / approval / reversibility classified per action"
+    measure:
+      - "Eval harness (PLANNED Phase 2)"
+      - "Tool verification ledger catches hallucinated / wrong tool calls"
+      - "Contradiction rate tracked in observability metrics"
+    manage:
+      - "Policy evaluator ESCALATEs low-confidence high-stakes decisions"
+      - "Never-auto-execute list for irreversible actions"
+      - "Approval center with TTL"
+
+  owasp_llm_top_10:
+    LLM01_prompt_injection:
+      posture: "Agents don't execute side effects from LLM responses; NextActions go through policy gate"
+      residual_risk: "Medium — LLM might still produce biased recommendations"
+    LLM02_insecure_output_handling:
+      posture: "Structured outputs validated against Pydantic + JSON Schema; markdown outputs escaped in UI"
+      residual_risk: "Low"
+    LLM03_training_data_poisoning:
+      posture: "Not applicable — we use frontier-model APIs, not custom training"
+      residual_risk: "N/A"
+    LLM04_model_dos:
+      posture: "Per-provider timeouts, retries, fallback chain; rate limiting planned"
+      residual_risk: "Medium"
+    LLM05_supply_chain:
+      posture: "Dependabot weekly; pinned versions; pre-commit checks"
+      residual_risk: "Low"
+    LLM06_sensitive_info_disclosure:
+      posture: "S3 data not sent to LLMs by default; SecretStr wrapping; audit log excludes secrets"
+      residual_risk: "Medium (enforcement needs stronger gating)"
+    LLM07_insecure_plugin_design:
+      posture: "No plugin system exposed; integrations use versioned facade"
+      residual_risk: "Low"
+    LLM08_excessive_agency:
+      posture: "Agents are Observer/Recommender only; external commitments go through approvals"
+      residual_risk: "Low (by design)"
+    LLM09_overreliance:
+      posture: "Confidence + evidence + human-in-loop for high-stakes"
+      residual_risk: "Low"
+    LLM10_model_theft:
+      posture: "N/A — no self-hosted model assets"
+      residual_risk: "N/A"
+
+# ═══════════════════════════════════════════════════════════════════
+# Operational responsibilities
+# ═══════════════════════════════════════════════════════════════════
+responsibilities:
+  compliance_owner: "Privacy & Trust Plane lead"
+  security_owner: "Platform Security lead"
+  dpo: "TBD — appointment before first production S3 customer"
+  review_cadence: "Quarterly; after any material incident; on any regulatory update"

@@ -1,0 +1,929 @@
+{
+  "generated_at": "2026-04-24",
+  "count": 46,
+  "results": {
+    "rewaa.com": {
+      "domain": "rewaa.com",
+      "url": "https://rewaa.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:44.776747+00:00",
+      "tools": [
+        {
+          "name": "WhatsApp Widget",
+          "category": "chat_mena",
+          "matched_pattern": "wa\\.me/\\d+"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms",
+          "matched_pattern": "wp-content/"
+        }
+      ],
+      "signals": [
+        {
+          "name": "WhatsApp widget — Saudi-native sales channel",
+          "weight": 8,
+          "evidence": "WhatsApp Widget"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ],
+      "error": null
+    },
+    "tabby.ai": {
+      "domain": "tabby.ai",
+      "url": "https://tabby.ai",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:45.345528+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "unifonic.com": {
+      "domain": "unifonic.com",
+      "url": "https://unifonic.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:44.023017+00:00",
+      "tools": [
+        {
+          "name": "Chili Piper",
+          "category": "booking",
+          "matched_pattern": "chilipiper\\.com"
+        },
+        {
+          "name": "HubSpot",
+          "category": "crm",
+          "matched_pattern": "hs-scripts\\.com"
+        },
+        {
+          "name": "Zendesk Chat",
+          "category": "chat",
+          "matched_pattern": "zopim\\.com"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        },
+        {
+          "name": "Hotjar",
+          "category": "analytics",
+          "matched_pattern": "static\\.hotjar\\.com"
+        },
+        {
+          "name": "HubSpot Forms",
+          "category": "form",
+          "matched_pattern": "js\\.hsforms\\.net"
+        }
+      ],
+      "signals": [
+        {
+          "name": "uses booking tool — has demo/sales flow",
+          "weight": 5,
+          "evidence": "Chili Piper"
+        },
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "live chat — sales/support motion",
+          "weight": 3,
+          "evidence": "Zendesk Chat"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager; Hotjar"
+        },
+        {
+          "name": "inbound form — lead flow evidence",
+          "weight": 5,
+          "evidence": "HubSpot Forms"
+        }
+      ],
+      "error": null
+    },
+    "wafeq.com": {
+      "domain": "wafeq.com",
+      "url": "https://wafeq.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:45.248862+00:00",
+      "tools": [
+        {
+          "name": "WhatsApp Widget",
+          "category": "chat_mena",
+          "matched_pattern": "wa\\.me/\\d+"
+        }
+      ],
+      "signals": [
+        {
+          "name": "WhatsApp widget — Saudi-native sales channel",
+          "weight": 8,
+          "evidence": "WhatsApp Widget"
+        }
+      ],
+      "error": null
+    },
+    "qoyod.com": {
+      "domain": "qoyod.com",
+      "url": "https://qoyod.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:44.614261+00:00",
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm",
+          "matched_pattern": "hubspot"
+        },
+        {
+          "name": "WhatsApp Widget",
+          "category": "chat_mena",
+          "matched_pattern": "api\\.whatsapp\\.com/send"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms",
+          "matched_pattern": "wp-content/"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "WhatsApp widget — Saudi-native sales channel",
+          "weight": 8,
+          "evidence": "WhatsApp Widget"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ],
+      "error": null
+    },
+    "tap.company": {
+      "domain": "tap.company",
+      "url": "https://tap.company",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:46.341772+00:00",
+      "tools": [
+        {
+          "name": "Tap Payments",
+          "category": "payment_mena",
+          "matched_pattern": "tap\\.company"
+        },
+        {
+          "name": "WooCommerce",
+          "category": "ecom",
+          "matched_pattern": "woocommerce"
+        },
+        {
+          "name": "Mixpanel",
+          "category": "analytics",
+          "matched_pattern": "cdn\\.mxpnl\\.com"
+        }
+      ],
+      "signals": [
+        {
+          "name": "MENA payment gateway — Saudi-ready checkout",
+          "weight": 6,
+          "evidence": "Tap Payments"
+        },
+        {
+          "name": "e-commerce platform",
+          "weight": 4,
+          "evidence": "WooCommerce"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Mixpanel"
+        }
+      ],
+      "error": null
+    },
+    "hyperpay.com": {
+      "domain": "hyperpay.com",
+      "url": "https://hyperpay.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:47.149145+00:00",
+      "tools": [
+        {
+          "name": "HyperPay",
+          "category": "payment_mena",
+          "matched_pattern": "hyperpay\\.com"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        },
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtag/js"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms",
+          "matched_pattern": "wp-content/"
+        }
+      ],
+      "signals": [
+        {
+          "name": "MENA payment gateway — Saudi-ready checkout",
+          "weight": 6,
+          "evidence": "HyperPay"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager; Google Analytics 4"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ],
+      "error": null
+    },
+    "paytabs.com": {
+      "domain": "paytabs.com",
+      "url": "https://paytabs.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:46.403796+00:00",
+      "tools": [
+        {
+          "name": "PayTabs",
+          "category": "payment_mena",
+          "matched_pattern": "paytabs\\.com"
+        }
+      ],
+      "signals": [
+        {
+          "name": "MENA payment gateway — Saudi-ready checkout",
+          "weight": 6,
+          "evidence": "PayTabs"
+        }
+      ],
+      "error": null
+    },
+    "intelmatix.com": {
+      "domain": "intelmatix.com",
+      "url": "https://intelmatix.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:45.913143+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "maqsam.com": {
+      "domain": "maqsam.com",
+      "url": "https://maqsam.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:45.890011+00:00",
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm",
+          "matched_pattern": "hs-scripts\\.com"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        },
+        {
+          "name": "Framer",
+          "category": "cms",
+          "matched_pattern": "framer\\.com"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "Framer"
+        }
+      ],
+      "error": null
+    },
+    "oqua.io": {
+      "domain": "oqua.io",
+      "url": "https://oqua.io",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:36:46.599615+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "careempay.com": {
+      "domain": "careempay.com",
+      "url": "https://careempay.com",
+      "status": "timeout",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:36:55.940549+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "timeout:/"
+    },
+    "sifi.co": {
+      "domain": "sifi.co",
+      "url": "https://sifi.co",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:36:46.680606+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "hakbah.sa": {
+      "domain": "hakbah.sa",
+      "url": "https://hakbah.sa",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:48.549506+00:00",
+      "tools": [
+        {
+          "name": "WooCommerce",
+          "category": "ecom",
+          "matched_pattern": "woocommerce"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        },
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtag/js"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms",
+          "matched_pattern": "wp-content/"
+        }
+      ],
+      "signals": [
+        {
+          "name": "e-commerce platform",
+          "weight": 4,
+          "evidence": "WooCommerce"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager; Google Analytics 4"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ],
+      "error": null
+    },
+    "logexa.com": {
+      "domain": "logexa.com",
+      "url": "https://logexa.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:46.638536+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "mnzil.co": {
+      "domain": "mnzil.co",
+      "url": "https://mnzil.co",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:57.021182+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "nana.sa": {
+      "domain": "nana.sa",
+      "url": "https://nana.sa",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:57.217369+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "jahez.net": {
+      "domain": "jahez.net",
+      "url": "https://jahez.net",
+      "status": "ok",
+      "http_status": 403,
+      "fetched_at": "2026-04-24T19:36:56.904009+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "bayzat.com": {
+      "domain": "bayzat.com",
+      "url": "https://bayzat.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:57.531736+00:00",
+      "tools": [
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        }
+      ],
+      "error": null
+    },
+    "meritincentives.com": {
+      "domain": "meritincentives.com",
+      "url": "https://meritincentives.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:57.142453+00:00",
+      "tools": [
+        {
+          "name": "Webflow",
+          "category": "cms",
+          "matched_pattern": "webflow\\.com"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "Webflow"
+        }
+      ],
+      "error": null
+    },
+    "darwalhekma.edu.sa": {
+      "domain": "darwalhekma.edu.sa",
+      "url": "https://darwalhekma.edu.sa",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:36:57.038914+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "alfaisal.edu": {
+      "domain": "alfaisal.edu",
+      "url": "https://alfaisal.edu",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:36:57.788818+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "ajar.com": {
+      "domain": "ajar.com",
+      "url": "https://ajar.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:57.921205+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "naseeb.com": {
+      "domain": "naseeb.com",
+      "url": "https://naseeb.com",
+      "status": "ok",
+      "http_status": 403,
+      "fetched_at": "2026-04-24T19:36:57.555269+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "lamsaworld.com": {
+      "domain": "lamsaworld.com",
+      "url": "https://lamsaworld.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:58.905410+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "mouwasat.com": {
+      "domain": "mouwasat.com",
+      "url": "https://mouwasat.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:00.987018+00:00",
+      "tools": [
+        {
+          "name": "WhatsApp Widget",
+          "category": "chat_mena",
+          "matched_pattern": "wa\\.me/\\d+"
+        },
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtag/js"
+        }
+      ],
+      "signals": [
+        {
+          "name": "WhatsApp widget — Saudi-native sales channel",
+          "weight": 8,
+          "evidence": "WhatsApp Widget"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Analytics 4"
+        }
+      ],
+      "error": null
+    },
+    "hmg.com.sa": {
+      "domain": "hmg.com.sa",
+      "url": "https://hmg.com.sa",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:36:58.053673+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "jar-app.com": {
+      "domain": "jar-app.com",
+      "url": "https://jar-app.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:57.894782+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "floward.com": {
+      "domain": "floward.com",
+      "url": "https://floward.com",
+      "status": "ok",
+      "http_status": 403,
+      "fetched_at": "2026-04-24T19:36:57.959796+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "haraj.com.sa": {
+      "domain": "haraj.com.sa",
+      "url": "https://haraj.com.sa",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:36:59.024990+00:00",
+      "tools": [
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtag/js"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Analytics 4"
+        }
+      ],
+      "error": null
+    },
+    "stcs.com.sa": {
+      "domain": "stcs.com.sa",
+      "url": "https://stcs.com.sa",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:05.782381+00:00",
+      "tools": [
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms",
+          "matched_pattern": "wp-content/"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ],
+      "error": null
+    },
+    "elm.sa": {
+      "domain": "elm.sa",
+      "url": "https://elm.sa",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:37:02.670864+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "majarra.com": {
+      "domain": "majarra.com",
+      "url": "https://majarra.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:03.207377+00:00",
+      "tools": [
+        {
+          "name": "WhatsApp Widget",
+          "category": "chat_mena",
+          "matched_pattern": "api\\.whatsapp\\.com/send"
+        },
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        }
+      ],
+      "signals": [
+        {
+          "name": "WhatsApp widget — Saudi-native sales channel",
+          "weight": 8,
+          "evidence": "WhatsApp Widget"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        }
+      ],
+      "error": null
+    },
+    "sanabilinvestments.com": {
+      "domain": "sanabilinvestments.com",
+      "url": "https://sanabilinvestments.com",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:37:01.652425+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "stv.com": {
+      "domain": "stv.com",
+      "url": "https://stv.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:01.942641+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "wamdacapital.com": {
+      "domain": "wamdacapital.com",
+      "url": "https://wamdacapital.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:01.746244+00:00",
+      "tools": [
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtag/js"
+        },
+        {
+          "name": "WordPress",
+          "category": "cms",
+          "matched_pattern": "wp-content/"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Analytics 4"
+        },
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "WordPress"
+        }
+      ],
+      "error": null
+    },
+    "raedventures.com": {
+      "domain": "raedventures.com",
+      "url": "https://raedventures.com",
+      "status": "timeout",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:37:11.765284+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "timeout:/"
+    },
+    "misk.org.sa": {
+      "domain": "misk.org.sa",
+      "url": "https://misk.org.sa",
+      "status": "ok",
+      "http_status": 403,
+      "fetched_at": "2026-04-24T19:37:02.651614+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "gate.vc": {
+      "domain": "gate.vc",
+      "url": "https://gate.vc",
+      "status": "timeout",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:37:12.671303+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "timeout:/"
+    },
+    "arzanvc.com": {
+      "domain": "arzanvc.com",
+      "url": "https://arzanvc.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:03.280237+00:00",
+      "tools": [],
+      "signals": [],
+      "error": null
+    },
+    "visionventures.com": {
+      "domain": "visionventures.com",
+      "url": "https://visionventures.com",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:37:03.368409+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "mocinno.com": {
+      "domain": "mocinno.com",
+      "url": "https://mocinno.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:04.498023+00:00",
+      "tools": [
+        {
+          "name": "Wix",
+          "category": "cms",
+          "matched_pattern": "static\\.parastorage\\.com"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CMS stack identified",
+          "weight": 1,
+          "evidence": "Wix"
+        }
+      ],
+      "error": null
+    },
+    "kaust.edu.sa": {
+      "domain": "kaust.edu.sa",
+      "url": "https://kaust.edu.sa",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:05.227154+00:00",
+      "tools": [
+        {
+          "name": "HubSpot",
+          "category": "crm",
+          "matched_pattern": "hs-scripts\\.com"
+        },
+        {
+          "name": "Google Analytics 4",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtag/js"
+        }
+      ],
+      "signals": [
+        {
+          "name": "CRM in use — sales process exists",
+          "weight": 5,
+          "evidence": "HubSpot"
+        },
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Analytics 4"
+        }
+      ],
+      "error": null
+    },
+    "entlaq.com.sa": {
+      "domain": "entlaq.com.sa",
+      "url": "https://entlaq.com.sa",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:37:04.568741+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "dafater.com": {
+      "domain": "dafater.com",
+      "url": "https://dafater.com",
+      "status": "fetch_error",
+      "http_status": null,
+      "fetched_at": "2026-04-24T19:37:04.734657+00:00",
+      "tools": [],
+      "signals": [],
+      "error": "fetch_error:/:ConnectError"
+    },
+    "alinma.com": {
+      "domain": "alinma.com",
+      "url": "https://alinma.com",
+      "status": "ok",
+      "http_status": 200,
+      "fetched_at": "2026-04-24T19:37:17.997086+00:00",
+      "tools": [
+        {
+          "name": "Google Tag Manager",
+          "category": "analytics",
+          "matched_pattern": "googletagmanager\\.com/gtm\\.js"
+        }
+      ],
+      "signals": [
+        {
+          "name": "analytics active — measurable funnel",
+          "weight": 2,
+          "evidence": "Google Tag Manager"
+        }
+      ],
+      "error": null
+    }
+  }
+}

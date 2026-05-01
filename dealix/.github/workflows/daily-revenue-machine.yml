@@ -1,0 +1,132 @@
+name: Daily Revenue Machine
+
+# Runs the autonomous daily Dealix revenue machine.
+# 04:00 UTC = 07:00 Asia/Riyadh.
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+    inputs:
+      gmail_drafts:
+        description: "Gmail drafts to generate"
+        default: "50"
+      linkedin_drafts:
+        description: "LinkedIn drafts to generate"
+        default: "20"
+      call_scripts:
+        description: "Call scripts to generate"
+        default: "10"
+      create_in_gmail_inbox:
+        description: "Create drafts in Gmail Drafts folder (true if OAuth ready)"
+        default: "true"
+
+# Prevent two runs from racing on shared API quota.
+concurrency:
+  group: dealix-daily-revenue-machine
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write   # for failure-issue creation
+
+jobs:
+  revenue-machine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout (for artifacts only)
+        uses: actions/checkout@v4
+
+      - name: Verify required secrets
+        env:
+          API_BASE: ${{ secrets.DEALIX_API_BASE }}
+          API_KEY: ${{ secrets.DEALIX_API_KEY }}
+        run: |
+          if [ -z "${API_BASE}" ]; then
+            echo "::error::DEALIX_API_BASE secret missing"; exit 1; fi
+          if [ -z "${API_KEY}" ]; then
+            echo "::error::DEALIX_API_KEY secret missing"; exit 1; fi
+          echo "✅ secrets present"
+
+      - name: 1. Generate today's drafts (with retry)
+        id: revenue_run
+        env:
+          API_BASE: ${{ secrets.DEALIX_API_BASE }}
+          API_KEY: ${{ secrets.DEALIX_API_KEY }}
+        run: |
+          set -e
+          n=0
+          until [ $n -ge 3 ]; do
+            curl -fsS -X POST "$API_BASE/api/v1/automation/revenue-machine/run" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $API_KEY" \
+              -d '{
+                "daily_candidates": 200,
+                "gmail_drafts": ${{ github.event.inputs.gmail_drafts || 50 }},
+                "linkedin_drafts": ${{ github.event.inputs.linkedin_drafts || 20 }},
+                "call_scripts": ${{ github.event.inputs.call_scripts || 10 }},
+                "partner_intros": 10,
+                "approval_mode": "draft_only",
+                "create_in_gmail_drafts_in_inbox": ${{ github.event.inputs.create_in_gmail_inbox || 'true' }}
+              }' -o revenue_run.json && break
+            n=$((n+1)); echo "retry $n / 3"; sleep 30
+          done
+          echo "produced=$(jq -c .produced revenue_run.json)" >> "$GITHUB_OUTPUT"
+          jq '.produced // .' revenue_run.json
+
+      - name: 2. Schedule follow-ups
+        env:
+          API_BASE: ${{ secrets.DEALIX_API_BASE }}
+          API_KEY: ${{ secrets.DEALIX_API_KEY }}
+        run: |
+          curl -fsS -X POST "$API_BASE/api/v1/automation/followups/run" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $API_KEY" -d '{}' | tee followups.json
+          jq . followups.json
+
+      - name: 3. Generate daily report
+        env:
+          API_BASE: ${{ secrets.DEALIX_API_BASE }}
+          API_KEY: ${{ secrets.DEALIX_API_KEY }}
+        run: |
+          curl -fsS -X POST "$API_BASE/api/v1/automation/daily-report/generate" \
+            -H "Authorization: Bearer $API_KEY" | tee daily_report.json
+          jq '.report_path, .metrics' daily_report.json
+
+      - name: 4. Export drafts to CSV
+        env:
+          API_BASE: ${{ secrets.DEALIX_API_BASE }}
+          API_KEY: ${{ secrets.DEALIX_API_KEY }}
+        run: |
+          curl -fsS "$API_BASE/api/v1/automation/revenue-machine/export?format=csv" \
+            -H "Authorization: Bearer $API_KEY" | tee export.json
+          jq . export.json
+
+      - name: 5. Upload run artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dealix-daily-${{ github.run_id }}
+          path: |
+            revenue_run.json
+            followups.json
+            daily_report.json
+            export.json
+          retention-days: 14
+
+      - name: 6. Open issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const today = new Date().toISOString().slice(0,10);
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔴 Daily revenue machine failed — ${today}`,
+              body: `The daily revenue-machine workflow failed on ${today}.\n\n` +
+                    `**Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\n` +
+                    `Check Railway logs + /api/v1/prospect/search-diag.`,
+              labels: ['ops', 'p0'],
+            });

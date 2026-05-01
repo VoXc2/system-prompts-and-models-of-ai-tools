@@ -1,0 +1,425 @@
+{
+  "generated_at": "2026-04-24",
+  "count": 20,
+  "targets": [
+    {
+      "company": "Foodics",
+      "domain": "foodics.com",
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority": "P1",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "CEO مرحباً،\n\nشفت إنكم تستخدمون HubSpot — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Foodics؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "CEO مرحباً،\n\nشفت إنكم تستخدمون HubSpot — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Foodics؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "CEO متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "CEO شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "CEO آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "HubSpot",
+          "WhatsApp Widget",
+          "Google Tag Manager",
+          "HubSpot Forms",
+          "WordPress"
+        ],
+        "fact_referenced": "شفت إنكم تستخدمون HubSpot"
+      }
+    },
+    {
+      "company": "Lucidya",
+      "domain": "lucidya.com",
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority": "P1",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "CEO مرحباً،\n\nشفت إنكم تستخدمون HubSpot — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Lucidya؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "CEO مرحباً،\n\nشفت إنكم تستخدمون HubSpot — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Lucidya؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "CEO متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "CEO شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "CEO آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "HubSpot",
+          "Google Tag Manager",
+          "HubSpot Forms",
+          "Webflow"
+        ],
+        "fact_referenced": "شفت إنكم تستخدمون HubSpot"
+      }
+    },
+    {
+      "company": "Hakbah",
+      "domain": "hakbah.sa",
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority": "P2",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "CEO مرحباً،\n\nشفت stack تقني واضح في موقعكم (WooCommerce, Google Tag Manager, Google Analytics 4) — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Hakbah؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "CEO مرحباً،\n\nشفت stack تقني واضح في موقعكم (WooCommerce, Google Tag Manager, Google Analytics 4) — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Hakbah؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "CEO متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "CEO شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "CEO آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "WooCommerce",
+          "Google Tag Manager",
+          "Google Analytics 4",
+          "WordPress"
+        ],
+        "fact_referenced": "شفت stack تقني واضح في موقعكم (WooCommerce, Google Tag Manager, Google Analytics 4)"
+      }
+    },
+    {
+      "company": "Sary",
+      "domain": "sary.com",
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority": "P2",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "Co-founder مرحباً،\n\nلاحظت إن موقعكم يستخدم WhatsApp widget كقناة للعملاء — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Sary؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Co-founder مرحباً،\n\nلاحظت إن موقعكم يستخدم WhatsApp widget كقناة للعملاء — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Sary؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Co-founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Co-founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Co-founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "WhatsApp Widget",
+          "Meta Pixel",
+          "WordPress"
+        ],
+        "fact_referenced": "لاحظت إن موقعكم يستخدم WhatsApp widget كقناة للعملاء"
+      }
+    },
+    {
+      "company": "Lean Technologies",
+      "domain": "leantech.me",
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority": "P2",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "CEO مرحباً،\n\nشفت إنكم تستخدمون HubSpot — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Lean Technologies؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "CEO مرحباً،\n\nشفت إنكم تستخدمون HubSpot — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Lean Technologies؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "CEO متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "CEO شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "CEO آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "HubSpot",
+          "Google Tag Manager"
+        ],
+        "fact_referenced": "شفت إنكم تستخدمون HubSpot"
+      }
+    },
+    {
+      "company": "Tamara",
+      "domain": "tamara.co",
+      "opportunity_type": "DIRECT_CUSTOMER",
+      "priority": "P2",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "CEO مرحباً،\n\nشفت stack تقني واضح في موقعكم (WooCommerce, Google Tag Manager, Webflow) — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Tamara؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "CEO مرحباً،\n\nشفت stack تقني واضح في موقعكم (WooCommerce, Google Tag Manager, Webflow) — هذا بالضبط المكان اللي Dealix يضيف فيه قيمة:\nAI sales rep بالعربي الخليجي يرد على lead جديد خلال 45 ثانية، يؤهّل BANT، ويحجز demo — فوق stack اللي تستخدمونه حالياً.\n\n20 دقيقة demo على سيناريو قريب من Tamara؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "CEO متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "CEO شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "CEO آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "WooCommerce",
+          "Google Tag Manager",
+          "Webflow"
+        ],
+        "fact_referenced": "شفت stack تقني واضح في موقعكم (WooCommerce, Google Tag Manager, Webflow)"
+      }
+    },
+    {
+      "company": "Jarwal",
+      "domain": "jarwal.com",
+      "opportunity_type": "AGENCY_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Founder السلام عليكم،\n\nJarwal وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Founder السلام عليكم،\n\nJarwal وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Bold Studio",
+      "domain": "boldstudio.sa",
+      "opportunity_type": "AGENCY_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Founder السلام عليكم،\n\nBold Studio وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Founder السلام عليكم،\n\nBold Studio وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Netaq",
+      "domain": "netaq.com",
+      "opportunity_type": "AGENCY_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Founder السلام عليكم،\n\nNetaq وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Founder السلام عليكم،\n\nNetaq وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Red Box",
+      "domain": "redbox.sa",
+      "opportunity_type": "AGENCY_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Founder السلام عليكم،\n\nRed Box وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Founder السلام عليكم،\n\nRed Box وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Nohayati",
+      "domain": "nohayati.com",
+      "opportunity_type": "AGENCY_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Founder السلام عليكم،\n\nNohayati وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Founder السلام عليكم،\n\nNohayati وكالة/مزوّد خدمة في السعودية. اقتراح شراكة:\nDealix = طبقة AI sales rep عربية تبيعونها فوق خدمتكم الحالية — setup 3-15K ريال + 20-30% من MRR كل عميل دائم.\n\n3-5 عملاء = 1,500-3,750 SAR شهري إضافي بدون أي tech build.\n\n20 دقيقة partner meeting هذا الأسبوع؟\n🤝 https://dealix.me/partners.html\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Salla",
+      "domain": "salla.sa",
+      "opportunity_type": "STRATEGIC_PARTNER",
+      "priority": "P2",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "CEO مرحباً،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. Salla platform/ecosystem مكمّل — اقتراح add-on أو bundle داخل منتجكم.\n\n20 دقيقة نستكشف الفكرة؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "CEO مرحباً،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. Salla platform/ecosystem مكمّل — اقتراح add-on أو bundle داخل منتجكم.\n\n20 دقيقة نستكشف الفكرة؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "CEO متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "CEO شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "CEO آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "HubSpot",
+          "Salla",
+          "Google Tag Manager",
+          "Google Analytics 4",
+          "WordPress"
+        ],
+        "fact_referenced": "شفت إنكم تستخدمون HubSpot"
+      }
+    },
+    {
+      "company": "Zid",
+      "domain": "zid.sa",
+      "opportunity_type": "STRATEGIC_PARTNER",
+      "priority": "P2",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Co-founder مرحباً،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. Zid platform/ecosystem مكمّل — اقتراح add-on أو bundle داخل منتجكم.\n\n20 دقيقة نستكشف الفكرة؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Co-founder مرحباً،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. Zid platform/ecosystem مكمّل — اقتراح add-on أو bundle داخل منتجكم.\n\n20 دقيقة نستكشف الفكرة؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Co-founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Co-founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Co-founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "HubSpot",
+          "Zid",
+          "Google Tag Manager"
+        ],
+        "fact_referenced": "شفت إنكم تستخدمون HubSpot"
+      }
+    },
+    {
+      "company": "STC Pay",
+      "domain": "stcpay.com.sa",
+      "opportunity_type": "STRATEGIC_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "BD head مرحباً،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. STC Pay platform/ecosystem مكمّل — اقتراح add-on أو bundle داخل منتجكم.\n\n20 دقيقة نستكشف الفكرة؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "BD head مرحباً،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. STC Pay platform/ecosystem مكمّل — اقتراح add-on أو bundle داخل منتجكم.\n\n20 دقيقة نستكشف الفكرة؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "BD head متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "BD head شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "BD head آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Abdullah Alzahrani",
+      "domain": "",
+      "opportunity_type": "CONTENT_COLLABORATION",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "Creator مرحباً،\n\nأتابع المحتوى اللي تنشره. Dealix (AI sales rep عربي سعودي) يمكن يكون زاوية مثيرة — قصة بناء شركة Saudi-first.\n\nتعاون podcast/newsletter/مقابلة؟\n\nسامي",
+        "email": "Creator مرحباً،\n\nأتابع المحتوى اللي تنشره. Dealix (AI sales rep عربي سعودي) يمكن يكون زاوية مثيرة — قصة بناء شركة Saudi-first.\n\nتعاون podcast/newsletter/مقابلة؟\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Creator متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Creator شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Creator آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Entlaq",
+      "domain": "entlaq.com.sa",
+      "opportunity_type": "CONTENT_COLLABORATION",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_DM",
+      "messages": {
+        "linkedin": "Community lead مرحباً،\n\nأتابع المحتوى اللي تنشره. Dealix (AI sales rep عربي سعودي) يمكن يكون زاوية مثيرة — قصة بناء شركة Saudi-first.\n\nتعاون podcast/newsletter/مقابلة؟\n\nسامي",
+        "email": "Community lead مرحباً،\n\nأتابع المحتوى اللي تنشره. Dealix (AI sales rep عربي سعودي) يمكن يكون زاوية مثيرة — قصة بناء شركة Saudi-first.\n\nتعاون podcast/newsletter/مقابلة؟\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Community lead متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Community lead شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Community lead آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Sanabil",
+      "domain": "sanabilinvestments.com",
+      "opportunity_type": "INVESTOR_OR_ADVISOR",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_INVESTOR_NOTE",
+      "messages": {
+        "linkedin": "Portfolio partner السلام عليكم،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. نبحث عن advisor/investor familiar with B2B SaaS + MENA GTM. 15 دقيقة call نستكشف fit + portfolio introductions؟\n\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Portfolio partner السلام عليكم،\n\nDealix = Arabic-first AI sales operator للسوق السعودي. نبحث عن advisor/investor familiar with B2B SaaS + MENA GTM. 15 دقيقة call نستكشف fit + portfolio introductions؟\n\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Portfolio partner متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Portfolio partner شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Portfolio partner آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Brand Lounge",
+      "domain": "thebrandlounge.ae",
+      "opportunity_type": "REFERRAL_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Founder مرحباً،\n\nDealix = AI sales rep بالعربي الخليجي. 20 دقيقة demo؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Founder مرحباً،\n\nDealix = AI sales rep بالعربي الخليجي. 20 دقيقة demo؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Founder متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Founder شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Founder آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    },
+    {
+      "company": "Mocinno",
+      "domain": "mocinno.com",
+      "opportunity_type": "REFERRAL_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Partnerships مرحباً،\n\nDealix = AI sales rep بالعربي الخليجي. 20 دقيقة demo؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Partnerships مرحباً،\n\nDealix = AI sales rep بالعربي الخليجي. 20 دقيقة demo؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Partnerships متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Partnerships شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Partnerships آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [
+          "Wix"
+        ],
+        "fact_referenced": "شفت stack تقني واضح في موقعكم (Wix)"
+      }
+    },
+    {
+      "company": "Misk Foundation",
+      "domain": "misk.org.sa",
+      "opportunity_type": "REFERRAL_PARTNER",
+      "priority": "BACKLOG",
+      "fit_score": 0,
+      "channel": null,
+      "next_action": "PREPARE_PARTNER_PITCH",
+      "messages": {
+        "linkedin": "Startup program lead مرحباً،\n\nDealix = AI sales rep بالعربي الخليجي. 20 دقيقة demo؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي",
+        "email": "Startup program lead مرحباً،\n\nDealix = AI sales rep بالعربي الخليجي. 20 دقيقة demo؟\n📅 https://calendly.com/sami-assiri11/dealix-demo\n\nسامي\n\n---\nلإيقاف هذه الرسائل، رد بكلمة: لا شكراً. نحترم رغبتك فوراً.",
+        "whatsapp_warm_only": "السلام عليكم،\nسامي من Dealix — AI sales rep بالعربي. مناسب نتكلم 10 دقائق؟",
+        "follow_up_plus_2": "Startup program lead متابعة للرسالة السابقة — 15 دقيقة demo هذا الأسبوع؟\n📅 https://calendly.com/sami-assiri11/dealix-demo",
+        "follow_up_plus_5": "Startup program lead شاركت لك case sample على Dealix لشركة بحجمكم — تحب أرسله؟",
+        "follow_up_plus_10": "Startup program lead آخر متابعة — لو ما هو الوقت المناسب تمام. سؤال: تعرف شركة ثانية سعودية ترى تستفيد؟ referral 10% من MRR لـ 12 شهر.",
+        "tech_observed": [],
+        "fact_referenced": null
+      }
+    }
+  ]
+}

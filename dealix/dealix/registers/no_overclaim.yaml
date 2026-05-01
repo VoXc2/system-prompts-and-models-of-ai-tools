@@ -1,0 +1,230 @@
+# ═══════════════════════════════════════════════════════════════════
+# No-Overclaim Register
+# ═══════════════════════════════════════════════════════════════════
+# Every public claim about Dealix MUST be tracked here with evidence.
+# CI gate will fail the release if README/deck claims are not present
+# in this register OR are not Production-status.
+#
+# Status legend:
+#   Planned    — not built yet
+#   Pilot      — built, tested only internally, not enabled by default
+#   Partial    — available under flag, missing hardening
+#   Production — fully built, tested, default-on
+# ═══════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+last_reviewed: "2026-04-21"
+
+claims:
+  # ───────────── Core platform ─────────────
+  - id: multi_llm_routing
+    claim: "Routes tasks across Claude, Gemini, Groq, DeepSeek, GLM with fallback"
+    status: Production
+    evidence:
+      - core/llm/router.py::ModelRouter
+      - tests/unit/test_model_router.py
+      - core/config/models.py::TASK_ROUTING
+
+  - id: bilingual_ar_en
+    claim: "First-class Arabic support across agents and content"
+    status: Production
+    evidence:
+      - core/utils.py::is_arabic
+      - core/prompts/sales_scripts.py
+      - dealix/contracts/evidence_pack.py::BilingualMemo
+      - tests/unit/test_intake.py::test_intake_arabic_detection
+
+  - id: secret_hygiene
+    claim: "All secrets loaded from .env via SecretStr; zero hardcoded keys"
+    status: Production
+    evidence:
+      - core/config/settings.py
+      - .gitignore
+      - .pre-commit-config.yaml
+      - .gitleaks.toml
+      - .github/workflows/ci.yml (security job)
+
+  - id: decision_output_contract
+    claim: "Every critical agent decision emits a structured, validated DecisionOutput"
+    status: Partial
+    evidence:
+      - dealix/contracts/decision.py
+      - dealix/contracts/schemas/decision_output.schema.json
+    gaps:
+      - "Not yet wired on every existing Phase 8/9 agent output"
+      - "Evidence items not yet populated from LLM responses"
+
+  - id: classifications_enforced
+    claim: "Every action is classified by Approval / Reversibility / Sensitivity"
+    status: Partial
+    evidence:
+      - dealix/classifications/__init__.py
+      - dealix/classifications/__init__.py::ACTION_CLASSIFICATIONS
+    gaps:
+      - "Pipeline step wrappers not yet reading classification before execution"
+
+  - id: policy_evaluator
+    claim: "In-process policy engine enforces NEVER_AUTO_EXECUTE, R3, and S3 rules"
+    status: Pilot
+    evidence:
+      - dealix/trust/policy.py
+    gaps:
+      - "OPA/Rego backend not yet integrated"
+      - "Per-tenant policies not yet supported"
+
+  - id: approval_center
+    claim: "Approval Center routes A1+ actions to human approvers with TTL"
+    status: Pilot
+    evidence:
+      - dealix/trust/approval.py
+    gaps:
+      - "Only in-memory; no persistence"
+      - "Notification hooks configured but no real email/Slack integration by default"
+
+  - id: audit_log
+    claim: "Immutable audit log for every Trust-Plane action"
+    status: Pilot
+    evidence:
+      - dealix/trust/audit.py
+      - dealix/contracts/audit_log.py
+    gaps:
+      - "Only in-memory sink implemented; Postgres-backed sink is Planned"
+
+  - id: tool_verification
+    claim: "Intended-vs-actual action ledger for every tool call"
+    status: Pilot
+    evidence:
+      - dealix/trust/tool_verification.py
+    gaps:
+      - "Agents don't yet emit to the ledger automatically"
+
+  # ───────────── Phase 8 ─────────────
+  - id: phase8_intake
+    claim: "Lead intake normalizes phone/email, detects locale, dedups"
+    status: Production
+    evidence:
+      - auto_client_acquisition/agents/intake.py
+      - tests/unit/test_intake.py
+
+  - id: phase8_icp
+    claim: "ICP Fit scoring across 5 weighted dimensions with tier labels"
+    status: Production
+    evidence:
+      - auto_client_acquisition/agents/icp_matcher.py
+      - tests/unit/test_icp_matcher.py
+
+  - id: phase8_pain
+    claim: "Hybrid keyword + LLM pain extraction (AR + EN)"
+    status: Production
+    evidence:
+      - auto_client_acquisition/agents/pain_extractor.py
+      - tests/unit/test_pain_extractor.py
+
+  - id: phase8_pipeline
+    claim: "End-to-end Phase 8 pipeline with per-step error isolation"
+    status: Production
+    evidence:
+      - auto_client_acquisition/pipeline.py
+      - tests/integration/test_pipeline.py
+
+  - id: phase8_crm
+    claim: "HubSpot contact+deal upsert with retry"
+    status: Pilot
+    evidence:
+      - auto_client_acquisition/agents/crm.py
+    gaps:
+      - "Requires HubSpot access token to activate"
+      - "Stage mapping is per-portal; needs customization"
+
+  - id: phase8_booking
+    claim: "Calendly → Google Calendar → manual booking fallback"
+    status: Partial
+    evidence:
+      - auto_client_acquisition/agents/booking.py
+    gaps:
+      - "Google Calendar event creation requires service account setup"
+
+  # ───────────── Phase 9 ─────────────
+  - id: phase9_sectors
+    claim: "12 Saudi sectors with curated market size, growth, AI readiness"
+    status: Production
+    evidence:
+      - autonomous_growth/agents/sector_intel.py
+
+  - id: phase9_content
+    claim: "Bilingual AR/EN content generation for articles, LinkedIn, case studies"
+    status: Production
+    evidence:
+      - autonomous_growth/agents/content.py
+
+  - id: phase9_linkedin
+    claim: "LinkedIn integration disabled by default for ToS compliance"
+    status: Production
+    evidence:
+      - integrations/linkedin.py
+
+  # ───────────── Operations ─────────────
+  - id: docker_production
+    claim: "Multi-stage Dockerfile with non-root user and healthcheck"
+    status: Production
+    evidence:
+      - Dockerfile
+
+  - id: ci_security
+    claim: "CI blocks merges on gitleaks + detect-secrets + trufflehog + bandit"
+    status: Production
+    evidence:
+      - .github/workflows/ci.yml
+      - .pre-commit-config.yaml
+
+  - id: observability_structlog
+    claim: "Structured JSON logs with request IDs in production"
+    status: Production
+    evidence:
+      - core/logging.py
+      - api/middleware.py::RequestIDMiddleware
+
+  - id: observability_otel
+    claim: "OpenTelemetry tracing links decision to execution"
+    status: Planned
+    evidence: []
+    gaps:
+      - "OTel SDK not yet wired into agents/pipeline"
+      - "gen_ai.* semantic conventions not yet emitted"
+
+  # ───────────── Compliance ─────────────
+  - id: pdpl_readiness
+    claim: "Designed for PDPL compliance from day one"
+    status: Partial
+    evidence:
+      - dealix/registers/compliance_saudi.yaml
+      - dealix/classifications/__init__.py::SensitivityClass
+    gaps:
+      - "No DPO register maintained yet"
+      - "No breach-response runbook with timers"
+      - "Retention schedules defined but not enforced in DB"
+
+  - id: nca_alignment
+    claim: "Mappable to NCA ECC 2-2024, DCC-1:2022, CCC 2:2024"
+    status: Planned
+    evidence:
+      - dealix/registers/compliance_saudi.yaml
+    gaps:
+      - "Full control-by-control mapping not yet complete"
+
+  # ───────────── Things we do NOT claim ─────────────
+  # (Listed here so the register is a positive declaration of limits)
+  - id: not_cursor_not_chatbot
+    claim: "Dealix is NOT positioned as a CRM, chatbot, or sales-automation tool"
+    status: Production
+    evidence:
+      - docs/blueprint/master-architecture.md
+      - README.md
+
+  - id: not_agent_executor
+    claim: "No agent calls sensitive tools directly without workflow mediation"
+    status: Partial
+    evidence:
+      - dealix/classifications/__init__.py::NEVER_AUTO_EXECUTE
+    gaps:
+      - "Agent tool calls (LLM tool use) not yet routed through the connector facade"

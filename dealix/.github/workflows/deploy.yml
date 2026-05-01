@@ -1,0 +1,31 @@
+name: Deploy to Production
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: 🚀 Deploy to VPS
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /root/dealix || cd /root/ai-company-saudi
+            git fetch --all --tags
+            git checkout ${{ github.ref_name }}
+            docker compose pull
+            docker compose up -d --build
+            sleep 10
+            curl -fsS http://localhost:8000/health || exit 1

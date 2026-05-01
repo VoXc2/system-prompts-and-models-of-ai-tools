@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix Community — مجتمع رواد B2B السعوديين</title>
+  <meta name="description" content="مجتمع مغلق لـ founders ومدراء المبيعات السعوديين. WhatsApp + Slack + لقاءات شهرية + benchmarks مشتركة. للمشتركين فقط — لا linkedin influencers ولا وكلاء بيع." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{--brand:#0f172a;--accent:#22d3ee;--purple:#8b5cf6;--success:#10b981;--gold:#f59e0b;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg);margin:0}
+    .wrap{max-width:1200px;margin:0 auto;padding:64px 24px}
+    .nav-back{display:inline-block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:12px}
+    .nav-back:hover{color:var(--brand)}
+
+    .hero{position:relative;background:linear-gradient(135deg,#1e1b4b,#312e81,#1e3a8a);color:#fff;border-radius:24px;padding:64px 48px;text-align:center;margin-bottom:48px;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(139,92,246,0.3),transparent 60%);pointer-events:none}
+    .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(34,211,238,0.25),transparent 60%);pointer-events:none}
+    .hero > *{position:relative;z-index:1}
+    .hero .badge{display:inline-block;background:rgba(139,92,246,0.25);color:#c4b5fd;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:0.5px;margin-bottom:18px;border:1px solid rgba(139,92,246,0.4)}
+    .hero h1{font-size:clamp(36px,6vw,60px);margin:0 0 18px;line-height:1.1}
+    .hero p{font-size:19px;line-height:1.7;max-width:780px;margin:0 auto 28px;opacity:0.92}
+    .hero-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:32px;margin-top:24px}
+    .hero-stat{text-align:center}
+    .hero-stat .num{font-size:36px;font-weight:700;color:#c4b5fd}
+    .hero-stat .lbl{font-size:13px;opacity:0.85;margin-top:2px}
+
+    .section-title{font-size:28px;color:var(--brand);margin:48px 0 8px;font-weight:700}
+    .section-sub{color:var(--muted);font-size:16px;margin:0 0 28px;max-width:800px}
+
+    .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+    .pillar{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px;position:relative;overflow:hidden}
+    .pillar::before{content:"";position:absolute;top:0;right:0;width:100px;height:100px;background:radial-gradient(circle,rgba(139,92,246,0.1),transparent);border-radius:50%;transform:translate(40%,-40%)}
+    .pillar-icon{font-size:42px;margin-bottom:14px}
+    .pillar h3{margin:0 0 10px;color:var(--brand);font-size:20px}
+    .pillar p{color:#475569;font-size:14px;line-height:1.7;margin:0 0 12px}
+    .pillar .badge{display:inline-block;background:#ede9fe;color:#5b21b6;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600}
+
+    .activities{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;margin-top:48px}
+    .activity-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:18px}
+    .activity{padding:18px;background:#f8fafc;border-radius:14px;border-right:3px solid var(--purple)}
+    .activity-when{color:var(--purple);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    .activity h4{margin:0 0 6px;color:var(--brand);font-size:16px}
+    .activity p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+
+    .members{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:18px;padding:32px;margin-top:48px}
+    .members h3{color:#713f12;font-size:24px;margin:0 0 8px;display:flex;align-items:center;gap:10px}
+    .members p{color:#92400e;font-size:15px;line-height:1.7;margin:0 0 18px}
+    .member-cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+    .member-cat{background:#fff;border:1px solid #fcd34d;border-radius:12px;padding:16px;text-align:center}
+    .member-cat .num{font-size:30px;font-weight:700;color:var(--brand)}
+    .member-cat .label{color:#713f12;font-size:13px;font-weight:600;margin-top:4px}
+
+    .calendar{margin-top:48px;background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px}
+    .calendar h3{margin:0 0 6px;color:var(--brand);font-size:22px}
+    .calendar p.sub{color:var(--muted);margin:0 0 20px;font-size:15px}
+    .event{display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--border);align-items:center}
+    .event:last-child{border-bottom:0}
+    .event-date{flex-shrink:0;width:64px;background:#f1f5f9;border:1px solid var(--border);border-radius:10px;padding:8px 6px;text-align:center}
+    .event-date .day{font-size:22px;font-weight:700;color:var(--brand);line-height:1}
+    .event-date .month{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:600;margin-top:2px}
+    .event-content{flex:1}
+    .event-content h4{margin:0 0 4px;color:var(--brand);font-size:15px}
+    .event-content p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    .event-tag{display:inline-block;background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-right:6px}
+    .event-tag.live{background:#fee2e2;color:#991b1b}
+    .event-tag.virtual{background:#dbeafe;color:#1e40af}
+    .event-tag.exec{background:#fef3c7;color:#92400e}
+
+    .rules{background:#fef2f2;border:1px solid #fecaca;border-radius:14px;padding:24px;margin-top:32px}
+    .rules h3{color:#991b1b;margin:0 0 12px;font-size:18px;display:flex;align-items:center;gap:8px}
+    .rules ol{margin:0;padding:0 18px;color:#7f1d1d;font-size:14px;line-height:2}
+
+    .pulse-link{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:18px;padding:32px;margin-top:48px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+    .pulse-link-text{flex:1;min-width:280px}
+    .pulse-link h3{margin:0 0 8px;font-size:22px}
+    .pulse-link p{margin:0;opacity:0.9;font-size:15px;line-height:1.7}
+    .pulse-link .btn{background:var(--accent);color:var(--brand);padding:13px 28px;border-radius:10px;font-weight:700;text-decoration:none;font-size:15px;flex-shrink:0}
+
+    .testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:24px}
+    .testimonial{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px}
+    .testimonial p{margin:0 0 14px;color:#334155;font-size:14px;line-height:1.7;font-style:italic}
+    .testimonial .meta{display:flex;align-items:center;gap:10px}
+    .testimonial .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#6d28d9);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .testimonial .name{font-weight:600;color:var(--brand);font-size:14px}
+    .testimonial .role{color:var(--muted);font-size:12px}
+
+    .cta-block{background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;border-radius:18px;padding:40px;text-align:center;margin-top:48px}
+    .cta-block h3{margin:0 0 12px;font-size:26px}
+    .cta-block p{margin:0 0 22px;opacity:0.9;font-size:16px}
+    .btn-primary{background:var(--accent);color:var(--brand);padding:13px 28px;border-radius:10px;font-weight:700;text-decoration:none;display:inline-block;font-size:15px}
+    .btn-primary:hover{transform:translateY(-2px)}
+
+    .access-tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:24px}
+    .tier{background:#fff;border:2px solid var(--border);border-radius:14px;padding:20px}
+    .tier.featured{border-color:var(--purple);box-shadow:0 8px 20px rgba(139,92,246,0.15)}
+    .tier h4{margin:0 0 6px;color:var(--brand);font-size:18px;display:flex;align-items:center;gap:8px}
+    .tier .price{font-size:24px;font-weight:700;color:var(--brand);margin:8px 0 14px}
+    .tier ul{list-style:none;padding:0;margin:0;font-size:13px;color:#475569;line-height:2}
+    .tier ul li::before{content:"✓ ";color:var(--success);font-weight:700}
+    .tier ul li.no::before{content:"× ";color:#dc2626}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+
+    <div class="hero">
+      <div class="badge">🤝 مغلق · موثوق · سعودي</div>
+      <h1>Dealix Community</h1>
+      <p>مجتمع مغلق للـ founders ومدراء المبيعات وقادة B2B السعوديين. لا تأثيريين، لا وكلاء بيع، لا "افتح حسابك في X" — فقط رواد فعليين يبنون شركات حقيقية في السعودية.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">47+</div><div class="lbl">شركة سعودية</div></div>
+        <div class="hero-stat"><div class="num">120+</div><div class="lbl">عضو مفعّل</div></div>
+        <div class="hero-stat"><div class="num">9</div><div class="lbl">قطاع</div></div>
+        <div class="hero-stat"><div class="num">12</div><div class="lbl">لقاء شهرياً</div></div>
+      </div>
+    </div>
+
+    <h2 class="section-title">ركائز المجتمع الأربع</h2>
+    <p class="section-sub">المجتمع ليس Slack فيه ضوضاء — هو منظومة منسقة بـ 4 ركائز أساسية، كل واحدة تحل مشكلة محددة لرواد B2B السعوديين.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">💬</div>
+        <h3>WhatsApp مغلق</h3>
+        <p>قناة رئيسية على WhatsApp Business — للأسئلة العاجلة، تبادل العملاء، التوصيات، والإجابات السريعة. moderated 24/7.</p>
+        <span class="badge">Tier All</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🧠</div>
+        <h3>Slack منظم</h3>
+        <p>قنوات متخصصة: #pricing-questions · #legal · #hiring · #saudi-customs · #sector-{x}. للنقاشات الطويلة + الـ playbooks المشتركة.</p>
+        <span class="badge">Tier Pro+</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">📊</div>
+        <h3>Benchmarks مشتركة</h3>
+        <p>لوحة شفافة: كل عضو يشاهد أين يقف مقارنة بأقرانه في القطاع — معدلات الرد، طول دورة الصفقة، CAC، LTV. مجهولة وآمنة.</p>
+        <span class="badge">Tier Pro+</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🎤</div>
+        <h3>لقاءات حضورية + AMA</h3>
+        <p>عشاء شهري في الرياض/جدة/الدمام (8-12 شخص فقط) + AMA افتراضي مع رؤوس أموال + جلسات تفاوض مشتركة.</p>
+        <span class="badge">Tier Scale</span>
+      </div>
+    </div>
+
+    <div class="activities">
+      <h2 style="margin:0;color:var(--brand);font-size:24px">🎯 ماذا يحدث في المجتمع شهرياً</h2>
+      <p style="color:var(--muted);margin:8px 0 0">12 نشاط منتظم — لا ضوضاء، لا تكرار. كل واحد له هدف محدد:</p>
+      <div class="activity-list">
+        <div class="activity">
+          <div class="activity-when">كل اثنين 8 ص</div>
+          <h4>Pulse Standup</h4>
+          <p>5 دقائق فيديو من فريق Dealix — أهم رقم/ملاحظة من الـ pulse الأسبوعي. ماذا يحدث في القطاعات هذا الأسبوع.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">كل ثلاثاء 7 م</div>
+          <h4>Hot Seat (1 ساعة)</h4>
+          <p>عضو يقدم تحدي حقيقي + 8 أعضاء يقدمون نصائح + Dealix يلخص في playbook. مسجل + مشار.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">كل أربعاء 6 م</div>
+          <h4>Pricing Lab</h4>
+          <p>عضو ينشر الـ pricing الحالي → 12 عضو يعطون feedback → نختبر معه نسخة جديدة. متوسط زيادة 18% في الإيراد.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">آخر خميس</div>
+          <h4>عشاء الرياض/جدة</h4>
+          <p>8-12 شخص فقط، tour by city. مدفوع من Dealix لأعضاء Scale. الموضوع يختاره الأعضاء قبل أسبوعين.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">كل أسبوعين</div>
+          <h4>Sector Deep Dive</h4>
+          <p>3-4 أعضاء من نفس القطاع → جلسة 90 دقيقة عن أبرز التحديات + الفرص. تنتج تقرير قطاعي.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">شهرياً</div>
+          <h4>Founder AMA</h4>
+          <p>founder سعودي ضيف (Salla, Tabby, Telgani, Lean) → ساعة AMA مغلقة. أسئلة لا تطرح في podcasts.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">ربع سنوياً</div>
+          <h4>VC Roundtable</h4>
+          <p>3 شركاء استثمار سعوديين + 12 founder → جلسة عن state of the market. لا pitches — فقط حوار حقيقي.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">حسب الطلب</div>
+          <h4>Crisis Calls</h4>
+          <p>عضو يواجه أزمة (شحنة غير دافعة، موظف رئيسي مغادر، VC متوتر) → emergency call خلال 12 ساعة.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">شهرياً</div>
+          <h4>Hire Swap</h4>
+          <p>أعضاء يشاركون مرشحين رفضوهم لكن "ممتازين". 30%+ من التوظيفات الناجحة جاءت من هذا.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">سنوياً</div>
+          <h4>Dealix Summit</h4>
+          <p>اللقاء السنوي الكبير — 2 يوم في الرياض، 100+ عضو، 12 keynote، أكبر تجمع B2B سعودي خاص.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">حسب الحاجة</div>
+          <h4>Referral Network</h4>
+          <p>عضو يحتاج عميل في قطاع معين → ينشر طلب → الأعضاء يحيلون. متوسط 6 إحالات/شهر/عضو نشط.</p>
+        </div>
+        <div class="activity">
+          <div class="activity-when">دائم</div>
+          <h4>Vendor Reviews</h4>
+          <p>قاعدة بيانات داخلية: مزودين موصى بهم (موثقون) + محذرين (مع توضيح). يوفر شهور من البحث الفاشل.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="members">
+      <h3>👥 من هم الأعضاء</h3>
+      <p>المجتمع موجه فقط لمن يبني/يقود B2B في السعودية — ليس مفتوح للعموم. كل عضو موثق ومراجع.</p>
+      <div class="member-cats">
+        <div class="member-cat"><div class="num">38</div><div class="label">Founders / CEOs</div></div>
+        <div class="member-cat"><div class="num">42</div><div class="label">VP Sales / Heads</div></div>
+        <div class="member-cat"><div class="num">28</div><div class="label">Sales Leaders</div></div>
+        <div class="member-cat"><div class="num">12</div><div class="label">RevOps / GTM</div></div>
+      </div>
+    </div>
+
+    <div class="calendar">
+      <h3>📅 الفعاليات القادمة</h3>
+      <p class="sub">مايو 2026 · 11 فعالية · 3 منها مفتوحة لـ Pro tier</p>
+      <div class="event">
+        <div class="event-date"><div class="day">04</div><div class="month">مايو</div></div>
+        <div class="event-content">
+          <h4><span class="event-tag virtual">Virtual</span>Hot Seat — تحدي عقاري كبير</h4>
+          <p>عضو من شركة تطوير في الرياض يستعرض صفقة 4M ريال متعثرة. كيف نحركها قبل نهاية Q2؟</p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-date"><div class="day">07</div><div class="month">مايو</div></div>
+        <div class="event-content">
+          <h4><span class="event-tag exec">Scale only</span><span class="event-tag live">Live</span>عشاء الرياض الشهري</h4>
+          <p>فندق Four Seasons · 8 أشخاص · موضوع: التسعير في Q3 — بعد Vision 2030 المراجعات الجديدة.</p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-date"><div class="day">12</div><div class="month">مايو</div></div>
+        <div class="event-content">
+          <h4><span class="event-tag virtual">Virtual</span>Founder AMA — Telgani</h4>
+          <p>ساعة مغلقة مع founder Telgani عن بناء B2C-to-B2B transition. 60 دقيقة Q&A فقط.</p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-date"><div class="day">19</div><div class="month">مايو</div></div>
+        <div class="event-content">
+          <h4><span class="event-tag virtual">Virtual</span>Pricing Lab — قطاع SaaS</h4>
+          <p>3 شركات SaaS سعودية تعرض pricing pages → 12 عضو يصوّت + يقترح. خرج منها 14% زيادة MRR في الجولات السابقة.</p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-date"><div class="day">26</div><div class="month">مايو</div></div>
+        <div class="event-content">
+          <h4><span class="event-tag exec">Scale only</span>VC Roundtable</h4>
+          <p>3 شركاء من 500 Saudi · STV · Sanabil → state of B2B SaaS funding في السعودية. مغلق + Chatham House rules.</p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-date"><div class="day">28</div><div class="month">مايو</div></div>
+        <div class="event-content">
+          <h4><span class="event-tag virtual">Virtual</span>Sector Deep Dive — Logistics</h4>
+          <p>4 شركات شحن سعودية → كيف تدخل سوق Bahrain + UAE في 2026. تخرج بـ playbook موحد.</p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-date"><div class="day">31</div><div class="month">مايو</div></div>
+        <div class="event-content">
+          <h4><span class="event-tag virtual">Virtual</span>Pulse + Q&A الشهري</h4>
+          <p>إصدار مايو من Saudi B2B Pulse → 30 دقيقة Q&A مع فريق Dealix. التحضير لـ Q2 review.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">ماذا يقول الأعضاء</h2>
+    <p class="section-sub">مقتطفات من شهادات المؤسسين الـ47 — منشورة بإذنهم.</p>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p>المجتمع وفّر علي 9 أشهر من المحاولات الخاطئة في القطاع الحكومي. Hot Seat وحده غيّر استراتيجية pricing عندي — رفعت أسعاري 22% بدون فقدان عميل واحد.</p>
+        <div class="meta"><div class="avatar">خ</div><div><div class="name">خالد ع.</div><div class="role">Founder · شركة SaaS عقاري</div></div></div>
+      </div>
+      <div class="testimonial">
+        <p>وظفت 3 من خلال Hire Swap — وفرت علي 50K ريال رسوم headhunters. الأهم: كلهم نجحوا، لأن جايين بـ vouch من زميل ثقة.</p>
+        <div class="meta"><div class="avatar">ن</div><div><div class="name">نوف م.</div><div class="role">VP Sales · لوجستيات بجدة</div></div></div>
+      </div>
+      <div class="testimonial">
+        <p>عشاء الرياض الشهري أهم اجتماع شغل لي. أكثر من اجتماعات مجلس الإدارة. لا linkedin posts، لا selfies — فقط نقاش حقيقي بين 8 أشخاص يفهمون ما تمر به.</p>
+        <div class="meta"><div class="avatar">س</div><div><div class="name">سارة ح.</div><div class="role">CEO · وكالة تسويق B2B</div></div></div>
+      </div>
+    </div>
+
+    <h2 class="section-title">قواعد المجتمع</h2>
+    <div class="rules">
+      <h3>🚫 ممنوعات صارمة</h3>
+      <ol>
+        <li><strong>لا بيع داخلي</strong> — لا تبيع منتجك للأعضاء بدون موافقة. الإحالة مسموحة، الـ pitch ممنوع.</li>
+        <li><strong>لا تسريب</strong> — كل ما يقال داخل المجتمع يبقى داخل المجتمع. تسريب = طرد فوري + سنة محظور.</li>
+        <li><strong>لا linkedin influencing</strong> — هذا ليس مكان لبناء شخصية إلكترونية. شارك ما يفيد فعلاً.</li>
+        <li><strong>لا spam قنوات WhatsApp</strong> — رسالة واحدة كاملة أفضل من 8 رسائل قصيرة.</li>
+        <li><strong>اعطِ قبل أن تأخذ</strong> — أعضاء جدد يقدمون 3 مساهمات قبل أن يطلبوا. هذا ليس قاعدة كتابية، هو ثقافة.</li>
+        <li><strong>الموثقون فقط</strong> — كل عضو يوثق هويته بـ ID + تأكيد شركته. لا حسابات وهمية.</li>
+      </ol>
+    </div>
+
+    <h2 class="section-title">الوصول والاشتراك</h2>
+    <p class="section-sub">المجتمع متاح كميزة لمشتركي Dealix — ليس منتج مستقل. كل tier يفتح مزيداً من القنوات والفعاليات.</p>
+
+    <div class="access-tiers">
+      <div class="tier">
+        <h4>🌱 Starter</h4>
+        <div class="price">99 ريال/شهر</div>
+        <ul>
+          <li>WhatsApp العام</li>
+          <li>Pulse الشهري (مجاني)</li>
+          <li class="no">قنوات Slack المتخصصة</li>
+          <li class="no">Hot Seat / Pricing Lab</li>
+          <li class="no">عشاء الرياض</li>
+          <li class="no">VC Roundtable</li>
+        </ul>
+      </div>
+      <div class="tier featured">
+        <h4>⚡ Pro <span style="background:var(--purple);color:#fff;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600;letter-spacing:0.5px">الأشهر</span></h4>
+        <div class="price">299 ريال/شهر</div>
+        <ul>
+          <li>كل ما في Starter</li>
+          <li>Slack كامل (9 قنوات)</li>
+          <li>Hot Seat + Pricing Lab + Hire Swap</li>
+          <li>Sector Deep Dive</li>
+          <li>Vendor Reviews (DB كاملة)</li>
+          <li>2 Founder AMA / شهر</li>
+          <li class="no">عشاء + VC + Summit</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <h4>🚀 Scale</h4>
+        <div class="price">999 ريال/شهر</div>
+        <ul>
+          <li>كل ما في Pro</li>
+          <li>عشاء الرياض/جدة/الدمام شهرياً</li>
+          <li>VC Roundtable ربع سنوي</li>
+          <li>Dealix Summit (ticket مجاني)</li>
+          <li>Crisis Calls (12 ساعة استجابة)</li>
+          <li>1-on-1 ربع سنوي مع founding team</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pulse-link">
+      <div class="pulse-link-text">
+        <h3>📊 شاهد أين يقف فريقك مقارنة بالأقران</h3>
+        <p>الـ benchmarks مشتركة لكل عضو في Pro+ — تشاهد بيانات قطاعك مجهولة (5+ شركة كحد أدنى) وتعرف بالضبط أين موقعك في الـ percentile.</p>
+      </div>
+      <a href="/pulse.html" class="btn">شاهد Pulse →</a>
+    </div>
+
+    <div class="cta-block">
+      <h3>الانضمام دعوة فقط — اكتب لنا</h3>
+      <p>كل عضو يمر بـ verification + reference check. الانضمام ليس فورياً — لكن إذا كنت جاد عن بناء B2B في السعودية، نريدك معنا.</p>
+      <a href="mailto:community@dealix.sa?subject=Community Application" class="btn-primary">قدّم طلب انضمام</a>
+    </div>
+  </div>
+</body>
+</html>

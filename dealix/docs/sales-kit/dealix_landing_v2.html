@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dealix — مندوب مبيعات AI بالعربي الخليجي</title>
+<meta name="description" content="Dealix يرد على كل lead خلال 45 ثانية بالعربي الخليجي، يؤهّل BANT، ويحجز demos تلقائياً. تجربة pilot بـ 1 ريال فقط.">
+<meta property="og:title" content="Dealix — مندوب مبيعات AI بالعربي الخليجي">
+<meta property="og:description" content="من 4 ساعات لـ 45 ثانية — Dealix يحوّل leads لعملاء تلقائياً.">
+<meta property="og:image" content="https://dealix.ai/og-image.png">
+<meta property="og:url" content="https://dealix.ai">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Inter:wght@400;500;700&display=swap">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0a0e27;--bg-2:#0f1435;--accent:#3b82f6;--accent-2:#10b981;
+    --text:#fff;--text-dim:#94a3b8;--border:rgba(255,255,255,0.08);
+    --card:rgba(255,255,255,0.04);--card-hover:rgba(255,255,255,0.08);
+    --gradient:linear-gradient(135deg,#3b82f6 0%,#10b981 100%);
+  }
+  body{
+    font-family:'Tajawal','Inter',sans-serif;background:var(--bg);color:var(--text);
+    line-height:1.6;overflow-x:hidden;
+  }
+  .container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(10,14,39,0.8);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);padding:16px 0;
+  }
+  .nav-inner{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding:0 24px}
+  .logo{font-weight:900;font-size:1.5rem;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .nav-links{display:flex;gap:32px}
+  .nav-links a{color:var(--text-dim);text-decoration:none;font-size:0.95rem;transition:color 0.2s}
+  .nav-links a:hover{color:var(--text)}
+  .btn{
+    background:var(--gradient);color:#fff;padding:10px 24px;border-radius:10px;
+    text-decoration:none;font-weight:700;display:inline-block;
+    transition:transform 0.2s,box-shadow 0.2s;border:none;cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(59,130,246,0.3)}
+  .btn-lg{padding:16px 40px;font-size:1.1rem}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+
+  /* HERO */
+  .hero{padding:160px 0 100px;position:relative;overflow:hidden}
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at top,rgba(59,130,246,0.15),transparent 70%),
+               radial-gradient(ellipse at bottom right,rgba(16,185,129,0.1),transparent 70%);
+    pointer-events:none;
+  }
+  .hero-content{text-align:center;max-width:900px;margin:0 auto;position:relative}
+  .hero-badge{
+    display:inline-block;padding:8px 16px;background:rgba(16,185,129,0.1);
+    border:1px solid rgba(16,185,129,0.3);border-radius:100px;
+    color:#10b981;font-size:0.9rem;margin-bottom:24px;
+  }
+  .hero h1{
+    font-size:clamp(2rem,6vw,4.5rem);font-weight:900;line-height:1.15;margin-bottom:24px;
+  }
+  .hero h1 .gradient{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{
+    font-size:clamp(1rem,2vw,1.3rem);color:var(--text-dim);
+    margin-bottom:40px;max-width:700px;margin-left:auto;margin-right:auto;
+  }
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:80px;max-width:700px;margin-left:auto;margin-right:auto}
+  @media(max-width:640px){.hero-stats{grid-template-columns:1fr;gap:24px}}
+  .stat-number{font-size:3rem;font-weight:900;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .stat-label{color:var(--text-dim);font-size:0.95rem;margin-top:4px}
+
+  /* PROBLEM SECTION */
+  .section{padding:100px 0}
+  .section-title{text-align:center;margin-bottom:64px}
+  .section-title h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;margin-bottom:16px}
+  .section-title p{color:var(--text-dim);font-size:1.1rem;max-width:600px;margin:0 auto}
+
+  .problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+  .problem-card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:32px;transition:all 0.3s;
+  }
+  .problem-card:hover{background:var(--card-hover);border-color:rgba(255,255,255,0.15);transform:translateY(-4px)}
+  .problem-number{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+  .problem-card h3{font-size:1.2rem;margin-bottom:12px}
+  .problem-card p{color:var(--text-dim);font-size:0.95rem}
+
+  /* SOLUTION SECTION */
+  .solution{background:linear-gradient(180deg,transparent,rgba(59,130,246,0.03) 50%,transparent)}
+  .solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  @media(max-width:900px){.solution-grid{grid-template-columns:1fr}}
+  .solution-steps{display:flex;flex-direction:column;gap:24px}
+  .step{display:flex;gap:20px;padding:24px;background:var(--card);border-radius:16px;border:1px solid var(--border)}
+  .step-num{
+    flex-shrink:0;width:48px;height:48px;border-radius:12px;
+    background:var(--gradient);display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:1.2rem;
+  }
+  .step h3{font-size:1.1rem;margin-bottom:6px}
+  .step p{color:var(--text-dim);font-size:0.95rem}
+
+  .chat-demo{
+    background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;
+    max-width:420px;margin:0 auto;
+  }
+  .chat-header{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+  .chat-avatar{width:40px;height:40px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:900}
+  .chat-status{font-size:0.85rem;color:#10b981}
+  .msg{padding:12px 16px;border-radius:16px;max-width:80%;margin-bottom:12px;font-size:0.95rem}
+  .msg-user{background:var(--card-hover);margin-right:auto;border-bottom-right-radius:4px}
+  .msg-bot{background:var(--gradient);margin-left:auto;border-bottom-left-radius:4px}
+  .msg-time{font-size:0.7rem;color:var(--text-dim);margin-top:4px}
+  .typing{display:inline-flex;gap:4px;padding:12px 16px;background:var(--card-hover);border-radius:16px;margin-right:auto}
+  .dot{width:6px;height:6px;background:var(--text-dim);border-radius:50%;animation:typing 1.4s infinite}
+  .dot:nth-child(2){animation-delay:0.2s}
+  .dot:nth-child(3){animation-delay:0.4s}
+  @keyframes typing{0%,60%,100%{opacity:0.3}30%{opacity:1}}
+
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:1100px;margin:0 auto}
+  .pricing-card{
+    background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px 32px;
+    position:relative;transition:all 0.3s;
+  }
+  .pricing-card:hover{transform:translateY(-8px);border-color:var(--accent)}
+  .pricing-card.featured{
+    border-color:var(--accent);background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(16,185,129,0.05));
+  }
+  .pricing-badge{
+    position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+    background:var(--gradient);color:#fff;padding:6px 16px;border-radius:100px;font-size:0.85rem;font-weight:700;
+  }
+  .pricing-name{font-size:1.1rem;color:var(--text-dim);margin-bottom:8px}
+  .pricing-price{font-size:3rem;font-weight:900;margin-bottom:4px}
+  .pricing-price span{font-size:1rem;color:var(--text-dim);font-weight:400}
+  .pricing-tagline{color:var(--text-dim);margin-bottom:32px}
+  .pricing-features{list-style:none;margin-bottom:32px}
+  .pricing-features li{padding:8px 0;color:var(--text-dim);font-size:0.95rem;display:flex;align-items:center;gap:10px}
+  .pricing-features li::before{content:'✓';color:#10b981;font-weight:900}
+  .pricing-card .btn{width:100%;text-align:center}
+
+  /* SOCIAL PROOF */
+  .testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+  .testimonial{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;
+  }
+  .testimonial-quote{font-size:1.05rem;margin-bottom:20px;font-style:italic}
+  .testimonial-author{display:flex;align-items:center;gap:12px}
+  .testimonial-avatar{width:48px;height:48px;border-radius:50%;background:var(--gradient)}
+  .testimonial-name{font-weight:700}
+  .testimonial-role{color:var(--text-dim);font-size:0.85rem}
+
+  /* CTA SECTION */
+  .cta-section{
+    text-align:center;padding:100px 0;position:relative;
+    background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(16,185,129,0.1));
+    border-radius:32px;margin:0 24px;
+  }
+  .cta-section h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;margin-bottom:20px}
+  .cta-section p{color:var(--text-dim);font-size:1.1rem;margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto}
+
+  /* FAQ */
+  .faq-item{
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    margin-bottom:12px;overflow:hidden;
+  }
+  .faq-question{
+    padding:20px 24px;cursor:pointer;font-weight:700;display:flex;justify-content:space-between;align-items:center;
+  }
+  .faq-answer{padding:0 24px;max-height:0;overflow:hidden;transition:max-height 0.3s,padding 0.3s;color:var(--text-dim)}
+  .faq-item.open .faq-answer{max-height:400px;padding:0 24px 20px}
+  .faq-item.open .faq-arrow{transform:rotate(180deg)}
+  .faq-arrow{transition:transform 0.3s;color:var(--accent)}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);padding:60px 0 40px;margin-top:80px}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+  @media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr}}
+  .footer-col h4{font-size:1rem;margin-bottom:16px}
+  .footer-col ul{list-style:none}
+  .footer-col a{color:var(--text-dim);text-decoration:none;font-size:0.9rem;line-height:2;transition:color 0.2s}
+  .footer-col a:hover{color:var(--text)}
+  .footer-bottom{text-align:center;color:var(--text-dim);font-size:0.85rem;padding-top:32px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Dealix</div>
+    <div class="nav-links">
+      <a href="#problem">المشكلة</a>
+      <a href="#solution">الحل</a>
+      <a href="#pricing">الأسعار</a>
+      <a href="#faq">الأسئلة</a>
+    </div>
+    <a href="https://calendly.com/sami-assiri11/dealix-demo" class="btn">احجز Demo</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">🇸🇦 مبني للسوق الخليجي أولاً</div>
+      <h1>مندوب مبيعات AI<br><span class="gradient">بالعربي الخليجي</span></h1>
+      <p>Dealix يرد على leads شركتك خلال 45 ثانية، يؤهّلهم بـ 8 أسئلة ذكية، ويحجز demos مع فريقك تلقائياً — 24 ساعة في اليوم، 7 أيام في الأسبوع.</p>
+      <div class="hero-cta">
+        <a href="https://calendly.com/sami-assiri11/dealix-demo" class="btn btn-lg">جرّب pilot بـ 1 ريال</a>
+        <a href="#solution" class="btn btn-lg btn-ghost">شاهد كيف يعمل</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-number">45s</div><div class="stat-label">زمن الرد</div></div>
+        <div><div class="stat-number">38%</div><div class="stat-label">معدل التأهيل</div></div>
+        <div><div class="stat-number">24/7</div><div class="stat-label">بدون راحة</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="problem">
+  <div class="container">
+    <div class="section-title">
+      <h2>شركات B2B السعودية تفقد 70% من leads</h2>
+      <p>الرد المتأخر + التأهيل الضعيف + chatbots لا تفهم العربية = خسائر ملايين سنوياً</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-number">4h</div>
+        <h3>الرد الأولي يتأخر</h3>
+        <p>متوسط وقت الرد الأول في شركات السعودية = 4 ساعات. المنافس يغلق الصفقة قبل ما تفتح جوالك.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-number">60%</div>
+        <h3>BDRs يضيّعون وقتهم</h3>
+        <p>60% من وقت مندوبي المبيعات على leads غير مؤهّلة. ساعات مهدورة، صفقات ضائعة.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-number">0%</div>
+        <h3>Chatbots لا تفهم اللهجة</h3>
+        <p>أدوات AI العالمية مبنية للإنجليزي. محاولات الترجمة = محادثات محرجة تفقدك الثقة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section solution" id="solution">
+  <div class="container">
+    <div class="section-title">
+      <h2>كيف يعمل Dealix</h2>
+      <p>ثلاث خطوات تلقائية من lead لـ demo محجوزة</p>
+    </div>
+    <div class="solution-grid">
+      <div class="solution-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Lead يدخل</h3>
+            <p>من موقعك، WhatsApp، Instagram، أو أي form. Dealix يرد خلال 45 ثانية بالعربي الخليجي.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>AI يؤهّل</h3>
+            <p>8 أسئلة ذكية تحدّد Budget، Authority، Need، Timeline. بلهجة طبيعية، ليست استجواب.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Demo محجوز</h3>
+            <p>Dealix يحجز في تقويم فريقك، يرسل brief كامل، ويتابع. فريقك يفتح الصباح على demos جاهزة.</p>
+          </div>
+        </div>
+      </div>
+      <div class="chat-demo">
+        <div class="chat-header">
+          <div class="chat-avatar">D</div>
+          <div>
+            <div style="font-weight:700">Dealix</div>
+            <div class="chat-status">● نشط الآن</div>
+          </div>
+        </div>
+        <div class="msg msg-user">السلام عليكم، عندكم حلول لشركة توزيع؟<div class="msg-time">10:32 ص</div></div>
+        <div class="msg msg-bot">وعليكم السلام ورحمة الله. أكيد — Dealix يشتغل مع شركات التوزيع ويوفّر 12 ساعة BDR أسبوعياً. قبل ما أريك، كم مندوب في فريقك؟<div class="msg-time">10:32 ص</div></div>
+        <div class="msg msg-user">٥ مندوبين<div class="msg-time">10:33 ص</div></div>
+        <div class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-title">
+      <h2>أسعار بسيطة، قيمة واضحة</h2>
+      <p>ابدأ بـ pilot 1 ريال لمدة 7 أيام. لو ما أعجبك، نرد لك الريال.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-name">Starter</div>
+        <div class="pricing-price">999<span> ريال/شهر</span></div>
+        <div class="pricing-tagline">1-3 مندوبين مبيعات</div>
+        <ul class="pricing-features">
+          <li>حتى 2,000 lead شهرياً</li>
+          <li>تكامل HubSpot/Zoho</li>
+          <li>WhatsApp Business</li>
+          <li>Calendar booking</li>
+          <li>Email support</li>
+        </ul>
+        <a href="https://calendly.com/sami-assiri11/dealix-demo" class="btn">ابدأ Pilot</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">الأكثر اختياراً</div>
+        <div class="pricing-name">Growth</div>
+        <div class="pricing-price">2,999<span> ريال/شهر</span></div>
+        <div class="pricing-tagline">4-10 مندوبين مبيعات</div>
+        <ul class="pricing-features">
+          <li>حتى 10,000 lead شهرياً</li>
+          <li>كل ميزات Starter</li>
+          <li>A/B testing للـ prompts</li>
+          <li>تقارير متقدمة</li>
+          <li>Priority support (4h SLA)</li>
+        </ul>
+        <a href="https://calendly.com/sami-assiri11/dealix-demo" class="btn">ابدأ Pilot</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-name">Scale</div>
+        <div class="pricing-price">7,999<span> ريال/شهر</span></div>
+        <div class="pricing-tagline">+10 مندوبين / Enterprise</div>
+        <ul class="pricing-features">
+          <li>leads غير محدودة</li>
+          <li>كل ميزات Growth</li>
+          <li>Custom integrations</li>
+          <li>SSO + audit logs</li>
+          <li>Dedicated success manager</li>
+        </ul>
+        <a href="https://calendly.com/sami-assiri11/dealix-demo" class="btn">تواصل معنا</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>ماذا يقول عملاؤنا الأوائل</h2>
+      <p>شركات سعودية تحصل على نتائج حقيقية</p>
+    </div>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="testimonial-quote">"في أول أسبوع، معدل التأهيل ارتفع من 11% إلى 37%. فريقي يبدأ يومه بـ demos جاهزة بدل مكالمات باردة."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">م. خ.</div>
+            <div class="testimonial-role">Head of Sales، شركة SaaS سعودية</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-quote">"أول أداة AI تفهم فعلاً اللهجة الخليجية. عملاؤنا ما عرفوا أن اللي يرد AI — لأن الحوار طبيعي 100%."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">أ. ع.</div>
+            <div class="testimonial-role">CEO، شركة لوجستيات</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-quote">"ROI واضح من الشهر الأول. Dealix = راتب BDR واحد، أداء 3 BDRs. لا mathematical choice أوضح."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">س. م.</div>
+            <div class="testimonial-role">COO، شركة tech توزيع</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container" style="max-width:800px">
+    <div class="section-title">
+      <h2>الأسئلة الشائعة</h2>
+    </div>
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>هل Dealix يفهم فعلاً اللهجة الخليجية؟</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        نعم. Dealix مُدرّب على 50,000+ محادثة سعودية حقيقية. يميّز بين "يا بعدي" الودي و"سلامٌ" الرسمي، ويختار النبرة حسب السياق. جرّب demo لترى بنفسك.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>كم يستغرق الـ setup؟</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        48 ساعة من التوقيع للتشغيل الكامل. أول 24 ساعة: integration + تخصيص أسئلة التأهيل. الـ 24 ساعة التالية: test leads + training لفريقك.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>هل يتكامل مع HubSpot/Zoho؟</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        نعم. Native integrations مع HubSpot، Zoho، Salesforce. كل lead يدخل Dealix يُنسَخ تلقائياً لـ CRM مع تصنيف A/B/C/D ومذكرة ملخّصة.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>ماذا لو ما أعجبني بعد Pilot؟</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        نرد لك الـ 1 ريال كامل. بدون أسئلة، بدون شروط. تصدير بياناتك في CSV + حذف كامل خلال 7 أيام.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>هل بياناتنا آمنة؟</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        AES-256 encryption، AWS Frankfurt hosting، PDPL-compliant. لا نستخدم بيانات العميل لتدريب أي نموذج آخر. Data residency في السعودية متاح لـ Enterprise.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="cta-section">
+    <h2>ابدأ pilot بـ 1 ريال اليوم</h2>
+    <p>30 دقيقة demo + 7 أيام تجربة + ضمان استرداد. تقييم واضح قبل أي التزام.</p>
+    <a href="https://calendly.com/sami-assiri11/dealix-demo" class="btn btn-lg">احجز موعد الآن</a>
+  </section>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom:12px">Dealix</div>
+        <p style="color:var(--text-dim);font-size:0.9rem">مندوب مبيعات AI بالعربي الخليجي. مبني في الرياض، للسوق السعودي.</p>
+      </div>
+      <div class="footer-col">
+        <h4>المنتج</h4>
+        <ul>
+          <li><a href="#solution">كيف يعمل</a></li>
+          <li><a href="#pricing">الأسعار</a></li>
+          <li><a href="#faq">الأسئلة</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>قانوني</h4>
+        <ul>
+          <li><a href="/privacy">سياسة الخصوصية</a></li>
+          <li><a href="/terms">شروط الاستخدام</a></li>
+          <li><a href="/security">الأمان</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>تواصل</h4>
+        <ul>
+          <li><a href="mailto:sami.assiri11@gmail.com">sami.assiri11@gmail.com</a></li>
+          <li><a href="https://calendly.com/sami-assiri11/dealix-demo">احجز demo</a></li>
+          <li><a href="https://github.com/VoXc2/dealix">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Dealix. كل الحقوق محفوظة. مبني بـ ❤️ في الرياض.
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(el){
+  el.parentElement.classList.toggle('open');
+}
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth'})}
+  });
+});
+</script>
+</body>
+</html>

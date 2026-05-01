@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compliance & Trust Center — Dealix</title>
+  <meta name="description" content="مركز الامتثال والثقة في Dealix — PDPL، consent ledger، opt-out، RoPA، 11 compliance gates، audit logs، PDPL risk scoring لكل حملة." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0f172a;--accent:#22d3ee;--success:#10b981;--warn:#f59e0b;--danger:#dc2626;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}
+    body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;background:var(--bg);color:var(--brand);line-height:1.7}
+    .wrap{max-width:1200px;margin:0 auto;padding:64px 24px}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:14px}
+    .hero{background:linear-gradient(135deg,#064e3b,#065f46,#047857);color:#fff;border-radius:24px;padding:56px 40px;margin:24px 0 48px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:"🛡";position:absolute;font-size:200px;opacity:0.06;top:50%;left:50%;transform:translate(-50%,-50%)}
+    .hero .badge{display:inline-block;background:rgba(255,255,255,0.15);padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:18px;border:1px solid rgba(255,255,255,0.3)}
+    .hero h1{font-size:clamp(36px,5vw,52px);margin:0 0 16px;line-height:1.15}
+    .hero p{font-size:18px;opacity:0.95;max-width:780px;margin:0 auto;line-height:1.7}
+    .pillar{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;margin-bottom:24px}
+    .pillar-header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .pillar-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#10b981,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
+    .pillar h2{font-size:24px;color:var(--brand);margin:0}
+    .pillar p.sub{color:var(--muted);font-size:15px}
+
+    .gates-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:18px}
+    .gate-card{padding:18px;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:12px}
+    .gate-card .num{display:inline-block;width:24px;height:24px;background:var(--success);color:#fff;border-radius:50%;text-align:center;line-height:24px;font-weight:700;font-size:13px;margin-bottom:6px}
+    .gate-card .h{font-weight:600;color:#065f46;font-size:15px;margin-bottom:4px}
+    .gate-card .d{font-size:13px;color:#047857;line-height:1.6}
+
+    .pdpl-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px}
+    .pdpl-table th,.pdpl-table td{padding:12px;border-bottom:1px solid var(--border);text-align:right}
+    .pdpl-table th{background:#f8fafc;font-weight:700}
+    .pdpl-table td .check{color:var(--success);font-weight:700}
+
+    .scenario{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:14px}
+    .scenario .when{font-weight:700;color:var(--brand);font-size:15px;margin-bottom:6px}
+    .scenario .then{font-size:14px;color:#334155;line-height:1.7}
+    .scenario .then strong{color:var(--success)}
+
+    .audit-log{background:#0f172a;color:#22d3ee;border-radius:14px;padding:24px;font-family:monospace;font-size:13px;line-height:1.9;overflow-x:auto;margin-top:18px}
+    .audit-log .ts{color:#94a3b8}
+    .audit-log .ev{color:#fbbf24}
+    .audit-log .ok{color:#10b981}
+
+    .cta{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:18px;padding:40px;text-align:center;margin-top:48px}
+    .cta h3{margin:0 0 12px;font-size:26px}
+    .cta p{margin:0 0 22px;opacity:0.9}
+    .cta .btn{display:inline-block;background:var(--accent);color:var(--brand);padding:14px 32px;border-radius:10px;font-weight:700;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="nav-back">← Dealix</a>
+    <div class="hero">
+      <div class="badge">🛡 PDPL-First · SDAIA-Aligned</div>
+      <h1>Compliance & Trust Center</h1>
+      <p>Dealix يبيع الثقة كميزة — ليس تذكيراً قانونياً صغيراً في الـ footer. كل حملة تمر بـ 11 PDPL compliance gates قبل الإرسال، وكل تفاعل موثق في audit log قابل للتصدير لـ SDAIA.</p>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-header">
+        <div class="pillar-icon">⚖️</div>
+        <h2>PDPL — قانون حماية البيانات الشخصية السعودي</h2>
+      </div>
+      <p class="sub">المرجع: SDAIA · لائحة 2023 · النفاذ المنظم 2024</p>
+      <table class="pdpl-table">
+        <thead>
+          <tr><th>المبدأ</th><th>التطبيق في Dealix</th><th>الحالة</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>المعالجة القانونية والعادلة والشفافة</td><td>كل lead يُسجل المصدر + المبرر القانوني + غرض المعالجة</td><td><span class="check">✓</span></td></tr>
+          <tr><td>تحديد الغرض (Purpose limitation)</td><td>البيانات تُستخدم لـ business contact research فقط — لا إعادة بيع</td><td><span class="check">✓</span></td></tr>
+          <tr><td>تقليل البيانات (Data minimization)</td><td>نجمع الحد الأدنى — لا نتطفل على بيانات حساسة</td><td><span class="check">✓</span></td></tr>
+          <tr><td>الدقة (Accuracy)</td><td>المصادر موثوقة + نظام للـ data subject لتصحيح بياناته</td><td><span class="check">✓</span></td></tr>
+          <tr><td>الاحتفاظ المحدود (Retention)</td><td>سياسة retention بـ 24 شهر + auto-delete</td><td><span class="check">✓</span></td></tr>
+          <tr><td>الحماية التقنية والتنظيمية</td><td>HTTPS · TLS 1.3 · encrypted at rest · access logs</td><td><span class="check">✓</span></td></tr>
+          <tr><td>المسؤولية (Accountability)</td><td>RoPA موثق + audit logs + DPA متاحة</td><td><span class="check">✓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-header">
+        <div class="pillar-icon">🚧</div>
+        <h2>11 Compliance Gates — كل رسالة قبل الإرسال</h2>
+      </div>
+      <p class="sub">قبل أن تُرسل أي رسالة من Dealix إلى أي شخص، تمر بـ 11 فحص آلي:</p>
+      <div class="gates-grid">
+        <div class="gate-card"><div class="num">1</div><div class="h">Consent verification</div><div class="d">هل وافق المتلقي صراحة؟ أم أن المصدر public business?</div></div>
+        <div class="gate-card"><div class="num">2</div><div class="h">Opt-out check</div><div class="d">هل سبق له طلب إزالته من قائمتنا؟ (instant block)</div></div>
+        <div class="gate-card"><div class="num">3</div><div class="h">Purpose limitation</div><div class="d">هل الغرض المعلن يتطابق مع ما سيُرسل؟</div></div>
+        <div class="gate-card"><div class="num">4</div><div class="h">Sensitive data scan</div><div class="d">لا أرقام هوية، حسابات بنكية، صور شخصية في الجسم</div></div>
+        <div class="gate-card"><div class="num">5</div><div class="h">List-Unsubscribe header</div><div class="d">RFC 8058 — one-click unsubscribe في كل إيميل</div></div>
+        <div class="gate-card"><div class="num">6</div><div class="h">Suppression list</div><div class="d">قائمة موحدة لكل من رفض التواصل سابقاً</div></div>
+        <div class="gate-card"><div class="num">7</div><div class="h">Risky phrase detection</div><div class="d">عبارات "ضمان"، "100% نتائج" تُحظر تلقائياً</div></div>
+        <div class="gate-card"><div class="num">8</div><div class="h">Channel preference</div><div class="d">هل سبق له اختيار قناة محددة؟ نحترمها</div></div>
+        <div class="gate-card"><div class="num">9</div><div class="h">Time window</div><div class="d">لا إرسال خارج 8ص-9م توقيت الرياض</div></div>
+        <div class="gate-card"><div class="num">10</div><div class="h">Frequency cap</div><div class="d">حد أقصى 2 رسالة/أسبوع لنفس المستلم</div></div>
+        <div class="gate-card"><div class="num">11</div><div class="h">Audit logging</div><div class="d">كل قرار مسجل + متاح للـ DPO</div></div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-header">
+        <div class="pillar-icon">📋</div>
+        <h2>RoPA — Records of Processing Activities</h2>
+      </div>
+      <p class="sub">SDAIA يلزم كل جهة معالجة بـ RoPA — Dealix يولّد ويُحدّث RoPA تلقائياً لكل عميل:</p>
+      <div class="scenario">
+        <div class="when">📌 RoPA يحتوي على</div>
+        <div class="then">
+          (1) <strong>اسم المسؤول</strong> · (2) <strong>الغرض من المعالجة</strong> · (3) <strong>أنواع البيانات</strong>
+          · (4) <strong>فئات الأشخاص</strong> · (5) <strong>المستلمون</strong> · (6) <strong>التحويلات الدولية</strong>
+          · (7) <strong>مدة الاحتفاظ</strong> · (8) <strong>التدابير الأمنية</strong>
+        </div>
+      </div>
+      <div class="scenario">
+        <div class="when">📤 تصدير RoPA</div>
+        <div class="then">العملاء يستطيعون تصدير RoPA كاملاً (PDF + JSON) لـ <strong>SDAIA audits</strong> أو <strong>internal compliance</strong> بنقرة واحدة من Trust Center داخل المنتج.</div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-header">
+        <div class="pillar-icon">📜</div>
+        <h2>Audit Log — كل تفاعل موثق</h2>
+      </div>
+      <p class="sub">عينة من سجل audit حقيقي — كل event مع timestamp + actor + reason:</p>
+      <div class="audit-log">
+<span class="ts">2026-04-28T09:14:22Z</span> <span class="ev">consent.verified</span> · sub=lead_8e3f...92 · source=public_company_directory · <span class="ok">→ allow</span><br>
+<span class="ts">2026-04-28T09:14:23Z</span> <span class="ev">purpose.check</span> · purpose=b2b_business_contact · template=cold_outreach_v3 · <span class="ok">→ allow</span><br>
+<span class="ts">2026-04-28T09:14:23Z</span> <span class="ev">opt_out.scan</span> · email=ali@example.sa · suppressed=false · <span class="ok">→ allow</span><br>
+<span class="ts">2026-04-28T09:14:24Z</span> <span class="ev">sensitive.scan</span> · pii_detected=0 · risky_phrases=0 · <span class="ok">→ allow</span><br>
+<span class="ts">2026-04-28T09:14:24Z</span> <span class="ev">freq.cap</span> · last_sent=72h_ago · cap_remaining=1 · <span class="ok">→ allow</span><br>
+<span class="ts">2026-04-28T09:14:25Z</span> <span class="ev">unsub.header</span> · type=list-unsubscribe-post · valid=true · <span class="ok">→ allow</span><br>
+<span class="ts">2026-04-28T09:14:25Z</span> <span class="ev">send.dispatched</span> · provider=gmail_oauth · message_id=18d3...e7f<br>
+<br>
+<span class="ts">2026-04-28T11:42:18Z</span> <span class="ev">opt_out.received</span> · sub=lead_8e3f...92 · channel=email · <span style="color:#f87171">→ added to suppression</span><br>
+<span class="ts">2026-04-28T11:42:18Z</span> <span class="ev">retention.scheduled</span> · delete_at=2028-04-28
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-header">
+        <div class="pillar-icon">⚡</div>
+        <h2>Data Subject Rights — حقوق الأشخاص</h2>
+      </div>
+      <p class="sub">طبقاً لـ PDPL، كل شخص له 6 حقوق رئيسية. Dealix يدعمها كلها:</p>
+      <table class="pdpl-table">
+        <thead><tr><th>الحق</th><th>كيف يمارس</th><th>SLA</th></tr></thead>
+        <tbody>
+          <tr><td>حق المعرفة</td><td>طلب من <code>privacy@dealix.sa</code></td><td>72 ساعة</td></tr>
+          <tr><td>حق الوصول</td><td>JSON export كامل لبياناته</td><td>5 أيام عمل</td></tr>
+          <tr><td>حق التصحيح</td><td>self-service من Customer Portal أو طلب</td><td>72 ساعة</td></tr>
+          <tr><td>حق الحذف (Right to be forgotten)</td><td>طلب → حذف كامل + تأكيد</td><td>5 أيام عمل</td></tr>
+          <tr><td>حق الاعتراض</td><td>opt-out instant via header أو طلب</td><td>فوري</td></tr>
+          <tr><td>حق نقل البيانات</td><td>JSON/CSV export قياسي</td><td>5 أيام عمل</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-header">
+        <div class="pillar-icon">🇸🇦</div>
+        <h2>السيادة على البيانات — Data Sovereignty</h2>
+      </div>
+      <p class="sub">من Vision 2030 — Saudi-first data hosting:</p>
+      <div class="scenario">
+        <div class="when">📍 موقع البيانات</div>
+        <div class="then">جميع بيانات العملاء السعوديين تُخزن في <strong>data centers داخل المملكة</strong> — لا تحويل خارجي بدون موافقة صريحة. الـ infrastructure على Saudi cloud (STC Cloud / Tabby Cloud / Aramco Digital).</div>
+      </div>
+      <div class="scenario">
+        <div class="when">🔒 التشفير</div>
+        <div class="then">TLS 1.3 in-transit · AES-256 at-rest · keys مُدارة عبر HSM · rotation كل 90 يوم</div>
+      </div>
+      <div class="scenario">
+        <div class="when">📑 DPA متاحة</div>
+        <div class="then">Data Processing Agreement (DPA) جاهز للتوقيع — يحدد دور Dealix كـ "Processor" + التزاماتنا تحت PDPL. متاح بصيغة <strong>عربي</strong> + <strong>English</strong>.</div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>هل تريد نسخة من DPA + Compliance Pack؟</h3>
+      <p>نسعد بإرسال DPA + RoPA template + Compliance one-pager + Pen-test summary بنقرة واحدة.</p>
+      <a href="mailto:privacy@dealix.sa?subject=Compliance Pack Request" class="btn">اطلب الحزمة كاملة</a>
+    </div>
+  </div>
+</body>
+</html>

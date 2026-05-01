@@ -1,0 +1,61 @@
+# Production dependencies — pinned for reproducibility
+# Regenerate with: make requirements
+# ═══════════════════════════════════════════════════════════════
+
+# Core framework
+fastapi>=0.115.0,<0.116
+uvicorn[standard]>=0.32.0,<0.33
+pydantic[email]>=2.9.0,<3
+pydantic-settings>=2.6.0,<3
+
+# HTTP
+httpx>=0.27.0,<0.28
+aiohttp>=3.10.0,<4
+tenacity>=9.0.0,<10
+
+# LLM SDKs (optional — router falls back gracefully if missing)
+anthropic>=0.40.0
+openai>=1.54.0
+google-generativeai>=0.8.0
+
+# Data
+sqlalchemy[asyncio]>=2.0.35,<3
+asyncpg>=0.30.0
+alembic>=1.13.0
+redis[hiredis]>=5.1.0
+motor>=3.6.0
+
+# CLI / UX
+typer>=0.13.0
+rich>=13.9.0
+click>=8.1.0
+
+# Utilities
+python-dotenv>=1.0.1
+python-multipart>=0.0.17
+email-validator>=2.2.0
+dnspython>=2.6.0
+phonenumbers>=8.13.0
+python-dateutil>=2.9.0
+
+# Observability
+structlog>=24.4.0
+langfuse>=2.50.0
+
+# Integrations
+hubspot-api-client>=11.0.0
+google-api-python-client>=2.150.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=1.2.0
+resend>=2.4.0
+slowapi>=0.1.9
+opentelemetry-api>=1.41.0
+opentelemetry-sdk>=1.41.0
+opentelemetry-exporter-otlp-proto-http>=1.41.0
+opentelemetry-instrumentation-fastapi>=0.62b0
+opentelemetry-instrumentation-httpx>=0.62b0
+opentelemetry-instrumentation-sqlalchemy>=0.62b0
+sentry-sdk[fastapi]>=2.58.0
+
+# IANA time zones on Windows (zoneinfo needs tzdata)
+tzdata>=2025.1

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealix Personal Operator — مساعدك الاستراتيجي العربي</title>
+  <style>
+    body{margin:0;background:#07110d;color:#f4fff8;font-family:system-ui,-apple-system,Segoe UI,Tahoma,sans-serif;line-height:1.8}
+    .wrap{max-width:1120px;margin:auto;padding:48px 20px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+    .badge{display:inline-block;border:1px solid #1f6f49;border-radius:999px;padding:6px 14px;color:#70f2ad;background:#0b2117}
+    h1{font-size:56px;line-height:1.15;margin:22px 0}.lead{font-size:22px;color:#c8d8cf}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}.card{background:#0d1b15;border:1px solid #203b2d;border-radius:22px;padding:22px}.phone{background:#111;border:1px solid #2a2a2a;border-radius:34px;padding:22px;box-shadow:0 30px 80px #0008}.bubble{background:#17231d;border-radius:18px;padding:18px;margin:12px 0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{background:#19c77a;color:#03140d;border:0;border-radius:14px;padding:12px;font-weight:800}.btn.secondary{background:#1c2a23;color:#bdfad9}.section{margin-top:70px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.metric{font-size:34px;font-weight:900;color:#75ffb2}@media(max-width:860px){.hero,.grid,.cols{grid-template-columns:1fr}h1{font-size:40px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <span class="badge">Dealix v3 Personal Operator</span>
+        <h1>مساعدك الاستراتيجي العربي الذي يفهمك ويفهم Dealix</h1>
+        <p class="lead">ليس chatbot. هذا Chief of Staff عربي يقرأ ذاكرة المشروع، يقترح فرص، يكتب رسائل، يطلب موافقتك، يحجز اجتماعات، ويحوّل العلاقات إلى خطوات استراتيجية.</p>
+      </div>
+      <div class="phone">
+        <div class="bubble"><b>صباح الخير سامي.</b><br/>أهم 3 قرارات اليوم:<br/>1. ادمج PR v3 بعد الاختبارات.<br/>2. شغّل WhatsApp Accept/Skip.<br/>3. ابدأ Private Beta مع 10 مؤسسين.</div>
+        <div class="bubble"><b>فرصة استراتيجية</b><br/>شريك Supabase/pgvector لمراجعة الذاكرة والـ RLS.<br/><span style="color:#75ffb2">القيمة: جاهزية إنتاج + فهم كامل للكود.</span></div>
+        <div class="actions"><button class="btn">قبول</button><button class="btn secondary">تخطي</button><button class="btn secondary">اكتب رسالة</button><button class="btn secondary">احجز اجتماع</button></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card"><h3>Daily Brief</h3><p>كل صباح يعطيك قرارات، فرص، مخاطر، وخطة تنفيذ.</p></div>
+      <div class="card"><h3>Accept / Skip</h3><p>نفس تجربة Boardy لكن مخصصة لعلاقاتك وDealix.</p></div>
+      <div class="card"><h3>Project Memory</h3><p>مرتبط بـ Supabase/pgvector حتى يفهم كود المشروع ووثائقه.</p></div>
+      <div class="card"><h3>Gmail Draft</h3><p>يجهز الرسائل ولا يرسل إلا بعد موافقتك.</p></div>
+      <div class="card"><h3>Calendar Draft</h3><p>يحضر agenda وmeeting payload قبل إنشاء الحدث.</p></div>
+      <div class="card"><h3>Launch Readiness</h3><p>يقيس جاهزية المشروع ويقول لك ماذا ينقص قبل السوق.</p></div>
+    </section>
+
+    <section class="section cols">
+      <div class="card"><div class="metric">100%</div><h2>الهدف</h2><p>الوصول إلى نظام يستهدف، يقترح، يكتب، يراجع، ويحجز بموافقتك، ثم يتعلم من كل نتيجة.</p></div>
+      <div class="card"><div class="metric">0</div><h2>إرسال تلقائي خطر</h2><p>أي رسالة خارجية أو WhatsApp cold أو LinkedIn DM تحتاج موافقة وسياسة أمان.</p></div>
+    </section>
+
+    <section class="section card">
+      <h2>Project Memory</h2>
+      <p>فهرسة محلية + هجرة Supabase/pgvector — راجع <code>docs/SUPABASE_PROJECT_MEMORY_SETUP.md</code>.</p>
+    </section>
+
+    <section class="section card">
+      <h2>أمثلة API</h2>
+      <pre style="white-space:pre-wrap;background:#0b1410;padding:16px;border-radius:14px;border:1px solid #203b2d;font-size:14px">GET /api/v1/personal-operator/daily-brief
+GET /api/v1/personal-operator/opportunities
+GET /api/v1/personal-operator/launch-report
+GET /api/v1/v3/command-center/snapshot
+POST /api/v1/personal-operator/project/ask
+  { "question": "وش ناقص المشروع؟" }
+POST /api/v1/personal-operator/messages/draft
+  { "tone": "warm", "opportunity_id": "opp_internal_project" }</pre>
+      <p style="margin-top:12px;color:#9fb8ad"><b>ثقة:</b> لا يُرسل واتساب أو بريد خارجي تلقائياً — كل شيء مسودة حتى الموافقة.</p>
+    </section>
+  </main>
+</body>
+</html>

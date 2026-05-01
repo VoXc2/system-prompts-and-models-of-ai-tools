@@ -1,0 +1,50 @@
+{
+  "info": {
+    "name": "Dealix API v3.0.0",
+    "description": "Dealix REST API collection — https://api.dealix.sa",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "X-API-Key", "type": "string" },
+      { "key": "value", "value": "{{api_key}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://api.dealix.sa" },
+    { "key": "api_key", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        { "name": "GET /health", "request": { "method": "GET", "url": "{{base_url}}/health" } },
+        { "name": "GET /health/deep", "request": { "method": "GET", "url": "{{base_url}}/health/deep" } }
+      ]
+    },
+    {
+      "name": "Leads",
+      "item": [
+        {
+          "name": "POST /api/v1/leads",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/leads",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"lead@example.sa\",\n  \"name\": \"أحمد\",\n  \"company\": \"شركة\",\n  \"message\": \"أبحث عن حل\"\n}" }
+          }
+        },
+        { "name": "GET /api/v1/leads", "request": { "method": "GET", "url": "{{base_url}}/api/v1/leads" } }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        { "name": "GET /admin/costs", "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/costs?window_hours=24&group_by=model" } },
+        { "name": "GET /admin/cache/stats", "request": { "method": "GET", "url": "{{base_url}}/api/v1/admin/cache/stats" } }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Dealix — One Pager</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    color: #0f172a;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 18mm;
+    margin: 0 auto;
+    background: #fff;
+  }
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #0369a1 100%);
+    color: #fff;
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: #22d3ee;
+    border-radius: 8px;
+    display: flex;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .hero .tagline {
+    font-size: 16px;
+    color: #22d3ee;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .hero .lead {
+    font-size: 14px;
+    color: #e2e8f0;
+    max-width: 620px;
+  }
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .box {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .box h3 {
+    font-size: 14px;
+    color: #0369a1;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .box h3 .icon {
+    background: #22d3ee;
+    color: #0f172a;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 11px;
+  }
+  .box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .box ul li {
+    padding: 4px 0;
+    position: relative;
+    padding-right: 18px;
+    font-size: 12.5px;
+  }
+  .box ul li::before {
+    content: '✓';
+    position: absolute;
+    right: 0;
+    color: #22d3ee;
+    font-weight: 700;
+  }
+  .numbers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .num-box {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1.5px solid #22d3ee;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .num-box .n {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0369a1;
+    line-height: 1;
+  }
+  .num-box .label {
+    font-size: 11px;
+    color: #475569;
+    margin-top: 6px;
+  }
+  .pricing {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .pricing h3 { font-size: 14px; margin-bottom: 12px; color: #0369a1; }
+  .tier {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed #cbd5e1;
+    font-size: 13px;
+  }
+  .tier:last-child { border: none; }
+  .tier .price {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 15px;
+  }
+  .tier.highlight {
+    background: #fef3c7;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1.5px solid #f59e0b;
+    margin: 6px 0;
+  }
+  .cta {
+    background: linear-gradient(135deg, #22d3ee 0%, #0369a1 100%);
+    color: #fff;
+    padding: 18px 20px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .cta h2 {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .cta p {
+    font-size: 13px;
+    margin-bottom: 12px;
+    opacity: 0.95;
+  }
+  .cta a {
+    background: #fff;
+    color: #0369a1;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+  }
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
+    font-size: 11px;
+  }
+  .kicker {
+    display: inline-block;
+    background: rgba(34, 211, 238, 0.2);
+    color: #22d3ee;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <span class="kicker">AI SALES REP · السعودية</span>
+    <h1>Dealix</h1>
+    <div class="tagline">مندوب مبيعات AI بالعربي الخليجي — يشتغل 24/7</div>
+    <p class="lead">
+      Dealix يستقبل leads شركتك من واتساب وlanding page، يؤهّل كل عميل بـ 5 أسئلة BANT بالعربي الخليجي، يحجز demos مع فريقك، ويكتب ملخصات CRM جاهزة. النتيجة: فريقك يركّز على إغلاق الصفقات، مو على data entry.
+    </p>
+  </div>
+
+  <div class="numbers">
+    <div class="num-box">
+      <div class="n">45ث</div>
+      <div class="label">متوسط وقت الرد</div>
+    </div>
+    <div class="num-box">
+      <div class="n">70%</div>
+      <div class="label">دقة التأهيل BANT</div>
+    </div>
+    <div class="num-box">
+      <div class="n">3x</div>
+      <div class="label">قدرة المندوب الواحد</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="box">
+      <h3><span class="icon">1</span> ماذا يفعل</h3>
+      <ul>
+        <li>يستلم lead من WhatsApp / landing / email</li>
+        <li>يرد خلال 45 ثانية بالعربي الخليجي</li>
+        <li>يؤهّل العميل بـ 5 أسئلة BANT</li>
+        <li>يحجز demo مع فريقك تلقائياً</li>
+        <li>يسجّل كل شي في HubSpot / Zoho / Salesforce</li>
+        <li>يولّد ملخص محادثة جاهز</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h3><span class="icon">2</span> لِمن</h3>
+      <ul>
+        <li>شركات B2B سعودية (SaaS, enterprise, توزيع)</li>
+        <li>50-1000 lead شهرياً</li>
+        <li>فريق مبيعات 3-20 شخص</li>
+        <li>يخسرون leads بسبب بطء الرد</li>
+        <li>يستخدمون WhatsApp Business + CRM</li>
+        <li>يبغون توسيع بدون توظيف</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pricing">
+    <h3>💳 الباقات (ريال سعودي/شهر)</h3>
+    <div class="tier highlight">
+      <span>🚀 Pilot 7 أيام <strong>(ابدأ هنا)</strong></span>
+      <span class="price">1 ريال</span>
+    </div>
+    <div class="tier">
+      <span>Starter — 50-200 lead/شهر</span>
+      <span class="price">999 ريال</span>
+    </div>
+    <div class="tier">
+      <span>Growth — 200-1000 lead/شهر</span>
+      <span class="price">2,999 ريال</span>
+    </div>
+    <div class="tier">
+      <span>Scale — +1000 lead/شهر + فرق كبيرة</span>
+      <span class="price">7,999 ريال</span>
+    </div>
+  </div>
+
+  <div class="cta">
+    <h2>جرّب Dealix أسبوع كامل بـ 1 ريال فقط</h2>
+    <p>نشغّله على leads شركتك الفعلية. إذا ما شفت نتائج ملموسة — نرجع لك الريال.</p>
+    <a href="https://calendly.com/sami-assiri11/dealix-demo">احجز Demo 30 دقيقة →</a>
+  </div>
+
+  <div class="foot">
+    <span>سامي العسيري · Founder · sami.assiri11@gmail.com</span>
+    <span>dealix.sa · PDPL aligned · Railway EU</span>
+  </div>
+</div>
+</body>
+</html>
