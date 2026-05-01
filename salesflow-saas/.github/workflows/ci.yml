@@ -1,53 +1,64 @@
-name: Dealix CI — Service Reality Protocol
+name: Dealix CI
 
 on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
-  test:
-    name: 8-Gate Reality Protocol
+  backend:
+    name: Backend tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
 
       - name: Install dependencies
-        working-directory: backend
         run: |
           pip install --upgrade pip
-          pip install flask flask-cors requests pytest
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
 
-      - name: Initialize database
-        working-directory: backend
-        run: python -c "from app.core.database import init_db; init_db()"
+      - name: Run backend pytest suite
+        env:
+          PYTHONPATH: .
+        run: pytest -q
 
-      - name: Start backend server
-        working-directory: backend
-        run: |
-          python main.py &
-          sleep 3
-          curl --retry 5 --retry-delay 1 http://localhost:8000/api/health
+  frontend:
+    name: Frontend lint + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
 
-      - name: Run existing unit tests
-        working-directory: backend
-        run: pytest tests/test_audit.py tests/test_lead_flow.py tests/test_approval_flow.py -v
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Run 8-Gate Reality Protocol
-        working-directory: backend
-        run: python tests/reality_protocol.py
-
-      - name: Upload protocol results
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          name: reality-protocol-results
-          path: backend/tests/
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
