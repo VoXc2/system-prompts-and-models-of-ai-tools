@@ -316,6 +316,32 @@ OAuth Gmail/Calendar، حصص، سياسات.
 - `scripts/launch_readiness_check.py` — runs 10 gates locally + against optional staging URL; reports JSON or pretty output.
 - `scripts/smoke_staging.py` — already exists (preserved).
 
+## 44. Autonomous Revenue Company OS
+
+> Dealix الآن **فئة جديدة** — ليس منصة، بل شركة نمو رقمية ذاتية التشغيل.
+
+**26 module جديد + 47 endpoint جديد + 81 اختبار**. **التفصيل:** [`AUTONOMOUS_REVENUE_COMPANY_OS.md`](AUTONOMOUS_REVENUE_COMPANY_OS.md).
+
+### Autonomous Service Operator (16 modules)
+البوت المركزي يدير كل المحادثات وتشغيل الخدمات:
+- `intent_classifier` (16 intents) → `conversation_router` → `service_orchestrator`.
+- `intake_collector` + `approval_manager` (≤3 buttons) + `workflow_runner` + `tool_action_planner` (LinkedIn scrape/auto-DM blocked).
+- `proof_pack_dispatcher` + `upsell_engine` + `whatsapp_renderer` + `operator_memory`.
+- `service_bundles` (6 bundles: Growth Starter / Data to Revenue / Executive Growth OS / Partnership Growth / Local Growth OS / Full Growth Control Tower).
+- `executive_mode` (CEO) + `client_mode` (Growth Manager) + `agency_mode` (multi-client + co-branded + revenue share).
+
+### Revenue Company OS (10 modules)
+الذكاء عبر القنوات:
+- `event_to_card` (13 event types → Arabic decision cards).
+- `command_feed_engine` (sort by risk) + `action_graph` (14 typed edges: signal→action→outcome→proof).
+- `revenue_work_units` (19 RWU types, Salesforce-inspired) + `channel_health`.
+- `opportunity_factory` + `service_factory` + `proof_ledger` (revenue-tier scoreboard).
+- `growth_memory` (cross-customer aggregates) + `self_improvement_loop` (weekly Arabic recommendations).
+
+**Endpoints:** `/api/v1/operator/*` (28) + `/api/v1/revenue-os/*` (19).
+
+**الفرق الشاسع:** Dealix لا يبيع features ولا AI ولا منصة. يبيع **شركة نمو رقمية ذاتية التشغيل** — نتائج منظمة + تشغيل يومي + Proof Pack شهري.
+
 ---
 
 **الخلاصة:** المنتج **قوي كأساس سوقي وتقني**؛ الإطلاق العام يحتاج تشغيلاً وامتثالاً وتجربة عميل مغلقة أولاً. الإطلاق اليوم = Private Beta + Pilots + Proof Pack، ليس Public Launch.

@@ -17,6 +17,7 @@ from api.routers import (
     admin,
     agent_observability,
     agents,
+    autonomous_service_operator,
     automation,
     autonomous,
     business,
@@ -45,6 +46,7 @@ from api.routers import (
     prospect,
     public,
     revenue,
+    revenue_company_os,
     revenue_launch,
     revenue_os,
     sales,
@@ -174,6 +176,8 @@ def create_app() -> FastAPI:
     app.include_router(service_excellence.router)
     app.include_router(launch_ops.router)
     app.include_router(revenue_launch.router)
+    app.include_router(autonomous_service_operator.router)
+    app.include_router(revenue_company_os.router)
     app.include_router(public.router)
     app.include_router(admin.router)
 
