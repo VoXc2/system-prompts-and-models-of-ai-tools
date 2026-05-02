@@ -553,6 +553,26 @@
       </div>
     </div>
 
+    <!-- ROW 6b: Role-Based Command Cards (live from /api/v1/cards/feed) -->
+    <div class="wrap" style="padding-top:0">
+      <div class="hero-strip" style="margin-top:8px">
+        <div>
+          <h2 style="margin:0 0 6px">كروت القرار حسب الدور — Revenue Command</h2>
+          <p style="margin:0;color:var(--muted);font-size:14px">واجهة واحدة، تغذية مختلفة لكل دور. البيانات من API (عند تشغيل الخادم على نفس النطاق).</p>
+        </div>
+        <div class="day" id="roleCardsStatus">جاري التحميل…</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px">
+        <button type="button" class="day" data-role="ceo" style="cursor:pointer;border:none">CEO</button>
+        <button type="button" class="day" data-role="sales_manager" style="cursor:pointer;border:none;opacity:.9">مبيعات</button>
+        <button type="button" class="day" data-role="growth_manager" style="cursor:pointer;border:none;opacity:.9">نمو</button>
+        <button type="button" class="day" data-role="agency_partner" style="cursor:pointer;border:none;opacity:.9">وكالة</button>
+        <button type="button" class="day" data-role="support" style="cursor:pointer;border:none;opacity:.9">دعم</button>
+        <button type="button" class="day" data-role="service_delivery" style="cursor:pointer;border:none;opacity:.9">تشغيل</button>
+      </div>
+      <div id="roleCardsMount" class="grid"></div>
+    </div>
+
     <!-- ROW 7: Today's Decisions -->
     <div class="actions-ribbon">
       <h3>🎯 3 قرارات يجب اتخاذها اليوم</h3>
@@ -578,8 +598,51 @@
     <div class="disclaimer">
       <strong>📌 ملاحظة:</strong> هذا preview للوحة Dealix — البيانات في هذه النسخة العامة افتراضية لأغراض العرض. عند الاشتراك،
       اللوحة تُربط مباشرة بـ Saudi Revenue Graph الخاص بشركتك وتُحدّث في الوقت الحقيقي عبر <code>/api/v1/command-center/snapshot</code>.
+      كروت الأدوار تُحمّل من <code>/api/v1/cards/feed</code> (موافقة أولاً — لا إرسال تلقائي).
       كل التوصيات مبنية على Pulse القطاعي + بيانات شركتك التراكمية + 11 AI Agents يعملون 24/7.
     </div>
   </div>
+  <script>
+(function(){
+  var mount = document.getElementById('roleCardsMount');
+  var statusEl = document.getElementById('roleCardsStatus');
+  if(!mount || !statusEl) return;
+  var base = (window.location && window.location.origin) ? window.location.origin : '';
+  function esc(s){
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  }
+  function render(data){
+    mount.innerHTML = '';
+    (data.cards||[]).forEach(function(c){
+      var col = document.createElement('div');
+      col.className = 'card col-6';
+      var risk = c.risk_level || 'low';
+      var tag = risk === 'high' ? 'tag-hot' : (risk === 'medium' ? 'tag-new' : 'tag-live');
+      var btns = (c.buttons||[]).slice(0,3).map(function(b){
+        return '<button type="button" style="margin:4px 0 4px 6px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:12px">'+esc(b.label_ar)+'</button>';
+      }).join('');
+      col.innerHTML =
+        '<div class="card-header"><div class="card-title"><div class="card-icon">'+(c.type==='partner'?'🤝':'📌')+'</div><h3>'+esc(c.title_ar)+'</h3></div>'+
+        '<span class="card-tag '+tag+'">'+esc(risk)+'</span></div>'+
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 8px"><strong>لماذا الآن:</strong> '+esc(c.why_now_ar)+'</p>'+
+        '<p style="font-size:13px;margin:0 0 10px"><strong>الإجراء:</strong> '+esc(c.recommended_action_ar)+'</p>'+
+        '<div style="display:flex;flex-wrap:wrap;align-items:center">'+btns+'</div>'+
+        '<p style="font-size:11px;color:var(--muted);margin-top:8px">وضع: '+esc(c.action_mode||'')+' · أثر Proof: '+(c.proof_impact||[]).join(', ')+'</p>';
+      mount.appendChild(col);
+    });
+  }
+  function load(role){
+    statusEl.textContent = 'جاري التحميل…';
+    fetch(base + '/api/v1/cards/feed?role=' + encodeURIComponent(role))
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(data){ statusEl.textContent = 'الدور: ' + role + ' · ' + (data.card_count||0) + ' كروت'; render(data); })
+      .catch(function(){ statusEl.textContent = 'تعذر الاتصال بالـ API (شغّل الخادم أو افتح من نفس النطاق)'; mount.innerHTML = '<div class="card col-12"><p style="font-size:14px;color:var(--muted)">جرّب من بيئة Staging أو محلياً مع <code>uvicorn</code> لعرض الكروت الحية.</p></div>'; });
+  }
+  document.querySelectorAll('[data-role]').forEach(function(btn){
+    btn.addEventListener('click', function(){ load(btn.getAttribute('data-role')); });
+  });
+  load('ceo');
+})();
+  </script>
 </body>
 </html>

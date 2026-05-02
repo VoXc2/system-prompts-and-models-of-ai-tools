@@ -21,6 +21,7 @@ from api.routers import (
     automation,
     autonomous,
     business,
+    cards,
     command_center,
     connector_router,
     customer_ops,
@@ -179,6 +180,7 @@ def create_app() -> FastAPI:
     app.include_router(revenue_launch.router)
     app.include_router(public_launch.router)
     app.include_router(business.router)
+    app.include_router(cards.router)
     app.include_router(personal_operator.router)
     app.include_router(public.router)
     app.include_router(admin.router)
@@ -197,6 +199,7 @@ def create_app() -> FastAPI:
             "personal_operator_launch_report": "/api/v1/personal-operator/launch-report",
             "business_pricing": "/api/v1/business/pricing",
             "innovation_command_feed_demo": "/api/v1/innovation/command-feed/demo",
+            "role_cards_feed": "/api/v1/cards/feed?role=ceo",
         }
 
     return app
