@@ -1,5 +1,42 @@
 ## PR Title: [Agent/Feature/Fix] Brief Description
 
+### Dealix Paid Beta gate (required when this PR touches `dealix/`)
+
+- **Objective:** what does this PR move forward?
+  - [ ] `PAID_BETA_READY` / staging readiness
+  - [ ] first payment or written commitment
+  - [ ] first Proof Pack
+  - [ ] pilot delivery
+  - [ ] customer proof / support
+  - [ ] other (explain — must align with [`dealix/docs/ops/DEALIX_ACTIVE_COMMAND_BOARD.md`](../dealix/docs/ops/DEALIX_ACTIVE_COMMAND_BOARD.md))
+
+- **Owner:** [ ] Claude Work (docs/sales) [ ] Cursor (engineering) [ ] Human
+
+- **Files changed:** (list)
+
+- **Explicitly not changed (check all that apply):**
+  - [ ] no live send enabled
+  - [ ] no scraping / LinkedIn automation
+  - [ ] no cold WhatsApp
+  - [ ] no pricing change
+  - [ ] no safety rule change
+  - [ ] no `.cursor/plans` change
+
+- **Tests / verification** (paste commands + key results):
+
+```bash
+cd dealix
+APP_ENV=test pytest -q --no-cov
+python scripts/print_routes.py
+python scripts/smoke_inprocess.py
+python scripts/launch_readiness_check.py
+```
+
+- **Risk:** [ ] low [ ] medium [ ] high
+- **Merge decision:** [ ] safe to merge [ ] blocked
+
+---
+
 ### 1. Business Context & Objective
 *لماذا نحتاج هذا التغيير؟ وكيف سيساهم في نمو الإيرادات أو الاستراتيجية (Sovereign OS)؟*
 - 

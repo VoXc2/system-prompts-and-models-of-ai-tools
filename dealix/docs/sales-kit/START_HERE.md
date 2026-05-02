@@ -34,10 +34,12 @@
 | [`layer14_email_sequences_4x7_ar.md`](layer14_email_sequences_4x7_ar.md) | ٤ تسلسلات × ٧ رسائل = ٢٨ بريداً جاهزاً (وكالات / تدريب / SaaS / خدمات محلية) |
 | [`layer14_battlecards_6_ar.md`](layer14_battlecards_6_ar.md) | مواجهة HubSpot / Salesforce / Apollo / Wati / Clay / «AI عام» |
 | [`layer14_demo_12min_script_ar.md`](layer14_demo_12min_script_ar.md) | سكربت ١٢ دقيقة بوتيرة سعودية + اعتراضات |
+| [`DAILY_GTM_CHECKLIST_AR.md`](DAILY_GTM_CHECKLIST_AR.md) | يومياً — ٢٥ لمسة + متابعات + روابط Layer ١٤ |
+| [`../customer-success/PILOT_7_DAY_AND_PROOF_PACK_AR.md`](../customer-success/PILOT_7_DAY_AND_PROOF_PACK_AR.md) | بعد أول دفع — أسبوع pilot + قالب Proof Pack |
 
 يُكمّل الجدول أعلاه ولا يستبدل `dealix_demo_script_30min.md` إذا احتجت ديمو أطول.
 
-**تنسيق العمل (Claude / Cursor):** [`../ops/DEALIX_ACTIVE_COMMAND_BOARD.md`](../ops/DEALIX_ACTIVE_COMMAND_BOARD.md)
+**تنسيق العمل (Claude / Cursor):** [`../ops/DEALIX_ACTIVE_COMMAND_BOARD.md`](../ops/DEALIX_ACTIVE_COMMAND_BOARD.md) · [`../ops/EXECUTION_GOVERNANCE_PACK.md`](../ops/EXECUTION_GOVERNANCE_PACK.md) (Skills + أوامر + PR + hooks)
 
 ---
 
